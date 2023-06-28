@@ -19,7 +19,7 @@ def get_project(table_name: str):
     valid_check_query = """
         SELECT TABLE_NAME
         FROM information_schema.tables
-        WHERE table_schema = 'structure2'
+        WHERE table_schema = 'structure3'
     """
     valid_attributes = pd.read_sql(valid_check_query, engine)['TABLE_NAME'].tolist()  # DB안에 있는 table 목록
     project_attributes = table_name.split(',')  # 여러개의 table을 요청했을때 ","로 구분할 수 있게 split하기
@@ -47,7 +47,7 @@ def get_project(table_name: str):
 # table들의 수 상수값으로 리턴
 @router.get("/dashboard/{table_name}/count")
 def get_total_project_num(table_name: str):
-    query = text(f"SELECT COUNT(*) FROM structure2.{table_name}")
+    query = text(f"SELECT COUNT(*) FROM structure3.{table_name}")
     
     with engine.connect() as connection:
         result = connection.execute(query)
@@ -60,10 +60,10 @@ def get_total_project_num(table_name: str):
 @router.get("/dashboard/project/usage_ratio")
 def get_project_usage_ratio():
     query = """
-        SELECT structure2.project.usage as field, COUNT(*) as count, 
+        SELECT structure3.project.usage as field, COUNT(*) as count, 
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage
-        FROM structure2.project 
-        GROUP BY structure2.project.usage
+        FROM structure3.project 
+        GROUP BY structure3.project.usage
         ORDER BY percentage DESC;
     """
     project_usage_df = pd.read_sql(query, engine)
@@ -74,10 +74,10 @@ def get_project_usage_ratio():
 @router.get("/dashboard/project/construction_company_ratio")
 def get_project_construction_company_ratio():
     query = """
-        SELECT structure2.project.construction_company as field, COUNT(*) as count,
+        SELECT structure3.project.construction_company as field, COUNT(*) as count,
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
-        FROM structure2.project 
-        GROUP BY structure2.project.construction_company
+        FROM structure3.project 
+        GROUP BY structure3.project.construction_company
         ORDER BY percentage DESC;
     """
     project_construction_company_df = pd.read_sql(query, engine)
@@ -88,10 +88,10 @@ def get_project_construction_company_ratio():
 @router.get("/dashboard/project/location_ratio")
 def get_project_location_ratio():
     query = """
-        SELECT structure2.project.location as field, COUNT(*) as count,
+        SELECT structure3.project.location as field, COUNT(*) as count,
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage
-        FROM structure2.project 
-        GROUP BY structure2.project.location
+        FROM structure3.project 
+        GROUP BY structure3.project.location
         ORDER BY percentage DESC;
     """
     project_location_df = pd.read_sql(query, engine)
@@ -103,7 +103,7 @@ def get_project_location_ratio():
 def get_construction_company_total_area():
     query="""
         SELECT construction_company, SUM(total_area) AS total_area_sum
-        FROM structure2.project
+        FROM structure3.project
         GROUP BY construction_company
         ORDER BY total_area_sum
     """
@@ -117,7 +117,7 @@ def get_construction_company_total_area():
 def get_map_data():
     query="""
         SELECT sub_table.latitude, sub_table.longitude, SUM(count) AS sum 
-        FROM (SELECT latitude, longitude, COUNT(*) AS count FROM structure2.location_coordinate AS loc JOIN structure2.building AS bldg
+        FROM (SELECT latitude, longitude, COUNT(*) AS count FROM structure3.location_coordinate AS loc JOIN structure3.building AS bldg
         WHERE loc.project_id = bldg.project_id 
         GROUP BY loc.project_id) AS sub_table
         GROUP BY sub_table.latitude, sub_table.longitude;
@@ -150,8 +150,8 @@ def get_total_area_histogram():
                 MIN(total_area) AS min_val,
                 (MAX(total_area) - MIN(total_area)) / 8 AS interval_size
             FROM
-                structure2.project) AS subquery
-        JOIN structure2.project AS p ON p.total_area >= subquery.min_val AND p.total_area <= subquery.max_val
+                structure3.project) AS subquery
+        JOIN structure3.project AS p ON p.total_area >= subquery.min_val AND p.total_area <= subquery.max_val
         GROUP BY subquery.min_val, subquery.max_val, range_num
         ORDER BY range_num;
     """
@@ -168,8 +168,8 @@ def get_floor_count_histogram():
             COUNT(*) AS item_count
         FROM
             (SELECT building_name, COUNT(*) AS floor_count 
-            FROM structure2.floor AS floor 
-            JOIN structure2.building AS building ON building.id = floor.building_id
+            FROM structure3.floor AS floor 
+            JOIN structure3.building AS building ON building.id = floor.building_id
             GROUP BY building_name) AS subquery
         GROUP BY range_num
         ORDER BY range_num;

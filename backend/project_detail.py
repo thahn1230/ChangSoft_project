@@ -15,8 +15,8 @@ def get_project_detail_data(project_id: int):
         p.location, p.total_area, p.construction_start, p.construction_end,
         (p.construction_end-p.construction_start) AS total_date,
         COUNT(*) AS building_count
-        FROM structure2.project AS p
-        JOIN structure2.building AS b ON p.id = b.project_id
+        FROM structure3.project AS p
+        JOIN structure3.building AS b ON p.id = b.project_id
         WHERE p.id = {project_id};
     """
     

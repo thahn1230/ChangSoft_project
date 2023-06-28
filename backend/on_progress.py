@@ -13,8 +13,8 @@ router = APIRouter()
 def get_building_dataframe(project_num: int):
     query = f"""
         SELECT *
-        FROM structure2.project AS p
-        JOIN structure2.building AS b ON p.id = b.project_id
+        FROM structure3.project AS p
+        JOIN structure3.building AS b ON p.id = b.project_id
         WHERE p.id = {project_num};
     """
     building_df = pd.read_sql(query, engine)
