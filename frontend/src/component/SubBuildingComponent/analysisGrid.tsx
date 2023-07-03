@@ -37,8 +37,8 @@ const TotalAnalysisGrid2 = (props: any) => {
   return (
     <div>
       {selectedBuildingInfo && (
-        <div className="table-container" style={{width: "50%"}}>
-          <Grid data={selectedBuildingInfo}>
+        <div className="table-container">
+          <Grid data={selectedBuildingInfo} style={{width: "50%"}}>
             <GridColumn title="구분" field="component_type" headerClassName="custom-header-cell"/>
             <GridColumn title="콘크리트(m³)" field="concrete_volume" headerClassName="custom-header-cell"/>
             <GridColumn title="콘크리트(%)" field="concrete_percentage" headerClassName="custom-header-cell"/>
