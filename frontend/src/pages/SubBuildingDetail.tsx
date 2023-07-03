@@ -7,7 +7,7 @@ import {
   GridFilterChangeEvent,
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
-import SubBuildingTotalAnalysisTable from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable";
+import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
@@ -21,8 +21,8 @@ const SubBuildingDetail = (props: any) => {
     buildingInfo_interface | undefined
   >();
   const [subBuildingInfo, setSubBuildingInfo] = useState<
-    subBuildingInfo_interface | undefined
-  >();
+    subBuildingInfo_interface[]
+  >([]);
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
 
   const [analysisTable1, setAnalysisTable1] =
@@ -37,14 +37,11 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //console.log("props.buildingInfo.id: ")
+        //console.log(props.buildingInfo.id)
         setBuildingInfo(props.buildingInfo);
 
-        const response = await axios.get(
-          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-        );
-
-        const subBuildings = JSON.parse(response.data);
-        setSubBuildingInfo(subBuildings);
+        //
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -56,21 +53,15 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setBuildingInfo(props.buildingInfo);
-
-        const response1 = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/total_analysis_table1/" +
-            props.buildingInfo.id
-        );
-        const response2 = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/total_analysis_table2/" +
-            props.buildingInfo.id
+        const response = await axios.get(
+          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
         );
 
-        setAnalysisTable1(JSON.parse(response1.data));
-        setAnalysisTable2(JSON.parse(response2.data));
+        const subBuildings = JSON.parse(response.data);
+        setSubBuildingInfo(subBuildings);
+
+        console.log("subBuildings");
+        console.log(subBuildings);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -78,6 +69,17 @@ const SubBuildingDetail = (props: any) => {
 
     fetchData();
   }, [buildingInfo]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(selectedSubBuildingId)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [selectedSubBuildingId]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -108,7 +110,6 @@ const SubBuildingDetail = (props: any) => {
         거푸집: analysisTable1[0].form_con_result.toFixed(2),
         "철근(Ton)": analysisTable1[0].reb_con_result.toFixed(2),
       });
-      console.log(tableGrid);
       setAnalysisTable1Grid(tableGrid);
     }
   }, [analysisTable1]);
@@ -120,48 +121,13 @@ const SubBuildingDetail = (props: any) => {
         setSelectedSubBuildingId={setSelectedSubBuildingId}
       />
 
-      {analysisTable1 && analysisTable1[0] && (
-        <Grid data={analysisTable1Grid}>
-          <GridColumn title="건물명 구분">
-            <GridColumn title={buildingInfo?.building_name}></GridColumn>
-            <GridColumn width="0px" />
-          </GridColumn>
+      <SubBuildingTotalAnalysisTable1
+        endpoint={"total_analysis_table1/" + buildingInfo?.id}
+        buildingInfo={buildingInfo}
+        subBuildingInfo={subBuildingInfo}
+        selectedSubBuildingId={selectedSubBuildingId}
+      />
 
-            <GridColumn title="연면적">
-              <GridColumn
-                title={
-                  analysisTable1[0].total_floor_area_meter.toString() + "㎥ / " +
-                  analysisTable1[0].total_floor_area_pyeong.toString() + "평"
-                }
-              ></GridColumn>
-              <GridColumn width ={"0px"}></GridColumn>
-            </GridColumn>
-        </Grid>
-      )}
-
-      {analysisTable1Grid &&
-        analysisTable1Grid.length > 0 &&
-        analysisTable1 &&
-        analysisTable1[0] && (
-          <Grid data={analysisTable1Grid}>
-            <GridColumn title={"구분"} field={"구분"}></GridColumn>
-            <GridColumn
-              title={"콘크리트(㎥)"}
-              field={"콘크리트(㎥)"}
-            ></GridColumn>
-
-            <GridColumn title={"거푸집(㎡)"} field={"거푸집"}></GridColumn>
-            <GridColumn title={"철근(Ton)"} field={"철근(Ton)"}></GridColumn>
-          </Grid>
-        )}
-
-      <div className="sub-building-detail">
-        <SubBuildingTotalAnalysisTable
-          buildingId={buildingInfo?.id}
-          subBuildingInfo={subBuildingInfo}
-          selectedSubBuildingId={selectedSubBuildingId}
-        />
-      </div>
     </div>
   );
 };
