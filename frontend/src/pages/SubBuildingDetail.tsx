@@ -16,6 +16,8 @@ import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuil
 import axios from "axios";
 import urlPrefix from "./../resource/URL_prefix.json";
 
+import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
+
 const SubBuildingDetail = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
@@ -134,6 +136,11 @@ const SubBuildingDetail = (props: any) => {
           subBuildingInfo={subBuildingInfo}
           selectedSubBuildingId={selectedSubBuildingId}
         />
+        <TotalAnalysisGrid2
+          buildingId={buildingInfo?.id}
+          subBuildingInfo={subBuildingInfo}
+          selectedSubBuildingId={selectedSubBuildingId}
+        ></TotalAnalysisGrid2>
       </div>
     </div>
   );
