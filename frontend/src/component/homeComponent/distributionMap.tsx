@@ -19,7 +19,7 @@ import axios from "axios";
 
 const tileSubdomains = ["a", "b", "c"];
 const tileUrl = (e: TileUrlTemplateArgs) =>
-`https://${e.subdomain}.tile.openstreetmap.org/${e.zoom}/${e.x}/${e.y}.png?layers=T`;
+  `https://${e.subdomain}.tile.openstreetmap.org/${e.zoom}/${e.x}/${e.y}.png?layers=T`;
 const attribution =
   '&copy; <a href="https://osm.org/copyright">OpenStreetMap contributors</a>';
 
@@ -61,31 +61,31 @@ const DistributionMap = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
+
         console.log("!");
         const response = await axios.get(urlPrefix.IP_port + "/dashboard/project/map");
-        const data:coordinate[] = response.data;
+        const data: coordinate[] = response.data;
 
         console.log(data);
         setMarkers(data);
-        
+
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  },[]);
+  }, []);
 
   return (
-    <div style={{display:"flex", alignItems:"center",justifyContent: 'center', }}>
-      <Map center={[34, 128]} zoom={6} style={{ width: '100%'}}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: 'center', }}>
+      <Map center={[34, 128]} zoom={6} style={{ width: '100%' }}>
         <MapLayers>
           <MapTileLayer
             urlTemplate={tileUrl}
             subdomains={tileSubdomains}
             attribution={attribution}
-            
+
           />
           <MapShapeLayer data={geoShapes} style={markerStyle} />
 

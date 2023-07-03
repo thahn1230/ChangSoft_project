@@ -7,14 +7,15 @@ from dbAccess import create_db_connection
 router = APIRouter()
 engine = create_db_connection()
 
+
 # 빌딩 id의 맞는 sub building을 받기
 @router.get("/sub_building/{building_id}")
 def get_sub_building_data(building_id: int):
-    query=f"""
+    query = f"""
         SELECT * FROM sub_building
         WHERE sub_building.building_id = {building_id}
     """
-    
+
     sub_building_df = pd.read_sql(query, engine)
     return JSONResponse(sub_building_df.to_json(force_ascii=False, orient="records"))
 
@@ -22,7 +23,7 @@ def get_sub_building_data(building_id: int):
 # 총괄분석표 전체 sub_building 1
 @router.get("/sub_building/total_analysis_table1/{building_id}")
 def get_total_analysis_data1(building_id: int):
-    query=f"""
+    query = f"""
         SELECT *, 
         (total_concrete / total_floor_area_meter) AS con_floor_area_meter,
         (total_formwork / total_floor_area_meter) AS form_floor_area_meter,
@@ -59,7 +60,7 @@ def get_total_analysis_data1(building_id: int):
                 WHERE building.id = {building_id}) AS total_floor_area_pyeong
             ) AS sub_table
     """
-    
+
     analysis_data_df = pd.read_sql(query, engine)
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
@@ -67,82 +68,62 @@ def get_total_analysis_data1(building_id: int):
 # 총괄분석표 전체 sub_building 2
 @router.get("/sub_building/total_analysis_table2/{building_id}")
 def get_total_analysis_data2(building_id: int):
-    query=f"""
-        SELECT
-        com.component_type,
-        SUM(con.volume) AS con_total,
-        SUM(con.volume) * 100.0 / totals.total_volume AS con_percentage,
-        SUM(form.area) AS form_total,
-        SUM(form.area) * 100.0 / totals.total_area AS form_percentage,
-        SUM(reb.rebar_weight) AS reb_total,
-        SUM(reb.rebar_weight) * 100.0 / totals.total_weight AS reb_percentage
-        FROM
-        component AS com
-        JOIN sub_building AS sub ON com.sub_building_id = sub.id
+    query = f"""
+        SELECT c.component_type,
+        ROUND(SUM(concrete_volume), 2) AS concrete_volume,
+        ROUND(SUM(formwork_area), 2) AS formwork_area,
+        ROUND(SUM(rebar_weight), 2) AS rebar_weight,
+        ROUND((SUM(concrete_volume) / (SELECT SUM(volume) FROM concrete 
+        WHERE component_id 
+        IN (SELECT id FROM component WHERE sub_building_id IN 
+        (SELECT id FROM sub_building WHERE building_id = {building_id})))) * 100, 2) 
+        AS concrete_percentage,
+        ROUND((SUM(formwork_area) / (SELECT SUM(area) FROM formwork WHERE component_id 
+        IN (SELECT id FROM component WHERE sub_building_id IN 
+        (SELECT id FROM sub_building 
+        WHERE building_id = {building_id})))) * 100, 2) 
+        AS formwork_percentage,
+        ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) FROM rebar 
+        WHERE component_id 
+        IN (SELECT id FROM component WHERE sub_building_id IN 
+        (SELECT id FROM sub_building 
+        WHERE building_id = {building_id})))) * 100, 2) AS rebar_percentage
+        FROM (
+            SELECT component.component_type
+            FROM component
+            GROUP BY component.component_type
+        ) AS c
         LEFT JOIN (
-            SELECT
-            con.component_id,
-            SUM(con.volume) AS volume
-            FROM
-            concrete AS con
-            JOIN component AS com ON con.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.building_id = {building_id}
-            GROUP BY
-            con.component_id
-        ) AS con ON com.id = con.component_id
+            SELECT component.component_type, SUM(concrete.volume) AS concrete_volume
+            FROM concrete
+            JOIN component ON concrete.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.building_id = {building_id}
+            GROUP BY component.component_type
+        ) AS cv ON c.component_type = cv.component_type
         LEFT JOIN (
-            SELECT
-            form.component_id,
-            SUM(form.area) AS area
-            FROM
-            formwork AS form
-            JOIN component AS com ON form.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.building_id = {building_id}
-            GROUP BY
-            form.component_id
-        ) AS form ON com.id = form.component_id
+            SELECT component.component_type, SUM(formwork.area) AS formwork_area
+            FROM formwork
+            JOIN component ON formwork.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.building_id = {building_id}
+            GROUP BY component.component_type
+        ) AS fa ON c.component_type = fa.component_type
         LEFT JOIN (
-            SELECT
-            reb.component_id,
-            SUM(reb.rebar_weight) AS rebar_weight
-            FROM
-            rebar AS reb
-            JOIN component AS com ON reb.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.building_id = {building_id}
-            GROUP BY
-            reb.component_id
-        ) AS reb ON com.id = reb.component_id
-        JOIN (
-            SELECT
-            sub.id AS sub_id,
-            SUM(con.volume) AS total_volume,
-            SUM(form.area) AS total_area,
-            SUM(reb.rebar_weight) AS total_weight
-            FROM
-            sub_building AS sub
-            LEFT JOIN component AS com ON com.sub_building_id = sub.id
-            LEFT JOIN concrete AS con ON con.component_id = com.id
-            LEFT JOIN formwork AS form ON form.component_id = com.id
-            LEFT JOIN rebar AS reb ON reb.component_id = com.id
-            WHERE
-            sub.building_id = {building_id}
-            GROUP BY
-            sub.id
-        ) AS totals ON sub.id = totals.sub_id
-        WHERE
-        sub.building_id = {building_id}
-        GROUP BY
-        com.component_type, totals.total_volume, totals.total_area, totals.total_weight
-        ORDER BY
-        com.component_type;
+            SELECT component.component_type, SUM(rebar.rebar_weight) AS rebar_weight
+            FROM rebar
+            JOIN component ON rebar.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.building_id = {building_id}
+            GROUP BY component.component_type
+        ) AS rw ON c.component_type = rw.component_type
+        GROUP BY c.component_type
+        HAVING concrete_volume IS NOT NULL
+            AND formwork_area IS NOT NULL
+            AND rebar_weight IS NOT NULL
+        ORDER BY c.component_type;
     """
-    
+
     analysis_data_df = pd.read_sql(query, engine)
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
@@ -150,7 +131,7 @@ def get_total_analysis_data2(building_id: int):
 # 총괄분석표 한개의 sub_building 1
 @router.get("/sub_building/analysis_table1/{sub_building_id}")
 def get_analysis_data1(sub_building_id: int):
-    query=f"""
+    query = f"""
         SELECT * , (total_formwork / total_concrete) AS form_con_result,
         (total_rebar / total_concrete) AS reb_con_result 
         FROM (SELECT
@@ -170,7 +151,7 @@ def get_analysis_data1(sub_building_id: int):
                 WHERE sub.id = {sub_building_id}) AS total_rebar
             ) AS sub_table
     """
-    
+
     analysis_data_df = pd.read_sql(query, engine)
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
@@ -178,81 +159,61 @@ def get_analysis_data1(sub_building_id: int):
 # 총괄분석표 한개의 sub_building 2
 @router.get("/sub_building/analysis_table2/{sub_building_id}")
 def get_analysis_data2(sub_building_id: int):
-    query=f"""
-        SELECT
-        com.component_type,
-        SUM(con.volume) AS con_total,
-        SUM(con.volume) * 100.0 / totals.total_volume AS con_percentage,
-        SUM(form.area) AS form_total,
-        SUM(form.area) * 100.0 / totals.total_area AS form_percentage,
-        SUM(reb.rebar_weight) AS reb_total,
-        SUM(reb.rebar_weight) * 100.0 / totals.total_weight AS reb_percentage
-        FROM
-        component AS com
-        JOIN sub_building AS sub ON com.sub_building_id = sub.id
+    query = f"""
+        SELECT c.component_type,
+        ROUND(SUM(concrete_volume), 2) AS concrete_volume,
+        ROUND(SUM(formwork_area), 2) AS formwork_area,
+        ROUND(SUM(rebar_weight), 2) AS rebar_weight,
+        ROUND((SUM(concrete_volume) / (SELECT SUM(volume) 
+        FROM concrete WHERE component_id IN (SELECT id FROM component 
+        WHERE sub_building_id IN (SELECT id FROM sub_building 
+        WHERE id = {sub_building_id})))) * 100, 2) 
+        AS concrete_percentage,
+        ROUND((SUM(formwork_area) / (SELECT SUM(area) 
+        FROM formwork WHERE component_id IN (SELECT id FROM component 
+        WHERE sub_building_id IN (SELECT id FROM sub_building 
+        WHERE id = {sub_building_id})))) * 100, 2) 
+        AS formwork_percentage,
+        ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) 
+        FROM rebar WHERE component_id IN (SELECT id FROM component 
+        WHERE sub_building_id IN (SELECT id FROM sub_building 
+        WHERE id = {sub_building_id})))) * 100, 2) 
+        AS rebar_percentage
+        FROM (
+            SELECT component.component_type
+            FROM component
+            GROUP BY component.component_type
+        ) AS c
         LEFT JOIN (
-            SELECT
-            con.component_id,
-            SUM(con.volume) AS volume
-            FROM
-            concrete AS con
-            JOIN component AS com ON con.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.id = {sub_building_id}
-            GROUP BY
-            con.component_id
-        ) AS con ON com.id = con.component_id
+            SELECT component.component_type, SUM(concrete.volume) AS concrete_volume
+            FROM concrete
+            JOIN component ON concrete.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.id = {sub_building_id}
+            GROUP BY component.component_type
+        ) AS cv ON c.component_type = cv.component_type
         LEFT JOIN (
-            SELECT
-            form.component_id,
-            SUM(form.area) AS area
-            FROM
-            formwork AS form
-            JOIN component AS com ON form.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.id = {sub_building_id}
-            GROUP BY
-            form.component_id
-        ) AS form ON com.id = form.component_id
+            SELECT component.component_type, SUM(formwork.area) AS formwork_area
+            FROM formwork
+            JOIN component ON formwork.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.id = {sub_building_id}
+            GROUP BY component.component_type
+        ) AS fa ON c.component_type = fa.component_type
         LEFT JOIN (
-            SELECT
-            reb.component_id,
-            SUM(reb.rebar_weight) AS rebar_weight
-            FROM
-            rebar AS reb
-            JOIN component AS com ON reb.component_id = com.id
-            JOIN sub_building AS sub ON com.sub_building_id = sub.id
-            WHERE
-            sub.id = {sub_building_id}
-            GROUP BY
-            reb.component_id
-        ) AS reb ON com.id = reb.component_id
-        JOIN (
-            SELECT
-            sub.id AS sub_id,
-            SUM(con.volume) AS total_volume,
-            SUM(form.area) AS total_area,
-            SUM(reb.rebar_weight) AS total_weight
-            FROM
-            sub_building AS sub
-            LEFT JOIN component AS com ON com.sub_building_id = sub.id
-            LEFT JOIN concrete AS con ON con.component_id = com.id
-            LEFT JOIN formwork AS form ON form.component_id = com.id
-            LEFT JOIN rebar AS reb ON reb.component_id = com.id
-            WHERE
-            sub.id = {sub_building_id}
-            GROUP BY
-            sub.id
-        ) AS totals ON sub.id = totals.sub_id
-        WHERE
-        sub.id = {sub_building_id}
-        GROUP BY
-        com.component_type, totals.total_volume, totals.total_area, totals.total_weight
-        ORDER BY
-        com.component_type;
+            SELECT component.component_type, SUM(rebar.rebar_weight) AS rebar_weight
+            FROM rebar
+            JOIN component ON rebar.component_id = component.id
+            JOIN sub_building ON component.sub_building_id = sub_building.id
+            WHERE sub_building.id = {sub_building_id}
+            GROUP BY component.component_type
+        ) AS rw ON c.component_type = rw.component_type
+        GROUP BY c.component_type
+        HAVING concrete_volume IS NOT NULL
+            AND formwork_area IS NOT NULL
+            AND rebar_weight IS NOT NULL
+        ORDER BY c.component_type;
     """
-    
+
     analysis_data_df = pd.read_sql(query, engine)
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
