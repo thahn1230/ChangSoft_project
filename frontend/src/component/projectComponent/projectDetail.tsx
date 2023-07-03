@@ -8,7 +8,7 @@ import {
 } from "@progress/kendo-react-grid";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
-import "../../styles/GridDetail.scss"
+import "../../styles/GridDetail.scss";
 
 interface projectDetail_interface {
   project_name: string;
