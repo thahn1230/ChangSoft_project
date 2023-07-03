@@ -17,8 +17,10 @@ const Projects = (props:any) => {
   useEffect(() => {
     props.setBuildingInfo(buildingInfo)
   }, [buildingInfo]);
+  useEffect(() => {
+    props.setProjectName(selectedProjectName)
+  }, [selectedProjectName]);
   
-
   return (
     <div className="projects">
       <ProjectList

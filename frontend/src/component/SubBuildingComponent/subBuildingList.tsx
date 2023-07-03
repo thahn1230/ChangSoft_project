@@ -64,15 +64,17 @@ const SubBuildingList = (props: any) => {
     props.setSelectedSubBuildingId(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
 
+  useEffect(() => {
+    props.setSelectedSubBuildingId(selectedSubBuildingId)
+  }, [selectedSubBuildingName]);
+
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);
-    console.log(selectedSubBuildingName)
-    props.setSelectedSubBuildingId(selectedSubBuildingId)
   };
 
   return (
     <div>
-      <div>{props.buildingInfo?.building_name}</div>
+      <div>{props.projectName}</div>
       <DropDownList
         data={subBuildinglist}
         //value={selectedBuilding ? selectedBuilding.id : null}

@@ -29,6 +29,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
     const selectedSubBuilding = subBuildingInfo?.find(
       (obj) => obj.id === selectedSubBuildingId
     );
+
     setSelectedSubBuildingInfo(selectedSubBuilding);
   }, [props]);
 
@@ -60,11 +61,11 @@ const SubBuildingAnalysisTable3 = (props: any) => {
           {analysisTable1 && analysisTable1[0] && (
             <Grid data={analysisTable1Grid}>
               <GridColumn
-                title="건물명 구분"
+                title="SubBuilding Name"
                 headerClassName="custom-header-cell"
               >
                 <GridColumn
-                  title={selectedSubBuildingInfo?.sub_building_name}
+                  title={(subBuildingInfo?.find((obj) => obj.id === selectedSubBuildingId))?.sub_building_name}
                 ></GridColumn>
                 <GridColumn width="0px" />
               </GridColumn>
