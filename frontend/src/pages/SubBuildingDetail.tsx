@@ -134,7 +134,9 @@ const SubBuildingDetail = (props: any) => {
       <br />
       <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
 
-      <SubBuildingTotalAnalysisTable1 selectedSubBuildingId = {selectedSubBuildingId}></SubBuildingTotalAnalysisTable1>
+      <SubBuildingTotalAnalysisTable1
+        selectedSubBuildingId={selectedSubBuildingId}
+      ></SubBuildingTotalAnalysisTable1>
     </div>
   );
 };
