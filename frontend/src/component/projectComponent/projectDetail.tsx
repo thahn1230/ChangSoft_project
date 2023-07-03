@@ -102,7 +102,7 @@ const ProjectDetail = (props: any) => {
           />
           <GridColumn
             field="total_date"
-            title="소요일??"
+            title="소요일"
             headerClassName={headerClassName}
           />
         </GridColumn>
