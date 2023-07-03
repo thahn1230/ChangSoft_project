@@ -1,15 +1,9 @@
-.sub-building-list {
-    display: flex;
-    justify-content: space-between;
-    
-    .left-panel {
-      flex: 1;
-      // add other left-panel specific styles here
-    }
-    
-    .right-panel {
-      flex: 1;
-      // add other right-panel specific styles here
-    }
-  }
-  
+.left-components {
+    float: left;
+    width: 50%;
+}
+
+.right-components {
+    float: right;
+    width: 50%;
+}

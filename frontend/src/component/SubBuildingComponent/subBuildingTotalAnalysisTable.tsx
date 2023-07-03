@@ -33,7 +33,7 @@ const SubBuildingTotalAnalysisTable = (props: any) => {
     const headerClassName = "custom-header-cell";
   
     return (
-      <div className="table-container" style={{width: "50%"}}>
+      <div className="table-container">
         {subBuildingDetail && (
           <div>
             <Grid data={subBuildingDetail}>

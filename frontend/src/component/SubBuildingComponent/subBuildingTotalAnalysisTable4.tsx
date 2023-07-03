@@ -60,7 +60,7 @@ const SubBuildingAnalysisTable4 = (props: any) => {
     setReturnDiv(  <div>
         {selectedSubBuildingInfo && (
           <div className="table-container">
-            <Grid data={selectedSubBuildingInfo} style={{ width: "50%" }}>
+            <Grid data={selectedSubBuildingInfo}>
               <GridColumn
                 title="구분"
                 field="component_type"
