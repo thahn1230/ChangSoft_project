@@ -39,12 +39,12 @@ const TotalAnalysisGrid2 = (props: any) => {
         <div>
           <Grid data={selectedBuildingInfo}>
             <GridColumn title="구분" field="component_type" />
-            <GridColumn title="콘크리트(m³)" field="con_total" />
-            <GridColumn title="콘크리트(%)" field="con_percentage" />
-            <GridColumn title="거푸집(㎡)" field="form_total" />
-            <GridColumn title="거푸집(%)" field="form_percentage" />
-            <GridColumn title="철근(Ton)" field="reb_total" />
-            <GridColumn title="철근(%)" field="reb_percentage" />
+            <GridColumn title="콘크리트(m³)" field="concrete_volume" />
+            <GridColumn title="콘크리트(%)" field="concrete_percentage" />
+            <GridColumn title="거푸집(㎡)" field="formwork_area" />
+            <GridColumn title="거푸집(%)" field="formwork_percentage" />
+            <GridColumn title="철근(Ton)" field="rebar_weight" />
+            <GridColumn title="철근(%)" field="rebar_percentage" />
           </Grid>
         </div>
       )}
