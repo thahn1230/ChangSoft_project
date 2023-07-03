@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import { subBuildingTotalAnalysisTable1_interface } from "./../../interface/subBuildingTotalAnalysisTable1_interface";
+import { subBuildingInfo_interface } from "./../../interface/subBuildingInfo_interface";
 
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
@@ -9,6 +10,10 @@ import urlPrefix from "../../resource/URL_prefix.json";
 const SubBuildingAnalysisTable3 = (props: any) => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
   const [returnDiv, setReturnDiv] = useState(<div></div>);
+
+  const [subBuildingInfo, setSubBuildingInfo] =
+    useState<subBuildingInfo_interface[]>();
+  const [selectedSubBuildingInfo , setSelectedSubBuildingInfo] =useState<subBuildingInfo_interface>();
 
   const [analysisTable1, setAnalysisTable1] =
     useState<subBuildingTotalAnalysisTable1_interface[]>();
@@ -19,7 +24,15 @@ const SubBuildingAnalysisTable3 = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setSubBuildingInfo(props.subBuildingInfo);  
         setSelectedSubBuildingId(props.selectedSubBuildingId);
+
+        const selectedSubBuilding = subBuildingInfo?.find(obj => obj.id===selectedSubBuildingId)
+        setSelectedSubBuildingInfo(selectedSubBuilding)
+
+        console.log(props)
+        //console.log(subBuildingInfo)
+       // console.log(selectedSubBuildingInfo?.sub_building_name)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -31,13 +44,13 @@ const SubBuildingAnalysisTable3 = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const response1 = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table1/" + selectedSubBuildingId
-          );
-  
-          setAnalysisTable1(JSON.parse(response1.data));
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table1/" +
+            selectedSubBuildingId
+        );
+
+        setAnalysisTable1(JSON.parse(response1.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -48,16 +61,36 @@ const SubBuildingAnalysisTable3 = (props: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
+        console.log("return val will be changed")
       try {
-        console.log("a");
-        console.log(selectedSubBuildingId);
         if (
           typeof selectedSubBuildingId === "number" &&
           selectedSubBuildingId !== 0
         ) {
-          console.log("changed");
           setReturnDiv(
             <div>
+              {analysisTable1 && analysisTable1[0] && (
+                <Grid data={analysisTable1Grid}>
+                  <GridColumn
+                    title="건물명 구분"
+                    headerClassName="custom-header-cell"
+                  >
+                    <GridColumn
+                      title={selectedSubBuildingInfo?.sub_building_name}
+                    ></GridColumn>
+                    <GridColumn width="0px" />
+                  </GridColumn>
+
+                  <GridColumn
+                    title="연면적"
+                    headerClassName="custom-header-cell"
+                  >
+                    <GridColumn title={" / "}></GridColumn>
+                    <GridColumn width={"0px"}></GridColumn>
+                  </GridColumn>
+                </Grid>
+              )}
+
               {analysisTable1Grid &&
                 analysisTable1Grid.length > 0 &&
                 analysisTable1 &&
@@ -96,7 +129,8 @@ const SubBuildingAnalysisTable3 = (props: any) => {
 
     fetchData();
   }, [analysisTable1Grid]);
-  
+
+
   useEffect(() => {
     if (analysisTable1) {
       let tableGrid = [];
@@ -128,6 +162,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
       setAnalysisTable1Grid(tableGrid);
     }
   }, [analysisTable1]);
+
   return returnDiv;
 };
 
