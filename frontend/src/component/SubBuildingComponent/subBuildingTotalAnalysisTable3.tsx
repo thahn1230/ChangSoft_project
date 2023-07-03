@@ -31,7 +31,7 @@ const SubBuildingAnalysisTable3=(props:any)=>{
         fetchData();
       }, [selectedSubBuildingId]);
 
-      return (<div></div>)
+      return (<div> {props.selectedSubBuildingId} 선택됨</div>)
 }
 
 export default SubBuildingAnalysisTable3;

@@ -88,7 +88,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
         "철근(Ton)": analysisTable1[0].reb_floor_area_pyeong,
       });
       tableGrid.push({
-        구분: "콘크리트 m^당 값",
+        구분: "콘크리트 1㎥당 값",
         "콘크리트(㎥)": "",
         거푸집: analysisTable1[0].form_con_result,
         "철근(Ton)": analysisTable1[0].reb_con_result,
