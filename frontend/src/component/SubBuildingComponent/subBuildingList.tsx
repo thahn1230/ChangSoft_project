@@ -66,6 +66,7 @@ const SubBuildingList = (props: any) => {
 
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);
+    console.log(selectedSubBuildingName)
     props.setSelectedSubBuildingId(selectedSubBuildingId)
   };
 

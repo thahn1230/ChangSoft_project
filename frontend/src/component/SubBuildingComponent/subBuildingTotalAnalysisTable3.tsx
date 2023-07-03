@@ -8,12 +8,13 @@ import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 
 const SubBuildingAnalysisTable3 = (props: any) => {
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
   const [returnDiv, setReturnDiv] = useState(<div></div>);
 
   const [subBuildingInfo, setSubBuildingInfo] =
     useState<subBuildingInfo_interface[]>();
-  const [selectedSubBuildingInfo , setSelectedSubBuildingInfo] =useState<subBuildingInfo_interface>();
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
+  const [selectedSubBuildingInfo, setSelectedSubBuildingInfo] =
+    useState<subBuildingInfo_interface>();
 
   const [analysisTable1, setAnalysisTable1] =
     useState<subBuildingTotalAnalysisTable1_interface[]>();
@@ -22,22 +23,13 @@ const SubBuildingAnalysisTable3 = (props: any) => {
   >([{}]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setSubBuildingInfo(props.subBuildingInfo);  
-        setSelectedSubBuildingId(props.selectedSubBuildingId);
+    setSubBuildingInfo(props.subBuildingInfo);
+    setSelectedSubBuildingId(props.selectedSubBuildingId);
 
-        const selectedSubBuilding = subBuildingInfo?.find(obj => obj.id===selectedSubBuildingId)
-        setSelectedSubBuildingInfo(selectedSubBuilding)
-
-        //console.log(subBuildingInfo)
-       // console.log(selectedSubBuildingInfo?.sub_building_name)
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    const selectedSubBuilding = subBuildingInfo?.find(
+      (obj) => obj.id === selectedSubBuildingId
+    );
+    setSelectedSubBuildingInfo(selectedSubBuilding);
   }, [props]);
 
   useEffect(() => {
@@ -59,75 +51,63 @@ const SubBuildingAnalysisTable3 = (props: any) => {
   }, [selectedSubBuildingId]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (
-          typeof selectedSubBuildingId === "number" &&
-          selectedSubBuildingId !== 0
-        ) {
-          setReturnDiv(
-            <div>
-              {analysisTable1 && analysisTable1[0] && (
-                <Grid data={analysisTable1Grid}>
-                  <GridColumn
-                    title="건물명 구분"
-                    headerClassName="custom-header-cell"
-                  >
-                    <GridColumn
-                      title={selectedSubBuildingInfo?.sub_building_name}
-                    ></GridColumn>
-                    <GridColumn width="0px" />
-                  </GridColumn>
+    if (
+      typeof selectedSubBuildingId === "number" &&
+      selectedSubBuildingId !== 0
+    ) {
+      setReturnDiv(
+        <div>
+          {analysisTable1 && analysisTable1[0] && (
+            <Grid data={analysisTable1Grid}>
+              <GridColumn
+                title="건물명 구분"
+                headerClassName="custom-header-cell"
+              >
+                <GridColumn
+                  title={selectedSubBuildingInfo?.sub_building_name}
+                ></GridColumn>
+                <GridColumn width="0px" />
+              </GridColumn>
 
-                  <GridColumn
-                    title="연면적"
-                    headerClassName="custom-header-cell"
-                  >
-                    <GridColumn title={" / "}></GridColumn>
-                    <GridColumn width={"0px"}></GridColumn>
-                  </GridColumn>
-                </Grid>
-              )}
+              <GridColumn title="연면적" headerClassName="custom-header-cell">
+                <GridColumn title={" / "}></GridColumn>
+                <GridColumn width={"0px"}></GridColumn>
+              </GridColumn>
+            </Grid>
+          )}
 
-              {analysisTable1Grid &&
-                analysisTable1Grid.length > 0 &&
-                analysisTable1 &&
-                analysisTable1[0] && (
-                  <Grid data={analysisTable1Grid}>
-                    <GridColumn
-                      title={"구분"}
-                      field={"구분"}
-                      headerClassName="custom-header-cell"
-                    ></GridColumn>
-                    <GridColumn
-                      title={"콘크리트(㎥)"}
-                      field={"콘크리트(㎥)"}
-                      headerClassName="custom-header-cell"
-                    ></GridColumn>
+          {analysisTable1Grid &&
+            analysisTable1Grid.length > 0 &&
+            analysisTable1 &&
+            analysisTable1[0] && (
+              <Grid data={analysisTable1Grid}>
+                <GridColumn
+                  title={"구분"}
+                  field={"구분"}
+                  headerClassName="custom-header-cell"
+                ></GridColumn>
+                <GridColumn
+                  title={"콘크리트(㎥)"}
+                  field={"콘크리트(㎥)"}
+                  headerClassName="custom-header-cell"
+                ></GridColumn>
 
-                    <GridColumn
-                      title={"거푸집(㎡)"}
-                      field={"거푸집"}
-                      headerClassName="custom-header-cell"
-                    ></GridColumn>
-                    <GridColumn
-                      title={"철근(Ton)"}
-                      field={"철근(Ton)"}
-                      headerClassName="custom-header-cell"
-                    ></GridColumn>
-                  </Grid>
-                )}
-            </div>
-          );
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+                <GridColumn
+                  title={"거푸집(㎡)"}
+                  field={"거푸집"}
+                  headerClassName="custom-header-cell"
+                ></GridColumn>
+                <GridColumn
+                  title={"철근(Ton)"}
+                  field={"철근(Ton)"}
+                  headerClassName="custom-header-cell"
+                ></GridColumn>
+              </Grid>
+            )}
+        </div>
+      );
+    }
   }, [analysisTable1Grid]);
-
 
   useEffect(() => {
     if (analysisTable1) {
@@ -161,7 +141,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
     }
   }, [analysisTable1]);
 
-  return returnDiv
+  return returnDiv;
 };
 
 export default SubBuildingAnalysisTable3;
