@@ -59,6 +59,7 @@ const SubBuildingList = (props: any) => {
     const selectedId = (subBuildingInfo.find(item => item.sub_building_name ===selectedSubBuildingName))?.id
     setSelectedSubBuildingId(selectedId)
   }, [selectedSubBuildingName]);
+
   useEffect(() => {
     props.setSelectedSubBuildingId(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
