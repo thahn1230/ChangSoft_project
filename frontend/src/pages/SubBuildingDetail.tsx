@@ -36,9 +36,6 @@ const SubBuildingDetail = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
-  const [analysisTable2, setAnalysisTable2] =
-    useState<subBuildingTotalAnalysisTable2_interface[]>();
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -46,7 +43,6 @@ const SubBuildingDetail = (props: any) => {
         //console.log(props.buildingInfo.id)
         setBuildingInfo(props.buildingInfo);
 
-        //
       } catch (error) {
         console.error("Error fetching data:", error);
       }

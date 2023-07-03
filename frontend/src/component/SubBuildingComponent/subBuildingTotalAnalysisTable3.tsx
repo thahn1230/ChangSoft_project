@@ -30,7 +30,6 @@ const SubBuildingAnalysisTable3 = (props: any) => {
         const selectedSubBuilding = subBuildingInfo?.find(obj => obj.id===selectedSubBuildingId)
         setSelectedSubBuildingInfo(selectedSubBuilding)
 
-        console.log(props)
         //console.log(subBuildingInfo)
        // console.log(selectedSubBuildingInfo?.sub_building_name)
       } catch (error) {
@@ -61,7 +60,6 @@ const SubBuildingAnalysisTable3 = (props: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-        console.log("return val will be changed")
       try {
         if (
           typeof selectedSubBuildingId === "number" &&
