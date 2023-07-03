@@ -19,7 +19,7 @@ const SubBuildingTotalAnalysisTable = (props: any) => {
             "/analysis_table/" +
             props.subBuildingInfo.id
           );
-          console.log(response);
+          
           const data = JSON.parse(response.data);
           setSubBuildingDetail(data);
         } catch (error) {
