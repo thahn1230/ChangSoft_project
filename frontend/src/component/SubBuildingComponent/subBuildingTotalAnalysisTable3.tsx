@@ -6,7 +6,6 @@ import { subBuildingInfo_interface } from "./../../interface/subBuildingInfo_int
 
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
-import "./../../styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingAnalysisTable3 = (props: any) => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
@@ -71,7 +70,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
           setReturnDiv(
             <div>
               {analysisTable1 && analysisTable1[0] && (
-                <Grid data={analysisTable1Grid}>
+                <Grid data={analysisTable1Grid} style={{width: "50%"}}>
                   <GridColumn
                     title="건물명 구분"
                     headerClassName="custom-header-cell"
@@ -96,7 +95,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
                 analysisTable1Grid.length > 0 &&
                 analysisTable1 &&
                 analysisTable1[0] && (
-                  <Grid data={analysisTable1Grid} style={{width: "50%"}}>
+                  <Grid data={analysisTable1Grid}>
                     <GridColumn
                       title={"구분"}
                       field={"구분"}
@@ -164,7 +163,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
     }
   }, [analysisTable1]);
 
-  return returnDiv;
+  return returnDiv
 };
 
 export default SubBuildingAnalysisTable3;
