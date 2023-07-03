@@ -102,12 +102,12 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     <div className="table-container" style={{width: "50%"}}>
       {analysisTable1 && analysisTable1[0] && (
         <Grid data={analysisTable1Grid}>
-          <GridColumn title="건물명 구분">
+          <GridColumn title="건물명 구분" headerClassName="custom-header-cell">
             <GridColumn title={buildingInfo?.building_name}></GridColumn>
             <GridColumn width="0px" />
           </GridColumn>
 
-          <GridColumn title="연면적">
+          <GridColumn title="연면적" headerClassName="custom-header-cell">
             <GridColumn
               title={
                 analysisTable1[0].total_floor_area_meter.toString() +
@@ -126,14 +126,15 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
         analysisTable1 &&
         analysisTable1[0] && (
           <Grid data={analysisTable1Grid}>
-            <GridColumn title={"구분"} field={"구분"}></GridColumn>
+            <GridColumn title={"구분"} field={"구분"} headerClassName="custom-header-cell"></GridColumn>
             <GridColumn
               title={"콘크리트(㎥)"}
               field={"콘크리트(㎥)"}
+              headerClassName="custom-header-cell"
             ></GridColumn>
 
-            <GridColumn title={"거푸집(㎡)"} field={"거푸집"}></GridColumn>
-            <GridColumn title={"철근(Ton)"} field={"철근(Ton)"}></GridColumn>
+            <GridColumn title={"거푸집(㎡)"} field={"거푸집"} headerClassName="custom-header-cell"></GridColumn>
+            <GridColumn title={"철근(Ton)"} field={"철근(Ton)"} headerClassName="custom-header-cell"></GridColumn>
           </Grid>
         )}
     </div>
