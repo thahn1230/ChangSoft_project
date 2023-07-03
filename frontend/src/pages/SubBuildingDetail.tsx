@@ -90,27 +90,27 @@ const SubBuildingDetail = (props: any) => {
 
       tableGrid.push({
         구분: "총물량",
-        "콘크리트(㎥)": analysisTable1[0].total_concrete.toFixed(2),
-        거푸집: analysisTable1[0].total_formwork.toFixed(2),
-        "철근(Ton)": analysisTable1[0].total_rebar.toFixed(2),
+        "콘크리트(㎥)": analysisTable1[0].total_concrete,
+        거푸집: analysisTable1[0].total_formwork,
+        "철근(Ton)": analysisTable1[0].total_rebar,
       });
       tableGrid.push({
         구분: "연면적",
-        "콘크리트(㎥)": analysisTable1[0].con_floor_area_meter.toFixed(2),
-        거푸집: analysisTable1[0].form_floor_area_meter.toFixed(2),
-        "철근(Ton)": analysisTable1[0].reb_floor_area_meter.toFixed(2),
+        "콘크리트(㎥)": analysisTable1[0].con_floor_area_meter,
+        거푸집: analysisTable1[0].form_floor_area_meter,
+        "철근(Ton)": analysisTable1[0].reb_floor_area_meter,
       });
       tableGrid.push({
         구분: "평당/평",
-        "콘크리트(㎥)": analysisTable1[0].con_floor_area_pyeong.toFixed(2),
-        거푸집: analysisTable1[0].form_floor_area_pyeong.toFixed(2),
-        "철근(Ton)": analysisTable1[0].reb_floor_area_pyeong.toFixed(2),
+        "콘크리트(㎥)": analysisTable1[0].con_floor_area_pyeong,
+        거푸집: analysisTable1[0].form_floor_area_pyeong,
+        "철근(Ton)": analysisTable1[0].reb_floor_area_pyeong,
       });
       tableGrid.push({
         구분: "콘크리트 m^당 값",
         "콘크리트(㎥)": "",
-        거푸집: analysisTable1[0].form_con_result.toFixed(2),
-        "철근(Ton)": analysisTable1[0].reb_con_result.toFixed(2),
+        거푸집: analysisTable1[0].form_con_result,
+        "철근(Ton)": analysisTable1[0].reb_con_result,
       });
       setAnalysisTable1Grid(tableGrid);
     }
@@ -129,8 +129,12 @@ const SubBuildingDetail = (props: any) => {
         subBuildingInfo={subBuildingInfo}
         selectedSubBuildingId={selectedSubBuildingId}
       />
-
+      <br />
+      <br />
+      <br />
       <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+
+      <SubBuildingTotalAnalysisTable1 selectedSubBuildingId = {selectedSubBuildingId}></SubBuildingTotalAnalysisTable1>
     </div>
   );
 };
