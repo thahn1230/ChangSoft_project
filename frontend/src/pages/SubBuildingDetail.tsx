@@ -8,7 +8,7 @@ import {
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
-import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3"
+import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3";
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
 
@@ -48,7 +48,6 @@ const SubBuildingDetail = (props: any) => {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
 
     fetchData();
@@ -63,7 +62,6 @@ const SubBuildingDetail = (props: any) => {
 
         const subBuildings = JSON.parse(response.data);
         setSubBuildingInfo(subBuildings);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -74,8 +72,6 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -124,18 +120,21 @@ const SubBuildingDetail = (props: any) => {
         setSelectedSubBuildingId={setSelectedSubBuildingId}
       />
 
-      <SubBuildingTotalAnalysisTable1
-        endpoint={"total_analysis_table1/" + buildingInfo?.id}
-        buildingInfo={buildingInfo}
-        subBuildingInfo={subBuildingInfo}
-        selectedSubBuildingId={selectedSubBuildingId}
-      />
-      <br />
-      <br />
-      <br />
-      <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+      <div className="left-panel">
+        <SubBuildingTotalAnalysisTable1
+          endpoint={"total_analysis_table1/" + buildingInfo?.id}
+          buildingInfo={buildingInfo}
+          subBuildingInfo={subBuildingInfo}
+          selectedSubBuildingId={selectedSubBuildingId}
+        />
+        <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+      </div>
 
-      <SubBuildingTotalAnalysisTable3 selectedSubBuildingId = {selectedSubBuildingId}></SubBuildingTotalAnalysisTable3>
+      <div className="right-panel">
+        <SubBuildingTotalAnalysisTable3
+          selectedSubBuildingId={selectedSubBuildingId}
+        ></SubBuildingTotalAnalysisTable3>
+      </div>
     </div>
   );
 };

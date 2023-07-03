@@ -1,0 +1,15 @@
+.sub-building-list {
+    display: flex;
+    justify-content: space-between;
+    
+    .left-panel {
+      flex: 1;
+      // add other left-panel specific styles here
+    }
+    
+    .right-panel {
+      flex: 1;
+      // add other right-panel specific styles here
+    }
+  }
+  
