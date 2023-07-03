@@ -8,6 +8,8 @@ import {
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
+import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
+
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
@@ -72,7 +74,7 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(selectedSubBuildingId)
+        console.log(selectedSubBuildingId);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -128,6 +130,7 @@ const SubBuildingDetail = (props: any) => {
         selectedSubBuildingId={selectedSubBuildingId}
       />
 
+      <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
     </div>
   );
 };
