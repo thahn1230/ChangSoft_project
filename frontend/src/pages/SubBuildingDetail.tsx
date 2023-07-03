@@ -8,11 +8,10 @@ import {
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
-import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3"
-import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4"
+import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3";
+import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4";
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
-
 
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
@@ -20,6 +19,7 @@ import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuil
 
 import axios from "axios";
 import urlPrefix from "./../resource/URL_prefix.json";
+import "./../styles/SubBuildingDetail.scss"
 
 const SubBuildingDetail = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -50,7 +50,6 @@ const SubBuildingDetail = (props: any) => {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
     };
 
     fetchData();
@@ -65,7 +64,6 @@ const SubBuildingDetail = (props: any) => {
 
         const subBuildings = JSON.parse(response.data);
         setSubBuildingInfo(subBuildings);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -73,7 +71,6 @@ const SubBuildingDetail = (props: any) => {
 
     fetchData();
   }, [buildingInfo]);
-
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -115,19 +112,26 @@ const SubBuildingDetail = (props: any) => {
         setSelectedSubBuildingId={setSelectedSubBuildingId}
       />
 
-      <SubBuildingTotalAnalysisTable1
-        endpoint={"total_analysis_table1/" + buildingInfo?.id}
-        buildingInfo={buildingInfo}
-        subBuildingInfo={subBuildingInfo}
-        selectedSubBuildingId={selectedSubBuildingId}
-      />
-      <br />
-      <br />
-      <br />
-      <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+      <div className="left-components">
+        <SubBuildingTotalAnalysisTable1
+          endpoint={"total_analysis_table1/" + buildingInfo?.id}
+          buildingInfo={buildingInfo}
+          subBuildingInfo={subBuildingInfo}
+          selectedSubBuildingId={selectedSubBuildingId}
+        />
+        <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+      </div>
 
-      <SubBuildingTotalAnalysisTable3 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingTotalAnalysisTable3>
-      <SubBuildingAnalysisTable4 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingAnalysisTable4>
+      <div className="right-components">
+        <SubBuildingTotalAnalysisTable3
+          selectedSubBuildingId={selectedSubBuildingId}
+          subBuildingInfo={subBuildingInfo}
+        ></SubBuildingTotalAnalysisTable3>
+        <SubBuildingAnalysisTable4
+          selectedSubBuildingId={selectedSubBuildingId}
+          subBuildingInfo={subBuildingInfo}
+        ></SubBuildingAnalysisTable4>
+      </div>
     </div>
   );
 };

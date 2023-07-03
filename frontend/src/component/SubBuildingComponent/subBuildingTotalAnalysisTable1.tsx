@@ -99,7 +99,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
   }, [analysisTable1]);
 
   return (
-    <div className="table-container" style={{width: "50%"}}>
+    <div className="table-container">
       {analysisTable1 && analysisTable1[0] && (
         <Grid data={analysisTable1Grid}>
           <GridColumn title="건물명 구분" headerClassName="custom-header-cell">
