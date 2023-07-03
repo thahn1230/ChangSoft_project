@@ -40,12 +40,12 @@ const TotalAnalysisGrid2 = (props: any) => {
         <div className="table-container" style={{width: "50%"}}>
           <Grid data={selectedBuildingInfo}>
             <GridColumn title="구분" field="component_type" width={"85%"} headerClassName="custom-header-cell"/>
-            <GridColumn title="콘크리트(m³)" field="concrete_volume" width={"104vw"} headerClassName="custom-header-cell"/>
-            <GridColumn title="콘크리트(%)" field="concrete_percentage" width={"100vw"} headerClassName="custom-header-cell"/>
-            <GridColumn title="거푸집(㎡)" field="formwork_area" width={"100vw"} headerClassName="custom-header-cell"/>
-            <GridColumn title="거푸집(%)" field="formwork_percentage" width={"100vw"} headerClassName="custom-header-cell"/>
-            <GridColumn title="철근(Ton)" field="rebar_weight" width={"100vw"} headerClassName="custom-header-cell"/>
-            <GridColumn title="철근(%)" field="rebar_percentage" width={"100vw"} headerClassName="custom-header-cell"/>
+            <GridColumn title="콘크리트(m³)" field="concrete_volume" width={"102.5%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="콘크리트(%)" field="concrete_percentage" width={"102.5%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="거푸집(㎡)" field="formwork_area" width={"102.5%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="거푸집(%)" field="formwork_percentage" width={"102.5%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="철근(Ton)" field="rebar_weight" width={"102.5%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="철근(%)" field="rebar_percentage" width={"102.5%"} headerClassName="custom-header-cell"/>
           </Grid>
         </div>
       )}
