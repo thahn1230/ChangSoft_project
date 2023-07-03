@@ -117,9 +117,11 @@ def get_construction_company_total_area():
 def get_map_data():
     query="""
         SELECT sub_table.latitude, sub_table.longitude, SUM(count) AS sum 
-        FROM (SELECT latitude, longitude, COUNT(*) AS count FROM structure3.location_coordinate AS loc JOIN structure3.building AS bldg
-        WHERE loc.project_id = bldg.project_id 
-        GROUP BY loc.project_id) AS sub_table
+        FROM 
+            (SELECT latitude, longitude, COUNT(*) AS count 
+            FROM structure3.location_coordinate AS loc 
+            JOIN structure3.building AS bldg ON loc.project_id = bldg.project_id
+            GROUP BY loc.project_id) AS sub_table
         GROUP BY sub_table.latitude, sub_table.longitude;
     """
     map_coordinates_df = pd.read_sql(query, engine)
