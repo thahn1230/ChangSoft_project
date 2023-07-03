@@ -12,15 +12,19 @@ const SubBuildingTotalAnalysisTable = (props: any) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
+          //console.log( "a")
+          //console.log( props.subBuildingInfo)
+          //console.log( props.subBuildingInfo.id)
+          /*
           const response = await axios.get(
             urlPrefix.IP_port +
-            "/sub_building/" +
-            "/analysis_table/" +
+            "/sub_building/analysis_table/" +
             props.subBuildingInfo.id
           );
           console.log(response);
           const data = JSON.parse(response.data);
           setSubBuildingDetail(data);
+          */
         } catch (error) {
           console.error("Error fetching data:", error);
         }
