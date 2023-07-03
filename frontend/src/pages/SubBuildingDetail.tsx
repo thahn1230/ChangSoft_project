@@ -8,9 +8,15 @@ import {
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
+<<<<<<< HEAD
 import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3";
+=======
+import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3"
+import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4"
+>>>>>>> ea4b6558da35092e115b1f366b0918e2283856fa
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
+
 
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
@@ -69,6 +75,7 @@ const SubBuildingDetail = (props: any) => {
 
     fetchData();
   }, [buildingInfo]);
+<<<<<<< HEAD
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -79,6 +86,9 @@ const SubBuildingDetail = (props: any) => {
 
     fetchData();
   }, [selectedSubBuildingId]);
+=======
+
+>>>>>>> ea4b6558da35092e115b1f366b0918e2283856fa
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -131,9 +141,14 @@ const SubBuildingDetail = (props: any) => {
       <br />
       <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
 
+<<<<<<< HEAD
       <SubBuildingTotalAnalysisTable3
         selectedSubBuildingId={selectedSubBuildingId}
       ></SubBuildingTotalAnalysisTable3>
+=======
+      <SubBuildingTotalAnalysisTable3 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingTotalAnalysisTable3>
+      <SubBuildingAnalysisTable4 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingAnalysisTable4>
+>>>>>>> ea4b6558da35092e115b1f366b0918e2283856fa
     </div>
   );
 };
