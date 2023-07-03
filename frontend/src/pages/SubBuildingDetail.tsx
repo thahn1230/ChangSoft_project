@@ -124,7 +124,7 @@ const SubBuildingDetail = (props: any) => {
       <br />
       <br />
       <br />
-      <TotalAnalysisGrid2 buildingId={buildingInfo?.id} />
+      <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
 
       <SubBuildingTotalAnalysisTable3 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingTotalAnalysisTable3>
       <SubBuildingAnalysisTable4 selectedSubBuildingId = {selectedSubBuildingId} subBuildingInfo ={subBuildingInfo} ></SubBuildingAnalysisTable4>

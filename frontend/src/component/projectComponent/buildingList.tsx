@@ -31,12 +31,10 @@ const initialDataState = {
 
 //여기에 빌딩상세정보
 const DetailComponent = (props: any) => {
-  props.setBuildingInfo(props.dataItem)
+  props.setBuildingInfo(props.dataItem);
   return (
     <div>
-      <BuildingDetail
-        buildingInfo = {props.dataItem}
-      />
+      <BuildingDetail buildingInfo={props.dataItem} />
     </div>
   );
 };
@@ -140,15 +138,36 @@ const BuildingList = (props: any) => {
         }}
         onPageChange={pageChange}
         expandField="expanded"
-        detail={({ dataItem }) => <DetailComponent dataItem={dataItem} setBuildingInfo = {props.setBuildingInfo} />}
+        detail={({ dataItem }) => (
+          <DetailComponent
+            dataItem={dataItem}
+            setBuildingInfo={props.setBuildingInfo}
+          />
+        )}
         onExpandChange={expandChange}
         filter={projectFilter}
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
-        <GridColumn title="Building Name" field="building_name"  headerClassName={headerClassName} />
-        <GridColumn title="Total Area" field="total_area" headerClassName={headerClassName} />
-        <GridColumn title="Stories" field="stories" headerClassName={headerClassName} />
-        <GridColumn title="Sub Buildings" field="sub_bldg_list" headerClassName={headerClassName} />
+        <GridColumn
+          title="Building Name"
+          field="building_name"
+          headerClassName={headerClassName}
+        />
+        <GridColumn
+          title="Total Area"
+          field="total_area"
+          headerClassName={headerClassName}
+        />
+        <GridColumn
+          title="Stories"
+          field="stories"
+          headerClassName={headerClassName}
+        />
+        <GridColumn
+          title="Sub Buildings"
+          field="sub_bldg_list"
+          headerClassName={headerClassName}
+        />
       </Grid>
     </div>
   );
