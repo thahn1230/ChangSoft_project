@@ -12,6 +12,7 @@ import {
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
 } from "@progress/kendo-react-grid";
+import "./../../styles/subBuildingTotalAnalysisTable.scss";
 
 const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
@@ -36,15 +37,15 @@ const TotalAnalysisGrid2 = (props: any) => {
   return (
     <div>
       {selectedBuildingInfo && (
-        <div>
-          <Grid data={selectedBuildingInfo}>
-            <GridColumn title="구분" field="component_type" />
-            <GridColumn title="콘크리트(m³)" field="concrete_volume" />
-            <GridColumn title="콘크리트(%)" field="concrete_percentage" />
-            <GridColumn title="거푸집(㎡)" field="formwork_area" />
-            <GridColumn title="거푸집(%)" field="formwork_percentage" />
-            <GridColumn title="철근(Ton)" field="rebar_weight" />
-            <GridColumn title="철근(%)" field="rebar_percentage" />
+        <div className="table-container">
+          <Grid data={selectedBuildingInfo} style={{width: "50%"}}>
+            <GridColumn title="구분" field="component_type" headerClassName="custom-header-cell"/>
+            <GridColumn title="콘크리트(m³)" field="concrete_volume" headerClassName="custom-header-cell"/>
+            <GridColumn title="콘크리트(%)" field="concrete_percentage" headerClassName="custom-header-cell"/>
+            <GridColumn title="거푸집(㎡)" field="formwork_area" headerClassName="custom-header-cell"/>
+            <GridColumn title="거푸집(%)" field="formwork_percentage" headerClassName="custom-header-cell"/>
+            <GridColumn title="철근(Ton)" field="rebar_weight" headerClassName="custom-header-cell"/>
+            <GridColumn title="철근(%)" field="rebar_percentage" headerClassName="custom-header-cell"/>
           </Grid>
         </div>
       )}
