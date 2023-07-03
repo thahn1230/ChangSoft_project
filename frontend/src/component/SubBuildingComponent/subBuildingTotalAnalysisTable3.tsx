@@ -71,7 +71,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
           setReturnDiv(
             <div>
               {analysisTable1 && analysisTable1[0] && (
-                <Grid data={analysisTable1Grid}>
+                <Grid data={analysisTable1Grid} style={{width: "50%"}}>
                   <GridColumn
                     title="건물명 구분"
                     headerClassName="custom-header-cell"
