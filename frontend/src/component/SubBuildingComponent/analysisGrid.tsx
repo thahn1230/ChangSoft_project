@@ -12,6 +12,7 @@ import {
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
 } from "@progress/kendo-react-grid";
+import "./../../styles/subBuildingTotalAnalysisTable.scss";
 
 const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
@@ -36,15 +37,15 @@ const TotalAnalysisGrid2 = (props: any) => {
   return (
     <div>
       {selectedBuildingInfo && (
-        <div>
+        <div className="table-container" style={{width: "50%"}}>
           <Grid data={selectedBuildingInfo}>
-            <GridColumn title="구분" field="component_type" />
-            <GridColumn title="콘크리트(m³)" field="concrete_volume" />
-            <GridColumn title="콘크리트(%)" field="concrete_percentage" />
-            <GridColumn title="거푸집(㎡)" field="formwork_area" />
-            <GridColumn title="거푸집(%)" field="formwork_percentage" />
-            <GridColumn title="철근(Ton)" field="rebar_weight" />
-            <GridColumn title="철근(%)" field="rebar_percentage" />
+            <GridColumn title="구분" field="component_type" width={"85vw"}/>
+            <GridColumn title="콘크리트(m³)" field="concrete_volume" width={"104vw"}/>
+            <GridColumn title="콘크리트(%)" field="concrete_percentage" width={"100vw"}/>
+            <GridColumn title="거푸집(㎡)" field="formwork_area" width={"100vw"}/>
+            <GridColumn title="거푸집(%)" field="formwork_percentage" width={"100vw"}/>
+            <GridColumn title="철근(Ton)" field="rebar_weight" width={"100vw"}/>
+            <GridColumn title="철근(%)" field="rebar_percentage" width={"100vw"}/>
           </Grid>
         </div>
       )}

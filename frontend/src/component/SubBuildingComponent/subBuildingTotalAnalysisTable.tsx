@@ -4,6 +4,7 @@ import urlPrefix from "../../resource/URL_prefix.json";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { subBuildingInfo_interface } from "../../interface/subBuildingInfo_interface";
 import { subBuildingAnalysisTable_interface } from "../../interface/subBuildingAnalysisTable_interface";
+import "./../../styles/subBuildingAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable = (props: any) => {
     const [selectedProject,setSelectedProject] = useState();
@@ -32,7 +33,7 @@ const SubBuildingTotalAnalysisTable = (props: any) => {
     const headerClassName = "custom-header-cell";
   
     return (
-      <div>
+      <div className="table-container" style={{width: "50%"}}>
         {subBuildingDetail && (
           <div>
             <Grid data={subBuildingDetail}>

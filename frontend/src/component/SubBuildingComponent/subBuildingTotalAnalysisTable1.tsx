@@ -6,6 +6,7 @@ import { subBuildingInfo_interface } from "../../interface/subBuildingInfo_inter
 import { subBuildingAnalysisTable_interface } from "../../interface/subBuildingAnalysisTable_interface";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../../interface/subBuildingTotalAnalysisTable1_interface";
+import "./../../styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -98,7 +99,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
   }, [analysisTable1]);
 
   return (
-    <div>
+    <div className="table-container" style={{width: "50%"}}>
       {analysisTable1 && analysisTable1[0] && (
         <Grid data={analysisTable1Grid}>
           <GridColumn title="건물명 구분">
