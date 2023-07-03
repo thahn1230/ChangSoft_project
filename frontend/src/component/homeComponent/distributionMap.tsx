@@ -15,7 +15,7 @@ import urlPrefix from "../../resource/URL_prefix.json";
 import { location } from "../../interface/location";
 import { coordinate } from "../../interface/coordinate";
 import axios from "axios";
-import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
+// import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
 
 const tileSubdomains = ["a", "b", "c"];
 const tileUrl = (e: TileUrlTemplateArgs) =>
@@ -25,7 +25,7 @@ const attribution =
 
 const reqPrefix = "https://maps.googleapis.com/maps/api/geocode/json?address="
 let address = "";
-const reqPostfix = "&key=" + GoogleMap_API_KEY
+// const reqPostfix = "&key=" + GoogleMap_API_KEY
 
 const geoShapes = [
   {
