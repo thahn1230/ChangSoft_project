@@ -8,9 +8,10 @@ import {
 } from "@progress/kendo-react-grid";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
+import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3"
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
-
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
+
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuildingTotalAnalysisTable2_interface";
@@ -25,7 +26,7 @@ const SubBuildingDetail = (props: any) => {
   const [subBuildingInfo, setSubBuildingInfo] = useState<
     subBuildingInfo_interface[]
   >([]);
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
 
   const [analysisTable1, setAnalysisTable1] =
     useState<subBuildingTotalAnalysisTable1_interface[]>();
@@ -47,6 +48,7 @@ const SubBuildingDetail = (props: any) => {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+
     };
 
     fetchData();
@@ -62,8 +64,6 @@ const SubBuildingDetail = (props: any) => {
         const subBuildings = JSON.parse(response.data);
         setSubBuildingInfo(subBuildings);
 
-        console.log("subBuildings");
-        console.log(subBuildings);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -74,7 +74,8 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(selectedSubBuildingId);
+        
+
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -134,7 +135,7 @@ const SubBuildingDetail = (props: any) => {
       <br />
       <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
 
-      <SubBuildingTotalAnalysisTable1 selectedSubBuildingId = {selectedSubBuildingId}></SubBuildingTotalAnalysisTable1>
+      <SubBuildingTotalAnalysisTable3 selectedSubBuildingId = {selectedSubBuildingId}></SubBuildingTotalAnalysisTable3>
     </div>
   );
 };
