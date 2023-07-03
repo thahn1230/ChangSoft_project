@@ -39,8 +39,8 @@ const TotalAnalysisGrid2 = (props: any) => {
       {selectedBuildingInfo && (
         <div className="table-container">
           <Grid data={selectedBuildingInfo} style={{width: "50%"}}>
-            <GridColumn title="구분" field="component_type" headerClassName="custom-header-cell"/>
-            <GridColumn title="콘크리트(m³)" field="concrete_volume" headerClassName="custom-header-cell"/>
+            <GridColumn title="구분" field="component_type" width={"85%"} headerClassName="custom-header-cell"/>
+            <GridColumn title="콘크리트(m³)" field="concrete_volume" width={"115%"} headerClassName="custom-header-cell"/>
             <GridColumn title="콘크리트(%)" field="concrete_percentage" headerClassName="custom-header-cell"/>
             <GridColumn title="거푸집(㎡)" field="formwork_area" headerClassName="custom-header-cell"/>
             <GridColumn title="거푸집(%)" field="formwork_percentage" headerClassName="custom-header-cell"/>
