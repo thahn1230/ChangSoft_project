@@ -101,11 +101,16 @@ const SubBuildingDetail = (props: any) => {
     }
   }, [analysisTable1]);
 
+  useEffect(() => {
+    console.log(selectedSubBuildingId)
+  }, [selectedSubBuildingId]);
+  
   return (
     <div className="sub-building-list">
       <SubBuildingList
         buildingInfo={buildingInfo}
         setSelectedSubBuildingId={setSelectedSubBuildingId}
+        projectName={props.projectName}
       />
 
       <div className="left-components">

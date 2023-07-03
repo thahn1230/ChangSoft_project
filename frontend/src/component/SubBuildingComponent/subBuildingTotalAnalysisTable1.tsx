@@ -27,7 +27,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     const fetchData = async () => {
       try {
         //console.log("props")
-       // console.log(props)
+        // console.log(props)
         setBuildingInfo(props.buildingInfo);
         setSubBuildingInfo(props.subBuildingInfo);
         setSelectedSubBuildingId(props.selectedSubBuildingId);
@@ -53,7 +53,8 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
         const response1 = await axios.get(
           urlPrefix.IP_port +
-            "/sub_building/total_analysis_table1/" + props.buildingInfo?.id
+            "/sub_building/total_analysis_table1/" +
+            props.buildingInfo?.id
         );
 
         setAnalysisTable1(JSON.parse(response1.data));
@@ -103,7 +104,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
       {analysisTable1 && analysisTable1[0] && (
         <Grid data={analysisTable1Grid}>
           <GridColumn title="건물명 구분" headerClassName="custom-header-cell">
-            <GridColumn title={buildingInfo?.building_name}></GridColumn>
+            <GridColumn title="전체동"></GridColumn>
             <GridColumn width="0px" />
           </GridColumn>
 
@@ -126,15 +127,27 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
         analysisTable1 &&
         analysisTable1[0] && (
           <Grid data={analysisTable1Grid}>
-            <GridColumn title={"구분"} field={"구분"} headerClassName="custom-header-cell"></GridColumn>
+            <GridColumn
+              title={"구분"}
+              field={"구분"}
+              headerClassName="custom-header-cell"
+            ></GridColumn>
             <GridColumn
               title={"콘크리트(㎥)"}
               field={"콘크리트(㎥)"}
               headerClassName="custom-header-cell"
             ></GridColumn>
 
-            <GridColumn title={"거푸집(㎡)"} field={"거푸집"} headerClassName="custom-header-cell"></GridColumn>
-            <GridColumn title={"철근(Ton)"} field={"철근(Ton)"} headerClassName="custom-header-cell"></GridColumn>
+            <GridColumn
+              title={"거푸집(㎡)"}
+              field={"거푸집"}
+              headerClassName="custom-header-cell"
+            ></GridColumn>
+            <GridColumn
+              title={"철근(Ton)"}
+              field={"철근(Ton)"}
+              headerClassName="custom-header-cell"
+            ></GridColumn>
           </Grid>
         )}
     </div>

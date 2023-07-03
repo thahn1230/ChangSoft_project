@@ -13,16 +13,17 @@ function App() {
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
   >();
+  const [projectName, setProjectName] = useState<string>("");
 
   return (
     <div className="App">
       <NavigationLayout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects setBuildingInfo={setBuildingInfo} />} />
+          <Route path="/projects" element={<Projects setBuildingInfo={setBuildingInfo} setProjectName={setProjectName} />} />
           <Route path="/insight" element={<Insight />} />
           <Route path="/user_info" element={<UserPage />} />
-          <Route path="/sub_building_detail" element={<SubBuildingDetail buildingInfo={buildingInfo} />} />
+          <Route path="/sub_building_detail" element={<SubBuildingDetail buildingInfo={buildingInfo} projectName={projectName} />} />
         </Routes>
       </NavigationLayout>
     </div>
