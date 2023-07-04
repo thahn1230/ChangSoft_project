@@ -19,6 +19,7 @@ import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 import { projectList_interface } from "./../../interface/projectList_interface";
 import { project_interface } from "./../../interface/project_interface";
+
 import "./../../styles/ProjectList.scss";
 
 //{ field: "construction_company", operator: "eq", value: "" }
@@ -38,20 +39,20 @@ const ProjectList = (props: any) => {
   const [fileteredList, setFileteredList] = useState<string[]>([]);
   const [filteredData, setFilteredData] = useState<project_interface[]>([]);
 
-
   //[0,10000][0,200000]이 아니라 들어오는 값들 따라서 최대값으로 설정해야함
   const [buildingAreaSliderValues, setBuildingAreaSliderValues] = useState<
     number[]
   >([]);
   const [buildingAreaMinMax, setBuildingAreaMinMax] = useState<number[]>([
-    0, 2500,
+    0, 0,
   ]);
 
   const [totalAreaSliderValues, setTotalAreaSliderValues] = useState<number[]>(
     []
   );
-  const [totalAreaMinMax, setTotalAreaMinMax] = useState<number[]>([0, 200000]);
+  const [totalAreaMinMax, setTotalAreaMinMax] = useState<number[]>([0, 0]);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,7 +70,6 @@ const ProjectList = (props: any) => {
         props.setData(data); //projects 페이지의 project data
         setProjectList(projectNames);
         setFileteredList(projectNames);
-
       } catch (error) {
         console.error(error);
       }
@@ -120,7 +120,6 @@ const ProjectList = (props: any) => {
         value: buildingAreaMinMax[1],
       }
     );
-
     projectFilter.filters = projectFilter.filters.filter((filter) => {
       return !("field" in filter && filter.field === "total_area");
     });
@@ -138,6 +137,10 @@ const ProjectList = (props: any) => {
     );
 
     setFilteredData(filterBy(data, projectFilter));
+  };
+
+  const resetFilter = () => {
+    console.log("reset filter clicked");
   };
 
   const constructionCompanyOnChange = (event: any) => {
@@ -164,6 +167,10 @@ const ProjectList = (props: any) => {
     });
   };
 
+  /**
+   * 만약 building_area의 가장 큰값이 11000이라면
+   * 12500 10000 7500...
+   */
   const setBuildingAreaSliderValue = () => {
     let largestBuildingArea_temp = -1;
     for (const project of data) {
@@ -171,7 +178,7 @@ const ProjectList = (props: any) => {
         largestBuildingArea_temp = project.building_area;
       }
     }
-
+    largestBuildingArea_temp= 7000;
     let sliderValues = [];
     largestBuildingArea_temp =
       largestBuildingArea_temp - (largestBuildingArea_temp % 2500);
@@ -181,8 +188,7 @@ const ProjectList = (props: any) => {
       largestBuildingArea_temp -= 2500;
     }
     setBuildingAreaSliderValues(sliderValues);
-
-    //////setBuildingAreaMinMax([0,sliderValues[0]]);
+    setBuildingAreaMinMax([0, sliderValues[0]]);
   };
   const setTotalAreaSliderValue = () => {
     let largestTotalArea_temp = -1;
@@ -200,13 +206,15 @@ const ProjectList = (props: any) => {
       sliderValues.push(largestTotalArea_temp);
       largestTotalArea_temp -= 50000;
     }
+    
     setTotalAreaSliderValues(sliderValues);
+    setTotalAreaMinMax([0, sliderValues[0]]);
   };
 
   const buildingAreaSliderOnClick = (event: any) => {
     setBuildingAreaMinMax([
-      parseFloat(event.value.start.toFixed(4)),
-      parseFloat(event.value.end.toFixed(4)),
+      parseFloat(event.value.start.toFixed(2)),
+      parseFloat(event.value.end.toFixed(2)),
     ]);
   };
   const handleBuildingAreaMinTextChange = (event: any) => {
@@ -218,8 +226,8 @@ const ProjectList = (props: any) => {
 
   const totalAreaSliderOnClick = (event: any) => {
     setTotalAreaMinMax([
-      parseFloat(event.value.start.toFixed(4)),
-      parseFloat(event.value.end.toFixed(4)),
+      parseFloat(event.value.start.toFixed(2)),
+      parseFloat(event.value.end.toFixed(2)),
     ]);
   };
   const handleTotalAreaMinTextChange = (event: any) => {
@@ -239,6 +247,7 @@ const ProjectList = (props: any) => {
         filterable={true}
         className="project-combobox"
       />
+
       <div className="filter-group">
         <DropDownList
           onChange={constructionCompanyOnChange}
@@ -248,38 +257,38 @@ const ProjectList = (props: any) => {
           className="filter-dropdown"
         />
 
-        <RangeSlider
-          defaultValue={{
-            start: buildingAreaMinMax[0],
-            end: buildingAreaMinMax[1],
-          }}
-          step={1}
-          min={0}
-          max={buildingAreaSliderValues[0]}
-          onChange={buildingAreaSliderOnClick}
-          className="range-slider"
-        >
-          {buildingAreaSliderValues.map((perc, i) => (
-            <SliderLabel key={i} position={perc}>
-              {perc.toString()}
-            </SliderLabel>
-          ))}
-        </RangeSlider>
+          <RangeSlider
+            value={{
+              start: buildingAreaMinMax[0],
+              end: buildingAreaMinMax[1],
+            }}
+            step={1}
+            min={0}
+            max={buildingAreaSliderValues[0]}
+            onChange={buildingAreaSliderOnClick}
+            className="range-slider"
+          >
+            {buildingAreaSliderValues.map((perc, i) => (
+              <SliderLabel key={i} position={perc}>
+                {perc.toString()}
+              </SliderLabel>
+            ))}
+          </RangeSlider>
 
-        <TextBox
-          value={buildingAreaMinMax[0]}
-          onChange={handleBuildingAreaMinTextChange}
-          contentEditable={true}
-          rounded={"large"}
-          className="slider-textbox"
-        ></TextBox>
-        <TextBox
-          value={buildingAreaMinMax[1]}
-          onChange={handleBuildingAreaMaxTextChange}
-          contentEditable={true}
-          rounded={"large"}
-          className="slider-textbox"
-        ></TextBox>
+          <TextBox
+            value={buildingAreaMinMax[0]}
+            onChange={handleBuildingAreaMinTextChange}
+            contentEditable={true}
+            rounded={"large"}
+            className="slider-textbox"
+          ></TextBox>
+          <TextBox
+            value={buildingAreaMinMax[1]}
+            onChange={handleBuildingAreaMaxTextChange}
+            contentEditable={true}
+            rounded={"large"}
+            className="slider-textbox"
+          ></TextBox>
       </div>
 
       <div className="filter-group">
@@ -291,42 +300,45 @@ const ProjectList = (props: any) => {
           className="filter-dropdown"
         />
 
-        <RangeSlider
-          defaultValue={{
-            start: totalAreaMinMax[0],
-            end: totalAreaMinMax[1],
-          }}
-          step={1}
-          min={0}
-          max={totalAreaSliderValues[0]}
-          onChange={totalAreaSliderOnClick}
-          className="range-slider"
-        >
-          {totalAreaSliderValues.map((perc, i) => (
-            <SliderLabel key={i} position={perc}>
-              {perc.toString()}
-            </SliderLabel>
-          ))}
-        </RangeSlider>
+          <RangeSlider
+            value={{
+              start: totalAreaMinMax[0],
+              end: totalAreaMinMax[1],
+            }}
+            step={1}
+            min={0}
+            max={totalAreaSliderValues[0]}
+            onChange={totalAreaSliderOnClick}
+            className="range-slider"
+          >
+            {totalAreaSliderValues.map((perc, i) => (
+              <SliderLabel key={i} position={perc}>
+                {perc.toString()}
+              </SliderLabel>
+            ))}
+          </RangeSlider>
 
-        <TextBox
-          value={totalAreaMinMax[0]}
-          onChange={handleTotalAreaMinTextChange}
-          contentEditable={true}
-          rounded={"large"}
-          className="slider-textbox"
-        ></TextBox>
-        <TextBox
-          value={totalAreaMinMax[1]}
-          onChange={handleTotalAreaMaxTextChange}
-          contentEditable={true}
-          rounded={"large"}
-          className="slider-textbox"
-        ></TextBox>
+          <TextBox
+            value={totalAreaMinMax[0]}
+            onChange={handleTotalAreaMinTextChange}
+            contentEditable={true}
+            rounded={"large"}
+            className="slider-textbox"
+          ></TextBox>
+          <TextBox
+            value={totalAreaMinMax[1]}
+            onChange={handleTotalAreaMaxTextChange}
+            contentEditable={true}
+            rounded={"large"}
+            className="slider-textbox"
+          ></TextBox>
       </div>
 
       <Button onClick={applyFilter} className="apply-filter-button">
-        apply filters
+        Apply filters
+      </Button>
+      <Button onClick={resetFilter} className="reset-filter-button">
+        Reset filters
       </Button>
     </div>
   );
