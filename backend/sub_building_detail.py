@@ -61,8 +61,10 @@ def get_total_analysis_data1(building_id: int):
             ) AS sub_table
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    total_analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        total_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 # 총괄분석표 전체 sub_building 2
@@ -124,8 +126,10 @@ def get_total_analysis_data2(building_id: int):
         ORDER BY c.component_type;
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    total_analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        total_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 # 총괄분석표 한개의 sub_building 1
