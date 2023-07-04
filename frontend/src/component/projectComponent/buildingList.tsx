@@ -157,13 +157,13 @@ const BuildingList = (props: any) => {
         />
         <GridColumn
           title="빌딩별 전체 면적(㎡)"
-          field="total_area"
+          field="total_area_rounded"
           headerClassName={headerClassName}
           className="custom-number-cell"
         />
         <GridColumn
-          title="빌딩 층수(지하 / 지상)"
-          field="stories"
+          title="빌딩 전체 층수(층)"
+          field="total_stories"
           headerClassName={headerClassName}
           className="custom-number-cell"
         />

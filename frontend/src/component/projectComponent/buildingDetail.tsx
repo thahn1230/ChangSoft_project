@@ -77,18 +77,18 @@ const BuildingDetail = (props: any) => {
         </Grid>
         <Grid data={[buildingInfo]}>
           <GridColumn
-            field="total_area"
-            title="total_area"
+            field="total_area_rounded"
+            title="전체 면적(㎡)"
             headerClassName={headerClassName}
           />
           <GridColumn
-            field="stories"
-            title="stories"
+            field="stories_above_below"
+            title="층수(지상/지하, 층)"
             headerClassName={headerClassName}
           />
           <GridColumn
-            field="height"
-            title="height"
+            field="height_above_below"
+            title="높이(지상/지하, m)"
             headerClassName={headerClassName}
           />
           <GridColumn
