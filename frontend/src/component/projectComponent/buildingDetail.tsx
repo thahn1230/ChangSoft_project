@@ -57,6 +57,7 @@ const BuildingDetail = (props: any) => {
   };
 
   const headerClassName = "custom-header-cell";
+  const CellClassName = "custom-cell";
 
   return (
     <div>
@@ -72,6 +73,7 @@ const BuildingDetail = (props: any) => {
             field="building_name"
             title="빌딩 이름"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
         </Grid>
         <Grid data={[buildingInfo]}>
@@ -79,21 +81,25 @@ const BuildingDetail = (props: any) => {
             field="total_area"
             title="total_area"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="stories"
             title="stories"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="height"
             title="height"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="construction_method"
             title="construction_method"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
         </Grid>
 
@@ -102,26 +108,31 @@ const BuildingDetail = (props: any) => {
             field="top_down"
             title="top_down"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="plane_shape"
             title="plane_shape"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="foundation_type"
             title="foundation_type"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="structure_code"
             title="structure_code"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
           <GridColumn
             field="performance_design_target"
             title="performance_design_target"
             headerClassName={headerClassName}
+            className={CellClassName}
           />
         </Grid>
       </div>

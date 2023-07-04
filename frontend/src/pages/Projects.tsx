@@ -32,7 +32,7 @@ const Projects = (props: any) => {
       <div className="projectDetail">
         <img
           src={
-            tempImage
+            "http://pcae.g2b.go.kr:8044/cmn/cmn0010/bevImage.sjson?untyAtchFileNo=8VcGkyP5jybg&atchFileSno=0&ttalBizNo=2022120011"
           }
           style={{ width: "49%", float: "left", paddingLeft: "1%" }}
           alt="프로젝트 사진"
