@@ -22,14 +22,6 @@ import { project_interface } from "./../../interface/project_interface";
 
 import "./../../styles/ProjectList.scss";
 
-
-/**
- * 현재 텍스트로 값을 바꾼후 apply하고
- * 그 상태에서 bar로 값을 바꾸려고 하면 
- * 오류가 나는 현상이있음
- */
-
-//{ field: "construction_company", operator: "eq", value: "" }
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
 
@@ -59,7 +51,6 @@ const ProjectList = (props: any) => {
   );
   const [totalAreaMinMax, setTotalAreaMinMax] = useState<number[]>([0, 0]);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -185,7 +176,7 @@ const ProjectList = (props: any) => {
         largestBuildingArea_temp = project.building_area;
       }
     }
-    largestBuildingArea_temp= 7000;
+    largestBuildingArea_temp = 7000;
     let sliderValues = [];
     largestBuildingArea_temp =
       largestBuildingArea_temp - (largestBuildingArea_temp % 2500);
@@ -213,7 +204,7 @@ const ProjectList = (props: any) => {
       sliderValues.push(largestTotalArea_temp);
       largestTotalArea_temp -= 50000;
     }
-    
+
     setTotalAreaSliderValues(sliderValues);
     setTotalAreaMinMax([0, sliderValues[0]]);
   };
@@ -247,6 +238,7 @@ const ProjectList = (props: any) => {
   return (
     <div className="project-list-container">
       <ComboBox
+        id="project-combobox"
         data={fileteredList}
         value={selectedProjectName}
         onChange={projectListOnChange}
@@ -256,15 +248,23 @@ const ProjectList = (props: any) => {
       />
 
       <div className="filter-group-left">
-        <DropDownList
-          onChange={constructionCompanyOnChange}
-          data={data
-            .map((item) => item.construction_company)
-            .filter((value, index, array) => array.indexOf(value) === index)}
-          className="filter-dropdown"
-        />
+        <div className="form-field">
+          <label htmlFor="construction-company-dropdown" className="custom-label">건설회사:</label>
+          <DropDownList
+            id="construction-company-dropdown"
+            onChange={constructionCompanyOnChange}
+            data={data
+              .map((item) => item.construction_company)
+              .filter((value, index, array) => array.indexOf(value) === index)}
+            className="filter-dropdown"
+            style={{width: "80%", height: "80% !important" }}
+          />
+        </div>
 
+        <div className="form-field">
+          <label htmlFor="building-area-range-slider" className="custom-label">빌딩별 면적:</label>
           <RangeSlider
+            id="building-area-range-slider"
             value={{
               start: buildingAreaMinMax[0],
               end: buildingAreaMinMax[1],
@@ -274,6 +274,7 @@ const ProjectList = (props: any) => {
             max={buildingAreaSliderValues[0]}
             onChange={buildingAreaSliderOnClick}
             className="range-slider"
+            style={{width: "80%"}}
           >
             {buildingAreaSliderValues.map((perc, i) => (
               <SliderLabel key={i} position={perc}>
@@ -281,33 +282,53 @@ const ProjectList = (props: any) => {
               </SliderLabel>
             ))}
           </RangeSlider>
+        </div>
 
+        <div className="form-field">
+          <label htmlFor="building-area-min-textbox" className="custom-label">Min:</label>
           <TextBox
+            id="building-area-min-textbox"
             value={buildingAreaMinMax[0]}
             onChange={handleBuildingAreaMinTextChange}
             contentEditable={true}
             rounded={"large"}
             className="slider-textbox"
+            style={{width: "80%"}}
           ></TextBox>
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="building-area-max-textbox" className="custom-label">Max:</label>
           <TextBox
+            id="building-area-max-textbox"
             value={buildingAreaMinMax[1]}
             onChange={handleBuildingAreaMaxTextChange}
             contentEditable={true}
             rounded={"large"}
             className="slider-textbox"
+            style={{width: "80%"}}
           ></TextBox>
+        </div>
       </div>
 
       <div className="filter-group-right">
-        <DropDownList
-          onChange={locationOnChange}
-          data={data
-            .map((item) => item.location)
-            .filter((value, index, array) => array.indexOf(value) === index)}
-          className="filter-dropdown"
-        />
+        <div className="form-field">
+          <label htmlFor="location-dropdown" className="custom-label">지역:</label>
+          <DropDownList
+            id="location-dropdown"
+            onChange={locationOnChange}
+            data={data
+              .map((item) => item.location)
+              .filter((value, index, array) => array.indexOf(value) === index)}
+            className="filter-dropdown"
+            style={{width: "80%", height: "80% !important" }}
+          />
+        </div>
 
+        <div className="form-field">
+          <label htmlFor="total-area-range-slider" className="custom-label">연면적:</label>
           <RangeSlider
+            id="total-area-range-slider"
             value={{
               start: totalAreaMinMax[0],
               end: totalAreaMinMax[1],
@@ -317,6 +338,7 @@ const ProjectList = (props: any) => {
             max={totalAreaSliderValues[0]}
             onChange={totalAreaSliderOnClick}
             className="range-slider"
+            style={{width: "80%"}}
           >
             {totalAreaSliderValues.map((perc, i) => (
               <SliderLabel key={i} position={perc}>
@@ -324,21 +346,33 @@ const ProjectList = (props: any) => {
               </SliderLabel>
             ))}
           </RangeSlider>
+        </div>
 
+        <div className="form-field">
+          <label htmlFor="total-area-min-textbox" className="custom-label">Min:</label>
           <TextBox
+            id="total-area-min-textbox"
             value={totalAreaMinMax[0]}
             onChange={handleTotalAreaMinTextChange}
             contentEditable={true}
             rounded={"large"}
             className="slider-textbox"
+            style={{width: "80%"}}
           ></TextBox>
+        </div>
+
+        <div className="form-field">
+          <label htmlFor="total-area-max-textbox" className="custom-label">Max:</label>
           <TextBox
+            id="total-area-max-textbox"
             value={totalAreaMinMax[1]}
             onChange={handleTotalAreaMaxTextChange}
             contentEditable={true}
             rounded={"large"}
             className="slider-textbox"
+            style={{width: "80%"}}
           ></TextBox>
+        </div>
       </div>
 
       <Button onClick={applyFilter} className="apply-filter-button">

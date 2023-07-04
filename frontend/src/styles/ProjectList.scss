@@ -51,8 +51,18 @@
 }
 
 .reset-filter-button{
-  
   align-self: center;
   padding: 10px;
   margin-left: 10px;
+}
+
+.form-field{
+  display: flex;
+}
+
+.custom-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
 }
