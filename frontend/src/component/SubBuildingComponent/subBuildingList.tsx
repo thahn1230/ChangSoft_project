@@ -10,6 +10,7 @@ import urlPrefix from "../../resource/URL_prefix.json";
 import { projectList_interface } from "./../../interface/projectList_interface";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
 import { subBuildingInfo_interface } from "../../interface/subBuildingInfo_interface";
+import "./../../styles/SubBuildingList.scss";
 
 const SubBuildingList = (props: any) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
@@ -18,8 +19,7 @@ const SubBuildingList = (props: any) => {
   >([]);
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
     useState<string>("");
-  const [selectedSubBuildingId, setSelectedSubBuildingId] =
-    useState<number>();
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
 
   const [selectedBuilding, setSelectedBuilding] =
     useState<buildingInfo_interface>();
@@ -36,9 +36,8 @@ const SubBuildingList = (props: any) => {
         //console.log("a")
         //console.log(data[0].sub_building_name)
         let subBuildingNames: string[] = [];
-        for(let i =0; i < data.length ; i++)
-        {
-          subBuildingNames.push(data[i].sub_building_name)
+        for (let i = 0; i < data.length; i++) {
+          subBuildingNames.push(data[i].sub_building_name);
         }
         /*
         setSubBuildinglist(
@@ -56,16 +55,18 @@ const SubBuildingList = (props: any) => {
   }, [props]);
 
   useEffect(() => {
-    const selectedId = (subBuildingInfo.find(item => item.sub_building_name ===selectedSubBuildingName))?.id
-    setSelectedSubBuildingId(selectedId)
+    const selectedId = subBuildingInfo.find(
+      (item) => item.sub_building_name === selectedSubBuildingName
+    )?.id;
+    setSelectedSubBuildingId(selectedId);
   }, [selectedSubBuildingName]);
 
   useEffect(() => {
-    props.setSelectedSubBuildingId(selectedSubBuildingId)
+    props.setSelectedSubBuildingId(selectedSubBuildingId);
   }, [selectedSubBuildingId]);
 
   useEffect(() => {
-    props.setSelectedSubBuildingId(selectedSubBuildingId)
+    props.setSelectedSubBuildingId(selectedSubBuildingId);
   }, [selectedSubBuildingName]);
 
   const onSelectedSubbuildingChange = (e: any) => {
@@ -74,20 +75,15 @@ const SubBuildingList = (props: any) => {
 
   return (
     <div>
-      <div>{props.projectName}</div>
-      <DropDownList
-        data={subBuildinglist}
-        //value={selectedBuilding ? selectedBuilding.id : null}
-        onChange={onSelectedSubbuildingChange}
-      />
-      {
-        //SubBuildingList && (
-        //<div>
-        //<h3>{SubBuildingList.sub_building_name}</h3>
-        //{/* Render additional building details */}
-        //</div>
-        //)
-      }
+      <div className="left-component">{props.projectName}</div>
+      <div className="right-component">
+        <DropDownList
+          data={subBuildinglist}
+          //value={selectedBuilding ? selectedBuilding.id : null}
+          onChange={onSelectedSubbuildingChange}
+          style={{height: "40px"}}
+        />
+      </div>
     </div>
   );
 };

@@ -1,0 +1,21 @@
+.left-component {
+    float: left;
+    width: 50%;
+    height: 20px !important;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    // bold 추가
+  }
+  
+  .right-component {
+    float: right;
+    width: 50%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  
