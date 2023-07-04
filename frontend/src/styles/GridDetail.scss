@@ -1,32 +1,14 @@
 .custom-header-cell {
+    text-align: center !important;
     background-color: rgb(25, 101, 203);
     color: white;
     font-weight: bold;
     border-bottom: 1px solid white !important;
-    text-align: center !important;
-
-    &:not(:last-child) {
-        &::after {
-            content: "";
-            position: absolute;
-            right: 0;
-            top: 50%;
-            height: 50%;
-            width: 1px;
-            background-color: white;
-            transform: translateY(-50%);
-        }
-    }
 }
 
 .k-grid tr.k-grid-row>td {
     border-color: white;
 }
-
-// 29, 91, 171
-// 89, 132, 187
-// 25, 101, 203
-// 22, 48, 138
 
 .custom-number-cell {
     background-color: white !important;
