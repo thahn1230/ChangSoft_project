@@ -34,3 +34,12 @@ main.py 안에 있는 app 모듈을 실행한다.
 
 FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 가져오는 식으로 진행하고 있습니다.
 이미지가 들어있는 project_pictures.zip을 /frontend/src/resource 디렉토리 안에 압축을 풀어 넣어주면 됩니다. 이때 저 압축파일들이 하나의 폴더 안에 들어가 있어야 하며 그 폴더명은 project_pictures여야 합니다.
+
+또한 기본적으로 frontEnd가 돌아갈 환경을 만들어주어야 하는데 package.json을 가지고 있다는 가정하에 다음과 같은 명령어를 입력해주시면 됩니다.
+npm install react
+npm install kendo-react-all
+npm install
+npm fund
+npm audit fix
+
+만약 npm audit fix 명령어를 실행하였을때 작동이 안된다면 npm --force audit fix를 실행해주시면 됩니다.
