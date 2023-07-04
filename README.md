@@ -2,7 +2,9 @@
 
 This repository is for project in ChangSoftI&amp;I
 
-1. BackEnd 서버를 돌리려면 필요한 파일들(add_middleware.py, dbAccess.py, origins.py)을 다운 받은 후 main.py가 있는 디렉토리로 이동 후 다음 명령어를 입력합니다.(wsl 기반. 이때 wsl에서 서버를 연다면 wsl과 windows 간에 포트포워딩을 해야 할 수도 있습니다)
+---
+
+BackEnd 서버를 돌리려면 필요한 파일들(add_middleware.py, dbAccess.py, origins.py)을 다운 받은 후 main.py가 있는 디렉토리로 이동 후 다음 명령어를 입력합니다.(wsl 기반. 이때 wsl에서 서버를 연다면 wsl과 windows 간에 포트포워딩을 해야 할 수도 있습니다)
 
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
@@ -27,3 +29,8 @@ main.py 안에 있는 app 모듈을 실행한다.
 3. 새로 포트포워딩 설정
    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=????
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
+
+---
+
+FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 가져오는 식으로 진행하고 있습니다.
+이미지가 들어있는 project_pictures.zip을 /frontend/src/resource 디렉토리 안에 압축을 풀어 넣어주면 됩니다. 이때 저 압축파일들이 하나의 폴더 안에 들어가 있어야 하며 그 폴더명은 project_pictures여야 합니다.
