@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Grid,
   GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
-  GridToolbar,
 } from "@progress/kendo-react-grid";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
