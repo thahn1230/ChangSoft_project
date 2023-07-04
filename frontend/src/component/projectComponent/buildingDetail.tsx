@@ -67,7 +67,7 @@ const BuildingDetail = (props: any) => {
       <div>
         <Button onClick={onClick}>상세보기</Button>
       </div>
-      <div style={{ width: "59%", float: "right", paddingLeft: "1%" }}>
+      <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="building_name"
