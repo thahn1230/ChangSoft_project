@@ -61,33 +61,36 @@ const BuildingDetail = (props: any) => {
       <div style={{ width: "30%", float: "left", paddingLeft: "1%" }}>
         {imgPath && <img src={imgPath} alt="Building Image" height="300px" />}
       </div>
-
-      <div>
-        <Button onClick={onClick}>상세보기</Button>
-      </div>
-      <div style={{ width: "59%", float: "right", paddingLeft: "1%" }}>
+      <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
+        <div style={{ width: "200%"}}>
+          <Button onClick={onClick}>상세보기</Button>
+        </div>
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="building_name"
             title="빌딩 이름"
             headerClassName={headerClassName}
+            className="custom-text-cell"
           />
         </Grid>
         <Grid data={[buildingInfo]}>
           <GridColumn
-            field="total_area"
-            title="total_area"
+            field="total_area_rounded"
+            title="전체 면적(㎡)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
-            field="stories"
-            title="stories"
+            field="stories_above_below"
+            title="층수(지상/지하, 층)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
-            field="height"
-            title="height"
+            field="height_above_below"
+            title="높이(지상/지하, m)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
             field="construction_method"

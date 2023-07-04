@@ -1,44 +1,58 @@
 .project-list-container {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
+  padding: 10px;
+}
+
+.project-combobox {
+  flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  padding: 10px;
+}
+
+.filter-group-left {
+  float: left;
+  width: 50%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
+}
+
+.filter-group-right {
+  float: left;
+  width: 50%;
+  padding: 0 10px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
+}
+
+.filter-group-left > div,
+.filter-group-right > div {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.range-slider {
+  width: 100%;
+  padding: 10px;
+}
+
+.slider-textbox {
+  width: 100%;
+  padding: 10px;
+}
+
+.apply-filter-button {
+  align-self: center;
+  padding: 10px;
+  margin-right: 10px;
+}
+
+.reset-filter-button{
   
-  .project-combobox {
-    flex: 0 0 100%;
-    width: 100%;
-    max-width: 100%;
-    padding: 10px;
-  }
-  
-  .filter-group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    flex: 1 1 50%;
-    padding: 0 10px;
-    box-sizing: border-box;
-    padding: 10px;
-  }
-  
-  .filter-group > div {
-    width: calc(50% - 10px);
-    margin-bottom: 10px;
-    padding: 10px;
-  }
-  
-  .range-slider {
-    width: 100%;
-    padding: 10px;
-  }
-  
-  .slider-textbox {
-    width: 100%;
-    padding: 10px;
-  }
-  
-  .apply-filter-button {
-    align-self: center;
-    padding: 10px;
-  }
-  
+  align-self: center;
+  padding: 10px;
+  margin-left: 10px;
+}

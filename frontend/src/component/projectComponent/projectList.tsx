@@ -255,7 +255,7 @@ const ProjectList = (props: any) => {
         className="project-combobox"
       />
 
-      <div className="filter-group">
+      <div className="filter-group-left">
         <DropDownList
           onChange={constructionCompanyOnChange}
           data={data
@@ -298,7 +298,7 @@ const ProjectList = (props: any) => {
           ></TextBox>
       </div>
 
-      <div className="filter-group">
+      <div className="filter-group-right">
         <DropDownList
           onChange={locationOnChange}
           data={data

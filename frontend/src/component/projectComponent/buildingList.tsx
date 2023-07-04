@@ -21,6 +21,7 @@ import { MultiSelectPropsContext } from "@progress/kendo-react-dropdowns";
 import BuildingDetail from "./buildingDetail";
 import ProjectIntro from "../homeComponent/totalProjectNum";
 import urlPrefix from "../../resource/URL_prefix.json";
+import "./../../styles/GridDetail.scss";
 
 const DATA_ITEM_KEY = "id";
 const SELECTED_FIELD = "selected";
@@ -149,24 +150,28 @@ const BuildingList = (props: any) => {
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
         <GridColumn
-          title="Building Name"
+          title="빌딩명"
           field="building_name"
           headerClassName={headerClassName}
+          className="custom-text-cell"
         />
         <GridColumn
-          title="Total Area"
-          field="total_area"
+          title="빌딩별 전체 면적(㎡)"
+          field="total_area_rounded"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
         <GridColumn
-          title="Stories"
-          field="stories"
+          title="빌딩 전체 층수(층)"
+          field="total_stories"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
         <GridColumn
           title="Sub Buildings"
           field="sub_bldg_list"
           headerClassName={headerClassName}
+          className="custom-text-cell"
         />
       </Grid>
     </div>

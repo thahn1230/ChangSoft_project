@@ -52,13 +52,11 @@ const ProjectDetail = (props: any) => {
           field="project_name"
           title="프로젝트명"
           headerClassName={headerClassName}
-          className="custom-column"
         />
         <GridColumn
           field="building_count"
           title="프로젝트 내 빌딩수"
           headerClassName={headerClassName}
-          className="custom-column"
         />
       </Grid>
 
