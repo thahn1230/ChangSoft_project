@@ -10,9 +10,13 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 이때 명령어의 뜻은 다음과 같습니다.
 main.py 안에 있는 app 모듈을 실행한다.
+
 "--reload" : 자동으로 재로딩 되게한다(코드 수정하고 저장 시 자동으로 서버 리부트가 됨)
+
 "--host 0.0.0.0" : 모든 호스트들을 접속할 수 있게 한다
+
 "--port 8000" : 포트번호를 8000번으로 지정한다
+
 
 - 이때 각자 컴퓨터에서 할당 받은 ip주소를 가지고 다른 컴퓨터에서 접속을 시도하려면 localhost에서의 방화벽을 해제시켜야 합니다
 
@@ -37,9 +41,14 @@ FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 
 
 또한 기본적으로 frontEnd가 돌아갈 환경을 만들어주어야 하는데 package.json을 가지고 있다는 가정하에 다음과 같은 명령어를 입력해주시면 됩니다.
 npm install react
+
 npm install kendo-react-all
+
 npm install
+
 npm fund
+
 npm audit fix
+
 
 만약 npm audit fix 명령어를 실행하였을때 작동이 안된다면 npm --force audit fix를 실행해주시면 됩니다.
