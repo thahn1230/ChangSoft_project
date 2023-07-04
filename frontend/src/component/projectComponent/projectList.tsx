@@ -262,7 +262,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="building-area-range-slider" className="custom-label">빌딩별 면적:</label>
+          <label htmlFor="building-area-range-slider" className="custom-label">빌딩면적:</label>
           <RangeSlider
             id="building-area-range-slider"
             value={{
@@ -285,7 +285,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="building-area-min-textbox" className="custom-label">Min:</label>
+          <label htmlFor="building-area-min-textbox" className="custom-label">최솟값:</label>
           <TextBox
             id="building-area-min-textbox"
             value={buildingAreaMinMax[0]}
@@ -298,7 +298,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="building-area-max-textbox" className="custom-label">Max:</label>
+          <label htmlFor="building-area-max-textbox" className="custom-label">최댓값:</label>
           <TextBox
             id="building-area-max-textbox"
             value={buildingAreaMinMax[1]}
@@ -349,7 +349,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="total-area-min-textbox" className="custom-label">Min:</label>
+          <label htmlFor="total-area-min-textbox" className="custom-label">최솟값:</label>
           <TextBox
             id="total-area-min-textbox"
             value={totalAreaMinMax[0]}
@@ -362,7 +362,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="form-field">
-          <label htmlFor="total-area-max-textbox" className="custom-label">Max:</label>
+          <label htmlFor="total-area-max-textbox" className="custom-label">최댓값:</label>
           <TextBox
             id="total-area-max-textbox"
             value={totalAreaMinMax[1]}
