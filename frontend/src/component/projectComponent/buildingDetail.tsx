@@ -80,16 +80,19 @@ const BuildingDetail = (props: any) => {
             field="total_area_rounded"
             title="전체 면적(㎡)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
             field="stories_above_below"
             title="층수(지상/지하, 층)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
             field="height_above_below"
             title="높이(지상/지하, m)"
             headerClassName={headerClassName}
+            className="custom-number-cell"
           />
           <GridColumn
             field="construction_method"
