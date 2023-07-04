@@ -41,9 +41,14 @@ FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 
 
 또한 기본적으로 frontEnd가 돌아갈 환경을 만들어주어야 하는데 package.json을 가지고 있다는 가정하에 다음과 같은 명령어를 입력해주시면 됩니다.
 npm install react
+
 npm install kendo-react-all
+
 npm install
+
 npm fund
+
 npm audit fix
+
 
 만약 npm audit fix 명령어를 실행하였을때 작동이 안된다면 npm --force audit fix를 실행해주시면 됩니다.
