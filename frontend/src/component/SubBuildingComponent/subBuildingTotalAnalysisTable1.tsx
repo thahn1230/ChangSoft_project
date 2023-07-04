@@ -103,8 +103,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
   //여기에서 테이블 갈아엎어야함
   useEffect(() => {
-
-
     const fetchData = async () => {
       try {
         if (selectedSubBuildingId === undefined) return;
@@ -160,12 +158,14 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
           <GridColumn title="연면적" headerClassName="custom-header-cell">
             <GridColumn
-              title={
-                analysisTable1[0].total_floor_area_meter +
-                "㎥ / " +
-                analysisTable1[0].total_floor_area_pyeong +
-                "평"
-              }
+              headerCell={() => (
+                <div className="custom-header-number-cell" >
+                  {analysisTable1[0].total_floor_area_meter +
+                    "㎥ / " +
+                    analysisTable1[0].total_floor_area_pyeong +
+                    "평"}
+                </div>
+              )}
             ></GridColumn>
             <GridColumn width={"0px"}></GridColumn>
           </GridColumn>
@@ -181,22 +181,26 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
               title={"구분"}
               field={"구분"}
               headerClassName="custom-header-cell"
+              className="custom-text-cell"
             ></GridColumn>
             <GridColumn
               title={"콘크리트(㎥)"}
               field={"콘크리트(㎥)"}
               headerClassName="custom-header-cell"
+              className="custom-number-cell"
             ></GridColumn>
 
             <GridColumn
               title={"거푸집(㎡)"}
               field={"거푸집"}
               headerClassName="custom-header-cell"
+              className="custom-number-cell"
             ></GridColumn>
             <GridColumn
               title={"철근(Ton)"}
               field={"철근(Ton)"}
               headerClassName="custom-header-cell"
+              className="custom-number-cell"
             ></GridColumn>
           </Grid>
         )}
