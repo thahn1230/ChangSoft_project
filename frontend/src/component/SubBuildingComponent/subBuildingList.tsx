@@ -72,19 +72,7 @@ const SubBuildingList = (props: any) => {
 
     fetchData();
   }, [props]);
-
-  /*
-  useEffect(() => {
-    const selectedSubId = subBuildingInfo.find(
-      (item) => item.sub_building_name === selectedSubBuildingName
-    )?.id;
-    setSelectedSubBuildingId(selectedSubId);
-  }, [selectedSubBuildingName]);
-
-  useEffect(() => {
-    props.setSelectedSubBuildingId(selectedSubBuildingId);
-  }, [selectedSubBuildingId]);
-*/
+  
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);
     if (e.value === "전체동") {

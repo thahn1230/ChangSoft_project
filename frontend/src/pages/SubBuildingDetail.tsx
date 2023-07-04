@@ -108,7 +108,7 @@ const SubBuildingDetail = (props: any) => {
   
   return (
     <div className="sub-building-list">
-      
+      <div>{props.projectName}</div>
       <div className="left-components">
         <SubBuildingTotalAnalysisTable1
           buildingInfo={buildingInfo}
