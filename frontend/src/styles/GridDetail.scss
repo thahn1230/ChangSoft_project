@@ -1,9 +1,8 @@
 .custom-header-cell {
-    text-align: center !important;
-    background-color: rgb(25, 101, 203);
+    background-color: rgb(25, 101, 203) !important;
     color: white;
     font-weight: bold;
-    border-bottom: 1px solid white !important;
+    border-bottom: 1px solid white;
 }
 
 .k-grid tr.k-grid-row>td {

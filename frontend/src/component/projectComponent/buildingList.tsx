@@ -21,6 +21,7 @@ import { MultiSelectPropsContext } from "@progress/kendo-react-dropdowns";
 import BuildingDetail from "./buildingDetail";
 import ProjectIntro from "../homeComponent/totalProjectNum";
 import urlPrefix from "../../resource/URL_prefix.json";
+import "./../../styles/GridDetail.scss";
 
 const DATA_ITEM_KEY = "id";
 const SELECTED_FIELD = "selected";
