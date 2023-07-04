@@ -150,19 +150,19 @@ const BuildingList = (props: any) => {
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
         <GridColumn
-          title="Building Name"
+          title="빌딩명"
           field="building_name"
           headerClassName={headerClassName}
           className="custom-text-cell"
         />
         <GridColumn
-          title="Total Area"
+          title="빌딩별 전체 면적(㎡)"
           field="total_area"
           headerClassName={headerClassName}
           className="custom-number-cell"
         />
         <GridColumn
-          title="Stories"
+          title="빌딩 층수(지하 / 지상)"
           field="stories"
           headerClassName={headerClassName}
           className="custom-number-cell"
