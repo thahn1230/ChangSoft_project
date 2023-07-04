@@ -4,23 +4,24 @@ import ProjectDetail from "../component/projectComponent/projectDetail";
 import ProjectList from "./../component/projectComponent/projectList";
 import { projectList_interface } from "./../interface/projectList_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
+import tempImage from "./../resource/temp.jpg"
 
-const Projects = (props:any) => {
-  const [selectedProjectName, setSelectedProjectName] =
-    useState<string>("project를 선택해주세요");
+const Projects = (props: any) => {
+  const [selectedProjectName, setSelectedProjectName] = useState<string>(
+    "project를 선택해주세요"
+  );
   const [data, setData] = useState<projectList_interface[]>([]);
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
   >();
 
-  
   useEffect(() => {
-    props.setBuildingInfo(buildingInfo)
+    props.setBuildingInfo(buildingInfo);
   }, [buildingInfo]);
   useEffect(() => {
-    props.setProjectName(selectedProjectName)
+    props.setProjectName(selectedProjectName);
   }, [selectedProjectName]);
-  
+
   return (
     <div className="projects">
       <ProjectList
@@ -30,6 +31,9 @@ const Projects = (props:any) => {
 
       <div className="projectDetail">
         <img
+          src={
+            tempImage
+          }
           style={{ width: "49%", float: "left", paddingLeft: "1%" }}
           alt="프로젝트 사진"
         />
@@ -43,7 +47,11 @@ const Projects = (props:any) => {
       </div>
 
       <div className="projects">
-        <BuildingList projectName={selectedProjectName} projectList={data} setBuildingInfo = {setBuildingInfo}/>
+        <BuildingList
+          projectName={selectedProjectName}
+          projectList={data}
+          setBuildingInfo={setBuildingInfo}
+        />
       </div>
     </div>
   );
