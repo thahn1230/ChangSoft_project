@@ -57,6 +57,7 @@ const ProjectDetail = (props: any) => {
           field="building_count"
           title="프로젝트 내 빌딩수"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
       </Grid>
 
@@ -65,6 +66,7 @@ const ProjectDetail = (props: any) => {
           field="building_area"
           title="건축면적(㎡)"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
         <GridColumn
           field="construction_company"
@@ -80,6 +82,7 @@ const ProjectDetail = (props: any) => {
           field="total_area"
           title="문서상 연면적(㎡)"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
       </Grid>
 
