@@ -24,41 +24,45 @@ def get_sub_building_data(building_id: int):
 @router.get("/sub_building/total_analysis_table1/{building_id}")
 def get_total_analysis_data1(building_id: int):
     query = f"""
-        SELECT *, 
-        ROUND((total_concrete / total_floor_area_meter), 2) AS con_floor_area_meter,
-        ROUND((total_formwork / total_floor_area_meter), 2) AS form_floor_area_meter,
-        ROUND((total_rebar / total_floor_area_meter), 2) AS reb_floor_area_meter,
-        ROUND((total_concrete / total_floor_area_pyeong), 2) AS con_floor_area_pyeong,
-        ROUND((total_formwork / total_floor_area_pyeong), 2) AS form_floor_area_pyeong,
-        ROUND((total_rebar / total_floor_area_pyeong), 2) AS reb_floor_area_pyeong,
-        ROUND((total_formwork / total_concrete), 2) AS form_con_result,
-        ROUND((total_rebar / total_concrete), 2) AS reb_con_result
+        SELECT FORMAT(total_concrete, 2) as total_concrete,
+        FORMAT(total_formwork, 2) as total_formwork,
+        FORMAT(total_rebar, 2) as total_rebar,
+        FORMAT(total_floor_area_meter, 2) as total_floor_area_meter,
+        FORMAT(total_floor_area_pyeong, 2) as total_floor_area_pyeong,
+        FORMAT(ROUND((total_concrete / total_floor_area_meter), 2), 2) AS con_floor_area_meter,
+        FORMAT(ROUND((total_formwork / total_floor_area_meter), 2), 2) AS form_floor_area_meter,
+        FORMAT(ROUND((total_rebar / total_floor_area_meter), 2), 2) AS reb_floor_area_meter,
+        FORMAT(ROUND((total_concrete / total_floor_area_pyeong), 2), 2) AS con_floor_area_pyeong,
+        FORMAT(ROUND((total_formwork / total_floor_area_pyeong), 2), 2) AS form_floor_area_pyeong,
+        FORMAT(ROUND((total_rebar / total_floor_area_pyeong), 2), 2) AS reb_floor_area_pyeong,
+        FORMAT(ROUND((total_formwork / total_concrete), 2), 2) AS form_con_result,
+        FORMAT(ROUND((total_rebar / total_concrete), 2), 2) AS reb_con_result
         FROM (SELECT
-                ROUND((SELECT SUM(volume) FROM structure3.concrete AS con
-                JOIN structure3.component AS com ON com.id = con.component_id
-                JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
-                WHERE sub.building_id = {building_id}), 2) AS total_concrete,
+        ROUND((SELECT SUM(volume) FROM structure3.concrete AS con
+        JOIN structure3.component AS com ON com.id = con.component_id
+        JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
+        WHERE sub.building_id = {building_id}), 2) AS total_concrete,
                 
-                ROUND((SELECT SUM(area) FROM structure3.formwork AS form
-                JOIN structure3.component AS com ON com.id = form.component_id
-                JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
-                WHERE sub.building_id = {building_id}), 2) AS total_formwork,
+        ROUND((SELECT SUM(area) FROM structure3.formwork AS form
+        JOIN structure3.component AS com ON com.id = form.component_id
+        JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
+        WHERE sub.building_id = {building_id}), 2) AS total_formwork,
                     
-                ROUND((SELECT SUM(rebar_weight) FROM structure3.rebar AS reb
-                JOIN structure3.component AS com ON com.id = reb.component_id
-                JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
-                WHERE sub.building_id = {building_id}), 2) AS total_rebar,
+        ROUND((SELECT SUM(rebar_weight) FROM structure3.rebar AS reb
+        JOIN structure3.component AS com ON com.id = reb.component_id
+        JOIN structure3.sub_building AS sub ON sub.id = com.sub_building_id
+        WHERE sub.building_id = {building_id}), 2) AS total_rebar,
 
-                ROUND((SELECT SUM(floor.floor_area / 1000000)
-                FROM floor
-                JOIN building ON floor.building_id = building.id
-                WHERE building.id = {building_id}), 2) AS total_floor_area_meter,
+        ROUND((SELECT SUM(floor.floor_area / 1000000)
+        FROM floor
+        JOIN building ON floor.building_id = building.id
+        WHERE building.id = {building_id}), 2) AS total_floor_area_meter,
                 
-                ROUND((SELECT SUM((floor.floor_area / 1000000) * 0.3025)
-                FROM floor
-                JOIN building ON floor.building_id = building.id
-                WHERE building.id = {building_id}), 2) AS total_floor_area_pyeong
-            ) AS sub_table
+        ROUND((SELECT SUM((floor.floor_area / 1000000) * 0.3025)
+        FROM floor
+        JOIN building ON floor.building_id = building.id
+        WHERE building.id = {building_id}), 2) AS total_floor_area_pyeong
+    ) AS sub_table
     """
 
     total_analysis_data_df = pd.read_sql(query, engine)
@@ -72,24 +76,24 @@ def get_total_analysis_data1(building_id: int):
 def get_total_analysis_data2(building_id: int):
     query = f"""
         SELECT c.component_type,
-        ROUND(SUM(concrete_volume), 2) AS concrete_volume,
-        ROUND(SUM(formwork_area), 2) AS formwork_area,
-        ROUND(SUM(rebar_weight), 2) AS rebar_weight,
-        ROUND((SUM(concrete_volume) / (SELECT SUM(volume) FROM concrete 
+        FORMAT(ROUND(SUM(concrete_volume), 2), 2) AS concrete_volume,
+        FORMAT(ROUND(SUM(formwork_area), 2), 2) AS formwork_area,
+        FORMAT(ROUND(SUM(rebar_weight), 2), 2) AS rebar_weight,
+        FORMAT(ROUND((SUM(concrete_volume) / (SELECT SUM(volume) FROM concrete 
         WHERE component_id 
         IN (SELECT id FROM component WHERE sub_building_id IN 
-        (SELECT id FROM sub_building WHERE building_id = {building_id})))) * 100, 2) 
+        (SELECT id FROM sub_building WHERE building_id = {building_id})))) * 100, 2), 2) 
         AS concrete_percentage,
-        ROUND((SUM(formwork_area) / (SELECT SUM(area) FROM formwork WHERE component_id 
+        FORMAT(ROUND((SUM(formwork_area) / (SELECT SUM(area) FROM formwork WHERE component_id 
         IN (SELECT id FROM component WHERE sub_building_id IN 
         (SELECT id FROM sub_building 
-        WHERE building_id = {building_id})))) * 100, 2) 
+        WHERE building_id = {building_id})))) * 100, 2), 2) 
         AS formwork_percentage,
-        ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) FROM rebar 
+        FORMAT(ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) FROM rebar 
         WHERE component_id 
         IN (SELECT id FROM component WHERE sub_building_id IN 
         (SELECT id FROM sub_building 
-        WHERE building_id = {building_id})))) * 100, 2) AS rebar_percentage
+        WHERE building_id = {building_id})))) * 100, 2), 2) AS rebar_percentage
         FROM (
             SELECT component.component_type
             FROM component
@@ -136,8 +140,12 @@ def get_total_analysis_data2(building_id: int):
 @router.get("/sub_building/analysis_table1/{sub_building_id}")
 def get_analysis_data1(sub_building_id: int):
     query = f"""
-        SELECT * , ROUND((total_formwork / total_concrete), 2) AS form_con_result,
-        ROUND((total_rebar / total_concrete), 2) AS reb_con_result 
+        SELECT  
+        FORMAT(ROUND((total_formwork / total_concrete), 2), 2) AS form_con_result,
+        FORMAT(ROUND((total_rebar / total_concrete), 2), 2) AS reb_con_result,
+        FORMAT(total_concrete, 2) AS total_concrete,
+        FORMAT(total_formwork, 2) AS total_formwork,
+        FORMAT(total_rebar, 2) AS total_rebar
         FROM (SELECT
                 ROUND((SELECT SUM(volume) FROM structure3.concrete con
                 JOIN structure3.component com ON com.id = con.component_id
@@ -165,23 +173,23 @@ def get_analysis_data1(sub_building_id: int):
 def get_analysis_data2(sub_building_id: int):
     query = f"""
         SELECT c.component_type,
-        ROUND(SUM(concrete_volume), 2) AS concrete_volume,
-        ROUND(SUM(formwork_area), 2) AS formwork_area,
-        ROUND(SUM(rebar_weight), 2) AS rebar_weight,
-        ROUND((SUM(concrete_volume) / (SELECT SUM(volume) 
+        FORMAT(ROUND(SUM(concrete_volume), 2), 2) AS concrete_volume,
+        FORMAT(ROUND(SUM(formwork_area), 2), 2) AS formwork_area,
+        FORMAT(ROUND(SUM(rebar_weight), 2), 2) AS rebar_weight,
+        FORMAT(ROUND((SUM(concrete_volume) / (SELECT SUM(volume) 
         FROM concrete WHERE component_id IN (SELECT id FROM component 
         WHERE sub_building_id IN (SELECT id FROM sub_building 
-        WHERE id = {sub_building_id})))) * 100, 2) 
+        WHERE id = {sub_building_id})))) * 100, 2), 2) 
         AS concrete_percentage,
-        ROUND((SUM(formwork_area) / (SELECT SUM(area) 
+        FORMAT(ROUND((SUM(formwork_area) / (SELECT SUM(area) 
         FROM formwork WHERE component_id IN (SELECT id FROM component 
         WHERE sub_building_id IN (SELECT id FROM sub_building 
-        WHERE id = {sub_building_id})))) * 100, 2) 
+        WHERE id = {sub_building_id})))) * 100, 2), 2) 
         AS formwork_percentage,
-        ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) 
+        FORMAT(ROUND((SUM(rebar_weight) / (SELECT SUM(rebar_weight) 
         FROM rebar WHERE component_id IN (SELECT id FROM component 
         WHERE sub_building_id IN (SELECT id FROM sub_building 
-        WHERE id = {sub_building_id})))) * 100, 2) 
+        WHERE id = {sub_building_id})))) * 100, 2), 2) 
         AS rebar_percentage
         FROM (
             SELECT component.component_type
