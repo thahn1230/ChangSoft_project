@@ -15,6 +15,7 @@
   padding: 0 10px;
   box-sizing: border-box;
   padding: 10px;
+  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
 }
 
 .filter-group-right {
@@ -23,6 +24,7 @@
   padding: 0 10px;
   box-sizing: border-box;
   padding: 10px;
+  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
 }
 
 .filter-group-left > div,
@@ -45,4 +47,12 @@
 .apply-filter-button {
   align-self: center;
   padding: 10px;
+  margin-right: 10px;
+}
+
+.reset-filter-button{
+  
+  align-self: center;
+  padding: 10px;
+  margin-left: 10px;
 }
