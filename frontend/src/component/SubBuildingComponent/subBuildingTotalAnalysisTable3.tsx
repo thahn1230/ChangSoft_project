@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
+import SubBuildingList from "./subBuildingList";
 import { subBuildingTotalAnalysisTable1_interface } from "./../../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingInfo_interface } from "./../../interface/subBuildingInfo_interface";
 
@@ -26,6 +27,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
     setSubBuildingInfo(props.subBuildingInfo);
     setSelectedSubBuildingId(props.selectedSubBuildingId);
 
+
     const selectedSubBuilding = subBuildingInfo?.find(
       (obj) => obj.id === selectedSubBuildingId
     );
@@ -48,6 +50,10 @@ const SubBuildingAnalysisTable3 = (props: any) => {
       }
     };
 
+    const selectedSubBuilding = subBuildingInfo?.find(
+      (obj) => obj.id === selectedSubBuildingId
+    );
+    setSelectedSubBuildingInfo(selectedSubBuilding);
     fetchData();
   }, [selectedSubBuildingId]);
 
@@ -65,8 +71,24 @@ const SubBuildingAnalysisTable3 = (props: any) => {
                 headerClassName="custom-header-cell"
               >
                 <GridColumn
-                  title={(subBuildingInfo?.find((obj) => obj.id === selectedSubBuildingId))?.sub_building_name}
-                ></GridColumn>
+                  title={
+                    subBuildingInfo?.find(
+                      (obj) => obj.id === selectedSubBuildingId
+                    )?.sub_building_name
+                  }
+                  headerCell={() => (
+                    <div>
+                      <SubBuildingList
+                        buildingInfo={props.buildingInfo}
+                        setSelectedSubBuildingId={
+                          setSelectedSubBuildingId
+                        }
+                        projectName={props.projectName}
+                        selectedSubBuildingName={selectedSubBuildingInfo?.sub_building_name}
+                      />
+                    </div>
+                  )}
+                />
                 <GridColumn width="0px" />
               </GridColumn>
 
@@ -105,6 +127,42 @@ const SubBuildingAnalysisTable3 = (props: any) => {
                 ></GridColumn>
               </Grid>
             )}
+        </div>
+      );
+    } else {
+      setReturnDiv(
+        <div>
+          {analysisTable1 && analysisTable1[0] && (
+            <Grid data={analysisTable1Grid}>
+              <GridColumn
+                title="SubBuilding Name"
+                headerClassName="custom-header-cell"
+              >
+                <GridColumn
+                  title="asd"
+                  headerCell={() => (
+                    <div>
+                      <SubBuildingList
+                        buildingInfo={props.buildingInfo}
+                        setSelectedSubBuildingId={
+                          setSelectedSubBuildingId
+                        }
+                        projectName={props.projectName}
+                        selectedSubBuildingName={selectedSubBuildingInfo?.sub_building_name}
+                      />
+                    </div>
+                  )}
+                />
+
+                <GridColumn width="0px" />
+              </GridColumn>
+
+              <GridColumn title="연면적" headerClassName="custom-header-cell">
+                <GridColumn title={" / "}></GridColumn>
+                <GridColumn width={"0px"}></GridColumn>
+              </GridColumn>
+            </Grid>
+          )}
         </div>
       );
     }
