@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   Chart,
   ChartSeries,
+  ChartTitle ,
   ChartSeriesItem,
   ChartCategoryAxis,
   ChartCategoryAxisTitle,
@@ -57,15 +58,16 @@ const FloorCount = () => {
     <div>
       <Chart style={{ height: "36vh" }}>
         <ChartCategoryAxis>
+          
           <ChartCategoryAxisItem
             categories={totalfloor.map(categoryContent
             )}
           >
-            <ChartCategoryAxisTitle text="Floors" />
+            <ChartCategoryAxisTitle text="Stories" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>
 
-        <ChartSeries>
+        <ChartSeries> 
           <ChartSeriesItem
             type="column"
             gap={2}

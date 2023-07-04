@@ -1,10 +1,6 @@
 // SubBuildingTotalAnalysisTable1.scss
 
-// SubBuildingTotalAnalysisTable1.scss
-
-.table-container {
-  
-}
+.table-container {}
 
 .k-grid {
   th {
@@ -13,20 +9,14 @@
 
   td {
     text-align: right;
+  }
 
-    &:not([data-type="string"]) {
-
-      // 숫자일 경우 소수점 아래 2글자까지 표시
-      &:before {
-        content: attr(data-value);
-        content: str-slice(attr(data-value), 1, -2) "." str-slice(attr(data-value), -2);
-        display: none;
-      }
-    }
+  // Custom styles for custom-number-cell and custom-text-cell
+  .custom-number-cell,
+  .custom-text-cell {
+    background-color: inherit !important;
   }
 }
-
-// TotalAnalysisGrid2.scss
 
 .custom-header-cell {
   background-color: rgb(25, 101, 203);
@@ -52,22 +42,16 @@
   border-color: white;
 }
 
-.custom-cell {
-  background-color: rgb(22, 48, 138);
-  color: white;
-  font-weight: bold;
-  border-bottom: 1px solid white !important;
+.custom-header-number-cell {
+  background-color: rgb(249, 249, 249) !important;
+  color: black !important;
+  text-align: right !important;
+}
 
-  &:not(:last-child) {
-    &::after {
-      content: "";
-      position: absolute;
-      right: 0;
-      top: 50%;
-      height: 50%;
-      width: 1px;
-      background-color: white;
-      transform: translateY(-50%);
-    }
-  }
+.custom-number-cell {
+  text-align: right !important;
+}
+
+.custom-text-cell {
+  text-align: left !important;
 }

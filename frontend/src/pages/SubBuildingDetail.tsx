@@ -39,6 +39,7 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         //console.log("props.buildingInfo.id: ")
         //console.log(props.buildingInfo.id)
         setBuildingInfo(props.buildingInfo);
@@ -102,37 +103,40 @@ const SubBuildingDetail = (props: any) => {
   }, [analysisTable1]);
 
   useEffect(() => {
-    console.log(selectedSubBuildingId)
+    //console.log(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
   
   return (
     <div className="sub-building-list">
-      <SubBuildingList
-        buildingInfo={buildingInfo}
-        setSelectedSubBuildingId={setSelectedSubBuildingId}
-        projectName={props.projectName}
-      />
-
+      <div>{props.projectName}</div>
       <div className="left-components">
         <SubBuildingTotalAnalysisTable1
-          endpoint={"total_analysis_table1/" + buildingInfo?.id}
           buildingInfo={buildingInfo}
           subBuildingInfo={subBuildingInfo}
+
           selectedSubBuildingId={selectedSubBuildingId}
+          setSelectedSubBuildingId={setSelectedSubBuildingId}
+          
+          projectName={props.projectName}
         />
-        <TotalAnalysisGrid2 buildingId={buildingInfo?.id}></TotalAnalysisGrid2>
+        <TotalAnalysisGrid2 selectedBuildingId={buildingInfo?.id} selectedSubBuildingId={selectedSubBuildingId}></TotalAnalysisGrid2>
       </div>
 
-      <div className="right-components">
+
+      {/* <div className="right-components">
         <SubBuildingTotalAnalysisTable3
           selectedSubBuildingId={selectedSubBuildingId}
           subBuildingInfo={subBuildingInfo}
+
+          buildingInfo={buildingInfo}
+          setSelectedSubBuildingId={setSelectedSubBuildingId}
+          projectName={props.projectName}
         ></SubBuildingTotalAnalysisTable3>
         <SubBuildingAnalysisTable4
           selectedSubBuildingId={selectedSubBuildingId}
           subBuildingInfo={subBuildingInfo}
         ></SubBuildingAnalysisTable4>
-      </div>
+      </div> */}
     </div>
   );
 };
