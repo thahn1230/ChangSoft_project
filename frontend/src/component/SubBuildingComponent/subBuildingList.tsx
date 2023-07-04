@@ -94,7 +94,7 @@ const SubBuildingList = (props: any) => {
           data={subBuildinglist}
           value={selectedSubBuildingName}
           onChange={onSelectedSubbuildingChange}
-          style={{ height: "20px", width: "100px"}}
+          style={{ height: "100%", width: "100%"}}
         />
       </div>
     </div>
