@@ -152,21 +152,25 @@ const BuildingList = (props: any) => {
           title="Building Name"
           field="building_name"
           headerClassName={headerClassName}
+          className="custom-text-cell"
         />
         <GridColumn
           title="Total Area"
           field="total_area"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
         <GridColumn
           title="Stories"
           field="stories"
           headerClassName={headerClassName}
+          className="custom-number-cell"
         />
         <GridColumn
           title="Sub Buildings"
           field="sub_bldg_list"
           headerClassName={headerClassName}
+          className="custom-text-cell"
         />
       </Grid>
     </div>

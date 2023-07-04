@@ -3,6 +3,7 @@
     color: white;
     font-weight: bold;
     border-bottom: 1px solid white !important;
+    text-align: center !important;
 
     &:not(:last-child) {
         &::after {
@@ -27,7 +28,13 @@
 // 25, 101, 203
 // 22, 48, 138
 
-.custom-cell {
+.custom-number-cell {
+    background-color: white !important;
+    color: black !important;
+    text-align: right !important;
+}
+
+.custom-text-cell {
     background-color: white !important;
     color: black !important;
     text-align: left !important;
