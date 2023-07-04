@@ -112,7 +112,7 @@ const BuildingDetail = (props: any) => {
           />
           <GridColumn
             field="foundation_type"
-            title="foundation_type"
+            title="기초타입"
             headerClassName={headerClassName}
           />
           <GridColumn
