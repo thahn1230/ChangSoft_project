@@ -63,11 +63,10 @@ const BuildingDetail = (props: any) => {
       <div style={{ width: "30%", float: "left", paddingLeft: "1%" }}>
         {imgPath && <img src={imgPath} alt="Building Image" height="300px" />}
       </div>
-
-      <div>
-        <Button onClick={onClick}>상세보기</Button>
-      </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
+        <div style={{ width: "200%"}}>
+          <Button onClick={onClick}>상세보기</Button>
+        </div>
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="building_name"
