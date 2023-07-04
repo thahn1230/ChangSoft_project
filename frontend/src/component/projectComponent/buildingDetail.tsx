@@ -23,8 +23,6 @@ const BuildingDetail = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("props : ");
-        console.log(props);
         const response = await axios.get(
           urlPrefix.IP_port +
             "/building/" +

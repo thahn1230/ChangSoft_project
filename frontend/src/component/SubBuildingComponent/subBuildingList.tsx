@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef} from "react";
 import { DropDownList, ComboBox } from "@progress/kendo-react-dropdowns";
 import {
   CompositeFilterDescriptor,
@@ -18,24 +18,43 @@ const SubBuildingList = (props: any) => {
     subBuildingInfo_interface[]
   >([]);
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
-    useState<string>("");
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
+    useState<string>("전체동");
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number|undefined>(0);
 
   const [selectedBuilding, setSelectedBuilding] =
     useState<buildingInfo_interface>();
 
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
+
+        console.log("in list");
+        let prevSelectedSubBuilding  = props.subBuildingInfo.find((subBuilding:any)=>subBuilding.id===props.selectedSubBuildingId)
+        if(prevSelectedSubBuilding === undefined)
+        {
+          console.log("전체동 selected");
+          setSelectedSubBuildingName("전체동")
+        }
+        else
+        {
+          console.log(prevSelectedSubBuilding.sub_building_name);
+          setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name)
+
+        }
+
+
         setSelectedBuilding(props.buildingInfo);
+
         const response = await axios.get(
           urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
         );
         const data: subBuildingInfo_interface[] = JSON.parse(response.data); // assuming the API response contains an array of buildings
 
-        //console.log("a")
-        //console.log(data[0].sub_building_name)
         let subBuildingNames: string[] = [];
+        subBuildingNames.push("전체동");
         for (let i = 0; i < data.length; i++) {
           subBuildingNames.push(data[i].sub_building_name);
         }
@@ -54,34 +73,40 @@ const SubBuildingList = (props: any) => {
     fetchData();
   }, [props]);
 
+  /*
   useEffect(() => {
-    const selectedId = subBuildingInfo.find(
+    const selectedSubId = subBuildingInfo.find(
       (item) => item.sub_building_name === selectedSubBuildingName
     )?.id;
-    setSelectedSubBuildingId(selectedId);
+    setSelectedSubBuildingId(selectedSubId);
   }, [selectedSubBuildingName]);
 
   useEffect(() => {
     props.setSelectedSubBuildingId(selectedSubBuildingId);
   }, [selectedSubBuildingId]);
-
-  useEffect(() => {
-    props.setSelectedSubBuildingId(selectedSubBuildingId);
-  }, [selectedSubBuildingName]);
-
+*/
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);
+    if (e.value === "전체동") {
+      setSelectedSubBuildingId(0);
+      props.setSelectedSubBuildingId(0);
+    } else {
+      const selectedSubId = subBuildingInfo.find(
+        (item) => item.sub_building_name === e.value
+      )?.id;
+      setSelectedSubBuildingId(selectedSubId);
+      props.setSelectedSubBuildingId(selectedSubId);
+    }
   };
 
   return (
     <div>
-      <div className="left-component">{props.projectName}</div>
       <div className="right-component">
         <DropDownList
           data={subBuildinglist}
-          //value={selectedBuilding ? selectedBuilding.id : null}
+          value={selectedSubBuildingName}
           onChange={onSelectedSubbuildingChange}
-          style={{height: "40px"}}
+          style={{ height: "20px", width: "100px"}}
         />
       </div>
     </div>

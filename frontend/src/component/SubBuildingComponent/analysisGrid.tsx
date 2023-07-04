@@ -17,16 +17,29 @@ import "./../../styles/subBuildingTotalAnalysisTable.scss";
 const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
     useState<subBuildingTotalAnalysisTable2_interface[]>();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/total_analysis_table2/" +
-            props.buildingId
-        );
-        const data = JSON.parse(response.data);
-        setSelectedBuildingInfo(data);
+        let response;
+        if(props.selectedSubBuildingId ===0)
+        {
+          response = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/total_analysis_table2/" +
+              props.selectedBuildingId
+          );
+        }
+        else
+        {
+          response = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table2/" +
+              props.selectedSubBuildingId
+          );
+        }
+       
+        setSelectedBuildingInfo(JSON.parse(response.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       }

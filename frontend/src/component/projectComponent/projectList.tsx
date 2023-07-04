@@ -22,6 +22,13 @@ import { project_interface } from "./../../interface/project_interface";
 
 import "./../../styles/ProjectList.scss";
 
+
+/**
+ * 현재 텍스트로 값을 바꾼후 apply하고
+ * 그 상태에서 bar로 값을 바꾸려고 하면 
+ * 오류가 나는 현상이있음
+ */
+
 //{ field: "construction_company", operator: "eq", value: "" }
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
