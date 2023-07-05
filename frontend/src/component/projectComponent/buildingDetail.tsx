@@ -94,7 +94,7 @@ const BuildingDetail = (props: any) => {
           />
           <GridColumn
             field="construction_method"
-            title="construction_method"
+            title="공법"
             headerClassName={headerClassName}
           />
         </Grid>
@@ -102,27 +102,27 @@ const BuildingDetail = (props: any) => {
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="top_down"
-            title="top_down"
+            title="탑다운"
             headerClassName={headerClassName}
           />
           <GridColumn
             field="plane_shape"
-            title="plane_shape"
+            title="평면현상"
             headerClassName={headerClassName}
           />
           <GridColumn
             field="foundation_type"
-            title="foundation_type"
+            title="기초타입"
             headerClassName={headerClassName}
           />
           <GridColumn
             field="structure_code"
-            title="structure_code"
+            title="규준"
             headerClassName={headerClassName}
           />
           <GridColumn
             field="performance_design_target"
-            title="performance_design_target"
+            title="내진설계"
             headerClassName={headerClassName}
           />
         </Grid>

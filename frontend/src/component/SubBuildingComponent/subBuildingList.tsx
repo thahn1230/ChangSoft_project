@@ -84,12 +84,12 @@ const SubBuildingList = (props: any) => {
 
   return (
     <div>
-      <div className="right-component">
+      <div>
         <DropDownList
           data={subBuildinglist}
           value={selectedSubBuildingName}
           onChange={onSelectedSubbuildingChange}
-          style={{ height: "20px", width: "100px"}}
+          style={{width: "100%"}}
         />
       </div>
     </div>
