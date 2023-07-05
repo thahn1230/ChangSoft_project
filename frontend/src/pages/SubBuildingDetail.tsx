@@ -21,7 +21,7 @@ import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interfac
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuildingTotalAnalysisTable2_interface";
-import {subBuildingAnalysisPercantage_interface} from "./../interface/subBuildingAnalysisPercantage_interface"
+import { subBuildingAnalysisPercantage_interface } from "./../interface/subBuildingAnalysisPercantage_interface";
 
 import axios from "axios";
 import urlPrefix from "./../resource/URL_prefix.json";
@@ -43,9 +43,10 @@ const SubBuildingDetail = (props: any) => {
   >([{}]);
 
   //콘크리트, 거푸집, 철근중에서 선택
-  const [selectedType,setSelectedType]=useState();
+  const [selectedType, setSelectedType] = useState();
   //각각의 퍼센트& 타입
-  const [percentagesInfo, setPercentagesInfo] =useState<subBuildingAnalysisPercantage_interface[]>();
+  const [percentagesInfo, setPercentagesInfo] =
+    useState<subBuildingAnalysisPercantage_interface[]>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,7 +116,6 @@ const SubBuildingDetail = (props: any) => {
     //console.log(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
 
-
   const onTypeChange = React.useCallback(
     (e: RadioButtonChangeEvent) => {
       setSelectedType(e.value);
@@ -123,11 +123,17 @@ const SubBuildingDetail = (props: any) => {
     [setSelectedType]
   );
 
+  let data = [
+    { projectName: props.projectName, building_name: buildingInfo?.building_name }
+  ];
+
   return (
     <div className="sub-building-list">
-      <div>{props.projectName}</div>
-      <div>{buildingInfo?.building_name}</div>
       <div className="left-components">
+        <Grid data={data}>
+          <GridColumn title="프로젝트명" field="projectName" headerClassName="custom-header-cell" className="custom-text-cell"/>
+          <GridColumn title="빌딩명" field="building_name" headerClassName="custom-header-cell" className="custom-text-cell"/>
+        </Grid>
         <SubBuildingTotalAnalysisTable1
           buildingInfo={buildingInfo}
           subBuildingInfo={subBuildingInfo}
@@ -138,36 +144,39 @@ const SubBuildingDetail = (props: any) => {
         <TotalAnalysisGrid2
           selectedBuildingId={buildingInfo?.id}
           selectedSubBuildingId={selectedSubBuildingId}
-          
           setPercentagesInfo={setPercentagesInfo}
           selectedType={selectedType}
         ></TotalAnalysisGrid2>
       </div>
 
       <div>
-      <RadioButton
-        value="concrete"
-        checked={selectedType === "concrete"}
-        label="콘크리트"
-        onChange={onTypeChange}
-      />
-      <br />
-      <RadioButton
-        value="formwork"
-        checked={selectedType === "formwork"}
-        label="거푸집"
-        onChange={onTypeChange}
-      />
-      <br />
-      <RadioButton
-        value="rebar"
-        checked={selectedType === "rebar"}
-        label="철근"
-        onChange={onTypeChange}
-      />
-    </div>
+        <RadioButton
+          value="concrete"
+          checked={selectedType === "concrete"}
+          label="콘크리트"
+          onChange={onTypeChange}
+        />
+        <br />
+        <RadioButton
+          value="formwork"
+          checked={selectedType === "formwork"}
+          label="거푸집"
+          onChange={onTypeChange}
+        />
+        <br />
+        <RadioButton
+          value="rebar"
+          checked={selectedType === "rebar"}
+          label="철근"
+          onChange={onTypeChange}
+        />
+      </div>
       <div>
-        { <SubBuildingTotalAnalysisPieChart percentagesInfo = {percentagesInfo}></SubBuildingTotalAnalysisPieChart> }
+        {
+          <SubBuildingTotalAnalysisPieChart
+            percentagesInfo={percentagesInfo}
+          ></SubBuildingTotalAnalysisPieChart>
+        }
       </div>
     </div>
   );
