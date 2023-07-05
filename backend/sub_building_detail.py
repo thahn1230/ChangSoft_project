@@ -21,7 +21,7 @@ def get_sub_building_data(building_id: int):
 
 
 # 총괄분석표 전체 sub_building 1
-@router.get("/sub_building/total_analysis_table1/{building_id}")
+@router.get("/sub_building/total_analysis_table_all/1/{building_id}")
 def get_total_analysis_data1(building_id: int):
     query = f"""
         SELECT *,
@@ -69,7 +69,7 @@ def get_total_analysis_data1(building_id: int):
 
 
 # 총괄분석표 전체 sub_building 2
-@router.get("/sub_building/total_analysis_table2/{building_id}")
+@router.get("/sub_building/total_analysis_table_all/2/{building_id}")
 def get_total_analysis_data2(building_id: int):
     query = f"""
         SELECT c.component_type,
@@ -134,7 +134,7 @@ def get_total_analysis_data2(building_id: int):
 
 
 # 총괄분석표 한개의 sub_building 1
-@router.get("/sub_building/analysis_table1/{sub_building_id}")
+@router.get("/sub_building/total_analysis_table/1/{sub_building_id}")
 def get_analysis_data1(sub_building_id: int):
     query = f"""
         SELECT *,
@@ -163,7 +163,7 @@ def get_analysis_data1(sub_building_id: int):
 
 
 # 총괄분석표 한개의 sub_building 2
-@router.get("/sub_building/analysis_table2/{sub_building_id}")
+@router.get("/sub_building/total_analysis_table/2/{sub_building_id}")
 def get_analysis_data2(sub_building_id: int):
     query = f"""
         SELECT c.component_type,
