@@ -1,5 +1,6 @@
 add_middleware.py
 dbAccess.py
 origins.py
-/backend/Others/
-/backend/__pycache__/
+
+Others/
+__pycache__/
