@@ -7,8 +7,7 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 
-import { subBuildingAnalysisPercantage_interface } from "../../interface/subBuildingAnalysisPercantage_interface";
-
+import { subBuildingAnalysisPercantage_interface } from "./../../interface/subBuildingAnalysisPercantage_interface";
 
 const SubBuildingTotalAnalysisPieChart = (props: any) => {
   const [percentages, setPercentages] = useState<

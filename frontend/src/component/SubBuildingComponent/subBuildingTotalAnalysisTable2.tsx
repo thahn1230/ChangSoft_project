@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 import { subBuildingTotalAnalysisTable2_interface } from "./../../interface/subBuildingTotalAnalysisTable2_interface";
-import { subBuildingAnalysisPercantage_interface } from "../../interface/subBuildingAnalysisPercantage_interface";
+import { subBuildingAnalysisPercantage_interface } from "./../../interface/subBuildingAnalysisPercantage_interface";
 
 import {
   Grid,
