@@ -97,7 +97,8 @@ const TotalAnalysisGrid2 = (props: any) => {
           break;
       }
     }
-  }, [props.selectedType]);
+
+  }, [props.selectedType , selectedBuildingInfo]);
 
   return (
     <div>
