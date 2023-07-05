@@ -16,12 +16,14 @@ import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/
 import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4";
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
 import SubBuildingTotalAnalysisPieChart from "../component/SubBuildingComponent/subBuildingTotalAnalysisPieChart";
+import SubBuildingTotalAnalysisBarChart from "../component/SubBuildingComponent/subBuildingTotalAnalysisBarChart";
 
 import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuildingTotalAnalysisTable2_interface";
-import {subBuildingAnalysisPercantage_interface} from "./../interface/subBuildingAnalysisPercantage_interface"
+import { subBuildingAnalysisPercantage_interface } from "./../interface/subBuildingAnalysisPercantage_interface";
+import { subBuildingAnalysisValue_interface } from "../interface/subBuildingAnalysisValue_interface";
 
 import axios from "axios";
 import urlPrefix from "./../resource/URL_prefix.json";
@@ -43,9 +45,13 @@ const SubBuildingDetail = (props: any) => {
   >([{}]);
 
   //콘크리트, 거푸집, 철근중에서 선택
-  const [selectedType,setSelectedType]=useState();
-  //각각의 퍼센트& 타입
-  const [percentagesInfo, setPercentagesInfo] =useState<subBuildingAnalysisPercantage_interface[]>();
+  const [selectedType, setSelectedType] = useState();
+  //각각의 퍼센트&타입
+  const [percentagesInfo, setPercentagesInfo] =
+    useState<subBuildingAnalysisPercantage_interface[]>();
+  //각각의 값&타입
+  const [valueInfo, setValueInfo] =
+    useState<subBuildingAnalysisValue_interface[]>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,7 +121,6 @@ const SubBuildingDetail = (props: any) => {
     //console.log(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
 
-
   const onTypeChange = React.useCallback(
     (e: RadioButtonChangeEvent) => {
       setSelectedType(e.value);
@@ -138,37 +143,42 @@ const SubBuildingDetail = (props: any) => {
         <TotalAnalysisGrid2
           selectedBuildingId={buildingInfo?.id}
           selectedSubBuildingId={selectedSubBuildingId}
-          
-          setPercentagesInfo={setPercentagesInfo}
           selectedType={selectedType}
+          setValueInfo={setValueInfo}
+          setPercentagesInfo={setPercentagesInfo}
         ></TotalAnalysisGrid2>
       </div>
 
       <div>
-      <RadioButton
-        value="concrete"
-        checked={selectedType === "concrete"}
-        label="콘크리트"
-        onChange={onTypeChange}
-      />
-      <br />
-      <RadioButton
-        value="formwork"
-        checked={selectedType === "formwork"}
-        label="거푸집"
-        onChange={onTypeChange}
-      />
-      <br />
-      <RadioButton
-        value="rebar"
-        checked={selectedType === "rebar"}
-        label="철근"
-        onChange={onTypeChange}
-      />
-    </div>
-      <div>
-        { <SubBuildingTotalAnalysisPieChart percentagesInfo = {percentagesInfo}></SubBuildingTotalAnalysisPieChart> }
+        <RadioButton
+          value="concrete"
+          checked={selectedType === "concrete"}
+          label="콘크리트"
+          onChange={onTypeChange}
+        />
+        <br />
+        <RadioButton
+          value="formwork"
+          checked={selectedType === "formwork"}
+          label="거푸집"
+          onChange={onTypeChange}
+        />
+        <br />
+        <RadioButton
+          value="rebar"
+          checked={selectedType === "rebar"}
+          label="철근"
+          onChange={onTypeChange}
+        />
       </div>
+
+      
+      <SubBuildingTotalAnalysisBarChart
+        valueInfo={valueInfo}
+      ></SubBuildingTotalAnalysisBarChart>
+      {/* <SubBuildingTotalAnalysisPieChart
+        percentagesInfo={percentagesInfo}
+      ></SubBuildingTotalAnalysisPieChart> */}
     </div>
   );
 };

@@ -47,15 +47,56 @@ const TotalAnalysisGrid2 = (props: any) => {
 
   //7/4에 여기하고있었음
   useEffect(() => {
-    if (selectedBuildingInfo !== undefined) {
-      console.log(selectedBuildingInfo[0]);
-      const newPercentageInfo = selectedBuildingInfo.map(
-        (item) => item.con_percentage
-      );
+    if (
+      props.selectedType !== undefined &&
+      selectedBuildingInfo !== undefined
+    ) {
+      switch (props.selectedType) {
+        case "concrete":
+          props.setPercentagesInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              percentage: item.concrete_percentage,
+            }))
+          );
+          props.setValueInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              value: item.concrete_volume,
+            }))
+          );
+          break;
 
-      console.log(newPercentageInfo);
+        case "formwork":
+          props.setPercentagesInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              percentage: item.formwork_percentage,
+            }))
+          );
+          props.setValueInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              value: item.formwork_area,
+            }))
+          );
+          break;
 
-      props.setPercentagesInfo(newPercentageInfo);
+        case "rebar":
+          props.setPercentagesInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              percentage: item.rebar_percentage,
+            }))
+          );
+          props.setValueInfo(
+            selectedBuildingInfo.map((item) => ({
+              type: item.component_type,
+              value: item.rebar_weight,
+            }))
+          );
+          break;
+      }
     }
   }, [props.selectedType]);
 

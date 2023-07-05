@@ -1,10 +1,10 @@
 //이거 수정해야함
 export interface subBuildingTotalAnalysisTable2_interface {
   component_type: string;
-  con_total: number;
-  con_percentage: number;
-  form_total: number;
-  form_percentage: number;
-  reb_total: number;
-  reb_percentage: number;
+  concrete_volume: number;
+  formwork_area: number;
+  rebar_weight: number;
+  concrete_percentage: number;
+  formwork_percentage: number;
+  rebar_percentage: number;
 }

@@ -8,33 +8,55 @@ import {
 } from "@progress/kendo-react-charts";
 
 import { subBuildingAnalysisPercantage_interface } from "../../interface/subBuildingAnalysisPercantage_interface";
-const SubBuildingTotalAnalysisPieChart = (
-  props:any
-) => {
+
+
+const SubBuildingTotalAnalysisPieChart = (props: any) => {
   const [percentages, setPercentages] = useState<
     subBuildingAnalysisPercantage_interface[]
   >([]);
+  const [returnDiv, setReturnDiv] = useState(<div></div>);
 
-  return (
-    <div>
-      {/* <Chart style={{ height: "36vh" }}>
-        <ChartLegend position="top" orientation="horizontal" padding={-5}/>
+  useEffect(() => {
+    setPercentages(props.percentagesInfo);
+  }, [props.percentagesInfo]);
 
-        <ChartSeries>
-          <ChartSeriesItem
-            type="donut"
-            data={percentages}
-            categoryField="field"
-            field="percentage"
-            autoFit={true}
-            holeSize={40}
-            size={45}
-          />
-        </ChartSeries>
-        <ChartTooltip render={renderTooltip} />
-      </Chart> */}
-    </div>
-  );
+  useEffect(() => {
+    setReturnDiv(
+      <div>
+        chartstart
+        <Chart style={{ height: "36vh" ,width:"50vh" }}>
+          {/* <ChartLegend position="top" orientation="horizontal" padding={-5} /> */}
+
+          <ChartSeries>
+            <ChartSeriesItem
+              type="donut"
+              data={percentages}
+              categoryField="type"
+              field="percentage"
+              holeSize={40}
+              size={45}
+            />
+          </ChartSeries>
+          <ChartTooltip render={renderTooltip} />
+        </Chart>
+        chartend
+      </div>
+    );
+  }, [percentages]);
+
+  const renderTooltip = (e: any) => {
+    if (e && e.point) {
+      return (
+        <div>
+          <p>Type: {e.point.dataItem.type}</p>
+          <p>Percentage: {Number(e.point.dataItem.percentage).toFixed(2)}%</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return returnDiv;
 };
 
 export default SubBuildingTotalAnalysisPieChart;
