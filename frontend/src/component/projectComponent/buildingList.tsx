@@ -160,6 +160,7 @@ const BuildingList = (props: any) => {
           field="total_area_rounded"
           headerClassName={headerClassName}
           className="custom-number-cell"
+          format={"{0:n2}"}
         />
         <GridColumn
           title="빌딩 전체 층수(층)"
