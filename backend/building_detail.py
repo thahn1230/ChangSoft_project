@@ -30,12 +30,12 @@ def get_project_building_data(building_id: int):
 def get_sub_building_names_data():
     query = """
         SELECT building.*, 
-        FORMAT(ROUND((total_area)/1000000, 2), 2) AS total_area_rounded,
+        ((total_area)/1000000) AS total_area_rounded,
         (stories_above + stories_below) AS total_stories, 
-        FORMAT(ROUND(((height_above + height_below)/ 1000), 2), 2) AS total_height,
+        ((height_above + height_below)/ 1000) AS total_height,
         CONCAT(stories_above, ' / ', stories_below) AS stories_above_below,
-        FORMAT(ROUND(height_above / 1000, 2), 2) AS height_above_meter,
-        FORMAT(ROUND(height_below / 1000, 2), 2) AS height_below_meter,
+        (height_above / 1000) AS height_above_meter,
+        (height_below / 1000) AS height_below_meter,
         CONCAT(FORMAT(ROUND(height_above / 1000, 2), 2), ' / ', 
         FORMAT(ROUND(height_below / 1000, 2), 2)) AS height_above_below,
         GROUP_CONCAT(sub_building.sub_building_name SEPARATOR ', ') AS sub_bldg_list
