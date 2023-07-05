@@ -45,7 +45,6 @@ const TotalAnalysisGrid2 = (props: any) => {
     fetchData();
   }, [props.selectedBuildingId, props.selectedSubBuildingId]);
 
-  //7/4에 여기하고있었음
   useEffect(() => {
     if (
       props.selectedType !== undefined &&
