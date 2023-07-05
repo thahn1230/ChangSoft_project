@@ -6,6 +6,7 @@ import {
   ChartCategoryAxisTitle,
   ChartSeries,
   ChartSeriesItem,
+  ChartTooltip,
 } from "@progress/kendo-react-charts";
 
 import { subBuildingAnalysisValue_interface } from "../../interface/subBuildingAnalysisValue_interface";
