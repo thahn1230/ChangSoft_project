@@ -2,32 +2,31 @@ import React, { useState, useEffect } from "react";
 import {
   Chart,
   ChartSeries,
-  ChartTitle ,
+  ChartTitle,
   ChartSeriesItem,
   ChartCategoryAxis,
   ChartCategoryAxisTitle,
   ChartCategoryAxisItem,
   ChartTooltip,
+  ChartValueAxis,
+  ChartValueAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import axios from "axios";
 import urlPrefix from "./../../resource/URL_prefix.json";
 import "./../../styles/ChartFont.scss";
 
-interface projectsFloorCount {
+interface ProjectsFloorCount {
   range_num: number;
   item_count: number;
 }
 
 const categoryContent = (e: any) => {
-  return (
-    "&nbsp;&nbsp;" +
-    (e.range_num * 10).toString()
-  );
+  return "&nbsp;&nbsp;" + (e.range_num * 10).toString();
 };
 
 const FloorCount = () => {
-  const [totalfloor, setTotalfloor] = useState<projectsFloorCount[]>([]);
+  const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +34,7 @@ const FloorCount = () => {
         const response = await axios.get(
           urlPrefix.IP_port + "/dashboard/building/floor_count_histogram"
         );
-        const data = JSON.parse(response.data);
+        const data: ProjectsFloorCount[] = JSON.parse(response.data);
 
         setTotalfloor(data);
       } catch (error) {
@@ -49,7 +48,7 @@ const FloorCount = () => {
   const renderTooltip = (e: any) => {
     return (
       <div>
-        <p>Floors: {(e.point.dataItem)}</p>
+        <p>Floors: {e.point.dataItem}</p>
       </div>
     );
   };
@@ -58,16 +57,18 @@ const FloorCount = () => {
     <div>
       <Chart style={{ height: "36vh" }}>
         <ChartCategoryAxis>
-          
           <ChartCategoryAxisItem
-            categories={totalfloor.map(categoryContent
-            )}
+            categories={totalfloor.map(categoryContent)}
           >
             <ChartCategoryAxisTitle text="Stories" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>
 
-        <ChartSeries> 
+        <ChartValueAxis>
+          <ChartValueAxisItem title={{ text: "Floor Count" }} />
+        </ChartValueAxis>
+
+        <ChartSeries>
           <ChartSeriesItem
             type="column"
             gap={2}
