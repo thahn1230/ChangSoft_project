@@ -117,10 +117,9 @@ const SubBuildingDetail = (props: any) => {
     }
   }, [analysisTable1]);
 
-  useEffect(() => {
-    //console.log(selectedSubBuildingId)
-  }, [selectedSubBuildingId]);
 
+
+  
   const onTypeChange = React.useCallback(
     (e: RadioButtonChangeEvent) => {
       setSelectedType(e.value);
@@ -155,6 +154,7 @@ const SubBuildingDetail = (props: any) => {
         <SubBuildingTotalAnalysisTable1
           buildingInfo={buildingInfo}
           subBuildingInfo={subBuildingInfo}
+
           selectedSubBuildingId={selectedSubBuildingId}
           setSelectedSubBuildingId={setSelectedSubBuildingId}
           projectName={props.projectName}
@@ -162,6 +162,7 @@ const SubBuildingDetail = (props: any) => {
         <TotalAnalysisGrid2
           selectedBuildingId={buildingInfo?.id}
           selectedSubBuildingId={selectedSubBuildingId}
+
           selectedType={selectedType}
           setValueInfo={setValueInfo}
           setPercentagesInfo={setPercentagesInfo}
@@ -201,6 +202,7 @@ const SubBuildingDetail = (props: any) => {
           <SubBuildingTotalAnalysisPieChart
             percentagesInfo={percentagesInfo}
             selectedType={selectedType}
+            selectedSubBuildingId={selectedSubBuildingId}
           ></SubBuildingTotalAnalysisPieChart>
         </div>
       </div>

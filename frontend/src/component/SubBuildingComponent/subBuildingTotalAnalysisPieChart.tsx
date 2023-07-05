@@ -16,7 +16,6 @@ const SubBuildingTotalAnalysisPieChart = (props: any) => {
   const [returnDiv, setReturnDiv] = useState(<div></div>);
 
   useEffect(() => {
-    console.log("??")
     setPercentages(props.percentagesInfo);
   }, [props.percentagesInfo]);
 

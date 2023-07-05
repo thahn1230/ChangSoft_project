@@ -12,7 +12,6 @@ import {
 } from "@progress/kendo-react-charts";
 
 import { subBuildingAnalysisValue_interface } from "../../interface/subBuildingAnalysisValue_interface";
-import { Color } from "@progress/kendo-drawing";
 
 const SubBuildingTotalAnalysisBarChart = (props: any) => {
   const [values, setValues] = useState<subBuildingAnalysisValue_interface[]>(
