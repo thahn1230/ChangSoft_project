@@ -8,6 +8,7 @@ import {
 } from "@progress/kendo-react-charts";
 
 import { subBuildingAnalysisValue_interface } from "../../interface/subBuildingAnalysisValue_interface";
+import { Color } from "@progress/kendo-drawing";
 
 const SubBuildingTotalAnalysisBarChart = (props:any) => {
     const [values, setValues] = useState<
@@ -24,7 +25,7 @@ const SubBuildingTotalAnalysisBarChart = (props:any) => {
     setReturnDiv(
         <div>
         chartstart
-        <Chart style={{ height: "36vh", width: "50vh" }}>
+        <Chart style={{ height: "40vh"}}>
           {/* <ChartLegend position="top" orientation="horizontal" padding={-5} /> */}
   
           <ChartSeries>
@@ -35,6 +36,7 @@ const SubBuildingTotalAnalysisBarChart = (props:any) => {
               field="value"
               holeSize={40}
               size={45}
+              color="#00028f"
             />
           </ChartSeries>
           {/* <ChartTooltip render={renderTooltip} /> */}

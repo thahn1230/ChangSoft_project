@@ -175,28 +175,27 @@ const SubBuildingDetail = (props: any) => {
             checked={selectedType === "concrete"}
             label="콘크리트"
             onChange={onTypeChange}
-            style={{ marginLeft: '10px' }}
+            style={{ marginLeft: "10px" }}
           />
           <RadioButton
             value="formwork"
             checked={selectedType === "formwork"}
             label="거푸집"
             onChange={onTypeChange}
-            style={{ marginLeft: '10px' }}
+            style={{ marginLeft: "10px" }}
           />
           <RadioButton
             value="rebar"
             checked={selectedType === "rebar"}
             label="철근"
             onChange={onTypeChange}
-            style={{ marginLeft: '10px' }}
+            style={{ marginLeft: "10px" }}
           />
         </div>
+        <SubBuildingTotalAnalysisBarChart
+          valueInfo={valueInfo}
+        ></SubBuildingTotalAnalysisBarChart>
       </div>
-      
-      <SubBuildingTotalAnalysisBarChart
-        valueInfo={valueInfo}
-      ></SubBuildingTotalAnalysisBarChart>
       {/* <SubBuildingTotalAnalysisPieChart
         percentagesInfo={percentagesInfo}
       ></SubBuildingTotalAnalysisPieChart> */}

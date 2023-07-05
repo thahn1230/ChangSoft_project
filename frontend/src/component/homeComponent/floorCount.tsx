@@ -60,7 +60,7 @@ const FloorCount = () => {
           <ChartCategoryAxisItem
             categories={totalfloor.map(categoryContent)}
           >
-            <ChartCategoryAxisTitle text="Stories" />
+            <ChartCategoryAxisTitle text="Stories(층)" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>
 
