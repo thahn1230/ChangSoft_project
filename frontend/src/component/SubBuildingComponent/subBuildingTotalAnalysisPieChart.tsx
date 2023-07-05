@@ -23,8 +23,7 @@ const SubBuildingTotalAnalysisPieChart = (props: any) => {
   useEffect(() => {
     setReturnDiv(
       <div>
-        chartstart
-        <Chart style={{ height: "36vh" ,width:"50vh" }}>
+        <Chart style={{ height: "36vh" }}>
           {/* <ChartLegend position="top" orientation="horizontal" padding={-5} /> */}
 
           <ChartSeries>
@@ -39,7 +38,6 @@ const SubBuildingTotalAnalysisPieChart = (props: any) => {
           </ChartSeries>
           <ChartTooltip render={renderTooltip} />
         </Chart>
-        chartend
       </div>
     );
   }, [percentages]);

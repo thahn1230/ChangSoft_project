@@ -26,13 +26,13 @@ const TotalAnalysisGrid2 = (props: any) => {
         if (props.selectedSubBuildingId === 0) {
           response = await axios.get(
             urlPrefix.IP_port +
-              "/sub_building/total_analysis_table2/" +
+              "/sub_building/total_analysis_table_all/2/" +
               props.selectedBuildingId
           );
         } else {
           response = await axios.get(
             urlPrefix.IP_port +
-              "/sub_building/analysis_table2/" +
+              "/sub_building/total_analysis_table/2/" +
               props.selectedSubBuildingId
           );
         }

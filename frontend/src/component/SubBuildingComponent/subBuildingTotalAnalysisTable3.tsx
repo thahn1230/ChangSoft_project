@@ -27,7 +27,6 @@ const SubBuildingAnalysisTable3 = (props: any) => {
     setSubBuildingInfo(props.subBuildingInfo);
     setSelectedSubBuildingId(props.selectedSubBuildingId);
 
-
     const selectedSubBuilding = subBuildingInfo?.find(
       (obj) => obj.id === selectedSubBuildingId
     );
@@ -40,7 +39,7 @@ const SubBuildingAnalysisTable3 = (props: any) => {
       try {
         const response1 = await axios.get(
           urlPrefix.IP_port +
-            "/sub_building/analysis_table1/" +
+            "/sub_building/total_analysis_table/1/" +
             selectedSubBuildingId
         );
 
@@ -80,11 +79,11 @@ const SubBuildingAnalysisTable3 = (props: any) => {
                     <div>
                       <SubBuildingList
                         buildingInfo={props.buildingInfo}
-                        setSelectedSubBuildingId={
-                          setSelectedSubBuildingId
-                        }
+                        setSelectedSubBuildingId={setSelectedSubBuildingId}
                         projectName={props.projectName}
-                        selectedSubBuildingName={selectedSubBuildingInfo?.sub_building_name}
+                        selectedSubBuildingName={
+                          selectedSubBuildingInfo?.sub_building_name
+                        }
                       />
                     </div>
                   )}
@@ -144,11 +143,11 @@ const SubBuildingAnalysisTable3 = (props: any) => {
                     <div>
                       <SubBuildingList
                         buildingInfo={props.buildingInfo}
-                        setSelectedSubBuildingId={
-                          setSelectedSubBuildingId
-                        }
+                        setSelectedSubBuildingId={setSelectedSubBuildingId}
                         projectName={props.projectName}
-                        selectedSubBuildingName={selectedSubBuildingInfo?.sub_building_name}
+                        selectedSubBuildingName={
+                          selectedSubBuildingInfo?.sub_building_name
+                        }
                       />
                     </div>
                   )}
