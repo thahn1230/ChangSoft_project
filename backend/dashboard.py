@@ -13,6 +13,7 @@ engine = create_db_connection()
 #    DASHBOARD    #
 ###################
 
+
 # table에 있는 데이터 전부 보내기
 @router.get("/dashboard/{table_name}")
 def get_project(table_name: str):
@@ -21,18 +22,28 @@ def get_project(table_name: str):
         FROM information_schema.tables
         WHERE table_schema = 'structure3'
     """
-    valid_attributes = pd.read_sql(valid_check_query, engine)['TABLE_NAME'].tolist()  # DB안에 있는 table 목록
-    project_attributes = table_name.split(',')  # 여러개의 table을 요청했을때 ","로 구분할 수 있게 split하기
+    valid_attributes = pd.read_sql(valid_check_query, engine)[
+        "TABLE_NAME"
+    ].tolist()  # DB안에 있는 table 목록
+    project_attributes = table_name.split(
+        ","
+    )  # 여러개의 table을 요청했을때 ","로 구분할 수 있게 split하기
 
     # invalid_attributes 리스트에 유효하지 않은 attribute들을 저장
-    invalid_attributes = [attr for attr in project_attributes if attr not in valid_attributes]
+    invalid_attributes = [
+        attr for attr in project_attributes if attr not in valid_attributes
+    ]
 
     # 유효하지 않은 attribute를 요청받았을 시, 오류 메시지 보내기
     if invalid_attributes:
-        error_message = {"error": f"Invalid attribute(s): {', '.join(invalid_attributes)}"}
+        error_message = {
+            "error": f"Invalid attribute(s): {', '.join(invalid_attributes)}"
+        }
         return JSONResponse(error_message)
 
-    attribute_list = ', '.join(project_attributes)  # 하나의 string으로 합치기(query문에 넣어야 하기 때문)
+    attribute_list = ", ".join(
+        project_attributes
+    )  # 하나의 string으로 합치기(query문에 넣어야 하기 때문)
 
     table_name = attribute_list
 
@@ -48,11 +59,11 @@ def get_project(table_name: str):
 @router.get("/dashboard/{table_name}/count")
 def get_total_project_num(table_name: str):
     query = text(f"SELECT COUNT(*) FROM structure3.{table_name}")
-    
+
     with engine.connect() as connection:
         result = connection.execute(query)
         table_count = result.scalar()
-    
+
     return {table_count}
 
 
@@ -81,7 +92,9 @@ def get_project_construction_company_ratio():
         ORDER BY percentage DESC;
     """
     project_construction_company_df = pd.read_sql(query, engine)
-    return JSONResponse(project_construction_company_df.to_json(force_ascii=False, orient="records"))
+    return JSONResponse(
+        project_construction_company_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 # 프로젝트 지역지구별 비율
@@ -95,27 +108,31 @@ def get_project_location_ratio():
         ORDER BY percentage DESC;
     """
     project_location_df = pd.read_sql(query, engine)
-    return JSONResponse(project_location_df.to_json(force_ascii=False, orient="records"))
+    return JSONResponse(
+        project_location_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 # construction_company당 면적
 @router.get("/dashboard/project/construction_company_total_area")
 def get_construction_company_total_area():
-    query="""
+    query = """
         SELECT construction_company, SUM(total_area) AS total_area_sum
         FROM structure3.project
         GROUP BY construction_company
         ORDER BY total_area_sum
     """
-    
+
     construction_company_total_area_df = pd.read_sql(query, engine)
-    return JSONResponse(construction_company_total_area_df.to_json(force_ascii=False, orient="records"))
+    return JSONResponse(
+        construction_company_total_area_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 # map 그릴때 필요한 데이터(좌표)들 보내기
 @router.get("/dashboard/project/map")
 def get_map_data():
-    query="""
+    query = """
         SELECT sub_table.latitude, sub_table.longitude, SUM(count) AS sum 
         FROM 
             (SELECT latitude, longitude, COUNT(*) AS count 
@@ -126,21 +143,21 @@ def get_map_data():
     """
     map_coordinates_df = pd.read_sql(query, engine)
     map_coordinates_json = json.loads(map_coordinates_df.to_json())
-    
+
     coordinates = []
-    for i in range (0,len(map_coordinates_json['latitude'])):
-        lat = map_coordinates_json['latitude'][str(i)]
-        lon = map_coordinates_json['longitude'][str(i)]
-        count = map_coordinates_json['sum'][str(i)]
-        coordinates.append({"latlng":[lat, lon],"sum" : count})
-        
+    for i in range(0, len(map_coordinates_json["latitude"])):
+        lat = map_coordinates_json["latitude"][str(i)]
+        lon = map_coordinates_json["longitude"][str(i)]
+        count = map_coordinates_json["sum"][str(i)]
+        coordinates.append({"latlng": [lat, lon], "sum": count})
+
     return coordinates
 
 
 # project의 total_area 히스토그램
 @router.get("/dashboard/project/total_area_histogram")
 def get_total_area_histogram():
-    query="""
+    query = """
         SELECT 
             subquery.min_val as min_val,
             subquery.max_val AS max_val,
@@ -164,7 +181,7 @@ def get_total_area_histogram():
 # building의 floor_count 히스토그램
 @router.get("/dashboard/building/floor_count_histogram")
 def get_floor_count_histogram():
-    query="""
+    query = """
         SELECT 
             FLOOR((floor_count) / 10) AS range_num,
             COUNT(*) AS item_count
@@ -177,4 +194,6 @@ def get_floor_count_histogram():
         ORDER BY range_num;
     """
     floor_count_table_df = pd.read_sql(query, engine)
-    return JSONResponse(floor_count_table_df.to_json(force_ascii=False, orient="records"))
+    return JSONResponse(
+        floor_count_table_df.to_json(force_ascii=False, orient="records")
+    )
