@@ -193,29 +193,6 @@ const SubBuildingDetail = (props: any) => {
           />
         </div>
       </div>
-      <div>
-        <RadioButton
-          value="concrete"
-          checked={selectedType === "concrete"}
-          label="콘크리트"
-          onChange={onTypeChange}
-        />
-        <br />
-        <RadioButton
-          value="formwork"
-          checked={selectedType === "formwork"}
-          label="거푸집"
-          onChange={onTypeChange}
-        />
-        <br />
-        <RadioButton
-          value="rebar"
-          checked={selectedType === "rebar"}
-          label="철근"
-          onChange={onTypeChange}
-        />
-      </div>
-
       
       <SubBuildingTotalAnalysisBarChart
         valueInfo={valueInfo}
