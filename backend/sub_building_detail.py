@@ -297,7 +297,7 @@ def get_analysis_concrete_data2(sub_building_id: int):
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
 
-# 분석표 한개의 sub_building에서 formwork 데이터 보이기
+# 분석표 전체의 sub_building에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/formwork")
 def get_analysis_formwork_data2(sub_building_id: int):
     query = f"""
@@ -314,7 +314,7 @@ def get_analysis_formwork_data2(sub_building_id: int):
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
 
-# 분석표 한개의 sub_building에서 rebar 데이터 보이기
+# 분석표 전체의 sub_building에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/rebar")
 def get_analysis_rebar_data2(sub_building_id: int):
     query = f"""
