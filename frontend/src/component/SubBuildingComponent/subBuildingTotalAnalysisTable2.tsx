@@ -125,7 +125,7 @@ const TotalAnalysisGrid2 = (props: any) => {
               field="concrete_percentage"
               headerClassName="custom-header-cell"
               className="custom-number-cell"
-              format={"{0:p2}"}
+              format={"{0:n2}"}
             />
             <GridColumn
               title="거푸집(㎡)"
@@ -139,7 +139,7 @@ const TotalAnalysisGrid2 = (props: any) => {
               field="formwork_percentage"
               headerClassName="custom-header-cell"
               className="custom-number-cell"
-              format={"{0:p2}"}
+              format={"{0:n2}"}
             />
             <GridColumn
               title="철근(Ton)"
@@ -153,7 +153,7 @@ const TotalAnalysisGrid2 = (props: any) => {
               field="rebar_percentage"
               headerClassName="custom-header-cell"
               className="custom-number-cell"
-              format={"{0:p2}"}
+              format={"{0:n2}"}
             />
           </Grid>
         </div>

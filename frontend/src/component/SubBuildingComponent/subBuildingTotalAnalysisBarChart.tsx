@@ -55,7 +55,7 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
             ></ChartSeriesItem>
           </ChartSeries>
           <ChartValueAxis>
-            <ChartValueAxisItem title={{ text: "Floor Count(" + unit + ")" }} />
+            <ChartValueAxisItem title={{ text: props.selectedType +"(" + unit + ")" }} />
           </ChartValueAxis>
           <ChartTooltip render={renderTooltip} />
         </Chart>
