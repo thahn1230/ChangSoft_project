@@ -14,7 +14,7 @@ import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
 import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3";
 import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4";
-import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
+import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable2";
 import SubBuildingTotalAnalysisPieChart from "../component/SubBuildingComponent/subBuildingTotalAnalysisPieChart";
 import SubBuildingTotalAnalysisBarChart from "../component/SubBuildingComponent/subBuildingTotalAnalysisBarChart";
 

@@ -38,7 +38,7 @@ const SubBuildingAnalysisTable4 = (props: any) => {
       try {
         const response = await axios.get(
           urlPrefix.IP_port +
-            "/sub_building/analysis_table2/" +
+            "/sub_building/total_analysis_table/2/" +
             selectedSubBUildingId
         );
         const data = JSON.parse(response.data);

@@ -55,7 +55,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
         const response1 = await axios.get(
           urlPrefix.IP_port +
-            "/sub_building/total_analysis_table1/" +
+            "/sub_building/total_analysis_table_all/1/" +
             props.buildingInfo?.id
         );
 
@@ -159,7 +159,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
           <GridColumn title="연면적" headerClassName="custom-header-cell">
             <GridColumn
               headerCell={() => (
-                <div className="custom-header-number-cell" >
+                <div className="custom-header-number-cell">
                   {analysisTable1[0].total_floor_area_meter +
                     "㎥ / " +
                     analysisTable1[0].total_floor_area_pyeong +
