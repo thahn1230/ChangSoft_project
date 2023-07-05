@@ -20,6 +20,9 @@ def get_sub_building_data(building_id: int):
     return JSONResponse(sub_building_df.to_json(force_ascii=False, orient="records"))
 
 
+### 총괄분석표 ###
+
+
 # 총괄분석표 전체 sub_building 1
 @router.get("/sub_building/total_analysis_table_all/1/{building_id}")
 def get_total_analysis_data1(building_id: int):
@@ -219,6 +222,36 @@ def get_analysis_data2(sub_building_id: int):
             AND formwork_area IS NOT NULL
             AND rebar_weight IS NOT NULL
         ORDER BY c.component_type;
+    """
+
+    analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+
+
+### 분석표 ###
+# 분석표 한개의 sub_building 보이기
+@router.get("/sub_building/total_analysis_table/1/{sub_building_id}")
+def get_analysis_data1(sub_building_id: int):
+    query = f"""
+        SELECT *,
+        (total_formwork / total_concrete) AS form_con_result,
+        (total_rebar / total_concrete) AS reb_con_result
+        FROM (SELECT
+                (SELECT SUM(volume) FROM structure3.concrete con
+                JOIN structure3.component com ON com.id = con.component_id
+                JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
+                WHERE sub.id = {sub_building_id}) AS total_concrete,
+                
+                (SELECT SUM(area) FROM structure3.formwork form
+                JOIN structure3.component com ON com.id = form.component_id
+                JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
+                WHERE sub.id = {sub_building_id}) AS total_formwork,
+                    
+                (SELECT SUM(rebar_weight) FROM structure3.rebar reb
+                JOIN structure3.component com ON com.id = reb.component_id
+                JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
+                WHERE sub.id = {sub_building_id}) AS total_rebar
+            ) AS sub_table
     """
 
     analysis_data_df = pd.read_sql(query, engine)
