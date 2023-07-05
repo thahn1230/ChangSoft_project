@@ -192,13 +192,16 @@ const SubBuildingDetail = (props: any) => {
             style={{ marginLeft: "10px" }}
           />
         </div>
-        <SubBuildingTotalAnalysisBarChart
-          valueInfo={valueInfo}
-        ></SubBuildingTotalAnalysisBarChart>
+        <div className="bar-pie-chart-container">
+          <SubBuildingTotalAnalysisBarChart
+            valueInfo={valueInfo}
+          ></SubBuildingTotalAnalysisBarChart>
+
+          <SubBuildingTotalAnalysisPieChart
+            percentagesInfo={percentagesInfo}
+          ></SubBuildingTotalAnalysisPieChart>
+        </div>
       </div>
-      {/* <SubBuildingTotalAnalysisPieChart
-        percentagesInfo={percentagesInfo}
-      ></SubBuildingTotalAnalysisPieChart> */}
     </div>
   );
 };

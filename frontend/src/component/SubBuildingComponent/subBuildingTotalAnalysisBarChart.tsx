@@ -24,8 +24,7 @@ const SubBuildingTotalAnalysisBarChart = (props:any) => {
     console.log(values);
     setReturnDiv(
         <div>
-        chartstart
-        <Chart style={{ height: "40vh"}}>
+        <Chart style={{width: "100%",height: "36vh"}}>
           {/* <ChartLegend position="top" orientation="horizontal" padding={-5} /> */}
   
           <ChartSeries>
@@ -41,7 +40,6 @@ const SubBuildingTotalAnalysisBarChart = (props:any) => {
           </ChartSeries>
           {/* <ChartTooltip render={renderTooltip} /> */}
         </Chart>
-        chartend
       </div>
     );
   }, [values]);
