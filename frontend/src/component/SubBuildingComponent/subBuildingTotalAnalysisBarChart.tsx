@@ -20,10 +20,8 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
 
   useEffect(() => {
     setReturnDiv(
-      <div>
-        <Chart style={{ width: "100%", height: "36vh"}}>
-          {/* <ChartLegend position="top" orientation="horizontal" padding={-5} /> */}
-
+      <div style={{height: "40vh" }}>
+        <Chart style={{ width: "100%", height: "100%" }}>
           <ChartSeries>
             <ChartSeriesItem
               type="bar"
@@ -35,11 +33,23 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
               color="#00028f"
             />
           </ChartSeries>
-          {/* <ChartTooltip render={renderTooltip} /> */}
+          <ChartTooltip render={renderTooltip} />
         </Chart>
       </div>
     );
   }, [values]);
+
+  const renderTooltip = (e: any) => {
+    if (e && e.point) {
+      return (
+        <div>
+          <p>Type: {e.point.dataItem.type}</p>
+          <p>Value: {e.point.dataItem.value}</p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return returnDiv;
 };
