@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
   Chart,
-  ChartLegend,
-  ChartTooltip,
+  ChartCategoryAxis,
+  ChartCategoryAxisItem,
+  ChartCategoryAxisTitle,
   ChartSeries,
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";

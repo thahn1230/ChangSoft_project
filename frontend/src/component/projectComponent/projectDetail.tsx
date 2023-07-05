@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  GridColumn,
-} from "@progress/kendo-react-grid";
+import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 import "../../styles/GridDetail.scss";
-
+import { formatNumber } from "@progress/kendo-intl";
 interface projectDetail_interface {
   project_name: string;
   building_area: number;
@@ -32,7 +29,12 @@ const ProjectDetail = (props: any) => {
               props.selectedProject.id +
               "/project_detail"
           );
+
           const data = JSON.parse(response.data);
+          for (let i = 0; i < data.length; i++) {
+            data[i].total_area = data[i].total_area.toFixed(2);
+          }
+
           setProjectData(data);
         }
       } catch (error) {
