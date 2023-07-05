@@ -29,18 +29,13 @@ const SubBuildingList = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
-
-        console.log("in list");
         let prevSelectedSubBuilding  = props.subBuildingInfo.find((subBuilding:any)=>subBuilding.id===props.selectedSubBuildingId)
         if(prevSelectedSubBuilding === undefined)
         {
-          console.log("전체동 selected");
           setSelectedSubBuildingName("전체동")
         }
         else
         {
-          console.log(prevSelectedSubBuilding.sub_building_name);
           setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name)
 
         }

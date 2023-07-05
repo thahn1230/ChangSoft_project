@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 import { subBuildingTotalAnalysisTable2_interface } from "./../../interface/subBuildingTotalAnalysisTable2_interface";
+import { subBuildingAnalysisPercantage_interface } from "../../interface/subBuildingAnalysisPercantage_interface";
 
 import {
   Grid,
@@ -22,30 +23,41 @@ const TotalAnalysisGrid2 = (props: any) => {
     const fetchData = async () => {
       try {
         let response;
-        if(props.selectedSubBuildingId ===0)
-        {
+        if (props.selectedSubBuildingId === 0) {
           response = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/total_analysis_table2/" +
               props.selectedBuildingId
           );
-        }
-        else
-        {
+        } else {
           response = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/analysis_table2/" +
               props.selectedSubBuildingId
           );
         }
-       
+
         setSelectedBuildingInfo(JSON.parse(response.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, [props]);
+  }, [props.selectedBuildingId, props.selectedSubBuildingId]);
+
+  //7/4에 여기하고있었음
+  useEffect(() => {
+    if (selectedBuildingInfo !== undefined) {
+      console.log(selectedBuildingInfo[0]);
+      const newPercentageInfo = selectedBuildingInfo.map(
+        (item) => item.con_percentage
+      );
+
+      console.log(newPercentageInfo);
+
+      props.setPercentagesInfo(newPercentageInfo);
+    }
+  }, [props.selectedType]);
 
   return (
     <div>

@@ -1,3 +1,4 @@
+//이거 수정해야함
 export interface subBuildingTotalAnalysisTable2_interface {
   component_type: string;
   con_total: number;

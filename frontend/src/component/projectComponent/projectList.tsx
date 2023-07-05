@@ -220,8 +220,8 @@ const ProjectList = (props: any) => {
 
   const buildingAreaSliderOnClick = (event: any) => {
     setBuildingAreaMinMax([
-      parseFloat(event.value.start.toFixed(2)),
-      parseFloat(event.value.end.toFixed(2)),
+      parseFloat(parseFloat(event.value.start).toFixed(2)),
+      parseFloat(parseFloat(event.value.end).toFixed(2)),
     ]);
   };
   const handleBuildingAreaMinTextChange = (event: any) => {
@@ -233,8 +233,8 @@ const ProjectList = (props: any) => {
 
   const totalAreaSliderOnClick = (event: any) => {
     setTotalAreaMinMax([
-      parseFloat(event.value.start.toFixed(2)),
-      parseFloat(event.value.end.toFixed(2)),
+      parseFloat(parseFloat(event.value.start).toFixed(2)),
+      parseFloat(parseFloat(event.value.end).toFixed(2)),
     ]);
   };
   const handleTotalAreaMinTextChange = (event: any) => {

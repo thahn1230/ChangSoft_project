@@ -6,20 +6,26 @@ import {
   getSelectedStateFromKeyDown,
   GridFilterChangeEvent,
 } from "@progress/kendo-react-grid";
+import {
+  RadioButton,
+  RadioButtonChangeEvent,
+} from "@progress/kendo-react-inputs";
 import SubBuildingList from "../component/SubBuildingComponent/subBuildingList";
 import SubBuildingTotalAnalysisTable1 from "../component/SubBuildingComponent/subBuildingTotalAnalysisTable1";
 import SubBuildingTotalAnalysisTable3 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable3";
 import SubBuildingAnalysisTable4 from "./../component/SubBuildingComponent/subBuildingTotalAnalysisTable4";
 import TotalAnalysisGrid2 from "./../component/SubBuildingComponent/analysisGrid";
-import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
+import SubBuildingTotalAnalysisPieChart from "../component/SubBuildingComponent/subBuildingTotalAnalysisPieChart";
 
+import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuildingTotalAnalysisTable2_interface";
+import {subBuildingAnalysisPercantage_interface} from "./../interface/subBuildingAnalysisPercantage_interface"
 
 import axios from "axios";
 import urlPrefix from "./../resource/URL_prefix.json";
-import "./../styles/SubBuildingDetail.scss"
+import "./../styles/SubBuildingDetail.scss";
 
 const SubBuildingDetail = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -36,14 +42,17 @@ const SubBuildingDetail = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
+  //콘크리트, 거푸집, 철근중에서 선택
+  const [selectedType,setSelectedType]=useState();
+  //각각의 퍼센트& 타입
+  const [percentagesInfo, setPercentagesInfo] =useState<subBuildingAnalysisPercantage_interface[]>();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         //console.log("props.buildingInfo.id: ")
         //console.log(props.buildingInfo.id)
         setBuildingInfo(props.buildingInfo);
-
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -105,38 +114,61 @@ const SubBuildingDetail = (props: any) => {
   useEffect(() => {
     //console.log(selectedSubBuildingId)
   }, [selectedSubBuildingId]);
-  
+
+
+  const onTypeChange = React.useCallback(
+    (e: RadioButtonChangeEvent) => {
+      setSelectedType(e.value);
+    },
+    [setSelectedType]
+  );
+
   return (
     <div className="sub-building-list">
       <div>{props.projectName}</div>
+      <div>{buildingInfo?.building_name}</div>
       <div className="left-components">
         <SubBuildingTotalAnalysisTable1
           buildingInfo={buildingInfo}
           subBuildingInfo={subBuildingInfo}
-
           selectedSubBuildingId={selectedSubBuildingId}
           setSelectedSubBuildingId={setSelectedSubBuildingId}
-          
           projectName={props.projectName}
         />
-        <TotalAnalysisGrid2 selectedBuildingId={buildingInfo?.id} selectedSubBuildingId={selectedSubBuildingId}></TotalAnalysisGrid2>
+        <TotalAnalysisGrid2
+          selectedBuildingId={buildingInfo?.id}
+          selectedSubBuildingId={selectedSubBuildingId}
+          
+          setPercentagesInfo={setPercentagesInfo}
+          selectedType={selectedType}
+        ></TotalAnalysisGrid2>
       </div>
 
-
-      {/* <div className="right-components">
-        <SubBuildingTotalAnalysisTable3
-          selectedSubBuildingId={selectedSubBuildingId}
-          subBuildingInfo={subBuildingInfo}
-
-          buildingInfo={buildingInfo}
-          setSelectedSubBuildingId={setSelectedSubBuildingId}
-          projectName={props.projectName}
-        ></SubBuildingTotalAnalysisTable3>
-        <SubBuildingAnalysisTable4
-          selectedSubBuildingId={selectedSubBuildingId}
-          subBuildingInfo={subBuildingInfo}
-        ></SubBuildingAnalysisTable4>
-      </div> */}
+      <div>
+      <RadioButton
+        value="concrete"
+        checked={selectedType === "concrete"}
+        label="콘크리트"
+        onChange={onTypeChange}
+      />
+      <br />
+      <RadioButton
+        value="formwork"
+        checked={selectedType === "formwork"}
+        label="거푸집"
+        onChange={onTypeChange}
+      />
+      <br />
+      <RadioButton
+        value="rebar"
+        checked={selectedType === "rebar"}
+        label="철근"
+        onChange={onTypeChange}
+      />
+    </div>
+      <div>
+        { <SubBuildingTotalAnalysisPieChart percentagesInfo = {percentagesInfo}></SubBuildingTotalAnalysisPieChart> }
+      </div>
     </div>
   );
 };
