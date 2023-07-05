@@ -24,13 +24,13 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
   useEffect(() => {
     switch (props.selectedType) {
       case "concrete":
-        setUnit("m³")
+        setUnit("m³");
         break;
       case "formwork":
-        setUnit("㎡")
+        setUnit("㎡");
         break;
       case "rebar":
-        setUnit("Ton")
+        setUnit("Ton");
         break;
     }
   }, [props.selectedType]);
