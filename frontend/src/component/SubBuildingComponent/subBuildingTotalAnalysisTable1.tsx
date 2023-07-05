@@ -160,7 +160,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
             <GridColumn
               headerCell={() => (
                 <div className="custom-header-number-cell">
-                  {analysisTable1[0].total_floor_area_meter +
+                  {analysisTable1[0].total_floor_area_meter.toFixed +
                     "㎥ / " +
                     analysisTable1[0].total_floor_area_pyeong +
                     "평"}
@@ -188,6 +188,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
               field={"콘크리트(㎥)"}
               headerClassName="custom-header-cell"
               className="custom-number-cell"
+              format={"{0:n2}"}
             ></GridColumn>
 
             <GridColumn
@@ -195,12 +196,14 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
               field={"거푸집"}
               headerClassName="custom-header-cell"
               className="custom-number-cell"
+              format={"{0:n2}"}
             ></GridColumn>
             <GridColumn
               title={"철근(Ton)"}
               field={"철근(Ton)"}
               headerClassName="custom-header-cell"
               className="custom-number-cell"
+              format={"{0:n2}"}
             ></GridColumn>
           </Grid>
         )}

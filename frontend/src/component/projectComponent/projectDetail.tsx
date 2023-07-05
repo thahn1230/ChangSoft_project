@@ -31,9 +31,9 @@ const ProjectDetail = (props: any) => {
           );
 
           const data = JSON.parse(response.data);
-          for (let i = 0; i < data.length; i++) {
-            data[i].total_area = data[i].total_area.toFixed(2);
-          }
+          // for (let i = 0; i < data.length; i++) {
+          //   data[i].total_area = data[i].total_area.toFixed(2);
+          // }
 
           setProjectData(data);
         }
@@ -69,6 +69,7 @@ const ProjectDetail = (props: any) => {
           title="건축면적(㎡)"
           headerClassName={headerClassName}
           className="custom-number-cell"
+          format={"{0:n2}"}
         />
         <GridColumn
           field="construction_company"
@@ -85,6 +86,7 @@ const ProjectDetail = (props: any) => {
           title="문서상 연면적(㎡)"
           headerClassName={headerClassName}
           className="custom-number-cell"
+          format={"{0:n2}"}
         />
       </Grid>
 

@@ -22,7 +22,7 @@ import { subBuildingInfo_interface } from "../interface/subBuildingInfo_interfac
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../interface/subBuildingTotalAnalysisTable1_interface";
 import { subBuildingTotalAnalysisTable2_interface } from "./../interface/subBuildingTotalAnalysisTable2_interface";
-import { subBuildingAnalysisPercantage_interface } from "./../interface/subBuildingAnalysisPercantage_interface";
+import { subBuildingAnalysisPercentage_interface } from "../interface/subBuildingAnalysisPercentage_interface";
 import { subBuildingAnalysisValue_interface } from "../interface/subBuildingAnalysisValue_interface";
 
 import axios from "axios";
@@ -48,7 +48,7 @@ const SubBuildingDetail = (props: any) => {
   const [selectedType, setSelectedType] = useState();
   //각각의 퍼센트&타입
   const [percentagesInfo, setPercentagesInfo] =
-    useState<subBuildingAnalysisPercantage_interface[]>();
+    useState<subBuildingAnalysisPercentage_interface[]>();
   //각각의 값&타입
   const [valueInfo, setValueInfo] =
     useState<subBuildingAnalysisValue_interface[]>();
