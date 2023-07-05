@@ -124,15 +124,28 @@ const SubBuildingDetail = (props: any) => {
   );
 
   let data = [
-    { projectName: props.projectName, building_name: buildingInfo?.building_name }
+    {
+      projectName: props.projectName,
+      building_name: buildingInfo?.building_name,
+    },
   ];
 
   return (
     <div className="sub-building-list">
       <div className="left-components">
         <Grid data={data}>
-          <GridColumn title="프로젝트명" field="projectName" headerClassName="custom-header-cell" className="custom-text-cell"/>
-          <GridColumn title="빌딩명" field="building_name" headerClassName="custom-header-cell" className="custom-text-cell"/>
+          <GridColumn
+            title="프로젝트명"
+            field="projectName"
+            headerClassName="custom-header-cell"
+            className="custom-text-cell"
+          />
+          <GridColumn
+            title="빌딩명"
+            field="building_name"
+            headerClassName="custom-header-cell"
+            className="custom-text-cell"
+          />
         </Grid>
         <SubBuildingTotalAnalysisTable1
           buildingInfo={buildingInfo}
@@ -149,27 +162,30 @@ const SubBuildingDetail = (props: any) => {
         ></TotalAnalysisGrid2>
       </div>
 
-      <div>
-        <RadioButton
-          value="concrete"
-          checked={selectedType === "concrete"}
-          label="콘크리트"
-          onChange={onTypeChange}
-        />
-        <br />
-        <RadioButton
-          value="formwork"
-          checked={selectedType === "formwork"}
-          label="거푸집"
-          onChange={onTypeChange}
-        />
-        <br />
-        <RadioButton
-          value="rebar"
-          checked={selectedType === "rebar"}
-          label="철근"
-          onChange={onTypeChange}
-        />
+      <div className="right-components">
+        <div className="button-container">
+          <RadioButton
+            value="concrete"
+            checked={selectedType === "concrete"}
+            label="콘크리트"
+            onChange={onTypeChange}
+            style={{ marginLeft: '10px' }}
+          />
+          <RadioButton
+            value="formwork"
+            checked={selectedType === "formwork"}
+            label="거푸집"
+            onChange={onTypeChange}
+            style={{ marginLeft: '10px' }}
+          />
+          <RadioButton
+            value="rebar"
+            checked={selectedType === "rebar"}
+            label="철근"
+            onChange={onTypeChange}
+            style={{ marginLeft: '10px' }}
+          />
+        </div>
       </div>
       <div>
         {
