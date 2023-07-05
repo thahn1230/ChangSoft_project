@@ -4,6 +4,8 @@ import {
   ChartCategoryAxis,
   ChartCategoryAxisItem,
   ChartCategoryAxisTitle,
+  ChartValueAxis,
+  ChartValueAxisItem,
   ChartSeries,
   ChartSeriesItem,
   ChartTooltip,
@@ -13,8 +15,25 @@ import { subBuildingAnalysisValue_interface } from "../../interface/subBuildingA
 import { Color } from "@progress/kendo-drawing";
 
 const SubBuildingTotalAnalysisBarChart = (props: any) => {
-  const [values, setValues] = useState<subBuildingAnalysisValue_interface[]>([]);
+  const [values, setValues] = useState<subBuildingAnalysisValue_interface[]>(
+    []
+  );
   const [returnDiv, setReturnDiv] = useState(<div></div>);
+  const [unit, setUnit] = useState<string>("");
+
+  useEffect(() => {
+    switch (props.selectedType) {
+      case "concrete":
+        setUnit("m³")
+        break;
+      case "formwork":
+        setUnit("㎡")
+        break;
+      case "rebar":
+        setUnit("Ton")
+        break;
+    }
+  }, [props.selectedType]);
 
   useEffect(() => {
     setValues(props.valueInfo);
@@ -22,7 +41,7 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
 
   useEffect(() => {
     setReturnDiv(
-      <div style={{height: "40vh" }}>
+      <div style={{ height: "40vh" }}>
         <Chart style={{ width: "100%", height: "100%" }}>
           <ChartSeries>
             <ChartSeriesItem
@@ -33,8 +52,11 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
               holeSize={40}
               size={45}
               color="#00028f"
-            />
+            ></ChartSeriesItem>
           </ChartSeries>
+          <ChartValueAxis>
+            <ChartValueAxisItem title={{ text: "Floor Count(" + unit + ")" }} />
+          </ChartValueAxis>
           <ChartTooltip render={renderTooltip} />
         </Chart>
       </div>
@@ -46,7 +68,7 @@ const SubBuildingTotalAnalysisBarChart = (props: any) => {
       return (
         <div>
           <p>Type: {e.point.dataItem.type}</p>
-          <p>Value: {e.point.dataItem.value}</p>
+          <p>Value: {e.point.dataItem.value.toFixed(2) + unit}</p>
         </div>
       );
     }

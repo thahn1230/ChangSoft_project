@@ -195,10 +195,12 @@ const SubBuildingDetail = (props: any) => {
         <div className="bar-pie-chart-container">
           <SubBuildingTotalAnalysisBarChart
             valueInfo={valueInfo}
+            selectedType={selectedType}
           ></SubBuildingTotalAnalysisBarChart>
 
           <SubBuildingTotalAnalysisPieChart
             percentagesInfo={percentagesInfo}
+            selectedType={selectedType}
           ></SubBuildingTotalAnalysisPieChart>
         </div>
       </div>

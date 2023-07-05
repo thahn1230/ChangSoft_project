@@ -160,9 +160,9 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
             <GridColumn
               headerCell={() => (
                 <div className="custom-header-number-cell">
-                  {analysisTable1[0].total_floor_area_meter.toFixed +
+                  {analysisTable1[0].total_floor_area_meter.toFixed(2) +
                     "㎥ / " +
-                    analysisTable1[0].total_floor_area_pyeong +
+                    analysisTable1[0].total_floor_area_pyeong.toFixed(2) +
                     "평"}
                 </div>
               )}
