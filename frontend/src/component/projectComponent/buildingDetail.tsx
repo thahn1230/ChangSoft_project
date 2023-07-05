@@ -79,6 +79,7 @@ const BuildingDetail = (props: any) => {
             title="전체 면적(㎡)"
             headerClassName={headerClassName}
             className="custom-number-cell"
+            format={"{0:n2}"}
           />
           <GridColumn
             field="stories_above_below"
