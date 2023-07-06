@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
-import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
-import "./../styles/NavigationLayout.scss";
-import LogoImg from "./../resource/changSoft_logo.png";
+import { useLocation, useNavigate, Outlet,Link  } from "react-router-dom";
 
 interface MenuItem {
   text: string;
@@ -11,7 +8,7 @@ interface MenuItem {
   route: string;
 }
 
-export const items: MenuItem[] = [
+const items: MenuItem[] = [
   {
     text: "개요",
     selected: true,
@@ -34,48 +31,34 @@ export const items: MenuItem[] = [
   },
 ];
 
-export const SubBuildingTabLayout = (props: any) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [expanded, setExpanded] = useState(true);
-  const [selected, setSelected] = useState("");
-
-  const handleClick = () => {
-    setExpanded(!expanded);
-  };
-
-  const onSelect = (e: any) => {
-    navigate(e.itemTarget.props.route);
-  };
-
-  useEffect(() => {
-    const selectedItem = items.find((item) => item.route === location.pathname);
-    if (selectedItem) {
-      setSelected(selectedItem.text);
-    }
-  }, [location.pathname]);
-
+const SubBuildingTabLayout = (props: any) => {
 
   return (
     <div>
+       <nav className="wrapper">
+      {/* 하단 네비게이션 최상위 태그 */}
       <div>
-        <Drawer
-          expanded={expanded}
-          position="start"
-          mode="push"
-          width={240}
-          items={items.map((item) => ({
-            ...item,
-            selected: item.text === selected,
-          }))}
-          onSelect={onSelect}
-          className="drawer"
-        >
-          <DrawerContent>
-            <Outlet />
-          </DrawerContent>
-        </Drawer>
+        <Link to="/first" className="nav-link">
+        </Link>
       </div>
+      <div>
+        <Link to="/second" className="nav-link">
+        </Link>
+      </div>
+      <div>
+        <Link to="/third" className="nav-link">
+        </Link>
+      </div>
+      <div>
+        <Link to="/fourth" className="nav-link">
+        </Link>
+      </div>
+      <div>
+        <Link to="/fifth" className="nav-link">
+        </Link>
+      </div>
+    </nav>
+
     </div>
   );
 };
