@@ -19,6 +19,7 @@ const InsightList = (props:any) => {
 
   const onButtonClick = () => {
     setSelectedInsightIndex(selectedInsightIndexInList);
+    props.setIsLoading(true);
   };
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const InsightList = (props:any) => {
         data={insightList}
         value={selectedInsightInList}
         onChange={onSelectedInsightChange}
-        style={{ width: "100%" }}
+        style={{ width: "30%" ,margin:"10px"}}
       />
       <Button onClick={onButtonClick}>apply</Button>
     </div>

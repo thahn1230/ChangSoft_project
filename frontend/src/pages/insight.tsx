@@ -15,17 +15,16 @@ const Insight: React.FC = () => {
     <div>
       <InsightList
         setSelectedInsightIndex={setSelectedInsightIndex}
+        setIsLoading={setIsLoading}
       ></InsightList>
 
-      {isLoading ? (
-        <Loader size="large" type={"infinite-spinner"} />
-      ) : (
-        <InsightGraph
-          selectedInsightIndex={selectedInsightIndex}
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-        ></InsightGraph>
-      )}
+      {isLoading && <Loader size="large" type={"infinite-spinner"} />}
+
+      <InsightGraph
+        selectedInsightIndex={selectedInsightIndex}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      ></InsightGraph>
     </div>
   );
 };

@@ -17,7 +17,6 @@ const InsightGraph = (props: any) => {
     const fetchData = async () => {
       try {
         setReturnDiv([]);
-        // props.setIsLoading(true);
 
         if (parseInt(props.selectedInsightIndex) !== -1) {
           const response1 = await axios.get(
@@ -29,8 +28,6 @@ const InsightGraph = (props: any) => {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        //props.setIsLoading(false);
       }
     };
 
@@ -52,6 +49,10 @@ const InsightGraph = (props: any) => {
     }
     setReturnDiv(newRes);
   }, [res]);
+
+  useEffect(() => {
+    if (returnDiv.length !== 0) props.setIsLoading(false);
+  }, [returnDiv]);
 
   return <div>{returnDiv}</div>;
 };
