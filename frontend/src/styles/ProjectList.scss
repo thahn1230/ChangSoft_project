@@ -2,6 +2,17 @@
   padding: 10px;
 }
 
+.filter-group {
+  border: 3px solid rgb(25, 101, 203) !important;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2%;
+  padding: 1%;
+}
+
 .project-combobox {
   flex: 0 0 100%;
   width: 100%;
@@ -9,39 +20,25 @@
   padding: 10px;
 }
 
-.filter-group-left {
-  float: left;
-  width: 50%;
-  padding: 0 10px;
-  box-sizing: border-box;
-  padding: 10px;
-  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
-}
-
-.filter-group-right {
-  float: left;
-  width: 50%;
-  padding: 0 10px;
-  box-sizing: border-box;
-  padding: 10px;
-  margin-bottom: 10px; /* 버튼 위쪽의 간격 추가 */
-}
-
-.filter-group-left > div,
-.filter-group-right > div {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-}
-
-.range-slider {
+/*.range-slider {
   width: 100%;
   padding: 10px;
+}*/
+
+.k-slider .k-slider-selection {
+  background-color: rgb(25, 101, 203);
+}
+
+.k-slider .k-draghandle {
+  background-color: rgb(25, 101, 203);
+  color: rgb(25, 101, 203);
 }
 
 .slider-textbox {
-  width: 100%;
-  padding: 10px;
+  align-self: center;
+  height: 70%;
+  width: 80%;
+  padding: 1%;
 }
 
 .apply-filter-button {
@@ -50,19 +47,54 @@
   margin-right: 10px;
 }
 
-.reset-filter-button{
+.reset-filter-button {
   align-self: center;
   padding: 10px;
   margin-left: 10px;
 }
 
-.form-field{
+.form-field {
   display: flex;
 }
 
 .custom-label {
   display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-right: 1%;
+  width: 7vw;
+  text-align: center;
+}
+
+.custom-label-range {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  margin-left: -5%;
+  margin-right: 5%;
+  width: 6vw;
+}
+
+.list-container {
+  display: flex;
   justify-content: center;
   align-items: center;
   padding: 1%;
+}
+
+.slider-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1%;
+}
+
+.left-slider {
+  display: flex;
+  margin-right: 1%;
+}
+
+.right-slider {
+  display: flex;
+  margin-right: 1%;
 }
