@@ -27,3 +27,4 @@ totalAreaByCompany.tsx
 
 src/resource/project_pictures
 src/resource/URL_prefix.json
+.DS_Store
