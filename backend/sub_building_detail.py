@@ -329,3 +329,64 @@ def get_analysis_rebar_data2(sub_building_id: int):
 
     analysis_data_df = pd.read_sql(query, engine)
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+
+
+## 층별총집계표
+# 층별총집계표에서의 concrete
+@router.get("/sub_building/floor_analysis_table/{building_id}/concrete")
+def get_floor_analysis_concrete_data(building_id: int):
+    query = f"""
+        SELECT floor_name, material_name, 
+        SUM(concrete.volume) AS total_concrete FROM concrete
+        JOIN component ON concrete.component_id = component.id
+        JOIN floor ON component.floor_id = floor.id
+        JOIN building ON floor.building_id = building.id
+        WHERE building.id = {building_id}
+        GROUP BY floor_name, concrete.material_name
+        ORDER BY floor_name
+    """
+
+    floor_analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
+
+
+# 층별총집계표에서의 formwork
+@router.get("/sub_building/floor_analysis_table/{building_id}/formwork")
+def get_floor_analysis_formwork_data(building_id: int):
+    query = f"""
+        SELECT floor_name, formwork_type, 
+        SUM(formwork.area) AS total_formwork FROM formwork
+        JOIN component ON formwork.component_id = component.id
+        JOIN floor ON component.floor_id = floor.id
+        JOIN building ON floor.building_id = building.id
+        WHERE building.id = {building_id}
+        GROUP BY floor_name, formwork_type
+        ORDER BY floor_name
+    """
+
+    floor_analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
+
+
+# 층별총집계표에서의 rebar
+@router.get("/sub_building/floor_analysis_table/{building_id}/rebar")
+def get_floor_analysis_rebar_data(building_id: int):
+    query = f"""
+        SELECT floor_name, rebar_grade, rebar_diameter, 
+        SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
+        JOIN component ON rebar.component_id = component.id
+        JOIN floor ON component.floor_id = floor.id
+        JOIN building ON floor.building_id = building.id
+        WHERE building.id = {building_id}
+        GROUP BY floor_name, rebar_grade, rebar_diameter
+        ORDER BY floor_name
+    """
+
+    floor_analysis_data_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
