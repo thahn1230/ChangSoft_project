@@ -29,6 +29,7 @@ import urlPrefix from "../../../resource/URL_prefix.json";
 import "./../../../styles/SubBuildingDetail.scss";
 
 import Analyses from "../../../pages/analyses";
+import "./../../../styles/TotalAnalysisTab.scss"
 
 const TotalAnalysisTab = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -176,6 +177,7 @@ const TotalAnalysisTab = (props: any) => {
             label="콘크리트"
             onChange={onTypeChange}
             style={{ marginLeft: "10px" }}
+            className="k-radio-button"
           />
           <RadioButton
             value="formwork"
@@ -183,6 +185,7 @@ const TotalAnalysisTab = (props: any) => {
             label="거푸집"
             onChange={onTypeChange}
             style={{ marginLeft: "10px" }}
+            className="k-radio-button"
           />
           <RadioButton
             value="rebar"
@@ -190,6 +193,7 @@ const TotalAnalysisTab = (props: any) => {
             label="철근"
             onChange={onTypeChange}
             style={{ marginLeft: "10px" }}
+            className="k-radio-button"
           />
         </div>
         <div className="bar-pie-chart-container">
