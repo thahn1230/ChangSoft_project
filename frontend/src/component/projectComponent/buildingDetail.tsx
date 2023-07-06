@@ -15,6 +15,7 @@ import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/subBuilding
 import "./../../styles/GridDetail.scss";
 
 const BuildingDetail = (props: any) => {
+  const [returnDiv, setReturnDiv] = useState(<div></div>);
   const [imgPath, setImgPath] = useState<string>("");
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
@@ -62,9 +63,11 @@ const BuildingDetail = (props: any) => {
         {imgPath && <img src={imgPath} alt="Building Image" height="300px" />}
       </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
-        <div style={{ width: "200%"}}>
-          <Button onClick={onClick}>상세보기</Button>
-        </div>
+        {!props.forAnalysisTab && (
+          <div style={{ width: "200%" }}>
+            <Button onClick={onClick}>상세보기</Button>
+          </div>
+        )}
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="building_name"

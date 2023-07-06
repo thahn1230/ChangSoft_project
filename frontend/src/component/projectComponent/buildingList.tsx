@@ -35,7 +35,11 @@ const DetailComponent = (props: any) => {
   props.setBuildingInfo(props.dataItem);
   return (
     <div>
-      <BuildingDetail projectName = {props.projectName} buildingInfo={props.dataItem} />
+      <BuildingDetail
+        projectName={props.projectName}
+        buildingInfo={props.dataItem}
+        forAnalysisTab={false}
+      />
     </div>
   );
 };
