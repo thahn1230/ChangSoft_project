@@ -6,6 +6,10 @@
   border: 3px solid rgb(57, 119, 201) !important;
 }
 
+.combo-box-container {
+  display: flex;
+}
+
 .button-container {
   display: flex;
   justify-content: flex-end;
@@ -14,9 +18,11 @@
 }
 
 .project-combobox {
+  justify-content: center;
+  align-items: center;
   flex: 0 0 100%;
-  width: 100%;
-  max-width: 100%;
+  width: 50% !important;
+  max-width: 50% !important;
   padding: 10px;
 }
 
@@ -68,6 +74,15 @@
   text-align: center;
 }
 
+.custom-label-project {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1%;
+  margin-top: -1%;
+  text-align: center;
+}
+
 .custom-label-range {
   display: flex;
   justify-content: right;
@@ -93,10 +108,9 @@
 
 .left-slider {
   display: flex;
-  margin-right: 1%;
+  justify-content: start !important;
 }
 
 .right-slider {
   display: flex;
-  margin-right: 1%;
 }

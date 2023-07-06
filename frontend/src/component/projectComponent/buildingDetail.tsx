@@ -75,6 +75,7 @@ const BuildingDetail = (props: any) => {
                 marginTop: "5px",
                 width: "6vw",
                 height: "4vh",
+                marginLeft: "1%"
               }}
             >
               상세보기

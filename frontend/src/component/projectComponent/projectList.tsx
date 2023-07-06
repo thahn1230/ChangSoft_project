@@ -20,7 +20,6 @@ import urlPrefix from "../../resource/URL_prefix.json";
 import { projectList_interface } from "./../../interface/projectList_interface";
 import { project_interface } from "./../../interface/project_interface";
 
-
 import "./../../styles/ProjectList.scss";
 
 const ProjectList = (props: any) => {
@@ -238,19 +237,27 @@ const ProjectList = (props: any) => {
 
   return (
     <div className="project-list-container">
-      <ComboBox
-        id="project-combobox"
-        data={fileteredList}
-        value={selectedProjectName}
-        onChange={projectListOnChange}
-        onFilterChange={filterChange}
-        filterable={true}
-        className="project-combobox"
-        style={{marginBottom: "10px"}}
-      />
+      <div className="combo-box-container">
+        <label htmlFor="project-combobox" className="custom-label-project">
+          프로젝트명:
+        </label>
+        <ComboBox
+          id="project-combobox"
+          data={fileteredList}
+          value={selectedProjectName}
+          onChange={projectListOnChange}
+          onFilterChange={filterChange}
+          filterable={true}
+          className="project-combobox"
+          style={{ marginBottom: "10px" }}
+        />
+      </div>
 
       <div className="filter-group">
-        <div className="list-container">
+        <div
+          className="list-container"
+          style={{ justifyContent: "flex-start" }}
+        >
           <div style={{ width: "25%", display: "flex" }}>
             <label
               htmlFor="construction-company-dropdown"
@@ -289,6 +296,7 @@ const ProjectList = (props: any) => {
               <label
                 htmlFor="building-area-range-slider"
                 className="custom-label"
+                style={{ marginLeft: "-100% !important" }}
               >
                 빌딩면적:
               </label>
