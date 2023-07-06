@@ -121,7 +121,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
             urlPrefix.IP_port +
               "/sub_building/total_analysis_table/1/" +
               selectedSubBuildingId
-          ); 
+          );
         }
         setAnalysisTable1(JSON.parse(response.data));
       } catch (error) {

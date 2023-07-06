@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from sqlalchemy import text
 import pandas as pd
 
 from dbAccess import create_db_connection
