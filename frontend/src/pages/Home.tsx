@@ -21,39 +21,39 @@ interface Tile {
 
 const tiles: Tile[] = [
   {
-    header: "Total Projects",
+    header: "총 프로젝트 수",
     body: <TotalProject />,
   },
   {
-    header: "Total Buildings",
+    header: "총 빌딩 수",
     body: <ProjectDetail />,
   },
   {
-    header: "Locations",
+    header: "지역별 비율",
     body: <LocalPercentage />,
   },
   {
-    header: "Companies",
+    header: "회사별 비율",
     body: <CompanyPercentage />,
   },
   {
-    header: "Usages",
+    header: "용도별 비율",
     body: <UsagePercentage />,
   },
   {
-    header: "Project Total Area",
+    header: "프로젝트 연면적",
     body: <TotalArea />,
   },
   {
-    header: "Building Floors",
+    header: "빌딩 층수",
     body: <FloorCount />,
   },
   {
-    header: "Location Map",
+    header: "프로젝트별 위치",
     body: <DistributionMap />,
   },
   {
-    header: "Total Area by Company",
+    header: "회사별 연면적",
     body: ""
   },
 ];
