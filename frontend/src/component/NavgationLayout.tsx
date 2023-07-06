@@ -51,6 +51,8 @@ export const NavigationLayout = (props: any) => {
 
   const onSelect = (e: any) => {
     navigate(e.itemTarget.props.route);
+    if(expanded)
+    setExpanded(false);
   };
 
   useEffect(() => {
@@ -99,6 +101,7 @@ export const NavigationLayout = (props: any) => {
           position="start"
           mode="push"
           width={240}
+          mini={true}
           items={items.map((item) => ({
             ...item,
             selected: item.text === selected,
