@@ -20,18 +20,18 @@
   padding: 10px;
 }
 
-/*.range-slider {
+.range-slider {
   width: 100%;
   padding: 10px;
-}*/
+}
 
 .k-slider .k-slider-selection {
-  background-color: rgb(25, 101, 203);
+  background-color: rgb(25, 101, 203) !important;
 }
 
 .k-slider .k-draghandle {
-  background-color: rgb(25, 101, 203);
-  color: rgb(25, 101, 203);
+  background-color: rgb(25, 101, 203) !important;
+  color: rgb(25, 101, 203) !important;
 }
 
 .slider-textbox {
