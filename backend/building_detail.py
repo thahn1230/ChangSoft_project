@@ -29,7 +29,7 @@ def get_project_building_data(building_id: int):
 def get_sub_building_names_data():
     query = """
         SELECT building.*, 
-        ((total_area)/1000000) AS total_area_rounded,
+        ((total_area) / 1000000) AS total_area_square_meter,
         (stories_above + stories_below) AS total_stories, 
         ((height_above + height_below)/ 1000) AS total_height,
         CONCAT(stories_above, ' / ', stories_below) AS stories_above_below,
