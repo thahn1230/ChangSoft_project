@@ -20,6 +20,7 @@ import urlPrefix from "../../resource/URL_prefix.json";
 import { projectList_interface } from "./../../interface/projectList_interface";
 import { project_interface } from "./../../interface/project_interface";
 
+
 import "./../../styles/ProjectList.scss";
 
 const ProjectList = (props: any) => {
@@ -245,142 +246,170 @@ const ProjectList = (props: any) => {
         onFilterChange={filterChange}
         filterable={true}
         className="project-combobox"
+        style={{marginBottom: "10px"}}
       />
 
-      <div className="filter-group-left">
-        <div className="form-field">
-          <label htmlFor="construction-company-dropdown" className="custom-label">건설회사:</label>
-          <DropDownList
-            id="construction-company-dropdown"
-            onChange={constructionCompanyOnChange}
-            data={data
-              .map((item) => item.construction_company)
-              .filter((value, index, array) => array.indexOf(value) === index)}
-            className="filter-dropdown"
-            style={{width: "80%", height: "80% !important" }}
-          />
+      <div className="filter-group">
+        <div className="list-container">
+          <div style={{ width: "25%", display: "flex" }}>
+            <label
+              htmlFor="construction-company-dropdown"
+              className="custom-label"
+            >
+              건설회사:
+            </label>
+            <DropDownList
+              id="construction-company-dropdown"
+              onChange={constructionCompanyOnChange}
+              data={data
+                .map((item) => item.construction_company)
+                .filter(
+                  (value, index, array) => array.indexOf(value) === index
+                )}
+            />
+          </div>
+          <div style={{ width: "25%", display: "flex" }}>
+            <label htmlFor="location-dropdown" className="custom-label">
+              지역:
+            </label>
+            <DropDownList
+              id="location-dropdown"
+              onChange={locationOnChange}
+              data={data
+                .map((item) => item.location)
+                .filter(
+                  (value, index, array) => array.indexOf(value) === index
+                )}
+            />
+          </div>
+        </div>
+        <div className="slider-group">
+          <div className="left-slider" style={{ width: "50%" }}>
+            <div className="form-field" style={{ width: "100%" }}>
+              <label
+                htmlFor="building-area-range-slider"
+                className="custom-label"
+              >
+                빌딩면적:
+              </label>
+              <RangeSlider
+                id="building-area-range-slider"
+                value={{
+                  start: buildingAreaMinMax[0],
+                  end: buildingAreaMinMax[1],
+                }}
+                step={1}
+                min={0}
+                max={buildingAreaSliderValues[0]}
+                onChange={buildingAreaSliderOnClick}
+                className="range-slider"
+              >
+                {buildingAreaSliderValues.map((perc, i) => (
+                  <SliderLabel key={i} position={perc}>
+                    {perc.toString()}
+                  </SliderLabel>
+                ))}
+              </RangeSlider>
+            </div>
+
+            <div className="form-field">
+              <label
+                htmlFor="building-area-min-textbox"
+                className="custom-label"
+              >
+                범위:
+              </label>
+              <TextBox
+                id="building-area-min-textbox"
+                value={buildingAreaMinMax[0]}
+                onChange={handleBuildingAreaMinTextChange}
+                contentEditable={true}
+                rounded={"large"}
+                className="slider-textbox"
+                style={{ marginRight: "1%" }}
+              ></TextBox>
+              <label
+                htmlFor="building-area-max-textbox"
+                className="custom-label-range"
+              >
+                ~
+              </label>
+              <TextBox
+                id="building-area-max-textbox"
+                value={buildingAreaMinMax[1]}
+                onChange={handleBuildingAreaMaxTextChange}
+                contentEditable={true}
+                rounded={"large"}
+                className="slider-textbox"
+              ></TextBox>
+            </div>
+          </div>
+
+          <div className="right-slider" style={{ width: "50%" }}>
+            <div className="form-field" style={{ width: "100%" }}>
+              <label htmlFor="total-area-range-slider" className="custom-label">
+                연면적:
+              </label>
+              <RangeSlider
+                id="total-area-range-slider"
+                value={{
+                  start: totalAreaMinMax[0],
+                  end: totalAreaMinMax[1],
+                }}
+                step={1}
+                min={0}
+                max={totalAreaSliderValues[0]}
+                onChange={totalAreaSliderOnClick}
+                className="range-slider"
+              >
+                {totalAreaSliderValues.map((perc, i) => (
+                  <SliderLabel key={i} position={perc}>
+                    {perc.toString()}
+                  </SliderLabel>
+                ))}
+              </RangeSlider>
+            </div>
+
+            <div className="form-field">
+              <label htmlFor="total-area-min-textbox" className="custom-label">
+                범위:
+              </label>
+              <TextBox
+                id="total-area-min-textbox"
+                value={totalAreaMinMax[0]}
+                onChange={handleTotalAreaMinTextChange}
+                contentEditable={true}
+                rounded={"large"}
+                className="slider-textbox"
+                style={{ marginRight: "1%" }}
+              ></TextBox>
+              <label
+                htmlFor="total-area-max-textbox"
+                className="custom-label-range"
+              >
+                ~
+              </label>
+              <TextBox
+                id="total-area-max-textbox"
+                value={totalAreaMinMax[1]}
+                onChange={handleTotalAreaMaxTextChange}
+                contentEditable={true}
+                rounded={"large"}
+                className="slider-textbox"
+              ></TextBox>
+            </div>
+          </div>
         </div>
 
-        <div className="form-field">
-          <label htmlFor="building-area-range-slider" className="custom-label">빌딩면적:</label>
-          <RangeSlider
-            id="building-area-range-slider"
-            value={{
-              start: buildingAreaMinMax[0],
-              end: buildingAreaMinMax[1],
-            }}
-            step={1}
-            min={0}
-            max={buildingAreaSliderValues[0]}
-            onChange={buildingAreaSliderOnClick}
-            className="range-slider"
-            style={{width: "80%"}}
-          >
-            {buildingAreaSliderValues.map((perc, i) => (
-              <SliderLabel key={i} position={perc}>
-                {perc.toString()}
-              </SliderLabel>
-            ))}
-          </RangeSlider>
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="building-area-min-textbox" className="custom-label">최솟값:</label>
-          <TextBox
-            id="building-area-min-textbox"
-            value={buildingAreaMinMax[0]}
-            onChange={handleBuildingAreaMinTextChange}
-            contentEditable={true}
-            rounded={"large"}
-            className="slider-textbox"
-            style={{width: "80%"}}
-          ></TextBox>
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="building-area-max-textbox" className="custom-label">최댓값:</label>
-          <TextBox
-            id="building-area-max-textbox"
-            value={buildingAreaMinMax[1]}
-            onChange={handleBuildingAreaMaxTextChange}
-            contentEditable={true}
-            rounded={"large"}
-            className="slider-textbox"
-            style={{width: "80%"}}
-          ></TextBox>
+        <div className="button-container">
+          <Button onClick={applyFilter} className="apply-filter-button">
+            Apply filters
+          </Button>
+          <Button onClick={resetFilter} className="reset-filter-button">
+            Reset filters
+          </Button>
         </div>
       </div>
-
-      <div className="filter-group-right">
-        <div className="form-field">
-          <label htmlFor="location-dropdown" className="custom-label">지역:</label>
-          <DropDownList
-            id="location-dropdown"
-            onChange={locationOnChange}
-            data={data
-              .map((item) => item.location)
-              .filter((value, index, array) => array.indexOf(value) === index)}
-            className="filter-dropdown"
-            style={{width: "80%", height: "80% !important" }}
-          />
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="total-area-range-slider" className="custom-label">연면적:</label>
-          <RangeSlider
-            id="total-area-range-slider"
-            value={{
-              start: totalAreaMinMax[0],
-              end: totalAreaMinMax[1],
-            }}
-            step={1}
-            min={0}
-            max={totalAreaSliderValues[0]}
-            onChange={totalAreaSliderOnClick}
-            className="range-slider"
-            style={{width: "80%"}}
-          >
-            {totalAreaSliderValues.map((perc, i) => (
-              <SliderLabel key={i} position={perc}>
-                {perc.toString()}
-              </SliderLabel>
-            ))}
-          </RangeSlider>
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="total-area-min-textbox" className="custom-label">최솟값:</label>
-          <TextBox
-            id="total-area-min-textbox"
-            value={totalAreaMinMax[0]}
-            onChange={handleTotalAreaMinTextChange}
-            contentEditable={true}
-            rounded={"large"}
-            className="slider-textbox"
-            style={{width: "80%"}}
-          ></TextBox>
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="total-area-max-textbox" className="custom-label">최댓값:</label>
-          <TextBox
-            id="total-area-max-textbox"
-            value={totalAreaMinMax[1]}
-            onChange={handleTotalAreaMaxTextChange}
-            contentEditable={true}
-            rounded={"large"}
-            className="slider-textbox"
-            style={{width: "80%"}}
-          ></TextBox>
-        </div>
-      </div>
-
-      <Button onClick={applyFilter} className="apply-filter-button">
-        Apply filters
-      </Button>
-      <Button onClick={resetFilter} className="reset-filter-button">
-        Reset filters
-      </Button>
     </div>
   );
 };
