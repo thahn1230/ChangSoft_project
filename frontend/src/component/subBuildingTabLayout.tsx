@@ -41,7 +41,7 @@ const SubBuildingTabLayout = (props: any) => {
   }
   return (
     <div>
-      <Menu onSelect={onMenuSelect}>
+      <Menu onSelect={onMenuSelect} >
         <MenuItem text="개요"  disabled={selectedPage === '개요'}/>
         <MenuItem text="총괄분석표" disabled={selectedPage === '총괄분석표'} />
         <MenuItem text="분석표"  disabled={selectedPage === '분석표'}/>

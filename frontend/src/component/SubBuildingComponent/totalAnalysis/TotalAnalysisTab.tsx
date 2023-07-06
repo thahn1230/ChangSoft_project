@@ -46,7 +46,7 @@ const TotalAnalysisTab = (props: any) => {
   >([{}]);
 
   //콘크리트, 거푸집, 철근중에서 선택
-  const [selectedType, setSelectedType] = useState();
+  const [selectedType, setSelectedType] = useState("concrete");
   //각각의 퍼센트&타입
   const [percentagesInfo, setPercentagesInfo] =
     useState<subBuildingAnalysisPercentage_interface[]>();

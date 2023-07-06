@@ -78,7 +78,7 @@ const BuildingDetail = (props: any) => {
         </Grid>
         <Grid data={[buildingInfo]}>
           <GridColumn
-            field="total_area_rounded"
+            field="total_area_square_meter"
             title="전체 면적(㎡)"
             headerClassName={headerClassName}
             className="custom-number-cell"
