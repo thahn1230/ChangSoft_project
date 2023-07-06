@@ -290,13 +290,13 @@ const ProjectList = (props: any) => {
             />
           </div>
         </div>
-        <div className="slider-group">
+        <div className="slider-group" style={{ marginLeft: "-2%" }}>
           <div className="left-slider" style={{ width: "50%" }}>
             <div className="form-field" style={{ width: "100%" }}>
               <label
                 htmlFor="building-area-range-slider"
                 className="custom-label"
-                style={{ marginLeft: "-100% !important" }}
+                // style={{ marginLeft: "-100% !important" }}
               >
                 빌딩면적:
               </label>
