@@ -26,3 +26,4 @@ googleMap_API_KEY.json
 totalAreaByCompany.tsx
 
 src/resource/project_pictures
+src/resource/URL_prefix.json
