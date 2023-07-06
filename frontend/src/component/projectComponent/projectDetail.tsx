@@ -4,6 +4,9 @@ import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
 import "../../styles/GridDetail.scss";
 import { formatNumber } from "@progress/kendo-intl";
+
+import "./../../styles/GridDetail.scss";
+
 interface projectDetail_interface {
   project_name: string;
   building_area: number;

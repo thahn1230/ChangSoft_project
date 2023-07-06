@@ -11,6 +11,7 @@ import {
 import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
 import BuildingDetail from "./projectComponent/buildingDetail";
 import AnalysisTab from "./SubBuildingComponent/analysis/analysisTab";
+import "./../styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
@@ -47,18 +48,31 @@ const SubBuildingTabLayout = (props: any) => {
   };
 
   const onMenuSelect = (e: any) => {
-    //e.item.disabled =true;
     setSelectedPage(e.item.text);
   };
+
+  const getMenuItemClassName = (text: string) => {
+    return selectedPage === text ? "selected-menu-item" : "";
+  };
+
   return (
     <div>
       <Menu onSelect={onMenuSelect}>
-        <MenuItem text="개요" disabled={selectedPage === "개요"} />
-        <MenuItem text="총괄분석표" disabled={selectedPage === "총괄분석표"} />
-        <MenuItem text="분석표" disabled={selectedPage === "분석표"} />
+        <MenuItem
+          text="개요"
+          cssClass={getMenuItemClassName("개요")}
+        />
+        <MenuItem
+          text="총괄분석표"
+          cssClass={getMenuItemClassName("총괄분석표")}
+        />
+        <MenuItem
+          text="분석표"
+          cssClass={getMenuItemClassName("분석표")}
+        />
         <MenuItem
           text="층별총집계표"
-          disabled={selectedPage === "층별총집계표"}
+          cssClass={getMenuItemClassName("층별총집계표")}
         />
       </Menu>
       {renderComponent()}

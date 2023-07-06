@@ -12,6 +12,7 @@ import urlPrefix from "./../../resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
 import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/subBuildingList";
+
 import "./../../styles/GridDetail.scss";
 
 const BuildingDetail = (props: any) => {
@@ -64,8 +65,21 @@ const BuildingDetail = (props: any) => {
       </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
         {!props.forAnalysisTab && (
-          <div style={{ width: "200%" }}>
-            <Button onClick={onClick}>상세보기</Button>
+          <div>
+            <Button
+              onClick={onClick}
+              style={{
+                backgroundColor: "rgb(25, 101, 203)",
+                color: "white",
+                marginBottom: "10px",
+                marginTop: "5px",
+                width: "6vw",
+                height: "4vh",
+                marginLeft: "1%"
+              }}
+            >
+              상세보기
+            </Button>
           </div>
         )}
         <Grid data={[buildingInfo]}>
