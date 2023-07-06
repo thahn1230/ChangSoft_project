@@ -11,7 +11,7 @@ import {
   ChartTooltip,
 } from "@progress/kendo-react-charts";
 
-import { subBuildingAnalysisValue_interface } from "../../interface/subBuildingAnalysisValue_interface";
+import { subBuildingAnalysisValue_interface } from "./../../../interface/subBuildingAnalysisValue_interface";
 
 const SubBuildingTotalAnalysisBarChart = (props: any) => {
   const [values, setValues] = useState<subBuildingAnalysisValue_interface[]>(

@@ -1,64 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { Menu, MenuItem, MenuSelectEvent } from "@progress/kendo-react-layout";
 import { Button } from "@progress/kendo-react-buttons";
-import { useLocation, useNavigate, Outlet,Link  } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  Outlet,
+  Link,
+  Navigate,
+} from "react-router-dom";
 
-interface MenuItem {
-  text: string;
-  selected: boolean;
-  route: string;
-}
-
-const items: MenuItem[] = [
-  {
-    text: "개요",
-    selected: true,
-    route: "/sub_building_detail/개요"
-  },
-  {
-    text: "총괄분석표",
-    selected: false,
-    route: "/sub_building_detail/총괄분석표"
-  },
-  {
-    text: "분석표",
-    selected: false,
-    route: "/sub_building_detail/분석표"
-  },
-  {
-    text: "층별분석표",
-    selected: false,
-    route: "/sub_building_detail/층별분석표"
-  },
-];
+import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
 
 const SubBuildingTabLayout = (props: any) => {
+  const [selectedPage, setSelectedPage] = useState<string | undefined>("");
+
+  const renderComponent = () => {
+    switch (selectedPage) {
+      case "개요":
+        return <div>bbb</div>;
+      case "총괄분석표":
+        return (
+          <TotalAnalysisTab
+            buildingInfo={props.buildingInfo}
+            projectName={props.projectName}
+          ></TotalAnalysisTab>
+        );
+      case "분석표":
+        return <div>ccc</div>;
+      case "층별총집계표":
+        return <div>ddd</div>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div>
-       <nav className="wrapper">
-      {/* 하단 네비게이션 최상위 태그 */}
-      <div>
-        <Link to="/first" className="nav-link">
-        </Link>
-      </div>
-      <div>
-        <Link to="/second" className="nav-link">
-        </Link>
-      </div>
-      <div>
-        <Link to="/third" className="nav-link">
-        </Link>
-      </div>
-      <div>
-        <Link to="/fourth" className="nav-link">
-        </Link>
-      </div>
-      <div>
-        <Link to="/fifth" className="nav-link">
-        </Link>
-      </div>
-    </nav>
-
+      <Menu onSelect={(e) => setSelectedPage(e.item.text)}>
+        <MenuItem text="개요" />
+        <MenuItem text="총괄분석표" />
+        <MenuItem text="분석표" />
+        <MenuItem text="층별총집계표" />
+      </Menu>
+      {renderComponent()}
     </div>
   );
 };

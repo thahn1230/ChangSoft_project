@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
+import urlPrefix from "../../../resource/URL_prefix.json";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import SubBuildingList from "./subBuildingList";
 
-import { subBuildingInfo_interface } from "../../interface/subBuildingInfo_interface";
-import { subBuildingAnalysisTable_interface } from "../../interface/subBuildingAnalysisTable_interface";
-import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "./../../interface/subBuildingTotalAnalysisTable1_interface";
-import "./../../styles/subBuildingTotalAnalysisTable.scss";
+import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
+import { subBuildingAnalysisTable_interface } from "../../../interface/subBuildingAnalysisTable_interface";
+import { buildingInfo_interface } from "./../../../interface/buildingInfo_interface";
+import { subBuildingTotalAnalysisTable1_interface } from "./../../../interface/subBuildingTotalAnalysisTable1_interface";
+import "./../../../styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
