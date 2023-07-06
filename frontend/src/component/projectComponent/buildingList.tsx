@@ -35,7 +35,11 @@ const DetailComponent = (props: any) => {
   props.setBuildingInfo(props.dataItem);
   return (
     <div>
-      <BuildingDetail projectName = {props.projectName} buildingInfo={props.dataItem} />
+      <BuildingDetail
+        projectName={props.projectName}
+        buildingInfo={props.dataItem}
+        forAnalysisTab={false}
+      />
     </div>
   );
 };
@@ -157,7 +161,7 @@ const BuildingList = (props: any) => {
         />
         <GridColumn
           title="빌딩별 전체 면적(㎡)"
-          field="total_area_rounded"
+          field="total_area_square_meter"
           headerClassName={headerClassName}
           className="custom-number-cell"
           format={"{0:n2}"}

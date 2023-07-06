@@ -11,10 +11,11 @@ import axios from "axios";
 import urlPrefix from "./../../resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
-import SubBuildingDetail from "./../SubBuildingComponent/subBuildingList";
+import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/subBuildingList";
 import "./../../styles/GridDetail.scss";
 
 const BuildingDetail = (props: any) => {
+  const [returnDiv, setReturnDiv] = useState(<div></div>);
   const [imgPath, setImgPath] = useState<string>("");
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
@@ -62,9 +63,11 @@ const BuildingDetail = (props: any) => {
         {imgPath && <img src={imgPath} alt="Building Image" height="300px" />}
       </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
-        <div style={{ width: "200%"}}>
-          <Button onClick={onClick}>상세보기</Button>
-        </div>
+        {!props.forAnalysisTab && (
+          <div style={{ width: "200%" }}>
+            <Button onClick={onClick}>상세보기</Button>
+          </div>
+        )}
         <Grid data={[buildingInfo]}>
           <GridColumn
             field="building_name"
@@ -75,7 +78,7 @@ const BuildingDetail = (props: any) => {
         </Grid>
         <Grid data={[buildingInfo]}>
           <GridColumn
-            field="total_area_rounded"
+            field="total_area_square_meter"
             title="전체 면적(㎡)"
             headerClassName={headerClassName}
             className="custom-number-cell"

@@ -5,6 +5,7 @@ import {
   useNavigate,
   Outlet,
   Link,
+  Routes,
   Route,
 } from "react-router-dom";
 import SubBuildingTabLayout from "./../component/subBuildingTabLayout";
@@ -12,7 +13,10 @@ import SubBuildingTabLayout from "./../component/subBuildingTabLayout";
 const Analyses = () => {
   return (
     <div>
-        <SubBuildingTabLayout></SubBuildingTabLayout>
+      <SubBuildingTabLayout>
+      </SubBuildingTabLayout>
     </div>
   );
 };
+
+export default Analyses;
