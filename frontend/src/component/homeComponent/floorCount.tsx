@@ -65,7 +65,7 @@ const FloorCount = () => {
         </ChartCategoryAxis>
 
         <ChartValueAxis>
-          <ChartValueAxisItem title={{ text: "Floor Count" }} />
+          <ChartValueAxisItem title={{ text: "Building count" }} />
         </ChartValueAxis>
 
         <ChartSeries>

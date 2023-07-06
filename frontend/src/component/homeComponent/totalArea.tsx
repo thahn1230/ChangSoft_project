@@ -83,7 +83,7 @@ const TotalArea = () => {
         </ChartCategoryAxis>
 
         <ChartValueAxis>
-          <ChartValueAxisItem min={0} majorUnit={1}/>
+          <ChartValueAxisItem min={0} majorUnit={1} title={{ text: "Project count" }}/>
         </ChartValueAxis>
 
         <ChartSeries>
