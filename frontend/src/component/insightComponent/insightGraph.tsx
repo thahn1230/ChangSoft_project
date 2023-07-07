@@ -47,7 +47,7 @@ const InsightGraph = (props: any) => {
         newRes.push(
           <div>
             <Plot data={res[idx].data} layout={res[idx].layout} />
-            <p> {res[idx].explanation}</p>
+            <p style={{textAlign:"left"}}> {res[idx].explanation}</p>
           </div>
         );
       }
