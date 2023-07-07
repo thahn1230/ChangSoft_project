@@ -11,6 +11,8 @@ const SubBuildingAnalysisTable = (props: any) => {
   const [formworkData, setFormworkData] = useState<gridData>([]);
   const [rebarData, setRebarData] = useState<gridData>([]);
 
+  const [totalData, setTotalData] = useState<gridData>([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -70,7 +72,6 @@ const SubBuildingAnalysisTable = (props: any) => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setIsLoading(false);
       }
     };
 
@@ -78,27 +79,28 @@ const SubBuildingAnalysisTable = (props: any) => {
   }, []);
 
   useEffect(() => {
-    if (formworkData.length <= 0 || rebarData.length <= 0) return;
-    //console.log(formworkData);
-    //console.log(Object.keys(formworkData[0]));
+    if (isLoading === true) return;
 
-    console.log(rebarData);
-    console.log(rebarData[0]);
-    // formworkData.forEach((item
-    console.log(formworkData);
-    console.log(formworkData[0])
-    //   Object.entries(item).forEach(([key, value]) => {
-    //     console.log(`${key}: ${typeof value}`);
-    //   });
-    // });
-    // rebarData.forEach((item) => {
-    //   Object.entries(item).forEach(([key, value]) => {
-    //     console.log(`${key}: ${typeof value}`);
-    //   });
-    // });
-    //Object.keys(rebarData[0]).map((key) => console.log(key));
-    //Object.keys(formworkData[0]).map((key) => console.log(key));
-  }, [formworkData]);
+    const combinedData: gridData = concreteData.map((concreteItem) => {
+      const key = concreteItem[""];
+      const formworkItem = formworkData.find((item) => item[""] === key);
+      const rebarItem = rebarData.find((item) => item[""] === key);
+
+      return {
+        ...concreteItem,
+        ...formworkItem,
+        ...rebarItem,
+      };
+    });
+
+    setTotalData(combinedData);
+
+  }, [isLoading]);
+
+useEffect(()=>{
+  console.log(totalData);
+},[totalData])
+
 
   return (
     <div>
@@ -106,24 +108,21 @@ const SubBuildingAnalysisTable = (props: any) => {
         <div>Loading...</div>
       ) : (
         <div>
-          <Grid data={concreteData}>
-            {concreteData.length > 0 &&
-              Object.keys(concreteData[0]).map((key) => (
-                <GridColumn key={key} field={key} title={key} />
-              ))}
-          </Grid>
-          <Grid data={formworkData}>
-            {formworkData.length > 0 &&
-              Object.keys(formworkData[0]).map((key) => (
-                <GridColumn key={key} field={key} title={key} />
-              ))}
-          </Grid>
-          <Grid data={rebarData}>
-            {rebarData.length > 0 &&
-              Object.keys(rebarData[0]).map((key) => (
-                <GridColumn key={key} field={key} title={key} />
-              ))}
-          </Grid>
+          {totalData.length > 0 ? (
+            <Grid data={totalData} style={{ width: "100%" }}>
+              {Object.keys(totalData[0])
+                .map((key) => (
+                  <GridColumn
+                    key={key}
+                    field={key}
+                    title={key}
+                    format={"{0:n2}"}
+                  />
+                ))}
+            </Grid>
+          ) : (
+            <div>No data available</div>
+          )}
         </div>
       )}
     </div>
