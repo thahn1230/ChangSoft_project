@@ -1,19 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
-import {
-  useLocation,
-  useNavigate,
-  Outlet,
-  Link,
-  Routes,
-  Route,
-} from "react-router-dom";
 import SubBuildingTabLayout from "./../component/subBuildingTabLayout";
 
-const Analyses = () => {
+const Analyses = (props:any) => {
   return (
     <div>
-      <SubBuildingTabLayout>
+      <SubBuildingTabLayout
+      buildingInfo={props.buildingInfo}
+      projectName={props.projectName}>
       </SubBuildingTabLayout>
     </div>
   );

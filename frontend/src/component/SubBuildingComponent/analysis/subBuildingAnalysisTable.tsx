@@ -18,22 +18,52 @@ const SubBuildingAnalysisTable = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const concreteResponse = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table/" +
-            "113" +
-            "/concrete"
-        );
-        const formworkResponse = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table/" +
-            "113" +
-            "/formwork"
-        );
-        const rebarResponse = await axios.get(
-          urlPrefix.IP_port + "/sub_building/analysis_table/" + "113" + "/rebar"
-        );
+        setIsLoading(true);
+        console.log(props.selectedSubBuildingId);
 
+        let concreteResponse;
+        let formworkResponse;
+        let rebarResponse;
+
+        if (props.selectedSubBuildingId === 0) {
+          concreteResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table_all/" +
+              props.buildingInfo.id +
+              "/concrete"
+          );
+          formworkResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table_all/" +
+              props.buildingInfo.id +
+              "/concrete"
+          );
+          rebarResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table_all/" +
+              props.buildingInfo.id +
+              "/concrete"
+          );
+        } else {
+          concreteResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table/" +
+              props.selectedSubBuildingId +
+              "/concrete"
+          );
+          formworkResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table/" +
+              props.selectedSubBuildingId +
+              "/formwork"
+          );
+          rebarResponse = await axios.get(
+            urlPrefix.IP_port +
+              "/sub_building/analysis_table/" +
+              props.selectedSubBuildingId +
+              "/rebar"
+          );
+        }
         const concreteJson = JSON.parse(concreteResponse.data);
         const formworkJson = JSON.parse(formworkResponse.data);
         const rebarJson = JSON.parse(rebarResponse.data);
@@ -76,7 +106,7 @@ const SubBuildingAnalysisTable = (props: any) => {
     };
 
     fetchData();
-  }, []);
+  }, [props]);
 
   useEffect(() => {
     if (isLoading === true) return;
@@ -94,13 +124,7 @@ const SubBuildingAnalysisTable = (props: any) => {
     });
 
     setTotalData(combinedData);
-
   }, [isLoading]);
-
-useEffect(()=>{
-  console.log(totalData);
-},[totalData])
-
 
   return (
     <div>
@@ -110,15 +134,14 @@ useEffect(()=>{
         <div>
           {totalData.length > 0 ? (
             <Grid data={totalData} style={{ width: "100%" }}>
-              {Object.keys(totalData[0])
-                .map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                  />
-                ))}
+              {Object.keys(totalData[0]).map((key) => (
+                <GridColumn
+                  key={key}
+                  field={key}
+                  title={key}
+                  format={"{0:n2}"}
+                />
+              ))}
             </Grid>
           ) : (
             <div>No data available</div>

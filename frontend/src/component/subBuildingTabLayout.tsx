@@ -16,6 +16,7 @@ import "./../styles/subBuildingTabLayout.scss";
 const SubBuildingTabLayout = (props: any) => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
 
+
   const renderComponent = () => {
     switch (selectedPage) {
       case "개요":
@@ -35,9 +36,10 @@ const SubBuildingTabLayout = (props: any) => {
         );
       case "분석표":
         return (
-          <AnalysisTab>
+          <AnalysisTab
             buildingInfo={props.buildingInfo}
             projectName={props.projectName}
+            >
           </AnalysisTab>
         );
       case "층별총집계표":
