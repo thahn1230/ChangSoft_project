@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 import pandas as pd
+import json
 
 from dbAccess import create_db_connection
 
@@ -229,12 +230,12 @@ def get_total_analysis_data4(sub_building_id: int):
 
 
 ### 분석표 ###
-# 분석표 한개의 sub_building에서 concrete 데이터 보이기
+# 분석표 전체 sub_building
 @router.get("/sub_building/analysis_table_all/{building_id}/concrete")
 def get_analysis_concrete_data1(building_id: int):
-    query = f"""
+    concrete_query = f"""
         SELECT component_type, material_name, 
-        SUM(concrete.volume) AS total_concrete FROM concrete
+        SUM(concrete.volume) AS total_volume FROM concrete
         JOIN component ON concrete.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.building_id = {building_id}
@@ -242,16 +243,24 @@ def get_analysis_concrete_data1(building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
+    concrete_analysis_data_pivot_df = concrete_analysis_data_df.pivot(
+        index="component_type",
+        columns="material_name",
+        values="total_volume",
+    )
+
+    return JSONResponse(
+        concrete_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
-# 분석표 한개의 sub_building에서 formwork 데이터 보이기
+# 분석표 전체 sub_building에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/formwork")
 def get_analysis_formwork_data1(building_id: int):
-    query = f"""
+    formwork_query = f"""
         SELECT component_type, formwork_type, 
-        SUM(formwork.area) AS total_formwork FROM formwork
+        SUM(formwork.area) AS total_area FROM formwork
         JOIN component ON formwork.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.building_id = {building_id}
@@ -259,16 +268,25 @@ def get_analysis_formwork_data1(building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    formwork_analysis_data_df = pd.read_sql(formwork_query, engine)
+    formwork_analysis_data_pivot_df = formwork_analysis_data_df.pivot(
+        index="component_type",
+        columns="formwork_type",
+        values="total_area",
+    )
+
+    return JSONResponse(
+        formwork_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
-# 분석표 한개의 sub_building에서 rebar 데이터 보이기
+# 분석표 전체 sub_building에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/rebar")
 def get_analysis_rebar_data1(building_id: int):
-    query = f"""
-        SELECT component_type, rebar_grade, rebar_diameter, 
-        SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
+    rebar_query = f"""
+        SELECT component_type, rebar_grade, 
+        CAST(rebar_diameter AS signed integer) AS rebar_diameter,
+        SUM(rebar.rebar_unit_weight) AS total_weight FROM rebar
         JOIN component ON rebar.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.building_id = {building_id}
@@ -276,16 +294,24 @@ def get_analysis_rebar_data1(building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
+    rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
+        index="component_type",
+        columns=["rebar_grade", "rebar_diameter"],
+        values="total_weight",
+    )
+
+    return JSONResponse(
+        rebar_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
-# 분석표 전체의 sub_building에서 concrete 데이터 보이기
+# 분석표 sub_building 1개
 @router.get("/sub_building/analysis_table/{sub_building_id}/concrete")
 def get_analysis_concrete_data2(sub_building_id: int):
-    query = f"""
+    concrete_query = f"""
         SELECT component_type, material_name, 
-        SUM(concrete.volume) AS total_concrete FROM concrete
+        SUM(concrete.volume) AS total_volume FROM concrete
         JOIN component ON concrete.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.id = {sub_building_id}
@@ -293,16 +319,24 @@ def get_analysis_concrete_data2(sub_building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
+    concrete_analysis_data_pivot_df = concrete_analysis_data_df.pivot(
+        index="component_type",
+        columns="material_name",
+        values="total_volume",
+    )
+
+    return JSONResponse(
+        concrete_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
-# 분석표 전체의 sub_building에서 formwork 데이터 보이기
+# 분석표 sub_building 1개에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/formwork")
 def get_analysis_formwork_data2(sub_building_id: int):
-    query = f"""
+    formwork_query = f"""
         SELECT component_type, formwork_type, 
-        SUM(formwork.area) AS total_formwork FROM formwork
+        SUM(formwork.area) AS total_area FROM formwork
         JOIN component ON formwork.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.id = {sub_building_id}
@@ -310,16 +344,25 @@ def get_analysis_formwork_data2(sub_building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    formwork_analysis_data_df = pd.read_sql(formwork_query, engine)
+    formwork_analysis_data_pivot_df = formwork_analysis_data_df.pivot(
+        index="component_type",
+        columns="formwork_type",
+        values="total_area",
+    )
+
+    return JSONResponse(
+        formwork_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
-# 분석표 전체의 sub_building에서 rebar 데이터 보이기
+# 분석표 sub_building 1개에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/rebar")
 def get_analysis_rebar_data2(sub_building_id: int):
-    query = f"""
-        SELECT component_type, rebar_grade, rebar_diameter, 
-        SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
+    rebar_query = f"""
+        SELECT component_type, rebar_grade, 
+        CAST(rebar_diameter AS signed integer) AS rebar_diameter,
+        SUM(rebar.rebar_unit_weight) AS total_weight FROM rebar
         JOIN component ON rebar.component_id = component.id
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.id = {sub_building_id}
@@ -327,8 +370,16 @@ def get_analysis_rebar_data2(sub_building_id: int):
         ORDER BY component_type
     """
 
-    analysis_data_df = pd.read_sql(query, engine)
-    return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
+    rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
+    rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
+        index="component_type",
+        columns=["rebar_grade", "rebar_diameter"],
+        values="total_weight",
+    )
+
+    return JSONResponse(
+        rebar_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+    )
 
 
 ## 층별총집계표
