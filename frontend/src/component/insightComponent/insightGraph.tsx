@@ -43,11 +43,15 @@ const InsightGraph = (props: any) => {
   useEffect(() => {
     let newRes: JSX.Element[] = [];
     if (res !== undefined) {
+      console.log(res)
       for (let idx = 0; idx < res.length; idx++) {
         newRes.push(
-          <div>
-            <Plot data={res[idx].data} layout={res[idx].layout} />
-            <p style={{textAlign:"left"}}> {res[idx].explanation}</p>
+          <div style={{textAlign:"center"}}>
+            <Plot data={res[idx].data} layout={res[idx].layout} style={{display:"inline-block"}} />
+            <p style={{textAlign:"left", width:"80%",display:"inline-block"}}> {res[idx].explanation}</p>
+            <br></br><br></br>
+            <hr style={{border:"solid 1px" ,color:"#162F84", width:"1000px"}}/>
+            <br></br><br></br>
           </div>
         );
       }
@@ -60,13 +64,15 @@ const InsightGraph = (props: any) => {
   }, [returnDiv]);
 
   useEffect(() => {
-    console.log(isLoading);
-  }, [isLoading]);
+    console.log(res);
+  }, [res]);
 
   return (
     <div>
+      <hr style={{border:"solid 1px" ,color:"#162F84", width:"1000px"}}/>
       {/* {isLoading ? <Loader size="large" type={"infinite-spinner"} /> : returnDiv} */}
-      {isLoading ? <img src={spinner} /> : returnDiv}
+      { isLoading ? <img src={spinner} /> : returnDiv }
+      {/* {returnDiv} */}
     </div>
   );
 };
