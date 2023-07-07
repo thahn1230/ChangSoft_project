@@ -19,7 +19,6 @@ const InsightList = (props:any) => {
 
   const onButtonClick = () => {
     setSelectedInsightIndex(selectedInsightIndexInList);
-    props.setIsLoading(true);
   };
 
   useEffect(() => {

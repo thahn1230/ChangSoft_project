@@ -21,6 +21,7 @@ import { projectList_interface } from "./../../interface/projectList_interface";
 import { project_interface } from "./../../interface/project_interface";
 
 import "./../../styles/ProjectList.scss";
+import { returnFalse } from "@progress/kendo-react-inputs/dist/npm/maskedtextbox/utils";
 
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
@@ -29,14 +30,21 @@ const ProjectList = (props: any) => {
   const [selectedProjectName, setSelectedProjectName] =
     useState<string>("project를 선택해주세요");
 
+  const [fileteredList, setFileteredList] = useState<string[]>([]);
+  const [filteredData, setFilteredData] = useState<project_interface[]>([]);
   const [projectFilter, setProjectFilter] = useState<CompositeFilterDescriptor>(
     {
       logic: "and",
       filters: [],
     }
   );
-  const [fileteredList, setFileteredList] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState<project_interface[]>([]);
+
+  const [
+    constructionCompanyFilterSelected,
+    setConstructionCompanyFilterSelected,
+  ] = useState<string>("전체");
+  const [totalAreaFilterSelected, setTotalAreaFilterSelected] =
+    useState<string>("전체");
 
   //[0,10000][0,200000]이 아니라 들어오는 값들 따라서 최대값으로 설정해야함
   const [buildingAreaSliderValues, setBuildingAreaSliderValues] = useState<
@@ -45,7 +53,6 @@ const ProjectList = (props: any) => {
   const [buildingAreaMinMax, setBuildingAreaMinMax] = useState<number[]>([
     0, 0,
   ]);
-
   const [totalAreaSliderValues, setTotalAreaSliderValues] = useState<number[]>(
     []
   );
@@ -88,20 +95,58 @@ const ProjectList = (props: any) => {
     setFileteredList(projectNames);
   }, [filteredData]);
 
+  useEffect(() => {
+    applyFilter();
+  }, [projectFilter]);
+
+  //projectList operations
   const filterData = (filter: FilterDescriptor | CompositeFilterDescriptor) => {
     const data = projectList.slice();
     return filterBy(data, filter);
   };
-
   const filterChange = (event: any) => {
     setFileteredList(filterData(event.filter));
   };
-
   const projectListOnChange = (event: any) => {
     setSelectedProjectName(event.target.value);
     props.setSelectedProjectName(event.target.value);
   };
 
+  //건설회사,지역 comboboxes
+  const constructionCompanyOnChange = (event: any) => {
+    //change selected value of the dropdown
+    setConstructionCompanyFilterSelected(event.target.value);
+
+    // Remove filters where the field is "construction_company"
+    projectFilter.filters = projectFilter.filters.filter((filter) => {
+      return !("field" in filter && filter.field === "construction_company");
+    });
+
+    if (event.target.value === "전체") return;
+    // and add new filter
+    projectFilter.filters.push({
+      field: "construction_company",
+      operator: "eq",
+      value: event.target.value,
+    });
+  };
+  const locationOnChange = (event: any) => {
+    //change selected value of the dropdown
+    setTotalAreaFilterSelected(event.target.value);
+
+    projectFilter.filters = projectFilter.filters.filter((filter) => {
+      return !("field" in filter && filter.field === "location");
+    });
+
+    if (event.target.value === "전체") return;
+    projectFilter.filters.push({
+      field: "location",
+      operator: "eq",
+      value: event.target.value,
+    });
+  };
+
+  //apply,reset
   const applyFilter = () => {
     projectFilter.filters = projectFilter.filters.filter((filter) => {
       return !("field" in filter && filter.field === "building_area");
@@ -136,35 +181,21 @@ const ProjectList = (props: any) => {
 
     setFilteredData(filterBy(data, projectFilter));
   };
+  //reset 구현중
+  const resetFilter = async () => {
+    setBuildingAreaMinMax([0, buildingAreaSliderValues[0]]);
+    setTotalAreaMinMax([0, totalAreaSliderValues[0]]);
 
-  const resetFilter = () => {
-    console.log("reset filter clicked");
-  };
+    setConstructionCompanyFilterSelected("전체");
+    setTotalAreaFilterSelected("전체");
 
-  const constructionCompanyOnChange = (event: any) => {
-    projectFilter.filters = projectFilter.filters.filter((filter) => {
-      return !("field" in filter && filter.field === "construction_company");
-    });
-
-    projectFilter.filters.push({
-      field: "construction_company",
-      operator: "eq",
-      value: event.target.value,
-    });
-  };
-  const locationOnChange = (event: any) => {
-    projectFilter.filters = projectFilter.filters.filter((filter) => {
-      // Remove filters where the field is "construction_company"
-      return !("field" in filter && filter.field === "location");
-    });
-
-    projectFilter.filters.push({
-      field: "location",
-      operator: "eq",
-      value: event.target.value,
+    setProjectFilter({
+      logic: "and",
+      filters: [],
     });
   };
 
+  //Sliders
   /**
    * 만약 building_area의 가장 큰값이 11000이라면
    * 12500 10000 7500...
@@ -265,28 +296,34 @@ const ProjectList = (props: any) => {
             >
               건설회사:
             </label>
-            <DropDownList
+            <ComboBox
               id="construction-company-dropdown"
               onChange={constructionCompanyOnChange}
-              data={data
-                .map((item) => item.construction_company)
-                .filter(
-                  (value, index, array) => array.indexOf(value) === index
-                )}
+              value={constructionCompanyFilterSelected}
+              data={["전체"].concat(
+                data
+                  .map((item) => item.construction_company)
+                  .filter(
+                    (value, index, array) => array.indexOf(value) === index
+                  )
+              )}
             />
           </div>
           <div style={{ width: "25%", display: "flex" }}>
             <label htmlFor="location-dropdown" className="custom-label">
               지역:
             </label>
-            <DropDownList
+            <ComboBox
               id="location-dropdown"
               onChange={locationOnChange}
-              data={data
-                .map((item) => item.location)
-                .filter(
-                  (value, index, array) => array.indexOf(value) === index
-                )}
+              value={totalAreaFilterSelected}
+              data={["전체"].concat(
+                data
+                  .map((item) => item.location)
+                  .filter(
+                    (value, index, array) => array.indexOf(value) === index
+                  )
+              )}
             />
           </div>
         </div>
