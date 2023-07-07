@@ -241,7 +241,7 @@ def get_insight_1():
 
     # Create a layout
     layout = go.Layout(
-        title_text=f"company_name, 빌딩별 콘크리트 볼륨(m^3)당 철근량(ton)의 분포표",
+        title_text=f"""{company_name}, 빌딩별 콘크리트 볼륨(m^3)당 철근량(ton)의 분포표""",
         title_font=dict(size=24, color="black"),
         xaxis_title="콘크리트 볼륨(m^3)당 철근량(ton)",
         yaxis_title="빈도(빌딩수)",
@@ -255,12 +255,12 @@ def get_insight_1():
     # py.plot(fig, filename='histogram_plotly.html')
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
-    explanation = f"""이 그래프는 DB에 저장되어 있는 {company_name}이 실행한 모든 프로젝트에서의 빌딩 별 콘크리트 볼륨당 철근 사용량(ton)을 표시한 히스토그램입니다. 
+    explanation1 = f"""이 그래프는 DB에 저장되어 있는 {company_name}이 실행한 모든 프로젝트에서의 빌딩 별 콘크리트 볼륨당 철근 사용량(ton)을 표시한 히스토그램입니다. 
     히스토그램은 데이터의 분포와 패턴을 시각화하는 데 사용되는 통계 그래프입니다. 이 경우, x축은 콘크리트 볼륨 당 철근의 양을 나타내고, y축은 해당 철근 사용량이 발생한 빌딩의 수, 즉 빈도를 나타냅니다. 
     각각의 막대는 콘크리트 볼륨당 철근의 양이 얼마나 자주 발생하는지를 나타내는 빈도를 표시하고 있습니다. 
     따라서, 이 히스토그램을 통해 우미건설의 프로젝트들에서 철근 사용량의 일반적인 분포와 트렌드를 쉽게 확인할 수 있습니다. 
     이 정보는 프로젝트의 자원 계획과 예산 설정에 중요한 역할을 할 수 있습니다."""
-    fig_json = add_explanation(fig_json, explanation)
+    fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
 
     # 그래프2
 
@@ -285,7 +285,7 @@ def get_insight_1():
 
     # Create a layout
     layout = go.Layout(
-        title=f"company_name, 프로젝트별 빌딩의 콘크리트 볼륨(m^3)당 철근량(ton)의 평균값",
+        title=f"""{company_name}, 프로젝트별 빌딩의 콘크리트 볼륨(m^3)당 철근량(ton)의 평균값""",
         title_font=dict(size=24, color="black"),
         xaxis=dict(title="프로젝트명"),
         yaxis=dict(title="콘크리트 볼륨(m^3)당 철근량(ton)의 평균값"),
@@ -309,16 +309,16 @@ def get_insight_1():
     # Convert the figure to JSON
     fig_json2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
 
-    explanation = f"""이 그래프는 DB에 저장된 {company_name}의 모든 프로젝트에 대한 빌딩별 콘크리트 볼륨(m³)당 철근 사용량(ton)의 평균값을 비교하고 있습니다.
+    explanation2 = f"""이 그래프는 DB에 저장된 {company_name}의 모든 프로젝트에 대한 빌딩별 콘크리트 볼륨(m³)당 철근 사용량(ton)의 평균값을 비교하고 있습니다.
     각 프로젝트에 대해 계산된 평균 철근 사용량이 표시되므로, 프로젝트 간에 철근 사용량의 차이를 쉽게 비교할 수 있습니다. 
     이 정보는 우미건설의 프로젝트 관리자가 프로젝트 간 자원 사용의 효율성을 비교하고, 더 효율적인 구조물 건설에 필요한 조치를 결정하는 데 도움이 될 수 있습니다. 
     이 비교를 통해, 어떤 프로젝트에서는 철근을 더 많이, 또는 더 적게 사용해야 하는지에 대한 통찰력을 얻을 수 있습니다. 
     이는 공사비용을 줄이고, 전체적인 프로젝트 실행을 개선하는 데 중요한 첫걸음이 될 수 있습니다."""
-    fig_json = add_explanation(fig_json, explanation)
+    fig_json_with_explanation2 = add_explanation(fig_json2, explanation2)
 
     # Load the jsons as Python dictionaries
-    fig_dict1 = json.loads(fig_json)
-    fig_dict2 = json.loads(fig_json2)
+    fig_dict1 = json.loads(fig_json_with_explanation1)
+    fig_dict2 = json.loads(fig_json_with_explanation2)
 
     # Create a new list that contains both figures
     figures = [fig_dict1, fig_dict2]
@@ -371,7 +371,8 @@ def get_insight_2():
     이를 통해 각 프로젝트의 구조물 강도, 안전성 등을 추정하는 데 도움이 될 수 있습니다."""
     fig_json = add_explanation(fig_json, explanation)
 
-    return fig_json
+    response_data = [json.loads(fig_json)]
+    return json.dumps(response_data)
 
 
 @router.get("/insight/3")
@@ -432,7 +433,8 @@ def get_insight_3():
 
     fig_json = add_explanation(fig_json, explanation)
 
-    return fig_json
+    response_data = [json.loads(fig_json)]
+    return json.dumps(response_data)
 
 
 @router.get("/insight/4")
@@ -508,7 +510,8 @@ def get_insight_4():
 
     fig_json = add_explanation(fig_json, explanation)
 
-    return fig_json
+    response_data = [json.loads(fig_json)]
+    return json.dumps(response_data)
 
 
 @router.get("/insight/5")
@@ -524,17 +527,7 @@ def get_insight_5():
     df = pd.read_sql_query(query, engine)
 
     df["group_name"] = df["section_name"].apply(extract_keywords)
-    df
 
-    # sql_query = """
-    # SELECT component.*
-    # FROM project
-    # JOIN building ON project.id = building.project_id
-    # JOIN floor ON building.id = floor.building_id
-    # JOIN component ON floor.id = component.floor_id
-    # WHERE project.construction_company = '우미건설'
-    # AND component.component_type = '내력벽'
-    # """
     sql_query = """
     SELECT component.*
     FROM (
@@ -648,7 +641,8 @@ def get_insight_5():
     또 이 값들은 추후 구조설계가 이루어지지 않은 건물의 물량을 더 정확히 예측하는데 사용될 수 있습니다."""
     fig_json = add_explanation(fig_json, explanation)
 
-    return fig_json
+    response_data = [json.loads(fig_json)]
+    return json.dumps(response_data)
 
 
 @router.get("/insight/6")
@@ -739,10 +733,10 @@ def get_insight_6():
     fig = go.Figure(data=[heatmap], layout=layout)
 
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    explanation = f"""이 히트맵은 {project_name}의 {building_name}에 대해 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
+    explanation1 = f"""이 히트맵은 {project_name}의 {building_name}에 대해 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
     색의 진하기는 값을 로그 스케일로 표현하며, 색이 진할수록 콘크리트 볼륨 당 더 많은 무게의 철근이 사용되었음을 의미합니다. 로그 스케일은 철근의 무게가 크게 다른 경우에도 모든 정보를 명확하게 표시하도록 해줍니다.
     이 정보를 통해 건축팀은 각 층에서 어떤 종류의 철근이 얼마나 사용되었는지, 어떤 층에서 철근의 사용량이 많았는지 등을 한눈에 파악할 수 있습니다. 이는 효율적인 자원 관리와 계획을 수립하는 데 도움이 될 것입니다."""
-    fig_json = add_explanation(fig_json, explanation)
+    fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
 
     query = f"""
     SELECT comp.component_type, r.rebar_type, SUM(r.rebar_weight) as total_rebar_weight
@@ -811,9 +805,18 @@ def get_insight_6():
     fig = go.Figure(data=[heatmap], layout=layout)
 
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    explanation = f"""이 히트맵은 {project_name}의 {building_name}에 대해 부재 타입별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 부재 타입을 나타냅니다.
+    explanation2 = f"""이 히트맵은 {project_name}의 {building_name}에 대해 부재 타입별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 부재 타입을 나타냅니다.
     색의 진하기는 값을 로그 스케일로 표현하며, 색이 진할수록 콘크리트 볼륨 당 더 많은 무게의 철근이 사용되었음을 의미합니다. 로그 스케일은 철근의 무게가 크게 다른 경우에도 모든 정보를 명확하게 표시하도록 해줍니다.
     이 정보를 통해 건축팀은 각 부재별로 어떤 종류의 철근이 얼마나 사용되었는지, 어떤 부재에서 철근의 사용량이 많았는지 등을 한눈에 파악할 수 있습니다. 이는 효율적인 자원 관리와 계획을 수립하는 데 도움이 될 것입니다."""
-    fig_json = add_explanation(fig_json, explanation)
+    fig_json_with_explanation2 = add_explanation(fig_json, explanation2)
 
-    return fig_json
+    fig_dict1 = json.loads(fig_json_with_explanation1)
+    fig_dict2 = json.loads(fig_json_with_explanation2)
+
+    # Create a new list that contains both figures
+    figures = [fig_dict1, fig_dict2]
+
+    # Convert the list to json
+    figures_json = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return figures_json
