@@ -37,6 +37,12 @@ export const items: MenuItem[] = [
     route: "/user_info",
     icon: "user",
   },
+  {
+    text: "AI Query",
+    selected: false,
+    route: "/AIquery",
+    icon: "k-i-js",
+  },
 ];
 
 export const NavigationLayout = (props: any) => {

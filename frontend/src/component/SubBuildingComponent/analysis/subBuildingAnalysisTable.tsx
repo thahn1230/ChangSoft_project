@@ -132,16 +132,19 @@ const SubBuildingAnalysisTable = (props: any) => {
         <div>Loading...</div>
       ) : (
         <div>
+          {/* 여기 grid하위에 gridcolumn하나랑 width 0짜리하나만들고 그 아래에 지금있는 object.keys랑 width0짜리가 오도록 */}
           {totalData.length > 0 ? (
             <Grid data={totalData} style={{ width: "100%" }}>
-              {Object.keys(totalData[0]).map((key) => (
-                <GridColumn
-                  key={key}
-                  field={key}
-                  title={key}
-                  format={"{0:n2}"}
-                />
-              ))}
+              <GridColumn title="asd">
+                {Object.keys(totalData[0]).map((key) => (
+                  <GridColumn
+                    key={key}
+                    field={key}
+                    title={key}
+                    format={"{0:n2}"}
+                  />
+                ))}
+              </GridColumn>
             </Grid>
           ) : (
             <div>No data available</div>
