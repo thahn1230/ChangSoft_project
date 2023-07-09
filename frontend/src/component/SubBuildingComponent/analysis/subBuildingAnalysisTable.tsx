@@ -19,7 +19,6 @@ const SubBuildingAnalysisTable = (props: any) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        console.log(props.selectedSubBuildingId);
 
         let concreteResponse;
         let formworkResponse;
@@ -99,6 +98,8 @@ const SubBuildingAnalysisTable = (props: any) => {
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
 
+        console.log(Object.keys(concreteData[0]).slice(1));
+
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -132,11 +133,14 @@ const SubBuildingAnalysisTable = (props: any) => {
         <div>Loading...</div>
       ) : (
         <div>
-          {/* 여기 grid하위에 gridcolumn하나랑 width 0짜리하나만들고 그 아래에 지금있는 object.keys랑 width0짜리가 오도록 */}
-          {totalData.length > 0 ? (
-            <Grid data={totalData} style={{ width: "100%" }}>
-              <GridColumn title="asd">
-                {Object.keys(totalData[0]).map((key) => (
+          {concreteData.length > 0 ? (
+            <div>
+              <br></br>
+              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+                콘크리트(㎥)
+              </header>
+              <Grid data={concreteData} style={{ width: "100%" }}>
+                {Object.keys(concreteData[0]).map((key) => (
                   <GridColumn
                     key={key}
                     field={key}
@@ -144,8 +148,38 @@ const SubBuildingAnalysisTable = (props: any) => {
                     format={"{0:n2}"}
                   />
                 ))}
-              </GridColumn>
-            </Grid>
+              </Grid>
+              <br></br>
+
+              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+                거푸집(㎡)
+              </header>
+              <Grid data={formworkData} style={{ width: "100%" }}>
+                {Object.keys(formworkData[0]).map((key) => (
+                  <GridColumn
+                    key={key}
+                    field={key}
+                    title={key}
+                    format={"{0:n2}"}
+                  />
+                ))}
+              </Grid>
+              <br></br>
+
+              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+                철근(Ton)
+              </header>
+              <Grid data={rebarData} style={{ width: "100%" }}>
+                {Object.keys(rebarData[0]).map((key) => (
+                  <GridColumn
+                    key={key}
+                    field={key}
+                    title={key}
+                    format={"{0:n2}"}
+                  />
+                ))}
+              </Grid>
+            </div>
           ) : (
             <div>No data available</div>
           )}

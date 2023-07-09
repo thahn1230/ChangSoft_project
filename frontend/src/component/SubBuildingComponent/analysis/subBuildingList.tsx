@@ -19,8 +19,6 @@ const SubBuildingList = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
-        console.log( props.buildingInfo)
         const response = await axios.get(
           urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
         );

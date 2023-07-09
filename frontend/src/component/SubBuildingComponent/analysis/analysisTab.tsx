@@ -19,9 +19,6 @@ import SubBuildingConcreteAnalysisTable from "./subBuildingAnalysisTable";
 const AnalysisTab = (props: any) => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState(0);
 
-  useEffect(() => {
-    console.log(props.buildingInfo)
-  }, [props]);
 
   return (
     <div>

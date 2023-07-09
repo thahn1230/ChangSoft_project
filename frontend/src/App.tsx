@@ -8,7 +8,8 @@ import UserPage from "./pages/user";
 import Insight from "./pages/insight";
 import { buildingInfo_interface } from "./interface/buildingInfo_interface";
 import SubBuildingTabLayout from "./component/subBuildingTabLayout";
-import Analyses from "./pages/analyses";
+import AIQuery from "./pages/AIQuery";
+
 function App() {
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
@@ -40,6 +41,7 @@ function App() {
               />
             }
           />
+          <Route path = "/ai_query" element={< AIQuery/>}/>
         </Routes>
       </NavigationLayout>
     </div>

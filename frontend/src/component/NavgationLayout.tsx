@@ -40,7 +40,7 @@ export const items: MenuItem[] = [
   {
     text: "AI Query",
     selected: false,
-    route: "/AIquery",
+    route: "/ai_query",
     icon: "k-i-js",
   },
 ];
