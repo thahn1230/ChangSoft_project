@@ -452,10 +452,13 @@ def get_floor_analysis_rebar_data(building_id: int):
     """
 
     rebar_floor_analysis_data_df = pd.read_sql(query, engine)
+    rebar_floor_analysis_data_df['rebar_combined'] = \
+    rebar_floor_analysis_data_df['rebar_grade'] + ' ' + \
+    rebar_floor_analysis_data_df['rebar_diameter'].astype(str)
 
     rebar_floor_analysis_data_pivot_df = rebar_floor_analysis_data_df.pivot(
         index="floor_name",
-        columns=["rebar_grade", "rebar_diameter"],
+        columns="rebar_combined",  # 새로운 컬럼 사용
         values="total_rebar",
     )
 
