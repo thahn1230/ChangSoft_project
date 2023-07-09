@@ -6,63 +6,42 @@ import urlPrefix from "../../../resource/URL_prefix.json";
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
-const SubBuildingAnalysisTable = (props: any) => {
+const SubBuildingFloorAnalysisTable = (props: any) => {
   const [concreteData, setConcreteData] = useState<gridData>([]);
   const [formworkData, setFormworkData] = useState<gridData>([]);
   const [rebarData, setRebarData] = useState<gridData>([]);
 
-  const [totalData, setTotalData] = useState<gridData>([]);
+  //const [totalData, setTotalData] = useState<gridData>([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
+      let concreteResponse;
+      let formworkResponse;
+      let rebarResponse;
+
       try {
-        setIsLoading(true);
+        concreteResponse = await axios.get(
+          urlPrefix.IP_port +
+            "/sub_building/floor_analysis_table/" +
+            props.buildingInfo.id +
+            "/concrete"
+        );
+        formworkResponse = await axios.get(
+          urlPrefix.IP_port +
+            "/sub_building/floor_analysis_table/" +
+            props.buildingInfo.id +
+            "/formwork"
+        );
+        rebarResponse = await axios.get(
+          urlPrefix.IP_port +
+            "/sub_building/floor_analysis_table/" +
+            props.buildingInfo.id +
+            "/rebar"
+        );
 
-        let concreteResponse;
-        let formworkResponse;
-        let rebarResponse;
-
-        if (props.selectedSubBuildingId === 0) {
-          concreteResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/concrete"
-          );
-          formworkResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/concrete"
-          );
-          rebarResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/concrete"
-          );
-        } else {
-          concreteResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              props.selectedSubBuildingId +
-              "/concrete"
-          );
-          formworkResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              props.selectedSubBuildingId +
-              "/formwork"
-          );
-          rebarResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              props.selectedSubBuildingId +
-              "/rebar"
-          );
-        }
         const concreteJson = JSON.parse(concreteResponse.data);
         const formworkJson = JSON.parse(formworkResponse.data);
         const rebarJson = JSON.parse(rebarResponse.data);
@@ -98,6 +77,8 @@ const SubBuildingAnalysisTable = (props: any) => {
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
 
+        console.log(concreteJson)
+        console.log(concreteJsonGrid)
 
         setIsLoading(false);
       } catch (error) {
@@ -108,27 +89,9 @@ const SubBuildingAnalysisTable = (props: any) => {
     fetchData();
   }, [props]);
 
-  //to set TotalData
-  // useEffect(() => {
-  //   if (isLoading === true) return;
-
-  //   const combinedData: gridData = concreteData.map((concreteItem) => {
-  //     const key = concreteItem[""];
-  //     const formworkItem = formworkData.find((item) => item[""] === key);
-  //     const rebarItem = rebarData.find((item) => item[""] === key);
-
-  //     return {
-  //       ...concreteItem,
-  //       ...formworkItem,
-  //       ...rebarItem,
-  //     };
-  //   });
-
-  //   setTotalData(combinedData);
-  // }, [isLoading]);
-
   return (
     <div>
+        <header>{props.projectName} {props.buildingInfo.building_name} </header>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
@@ -189,4 +152,4 @@ const SubBuildingAnalysisTable = (props: any) => {
   );
 };
 
-export default SubBuildingAnalysisTable;
+export default SubBuildingFloorAnalysisTable;

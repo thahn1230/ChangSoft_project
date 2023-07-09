@@ -11,6 +11,7 @@ import {
 import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
 import BuildingDetail from "./projectComponent/buildingDetail";
 import AnalysisTab from "./SubBuildingComponent/analysis/analysisTab";
+import FloorAnalysisTab from "./SubBuildingComponent/floorAnalysis/floorAnalysisTab";
 import "./../styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {
@@ -43,7 +44,9 @@ const SubBuildingTabLayout = (props: any) => {
           </AnalysisTab>
         );
       case "층별총집계표":
-        return <div>ddd</div>;
+        return <FloorAnalysisTab
+        buildingInfo={props.buildingInfo}
+        projectName={props.projectName}></FloorAnalysisTab>
       default:
         return null;
     }

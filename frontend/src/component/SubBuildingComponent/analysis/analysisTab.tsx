@@ -1,15 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
-  GridFilterChangeEvent,
-} from "@progress/kendo-react-grid";
-import {
-  RadioButton,
-  RadioButtonChangeEvent,
-} from "@progress/kendo-react-inputs";
 import SubBuildingList from "./subBuildingList";
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
