@@ -28,7 +28,7 @@ const ProjectList = (props: any) => {
 
   const [projectList, setProjectList] = useState<string[]>([]);
   const [selectedProjectName, setSelectedProjectName] =
-    useState<string>("project를 선택해주세요");
+    useState<string>("Project");
 
   const [fileteredList, setFileteredList] = useState<string[]>([]);
   const [filteredData, setFilteredData] = useState<project_interface[]>([]);

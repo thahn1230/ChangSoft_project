@@ -3,6 +3,7 @@ import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import urlPrefix from "../../../resource/URL_prefix.json";
+import "./../../../styles/subBuildingFloorAnalysisTable.scss"
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
@@ -77,8 +78,8 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
 
-        console.log(concreteJson)
-        console.log(concreteJsonGrid)
+        console.log(concreteJson);
+        console.log(concreteJsonGrid);
 
         setIsLoading(false);
       } catch (error) {
@@ -91,7 +92,6 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
 
   return (
     <div>
-        <header>{props.projectName} {props.buildingInfo.building_name} </header>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
@@ -99,7 +99,7 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
           {concreteData.length > 0 ? (
             <div>
               <br></br>
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header  className="floorAnalysisTableType">
                 콘크리트(㎥)
               </header>
               <Grid data={concreteData} style={{ width: "100%" }}>
@@ -109,12 +109,14 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>
               <br></br>
 
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header className="floorAnalysisTableType" >
                 거푸집(㎡)
               </header>
               <Grid data={formworkData} style={{ width: "100%" }}>
@@ -124,12 +126,14 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>
               <br></br>
 
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header className="floorAnalysisTableType">
                 철근(Ton)
               </header>
               <Grid data={rebarData} style={{ width: "100%" }}>
@@ -139,6 +143,8 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import urlPrefix from "../../../resource/URL_prefix.json";
+import "./../../../styles/subBuildingAnalysisTable.scss"
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
@@ -35,13 +36,13 @@ const SubBuildingAnalysisTable = (props: any) => {
             urlPrefix.IP_port +
               "/sub_building/analysis_table_all/" +
               props.buildingInfo.id +
-              "/concrete"
+              "/formwork"
           );
           rebarResponse = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/analysis_table_all/" +
               props.buildingInfo.id +
-              "/concrete"
+              "/rebar"
           );
         } else {
           concreteResponse = await axios.get(
@@ -66,6 +67,9 @@ const SubBuildingAnalysisTable = (props: any) => {
         const concreteJson = JSON.parse(concreteResponse.data);
         const formworkJson = JSON.parse(formworkResponse.data);
         const rebarJson = JSON.parse(rebarResponse.data);
+
+        console.log("rebarJson : ")
+        console.log(rebarJson)
 
         const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
           ([key, value]) => {
@@ -97,7 +101,6 @@ const SubBuildingAnalysisTable = (props: any) => {
         setConcreteData(concreteJsonGrid);
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
-
 
         setIsLoading(false);
       } catch (error) {
@@ -136,7 +139,7 @@ const SubBuildingAnalysisTable = (props: any) => {
           {concreteData.length > 0 ? (
             <div>
               <br></br>
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header className="analysis-table-type">
                 콘크리트(㎥)
               </header>
               <Grid data={concreteData} style={{ width: "100%" }}>
@@ -146,12 +149,14 @@ const SubBuildingAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>
               <br></br>
 
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header className="analysis-table-type" >
                 거푸집(㎡)
               </header>
               <Grid data={formworkData} style={{ width: "100%" }}>
@@ -161,12 +166,14 @@ const SubBuildingAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>
               <br></br>
 
-              <header style={{ paddingLeft: "20px", textAlign: "left" }}>
+              <header className="analysis-table-type" >
                 철근(Ton)
               </header>
               <Grid data={rebarData} style={{ width: "100%" }}>
@@ -176,6 +183,8 @@ const SubBuildingAnalysisTable = (props: any) => {
                     field={key}
                     title={key}
                     format={"{0:n2}"}
+                    headerClassName="custom-header-cell"
+                    className="custom-number-cell"
                   />
                 ))}
               </Grid>

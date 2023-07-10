@@ -16,8 +16,8 @@ import "./../styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
-
-
+  const [selectedSubBuildingInfo, setSelectedSubBuildingInfo] =useState<string>();
+  
   const renderComponent = () => {
     switch (selectedPage) {
       case "개요":
@@ -40,13 +40,15 @@ const SubBuildingTabLayout = (props: any) => {
           <AnalysisTab
             buildingInfo={props.buildingInfo}
             projectName={props.projectName}
-            >
-          </AnalysisTab>
+          ></AnalysisTab>
         );
       case "층별총집계표":
-        return <FloorAnalysisTab
-        buildingInfo={props.buildingInfo}
-        projectName={props.projectName}></FloorAnalysisTab>
+        return (
+          <FloorAnalysisTab
+            buildingInfo={props.buildingInfo}
+            projectName={props.projectName}
+          ></FloorAnalysisTab>
+        );
       default:
         return null;
     }
@@ -63,18 +65,12 @@ const SubBuildingTabLayout = (props: any) => {
   return (
     <div>
       <Menu onSelect={onMenuSelect}>
-        <MenuItem
-          text="개요"
-          cssClass={getMenuItemClassName("개요")}
-        />
+        <MenuItem text="개요" cssClass={getMenuItemClassName("개요")} />
         <MenuItem
           text="총괄분석표"
           cssClass={getMenuItemClassName("총괄분석표")}
         />
-        <MenuItem
-          text="분석표"
-          cssClass={getMenuItemClassName("분석표")}
-        />
+        <MenuItem text="분석표" cssClass={getMenuItemClassName("분석표")} />
         <MenuItem
           text="층별총집계표"
           cssClass={getMenuItemClassName("층별총집계표")}

@@ -4,6 +4,7 @@ import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
+import { TextArea } from "@progress/kendo-react-inputs";
 
 const SubBuildingList = (props: any) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
@@ -61,7 +62,7 @@ const SubBuildingList = (props: any) => {
           data={subBuildinglist}
           value={selectedSubBuildingName}
           onChange={onSelectedSubbuildingChange}
-          style={{width: "100%"}}
+          style={{width: "30%" }}
         />
       </div>
     </div>

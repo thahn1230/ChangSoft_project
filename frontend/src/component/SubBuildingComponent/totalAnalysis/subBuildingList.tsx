@@ -53,11 +53,7 @@ const SubBuildingList = (props: any) => {
         for (let i = 0; i < data.length; i++) {
           subBuildingNames.push(data[i].sub_building_name);
         }
-        /*
-        setSubBuildinglist(
-          data.map((obj: subBuildingInfo_interface) => obj.sub_building_name)
-        );
-        */
+        
         setSubBuildingInfo(data);
         setSubBuildinglist(subBuildingNames);
       } catch (error) {

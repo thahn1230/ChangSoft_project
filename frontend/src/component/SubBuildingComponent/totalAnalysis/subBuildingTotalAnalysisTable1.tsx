@@ -101,7 +101,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     }
   }, [analysisTable1]);
 
-  //여기에서 테이블 갈아엎어야함
+  //여기에서 테이블 수정
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -142,9 +142,10 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
                 <div>
                   <SubBuildingList
                     buildingInfo={props.buildingInfo}
-                    setSelectedSubBuildingId={setSelectedSubBuildingId}
-                    selectedSubBuildingId={selectedSubBuildingId}
                     projectName={props.projectName}
+                    setSelectedSubBuildingId={setSelectedSubBuildingId}
+                    
+                    selectedSubBuildingId={selectedSubBuildingId}
                     selectedSubBuildingName={
                       props.selectedSubBuildingInfo?.sub_building_name
                     }

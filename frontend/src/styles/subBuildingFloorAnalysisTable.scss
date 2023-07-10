@@ -1,0 +1,28 @@
+
+.custom-header-cell{
+    background-color: rgb(25, 101, 203);
+    color: white;
+    font-weight: bold;
+    border-bottom: 1px solid white !important;
+  
+    &:not(:last-child) {
+      &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 50%;
+        width: 1px;
+        background-color: white;
+        transform: translateY(-50%);
+      }
+    }
+}
+
+
+.floorAnalysisTableType
+{
+    padding-left : 20px;
+    text-align: left;
+    font-size: 20px;
+}
