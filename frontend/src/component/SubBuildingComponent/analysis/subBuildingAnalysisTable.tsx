@@ -5,6 +5,13 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import "./../../../styles/subBuildingAnalysisTable.scss"
 
+interface RebarJson {
+  component_type: string;
+  rebar_grade: string;
+  rebar_diameter: number;
+  total_weight: number;
+}
+
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
 const SubBuildingAnalysisTable = (props: any) => {
@@ -12,18 +19,19 @@ const SubBuildingAnalysisTable = (props: any) => {
   const [formworkData, setFormworkData] = useState<gridData>([]);
   const [rebarData, setRebarData] = useState<gridData>([]);
 
-  const [totalData, setTotalData] = useState<gridData>([]);
+  //const [totalData, setTotalData] = useState<gridData>([]);
 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        setIsLoading(true);
+      setIsLoading(true);
 
-        let concreteResponse;
-        let formworkResponse;
-        let rebarResponse;
+      let concreteResponse;
+      let formworkResponse;
+      let rebarResponse;
+      
+      try {
 
         if (props.selectedSubBuildingId === 0) {
           concreteResponse = await axios.get(
@@ -44,6 +52,7 @@ const SubBuildingAnalysisTable = (props: any) => {
               props.buildingInfo.id +
               "/rebar"
           );
+
         } else {
           concreteResponse = await axios.get(
             urlPrefix.IP_port +
@@ -66,10 +75,8 @@ const SubBuildingAnalysisTable = (props: any) => {
         }
         const concreteJson = JSON.parse(concreteResponse.data);
         const formworkJson = JSON.parse(formworkResponse.data);
-        const rebarJson = JSON.parse(rebarResponse.data);
+        const rebarJson:RebarJson[] = JSON.parse(rebarResponse.data);
 
-        console.log("rebarJson : ")
-        console.log(rebarJson)
 
         const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
           ([key, value]) => {
@@ -89,15 +96,34 @@ const SubBuildingAnalysisTable = (props: any) => {
             return newObj as { [key: string]: any } & { "": string };
           }
         );
-        const rebarJsonGrid: gridData = Object.entries(rebarJson).map(
-          ([key, value]) => {
-            const newObj: { [key: string]: any } = { "": key };
-            for (const prop in value as Record<string, any>) {
-              newObj[prop] = (value as Record<string, any>)[prop];
+        
+        console.log(rebarJson)
+        const rebarJsonGrid: gridData = [];
+        for (const rebar of rebarJson) {
+          const componentType = rebar.component_type;
+          const rebarGrade = rebar.rebar_grade;
+          const rebarDiameter = rebar.rebar_diameter;
+          const totalWeight = rebar.total_weight;
+
+          const existingItem = rebarJsonGrid.find(
+            (item) => item[""] === componentType
+          );
+          if (existingItem) {
+            if (!existingItem[rebarGrade]) {
+              existingItem[rebarGrade] = {};
             }
-            return newObj as { [key: string]: any } & { "": string };
+            existingItem[rebarGrade][rebarDiameter.toString()] = totalWeight;
+          } else {
+            const newItem = {
+              "": componentType,
+              [rebarGrade]: {
+                [rebarDiameter.toString()]: totalWeight,
+              },
+            };
+            rebarJsonGrid.push(newItem);
           }
-        );
+        }
+
         setConcreteData(concreteJsonGrid);
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
@@ -130,6 +156,22 @@ const SubBuildingAnalysisTable = (props: any) => {
   //   setTotalData(combinedData);
   // }, [isLoading]);
 
+  
+  const splitColumns = (data: gridData, count: number) => {
+    const keys = Object.keys(data[0]);
+    const chunks = [];
+    let start = 0;
+    while (start < keys.length) {
+      const chunk = keys.slice(start, start + count);
+      if (chunks.length > 0 && start === count) {
+        chunk.unshift(keys[0]);
+      }
+      chunks.push(chunk);
+      start += count;
+    }
+    return chunks;
+  };
+
   return (
     <div>
       {isLoading ? (
@@ -142,52 +184,107 @@ const SubBuildingAnalysisTable = (props: any) => {
               <header className="analysis-table-type">
                 콘크리트(㎥)
               </header>
-              <Grid data={concreteData} style={{ width: "100%" }}>
-                {Object.keys(concreteData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              {splitColumns(concreteData, 15).map((chunk, index) => (
+                <div>
+                  <Grid
+                    key={index}
+                    data={concreteData}
+                    style={{ width: "100%" }}
+                  >
+                    {chunk.map((key) => (
+                      <GridColumn
+                        key={key}
+                        field={key}
+                        title={key}
+                        format="{0:n2}"
+                        headerClassName="custom-header-cell"
+                        className="custom-number-cell"
+                      />
+                    ))}
+                  </Grid>
+                  <br></br>
+                </div>
+              ))}
               <br></br>
 
               <header className="analysis-table-type" >
                 거푸집(㎡)
               </header>
-              <Grid data={formworkData} style={{ width: "100%" }}>
-                {Object.keys(formworkData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              {splitColumns(formworkData, 15).map((chunk, index) => (
+                <div>
+                  <Grid
+                    key={index}
+                    data={formworkData}
+                    style={{ width: "100%" }}
+                  >
+                    {chunk.map((key) => (
+                      <GridColumn
+                        key={key}
+                        field={key}
+                        title={key}
+                        format="{0:n2}"
+                        headerClassName="custom-header-cell"
+                        className="custom-number-cell"
+                      />
+                    ))}
+                  </Grid>
+                  <br></br>
+                </div>
+              ))}
               <br></br>
 
               <header className="analysis-table-type" >
                 철근(Ton)
               </header>
-              <Grid data={rebarData} style={{ width: "100%" }}>
-                {Object.keys(rebarData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              {splitColumns(rebarData, 15).map((chunk, index) => (
+                <div key={index}>
+                  <Grid
+                    key={index}
+                    data={rebarData}
+                    style={{ width: "100%" }}
+                  >
+                    {chunk.map((key) => {
+                      if (key === "") {
+                        return <GridColumn key={key} field={key} title="" headerClassName="custom-header-cell"/>;
+                      } else if (
+                        Object.keys(rebarData[0])
+                          .filter((key) => key !== "")
+                          .includes(key)
+                      ) {
+                        const subColumns = Object.keys(
+                          rebarData[0][key]
+                        ).filter((subColumn) => subColumn !== "");
+                        return (
+                          <GridColumn key={key} title={key} headerClassName="custom-header-cell">
+                            {subColumns.map((subColumn) => (
+                              <GridColumn
+                                key={`${key}_${subColumn}`}
+                                field={`${key}.${subColumn}`}
+                                title={"D" + subColumn}
+                                format="{0:n2}"
+                                headerClassName="custom-header-cell"
+                                className="custom-number-cell"
+                              />
+                            ))}
+                          </GridColumn>
+                        );
+                      } else {
+                        return (
+                          <GridColumn
+                            key={key}
+                            field={key}
+                            title={key}
+                            format="{0:n2}"
+                            headerClassName="custom-header-cell"
+                            className="custom-number-cell"
+                          />
+                        );
+                      }
+                    })}
+                  </Grid>
+                  <br />
+                </div>
+              ))}
             </div>
           ) : (
             <div>No data available</div>

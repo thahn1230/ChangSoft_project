@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Loader, LoaderType } from "@progress/kendo-react-indicators";
 import InsightList from "../component/insightComponent/insightList";
 import InsightGraph from "../component/insightComponent/insightGraph";
 

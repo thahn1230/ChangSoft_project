@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Loader, LoaderType } from "@progress/kendo-react-indicators";
 import Plot from "react-plotly.js";
 import axios from "axios";
 import urlPrefix from "./../../resource/URL_prefix.json";
@@ -11,8 +10,6 @@ interface resI {
   layout: any;
 }
 
-//page에서 관리할게 아니라 여기에서 로딩중이면 비어있는 div나 로딩바를 리턴하도록?모르겠음
-//지금문제는 isloading이 false가 되면 page가 다시 랜더링돼서 시간이 2배로 걸리는게 문제
 const InsightGraph = (props: any) => {
   const [res, setRes] = useState<resI[]>();
   const [returnDiv, setReturnDiv] = useState<JSX.Element[]>([]);
