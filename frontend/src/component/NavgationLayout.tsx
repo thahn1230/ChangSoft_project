@@ -30,13 +30,13 @@ export const items: MenuItem[] = [
     text: "Insight",
     selected: false,
     route: "/insight",
-    icon: "k-i-preview",
+    icon: "k-i-align-bottom-element",
   },
   {
     text: "AI Query",
     selected: false,
     route: "/ai_query",
-    icon: "k-i-zoom",
+    icon: "k-i-comment",
   },
   {
     text: "User",
@@ -67,7 +67,6 @@ export const NavigationLayout = (props: any) => {
       setSelected(selectedItem.text);
     }
   }, [location.pathname]);
-
 
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";

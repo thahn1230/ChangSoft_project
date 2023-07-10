@@ -295,19 +295,9 @@ def get_analysis_rebar_data1(building_id: int):
     """
 
     rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
-    
-    rebar_analysis_data_df['rebar_combined'] = \
-    rebar_analysis_data_df['rebar_grade'] + '/' + \
-    rebar_analysis_data_df['rebar_diameter'].astype(str)
-    
-    rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
-        index="component_type",
-        columns="rebar_combined",
-        values="total_weight",
-    )
 
     return JSONResponse(
-        rebar_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+        rebar_analysis_data_df.to_json(force_ascii=False, orient="records")
     )
 
 
@@ -376,19 +366,9 @@ def get_analysis_rebar_data2(sub_building_id: int):
     """
 
     rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
-    
-    rebar_analysis_data_df['rebar_combined'] = \
-    rebar_analysis_data_df['rebar_grade'] + '/' + \
-    rebar_analysis_data_df['rebar_diameter'].astype(str)
-    
-    rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
-        index="component_type",
-        columns="rebar_combined",
-        values="total_weight",
-    )
 
     return JSONResponse(
-        rebar_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+        rebar_analysis_data_df.to_json(force_ascii=False, orient="records")
     )
 
 
@@ -403,11 +383,12 @@ def get_floor_analysis_concrete_data(building_id: int):
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        GROUP BY floor_name, concrete.material_name
+        GROUP BY floor_name, concrete.material_name, floor.id
+        ORDER BY floor.id
     """
 
     concrete_floor_analysis_data_df = pd.read_sql(query, engine)
-    concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot(
+    concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot_table(
         index="floor_name",
         columns="material_name",
         values="total_volume",
@@ -459,16 +440,7 @@ def get_floor_analysis_rebar_data(building_id: int):
     """
 
     rebar_floor_analysis_data_df = pd.read_sql(query, engine)
-    rebar_floor_analysis_data_df['rebar_combined'] = \
-    rebar_floor_analysis_data_df['rebar_grade'] + '/' + \
-    rebar_floor_analysis_data_df['rebar_diameter'].astype(str)
-
-    rebar_floor_analysis_data_pivot_df = rebar_floor_analysis_data_df.pivot(
-        index="floor_name",
-        columns="rebar_combined",  # 새로운 컬럼 사용
-        values="total_rebar",
-    )
 
     return JSONResponse(
-        rebar_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
+        rebar_floor_analysis_data_df.to_json(force_ascii=False, orient="records")
     )
