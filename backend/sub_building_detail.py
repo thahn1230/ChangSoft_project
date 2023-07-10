@@ -388,7 +388,7 @@ def get_analysis_rebar_data2(sub_building_id: int):
 def get_floor_analysis_concrete_data(building_id: int):
     query = f"""
         SELECT floor_name, material_name, 
-        SUM(concrete.volume) AS total_concrete FROM concrete
+        SUM(concrete.volume) AS total_volume FROM concrete
         JOIN component ON concrete.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
@@ -397,9 +397,15 @@ def get_floor_analysis_concrete_data(building_id: int):
         ORDER BY floor_name
     """
 
-    floor_analysis_data_df = pd.read_sql(query, engine)
+    concrete_floor_analysis_data_df = pd.read_sql(query, engine)
+    concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot(
+        index="floor_name",
+        columns="material_name",
+        values="total_volume",
+    )
+
     return JSONResponse(
-        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+        concrete_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
 
 
@@ -408,7 +414,7 @@ def get_floor_analysis_concrete_data(building_id: int):
 def get_floor_analysis_formwork_data(building_id: int):
     query = f"""
         SELECT floor_name, formwork_type, 
-        SUM(formwork.area) AS total_formwork FROM formwork
+        SUM(formwork.area) AS total_area FROM formwork
         JOIN component ON formwork.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
@@ -417,9 +423,16 @@ def get_floor_analysis_formwork_data(building_id: int):
         ORDER BY floor_name
     """
 
-    floor_analysis_data_df = pd.read_sql(query, engine)
+    formwork_floor_analysis_data_df = pd.read_sql(query, engine)
+
+    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot(
+        index="floor_name",
+        columns="formwork_type",
+        values="total_area",
+    )
+
     return JSONResponse(
-        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+        formwork_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
 
 
@@ -427,7 +440,8 @@ def get_floor_analysis_formwork_data(building_id: int):
 @router.get("/sub_building/floor_analysis_table/{building_id}/rebar")
 def get_floor_analysis_rebar_data(building_id: int):
     query = f"""
-        SELECT floor_name, rebar_grade, rebar_diameter, 
+        SELECT floor_name, rebar_grade, 
+        CAST(rebar_diameter AS signed integer) AS rebar_diameter,
         SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
         JOIN component ON rebar.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
@@ -437,7 +451,17 @@ def get_floor_analysis_rebar_data(building_id: int):
         ORDER BY floor_name
     """
 
-    floor_analysis_data_df = pd.read_sql(query, engine)
+    rebar_floor_analysis_data_df = pd.read_sql(query, engine)
+    rebar_floor_analysis_data_df['rebar_combined'] = \
+    rebar_floor_analysis_data_df['rebar_grade'] + ' ' + \
+    rebar_floor_analysis_data_df['rebar_diameter'].astype(str)
+
+    rebar_floor_analysis_data_pivot_df = rebar_floor_analysis_data_df.pivot(
+        index="floor_name",
+        columns="rebar_combined",  # 새로운 컬럼 사용
+        values="total_rebar",
+    )
+
     return JSONResponse(
-        floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+        rebar_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
