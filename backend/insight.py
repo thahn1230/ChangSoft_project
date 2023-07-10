@@ -820,3 +820,107 @@ def get_insight_6():
     figures_json = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
 
     return figures_json
+
+
+
+@router.get("/insight/customed/{construction_company}")
+def get_insight_customed(construction_company: str, project_name: str):
+    # 예제 1번
+    # company_name의 모든 프로젝트에 있는 빌딩별, 콘크리트 M3당 철근량(ton) 값에 대한 분석
+    # 그래프 1 : 빌딩별 콘크리트 M3당 철근량(ton) 값의 분포 히스토그램
+    # 그래프 2 : 프로젝트별 콘크리트 M3당 철근량(ton) 값의 평균값 비교
+
+    # 계산 로직
+    df = get_materials_data_by_company(construction_company, 5)
+    # 그래프1
+    # make plotly histogram chart
+    # Create a histogram
+    data = [go.Histogram(x=df["rebar_per_conc"], nbinsx=30, marker=dict(color="navy"))]
+
+    # Create a layout
+    layout = go.Layout(
+        title_text=f"""{construction_company}, 빌딩별 콘크리트 볼륨(m^3)당 철근량(ton)의 분포표""",
+        title_font=dict(size=24, color="black"),
+        xaxis_title="콘크리트 볼륨(m^3)당 철근량(ton)",
+        yaxis_title="빈도(빌딩수)",
+        bargap=0.1,  # gap between bars of adjacent location coordinates
+    )
+
+    # Create a fig from data and layout, and plot the fig
+    fig = go.Figure(data=data, layout=layout)
+
+    # Save the plot to HTML file
+    # py.plot(fig, filename='histogram_plotly.html')
+    fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    explanation1 = f"""이 그래프는 DB에 저장되어 있는 {construction_company}이 실행한 모든 프로젝트에서의 빌딩 별 콘크리트 볼륨당 철근 사용량(ton)을 표시한 히스토그램입니다. 
+    히스토그램은 데이터의 분포와 패턴을 시각화하는 데 사용되는 통계 그래프입니다. 이 경우, x축은 콘크리트 볼륨 당 철근의 양을 나타내고, y축은 해당 철근 사용량이 발생한 빌딩의 수, 즉 빈도를 나타냅니다. 
+    각각의 막대는 콘크리트 볼륨당 철근의 양이 얼마나 자주 발생하는지를 나타내는 빈도를 표시하고 있습니다. 
+    따라서, 이 히스토그램을 통해 우미건설의 프로젝트들에서 철근 사용량의 일반적인 분포와 트렌드를 쉽게 확인할 수 있습니다. 
+    이 정보는 프로젝트의 자원 계획과 예산 설정에 중요한 역할을 할 수 있습니다."""
+    fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
+
+    # 그래프2
+
+    # Calculate the average rebar_per_conc grouped by project_name
+    rebar_per_conc_avg = (
+        df.groupby("project_name")["rebar_per_conc"].mean().reset_index()
+    )
+    rebar_per_conc_avg["project_name_truncated"] = rebar_per_conc_avg[
+        "project_name"
+    ].str[:20]
+
+    # Create a bar chart with different colors
+    data = [
+        go.Bar(
+            x=rebar_per_conc_avg["project_name_truncated"],
+            y=rebar_per_conc_avg["rebar_per_conc"],
+            marker=dict(
+                color=random_color(len(rebar_per_conc_avg["project_name_truncated"]))
+            ),
+        )
+    ]
+
+    # Create a layout
+    layout = go.Layout(
+        title=f"""{construction_company}, 프로젝트별 빌딩의 콘크리트 볼륨(m^3)당 철근량(ton)의 평균값""",
+        title_font=dict(size=24, color="black"),
+        xaxis=dict(title="프로젝트명"),
+        yaxis=dict(title="콘크리트 볼륨(m^3)당 철근량(ton)의 평균값"),
+        autosize=False,
+        width=1000,
+        height=600,
+        margin=go.layout.Margin(
+            l=50,
+            r=50,
+            b=100,  # Adjust this value to change the space for x-axis labels
+            t=100,
+            pad=4,
+        ),
+    )
+
+    # Create a fig from data and layout, and plot the fig
+    fig2 = go.Figure(data=data, layout=layout)
+
+    # Save the plot to HTML file
+    # py.plot(fig, filename='average_rebar_per_conc_plotly.html')
+    # Convert the figure to JSON
+    fig_json2 = json.dumps(fig2, cls=plotly.utils.PlotlyJSONEncoder)
+
+    explanation2 = f"""이 그래프는 DB에 저장된 {construction_company}의 모든 프로젝트에 대한 빌딩별 콘크리트 볼륨(m³)당 철근 사용량(ton)의 평균값을 비교하고 있습니다.
+    각 프로젝트에 대해 계산된 평균 철근 사용량이 표시되므로, 프로젝트 간에 철근 사용량의 차이를 쉽게 비교할 수 있습니다. 
+    이 정보는 우미건설의 프로젝트 관리자가 프로젝트 간 자원 사용의 효율성을 비교하고, 더 효율적인 구조물 건설에 필요한 조치를 결정하는 데 도움이 될 수 있습니다. 
+    이 비교를 통해, 어떤 프로젝트에서는 철근을 더 많이, 또는 더 적게 사용해야 하는지에 대한 통찰력을 얻을 수 있습니다. 
+    이는 공사비용을 줄이고, 전체적인 프로젝트 실행을 개선하는 데 중요한 첫걸음이 될 수 있습니다."""
+    fig_json_with_explanation2 = add_explanation(fig_json2, explanation2)
+
+    # Load the jsons as Python dictionaries
+    fig_dict1 = json.loads(fig_json_with_explanation1)
+    fig_dict2 = json.loads(fig_json_with_explanation2)
+
+    # Create a new list that contains both figures
+    figures = [fig_dict1, fig_dict2]
+
+    # Convert the list to json
+    figures_json = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
+    return figures_json
