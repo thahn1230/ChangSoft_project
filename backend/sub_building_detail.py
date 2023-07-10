@@ -394,7 +394,6 @@ def get_floor_analysis_concrete_data(building_id: int):
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
         GROUP BY floor_name, concrete.material_name
-        ORDER BY floor_name
     """
 
     concrete_floor_analysis_data_df = pd.read_sql(query, engine)
@@ -420,7 +419,6 @@ def get_floor_analysis_formwork_data(building_id: int):
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
         GROUP BY floor_name, formwork_type
-        ORDER BY floor_name
     """
 
     formwork_floor_analysis_data_df = pd.read_sql(query, engine)
@@ -448,7 +446,6 @@ def get_floor_analysis_rebar_data(building_id: int):
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
         GROUP BY floor_name, rebar_grade, rebar_diameter
-        ORDER BY floor_name
     """
 
     rebar_floor_analysis_data_df = pd.read_sql(query, engine)
