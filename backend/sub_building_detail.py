@@ -295,9 +295,14 @@ def get_analysis_rebar_data1(building_id: int):
     """
 
     rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
+    
+    rebar_analysis_data_df['rebar_combined'] = \
+    rebar_analysis_data_df['rebar_grade'] + '/' + \
+    rebar_analysis_data_df['rebar_diameter'].astype(str)
+    
     rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
         index="component_type",
-        columns=["rebar_grade", "rebar_diameter"],
+        columns="rebar_combined",
         values="total_weight",
     )
 
@@ -371,9 +376,14 @@ def get_analysis_rebar_data2(sub_building_id: int):
     """
 
     rebar_analysis_data_df = pd.read_sql(rebar_query, engine)
+    
+    rebar_analysis_data_df['rebar_combined'] = \
+    rebar_analysis_data_df['rebar_grade'] + '/' + \
+    rebar_analysis_data_df['rebar_diameter'].astype(str)
+    
     rebar_analysis_data_pivot_df = rebar_analysis_data_df.pivot(
         index="component_type",
-        columns=["rebar_grade", "rebar_diameter"],
+        columns="rebar_combined",
         values="total_weight",
     )
 
@@ -450,7 +460,7 @@ def get_floor_analysis_rebar_data(building_id: int):
 
     rebar_floor_analysis_data_df = pd.read_sql(query, engine)
     rebar_floor_analysis_data_df['rebar_combined'] = \
-    rebar_floor_analysis_data_df['rebar_grade'] + ' ' + \
+    rebar_floor_analysis_data_df['rebar_grade'] + '/' + \
     rebar_floor_analysis_data_df['rebar_diameter'].astype(str)
 
     rebar_floor_analysis_data_pivot_df = rebar_floor_analysis_data_df.pivot(
