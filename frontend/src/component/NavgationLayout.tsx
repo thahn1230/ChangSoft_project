@@ -36,7 +36,7 @@ export const items: MenuItem[] = [
     text: "AI Query",
     selected: false,
     route: "/ai_query",
-    icon: ChatgptLogo,
+    icon: "k-i-zoom",
   },
   {
     text: "User",
