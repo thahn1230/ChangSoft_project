@@ -3,7 +3,8 @@ import { Button } from "@progress/kendo-react-buttons";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
 import "./../styles/NavigationLayout.scss";
-import LogoImg from "./../resource/changSoft_logo.png";
+import ChangSoftLogo from "./../resource/changSoft_logo.png";
+import ChatgptLogo from "./../resource/chatgpt_logo.png";
 
 interface MenuItem {
   text: string;
@@ -32,16 +33,16 @@ export const items: MenuItem[] = [
     icon: "k-i-preview",
   },
   {
+    text: "AI Query",
+    selected: false,
+    route: "/ai_query",
+    icon: ChatgptLogo,
+  },
+  {
     text: "User",
     selected: false,
     route: "/user_info",
     icon: "user",
-  },
-  {
-    text: "AI Query",
-    selected: false,
-    route: "/ai_query",
-    icon: "k-i-js",
   },
 ];
 
@@ -57,8 +58,7 @@ export const NavigationLayout = (props: any) => {
 
   const onSelect = (e: any) => {
     navigate(e.itemTarget.props.route);
-    if(expanded)
-    setExpanded(false);
+    if (expanded) setExpanded(false);
   };
 
   useEffect(() => {
@@ -67,6 +67,7 @@ export const NavigationLayout = (props: any) => {
       setSelected(selectedItem.text);
     }
   }, [location.pathname]);
+
 
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";
@@ -97,7 +98,7 @@ export const NavigationLayout = (props: any) => {
         </div>
 
         <div className="logo">
-          {<img alt="LogoImg" src={LogoImg} height="50px" />}
+          {<img alt="LogoImg" src={ChangSoftLogo} height="50px" />}
         </div>
       </div>
 

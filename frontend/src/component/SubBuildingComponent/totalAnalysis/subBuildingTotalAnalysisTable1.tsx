@@ -144,7 +144,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
                     buildingInfo={props.buildingInfo}
                     projectName={props.projectName}
                     setSelectedSubBuildingId={setSelectedSubBuildingId}
-                    
                     selectedSubBuildingId={selectedSubBuildingId}
                     selectedSubBuildingName={
                       props.selectedSubBuildingInfo?.sub_building_name
@@ -161,10 +160,15 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
             <GridColumn
               headerCell={() => (
                 <div className="custom-header-number-cell">
-                  {analysisTable1[0].total_floor_area_meter +
-                    "㎥ / " +
-                    analysisTable1[0].total_floor_area_pyeong +
-                    "평"}
+                  {analysisTable1 &&
+                  analysisTable1[0] &&
+                  analysisTable1[0].total_floor_area_meter !== undefined &&
+                  analysisTable1[0].total_floor_area_pyeong !== undefined
+                    ? analysisTable1[0].total_floor_area_meter.toFixed(2) +
+                      "㎥ / " +
+                      analysisTable1[0].total_floor_area_pyeong.toFixed(2) +
+                      "평"
+                    : null}
                 </div>
               )}
             ></GridColumn>

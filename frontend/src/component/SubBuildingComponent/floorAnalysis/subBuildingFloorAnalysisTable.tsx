@@ -3,7 +3,7 @@ import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import urlPrefix from "../../../resource/URL_prefix.json";
-import "./../../../styles/subBuildingFloorAnalysisTable.scss"
+import "./../../../styles/subBuildingFloorAnalysisTable.scss";
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
@@ -78,9 +78,6 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
         setFormworkData(formworkJsonGrid);
         setRebarData(rebarJsonGrid);
 
-        console.log(concreteJson);
-        console.log(concreteJsonGrid);
-
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -89,6 +86,21 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
 
     fetchData();
   }, [props]);
+
+  const splitColumns = (data: gridData, count: number) => {
+    const keys = Object.keys(data[0]);
+    const chunks = [];
+    let start = 0;
+    while (start < keys.length) {
+      const chunk = keys.slice(start, start + count);
+      if (chunks.length > 0 && start === count) {
+        chunk.unshift(keys[0]);
+      }
+      chunks.push(chunk);
+      start += count;
+    }
+    return chunks;
+  };
 
   return (
     <div>
@@ -99,55 +111,76 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
           {concreteData.length > 0 ? (
             <div>
               <br></br>
-              <header  className="floorAnalysisTableType">
-                콘크리트(㎥)
-              </header>
-              <Grid data={concreteData} style={{ width: "100%" }}>
-                {Object.keys(concreteData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              <header className="floorAnalysisTableType">콘크리트(㎥)</header>
+              {splitColumns(concreteData, 15).map((chunk, index) => (
+                <div>
+                <Grid
+                  key={index}
+                  data={concreteData}
+                  style={{ width: "100%" }}
+                >
+                  {chunk.map((key) => (
+                    <GridColumn
+                      key={key}
+                      field={key}
+                      title={key}
+                      format="{0:n2}"
+                      headerClassName="custom-header-cell"
+                      className="custom-number-cell"
+                    />
+                  ))}
+                </Grid>
+                <br></br>
+                </div>
+              ))}
               <br></br>
 
-              <header className="floorAnalysisTableType" >
-                거푸집(㎡)
-              </header>
-              <Grid data={formworkData} style={{ width: "100%" }}>
-                {Object.keys(formworkData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              <header className="floorAnalysisTableType">거푸집(㎡)</header>
+              {splitColumns(formworkData, 15).map((chunk, index) => (
+                <div>
+                <Grid
+                  key={index}
+                  data={formworkData}
+                  style={{ width: "100%" }}
+                >
+                  {chunk.map((key) => (
+                    <GridColumn
+                      key={key}
+                      field={key}
+                      title={key}
+                      format="{0:n2}"
+                      headerClassName="custom-header-cell"
+                      className="custom-number-cell"
+                    />
+                  ))}
+                </Grid>
+                <br></br>
+                </div>
+              ))}
               <br></br>
 
-              <header className="floorAnalysisTableType">
-                철근(Ton)
-              </header>
-              <Grid data={rebarData} style={{ width: "100%" }}>
-                {Object.keys(rebarData[0]).map((key) => (
-                  <GridColumn
-                    key={key}
-                    field={key}
-                    title={key}
-                    format={"{0:n2}"}
-                    headerClassName="custom-header-cell"
-                    className="custom-number-cell"
-                  />
-                ))}
-              </Grid>
+              <header className="floorAnalysisTableType">철근(Ton)</header>
+              {splitColumns(rebarData, 15).map((chunk, index) => (
+                <div>
+                <Grid
+                  key={index}
+                  data={rebarData}
+                  style={{ width: "100%" }}
+                >
+                  {chunk.map((key) => (
+                    <GridColumn
+                      key={key}
+                      field={key}
+                      title={key}
+                      format="{0:n2}"
+                      headerClassName="custom-header-cell"
+                      className="custom-number-cell"
+                    />
+                  ))}
+                </Grid>
+                <br></br>
+                </div>
+              ))}
             </div>
           ) : (
             <div>No data available</div>

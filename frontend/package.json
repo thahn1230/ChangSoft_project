@@ -42,7 +42,7 @@
     "@progress/kendo-react-treelist": "^5.14.1",
     "@progress/kendo-react-treeview": "^5.14.1",
     "@progress/kendo-react-upload": "^5.14.1",
-    "@progress/kendo-svg-icons": "^1.5.0",
+    "@progress/kendo-svg-icons": "^1.6.0",
     "@progress/kendo-theme-bootstrap": "^6.4.0",
     "@progress/kendo-theme-default": "^6.4.0",
     "@progress/kendo-theme-material": "^6.4.0",
