@@ -61,7 +61,7 @@ const BuildingDetail = (props: any) => {
   return (
     <div>
       <div style={{ width: "30%", float: "left", paddingLeft: "1%" }}>
-        {imgPath && <img src={imgPath} alt="Building Image" height="300px" />}
+        {imgPath && <img src={imgPath} alt="Building Image" style={{ width: "163%", float: "left"}} />}
       </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
         {!props.forAnalysisTab && (
