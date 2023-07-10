@@ -84,7 +84,7 @@ const TotalAnalysisTab = (props: any) => {
     };
 
     fetchData();
-  }, [buildingInfo]);
+  }, [buildingInfo, props.buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {

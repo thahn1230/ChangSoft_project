@@ -58,12 +58,11 @@ const AnalysisTab = (props: any) => {
         <GridColumn
           title="건물명 구분"
           cell={() => (
-            <div>
+            <div style={{textAlign:"center"}}>
               <SubBuildingList
                 buildingInfo={props.buildingInfo}
                 projectName={props.projectName}
                 setSelectedSubBuildingId={setSelectedSubBuildingId}
-
                 selectedSubBuildingId={selectedSubBuildingId}
                 selectedSubBuildingName={
                   props.selectedSubBuildingInfo?.sub_building_name
@@ -77,11 +76,6 @@ const AnalysisTab = (props: any) => {
         />
       </Grid>
 
-      <SubBuildingList
-        buildingInfo={props.buildingInfo}
-        projectName={props.projectName}
-        setSelectedSubBuildingId={setSelectedSubBuildingId}
-      ></SubBuildingList>
       <SubBuildingConcreteAnalysisTable
         buildingInfo={props.buildingInfo}
         projectName={props.projectName}

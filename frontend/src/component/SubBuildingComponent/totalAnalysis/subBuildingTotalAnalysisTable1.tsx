@@ -6,18 +6,11 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import SubBuildingList from "./subBuildingList";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import { subBuildingAnalysisTable_interface } from "../../../interface/subBuildingAnalysisTable_interface";
 import { buildingInfo_interface } from "./../../../interface/buildingInfo_interface";
 import { subBuildingTotalAnalysisTable1_interface } from "./../../../interface/subBuildingTotalAnalysisTable1_interface";
 import "./../../../styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
-  const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
-  >();
-  const [subBuildingInfo, setSubBuildingInfo] = useState<
-    subBuildingInfo_interface | undefined
-  >();
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
 
   const [analysisTable1, setAnalysisTable1] =
@@ -26,33 +19,10 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // console.log(props)
-        setBuildingInfo(props.buildingInfo);
-        setSubBuildingInfo(props.subBuildingInfo);
-        setSelectedSubBuildingId(props.selectedSubBuildingId);
-
-        const response = await axios.get(
-          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-        );
-
-        const subBuildings = JSON.parse(response.data);
-        setSubBuildingInfo(subBuildings);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [props]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setBuildingInfo(props.buildingInfo);
-
         const response1 = await axios.get(
           urlPrefix.IP_port +
             "/sub_building/total_analysis_table_all/1/" +
@@ -66,7 +36,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     };
 
     fetchData();
-  }, [buildingInfo]);
+  }, [props.buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -107,14 +77,12 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
       try {
         if (selectedSubBuildingId === undefined) return;
 
-        props.setSelectedSubBuildingId(selectedSubBuildingId);
-
         let response;
         if (selectedSubBuildingId === 0) {
           response = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/total_analysis_table_all/1/" +
-              buildingInfo?.id
+              props.buildingInfo?.id
           );
         } else {
           response = await axios.get(
@@ -130,7 +98,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     };
 
     fetchData();
-  }, [selectedSubBuildingId]);
+  }, [selectedSubBuildingId, props.buildingInfo?.id]);
 
   return (
     <div className="table-container">

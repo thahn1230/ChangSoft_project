@@ -16,10 +16,23 @@ const SubBuildingList = (props: any) => {
     useState<string>("전체동");
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number|undefined>(0);
 
+  const [selectedBuilding, setSelectedBuilding] =
+    useState<buildingInfo_interface>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        let prevSelectedSubBuilding = props.subBuildingInfo.find(
+          (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
+        );
+        if (prevSelectedSubBuilding === undefined) {
+          setSelectedSubBuildingName("전체동");
+        } else {
+          setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name);
+        }
+
+        setSelectedBuilding(props.buildingInfo);
+
         const response = await axios.get(
           urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
         );
@@ -62,7 +75,7 @@ const SubBuildingList = (props: any) => {
           data={subBuildinglist}
           value={selectedSubBuildingName}
           onChange={onSelectedSubbuildingChange}
-          style={{width: "30%" }}
+          style={{width: "95%" }}
         />
       </div>
     </div>
