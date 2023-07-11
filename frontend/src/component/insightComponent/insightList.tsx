@@ -18,6 +18,7 @@ import {
 import { Button } from "@progress/kendo-react-buttons";
 import { getter, setter } from "@progress/kendo-react-common";
 import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
+import { filter } from "@progress/kendo-data-query/dist/npm/transducers";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -43,6 +44,7 @@ const InsightList = (props: any) => {
     "'우미건설' 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
     "'신세계 어바인시티' 프로젝트에서 층별, 부재타입별, 철근타입별로 콘크리트 당 철근 사용량 값의 대한 히트맵 분석",
   ]);
+
   //only in list
   const [selectedInsightInList, setSelectedInsightInList] = useState<string>();
   const [selectedInsightIndexInList, setSelectedInsightIndexInList] =
@@ -53,21 +55,24 @@ const InsightList = (props: any) => {
   //constructionCompanyList's id is useless
   const [constructionCompanyList, setConstructionCompanyList] = useState<
     { constructionCompany: string; id: number }[]
-  >([{ constructionCompany: "All", id: 0 }]);
+  >([]);
   const [selectedConstructionCompanyList, setSelectedConstructionCompanyList] =
     useState<{ constructionCompany: string; id: number }[]>([]);
 
   const [projectList, setProjectList] = useState<
-    { projectName: string; id: number }[]
-  >([{ projectName: "All", id: 0 }]);
+    { projectName: string; id: number; constructionCompany: string }[]
+  >([{ projectName: "All", id: 0, constructionCompany: "All" }]);
+  const [filteredProjectList, setFilteredProjectList] = useState<
+    { projectName: string; id: number; constructionCompany: string }[]
+  >([]);
   const [selectedProjectList, setSelectedProjectList] = useState<
-    { projectName: string; id: number }[]
+    { projectName: string; id: number; constructionCompany: string }[]
   >([]);
   //const [expandedProject, setExpandedProject] = useState<string[]>([]);
 
   const [projectFilter, setProjectFilter] = useState<CompositeFilterDescriptor>(
     {
-      logic: "and",
+      logic: "or",
       filters: [],
     }
   );
@@ -81,21 +86,29 @@ const InsightList = (props: any) => {
         const data = JSON.parse(response.data);
 
         setProjectList(
-          data.map((item: any) => {
-            return { projectName: item.project_name, id: item.id };
-          })
+          projectList.concat(
+            data.map((item: any) => {
+              return {
+                projectName: item.project_name,
+                id: item.id,
+                constructionCompany: item.construction_company,
+              };
+            })
+          )
         );
 
         const uniqueConstructionCompanies = Array.from(
           new Set(data.map((item: any) => item.construction_company))
         );
         setConstructionCompanyList(
-          uniqueConstructionCompanies.map((constructionCompany: any) => {
-            const item = data.find(
-              (item: any) => item.construction_company === constructionCompany
-            );
-            return { constructionCompany, id: item.id };
-          })
+          [{ constructionCompany: "All", id: 0 }].concat(
+            uniqueConstructionCompanies.map((constructionCompany: any) => {
+              const item = data.find(
+                (item: any) => item.construction_company === constructionCompany
+              );
+              return { constructionCompany, id: item.id };
+            })
+          )
         );
       } catch (error) {
         console.error(error);
@@ -106,8 +119,34 @@ const InsightList = (props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log(projectFilter );
-  }, [projectFilter]);
+    setFilteredProjectList(projectList);
+  }, [projectList]);
+
+  // set filter here
+  useEffect(() => {
+    setProjectFilter({
+      logic: "or",
+      filters: [],
+    });
+
+    let newProjectFilter:CompositeFilterDescriptor =  {
+      logic: "or",
+      filters: [{ field: "constructionCompany",
+      operator: "eq",
+      value: "All"}],
+    }
+
+    for(let item of selectedConstructionCompanyList)
+    {
+      newProjectFilter.filters.push({
+        field: "constructionCompany",
+        operator: "eq",
+        value: item.constructionCompany
+      });
+    }
+
+    setProjectFilter(newProjectFilter)
+  }, [selectedConstructionCompanyList]);
 
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
@@ -119,38 +158,30 @@ const InsightList = (props: any) => {
     setSelectedInsightIndex(selectedInsightIndexInList);
   };
 
-  //set filter here
+  // 여기에서는 선택된 건설회사만 set
   const onNewConstructionCompanySelection = (
     event: MultiSelectTreeChangeEvent
   ) => {
-    if (event.items[0] !== undefined) {
-      projectFilter.filters = projectFilter.filters.filter((filter) => {
-        return !(
-          "field" in filter &&
-          filter.field === "constructionCompany" &&
-          filter.value === event.items[0].constructionCompany
-        );
-      });
-
-      projectFilter.filters.push({
-        field: "constructionCompany",
-        operator: "eq",
-        value: event.items[0].constructionCompany,
-      });
+    if (event.items[0].constructionCompany === "All") {
+      setSelectedConstructionCompanyList(
+        getMultiSelectTreeValue(constructionCompanyList, {
+          ...selectDropDownFields,
+          ...event,
+          value: constructionCompanyList,
+        })
+      );
+    } else {
+      setSelectedConstructionCompanyList(
+        getMultiSelectTreeValue(constructionCompanyList, {
+          ...selectDropDownFields,
+          ...event,
+          value: selectedConstructionCompanyList,
+        })
+      );
     }
-
-    setSelectedConstructionCompanyList(
-      getMultiSelectTreeValue(constructionCompanyList, {
-        ...selectDropDownFields,
-        ...event,
-        value: selectedConstructionCompanyList,
-      })
-    );
   };
 
-  //set filter here
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
-    // console.log(event)
     setSelectedProjectList(
       getMultiSelectTreeValue(projectList, {
         ...selectDropDownFields,
@@ -160,8 +191,11 @@ const InsightList = (props: any) => {
     );
   };
 
-  useEffect(()=>{console.log(projectFilter)},[projectFilter.filters])
-  
+  useEffect(() => {
+   console.log(projectFilter)
+    setFilteredProjectList(filterBy(projectList, projectFilter));
+  }, [projectFilter]);
+
   // const expandedState = (
   //   item: unknown,
   //   dataItemKey: string,
@@ -210,7 +244,7 @@ const InsightList = (props: any) => {
 
       <MultiSelectTree
         style={{ width: "20%", margin: "10px" }}
-        data={projectList}
+        data={filteredProjectList}
         value={selectedProjectList}
         onChange={onNewProjectSelection}
         textField="projectName"
@@ -218,7 +252,11 @@ const InsightList = (props: any) => {
         checkField={checkField}
         checkIndeterminateField={checkIndeterminateField}
         expandField={expandField}
-        //onExpandChange={onProjectExpandChange}
+        tags={
+          selectedProjectList.length >0
+            ? [{ text: `${selectedProjectList.length} projects selected`, data: [...selectedProjectList] }]
+            : []
+        }
       />
     </div>
   );
