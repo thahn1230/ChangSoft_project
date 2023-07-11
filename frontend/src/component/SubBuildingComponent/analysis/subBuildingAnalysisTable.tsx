@@ -179,7 +179,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                         format="{0:n2}"
                         headerClassName="custom-header-cell"
                         className="custom-number-cell"
-                        width={"100vw"}
+                        width={"150vw"}
                       />
                     ))}
                   </Grid>
