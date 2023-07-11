@@ -196,21 +196,26 @@ const InsightList = (props: any) => {
   const getGraph = () => {
     const fetchData = async () => {
       try {
-        const selectedScenario:number = selectedInsightIndexInList;
-        const selectedProjectId:number[] = [];
-        const selectedConstructionCompany:[]=[];
+        const selectedProjectId: number[] = [];
 
         selectedProjectList.map((item) => {
           selectedProjectId.push(item.id);
         });
-       
+
+        console.log( urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
+        { params:{
+          project_ids: selectedProjectId
+        }}
+      );
         const response = await axios.get(
-          urlPrefix.IP_port + "/insight/customed",
-          { params: selectedProjectId }
+          urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
+          { params:{
+            project_ids: [4,5,6]
+          }}
         );
         const data = JSON.parse(response.data);
 
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error(error);
       }
