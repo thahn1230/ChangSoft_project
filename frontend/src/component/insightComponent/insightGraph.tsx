@@ -68,7 +68,7 @@ const InsightGraph = (props: any) => {
     <div>
       <hr style={{border:"solid 1px" ,color:"#162F84", width:"1000px"}}/>
       {/* {isLoading ? <Loader size="large" type={"infinite-spinner"} /> : returnDiv} */}
-      { isLoading ? <img src={spinner} /> : returnDiv }
+      { isLoading ? <img alt="loader" src={spinner} /> : returnDiv }
       {/* {returnDiv} */}
     </div>
   );

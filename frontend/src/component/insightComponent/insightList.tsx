@@ -10,13 +10,18 @@ import {
   MultiSelectTreeExpandEvent,
   getMultiSelectTreeValue,
 } from "@progress/kendo-react-dropdowns";
+import {
+  CompositeFilterDescriptor,
+  filterBy,
+  FilterDescriptor,
+} from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
+import { getter, setter } from "@progress/kendo-react-common";
 import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
 
 const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
-const subItemsField = "";
 const expandField = "expanded";
 // const projectsTextField = "projectName";
 // const constructionCompanyTextField = "constructionCompany";
@@ -58,6 +63,14 @@ const InsightList = (props: any) => {
   const [selectedProjectList, setSelectedProjectList] = useState<
     { projectName: string; id: number }[]
   >([]);
+  //const [expandedProject, setExpandedProject] = useState<string[]>([]);
+
+  const [projectFilter, setProjectFilter] = useState<CompositeFilterDescriptor>(
+    {
+      logic: "and",
+      filters: [],
+    }
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,21 +106,39 @@ const InsightList = (props: any) => {
   }, []);
 
   useEffect(() => {
-    console.log(projectList);
-  }, [projectList]);
+    console.log(projectFilter );
+  }, [projectFilter]);
+
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
     setSelectedInsightInList(e.value);
   };
 
   const onButtonClick = () => {
+    props.setSelectedInsightIndex(selectedInsightIndexInList);
     setSelectedInsightIndex(selectedInsightIndexInList);
   };
 
+  //set filter here
   const onNewConstructionCompanySelection = (
     event: MultiSelectTreeChangeEvent
   ) => {
-    // console.log(event)
+    if (event.items[0] !== undefined) {
+      projectFilter.filters = projectFilter.filters.filter((filter) => {
+        return !(
+          "field" in filter &&
+          filter.field === "constructionCompany" &&
+          filter.value === event.items[0].constructionCompany
+        );
+      });
+
+      projectFilter.filters.push({
+        field: "constructionCompany",
+        operator: "eq",
+        value: event.items[0].constructionCompany,
+      });
+    }
+
     setSelectedConstructionCompanyList(
       getMultiSelectTreeValue(constructionCompanyList, {
         ...selectDropDownFields,
@@ -117,6 +148,7 @@ const InsightList = (props: any) => {
     );
   };
 
+  //set filter here
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
     // console.log(event)
     setSelectedProjectList(
@@ -127,6 +159,31 @@ const InsightList = (props: any) => {
       })
     );
   };
+
+  useEffect(()=>{console.log(projectFilter)},[projectFilter.filters])
+  
+  // const expandedState = (
+  //   item: unknown,
+  //   dataItemKey: string,
+  //   expanded: string[]
+  // ) => {
+  //   const nextExpanded = expanded.slice();
+  //   const keyGetter = getter(dataItemKey);
+  //   const itemKey = keyGetter(item);
+  //   const index = expanded.findIndex((currentKey) => {
+  //     return currentKey === itemKey;
+  //   });
+  //   index === -1 ? nextExpanded.push(itemKey) : nextExpanded.splice(index, 1);
+
+  //   return nextExpanded;
+  // };
+  // const onProjectExpandChange = React.useCallback(
+  //   (event: MultiSelectTreeExpandEvent) =>
+  //     setExpandedProject(
+  //       expandedState(event.item, dataItemKey, expandedProject)
+  //     ),
+  //   [expandedProject]
+  // );
 
   return (
     <div>
