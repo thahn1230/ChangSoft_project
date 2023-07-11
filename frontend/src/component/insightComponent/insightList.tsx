@@ -37,12 +37,12 @@ const selectDropDownFields = {
 
 const InsightList = (props: any) => {
   const [insightList, setInsightList] = useState<string[]>([
-    "'우미건설'의 모든 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값에 대한 분석",
-    "'계룡건설'의 모든 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석 (BoxPlot)",
-    "'우미건설'의 4개 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
-    "건설사별 콘크리트당 철근중량 비교",
-    "'우미건설' 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
-    "'신세계 어바인시티' 프로젝트에서 층별, 부재타입별, 철근타입별로 콘크리트 당 철근 사용량 값의 대한 히트맵 분석",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값에 대한 분석",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석 (BoxPlot)",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
+    "건설사들(선택)에 대한 콘크리트당 철근중량 비교",
+    "건설사(선택)의 한 프로젝트(선택)에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
+    "건설사(선택)의 한 프로젝트(선택)에 대해서 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석",
   ]);
 
   //only in list
@@ -129,24 +129,26 @@ const InsightList = (props: any) => {
       filters: [],
     });
 
-    let newProjectFilter:CompositeFilterDescriptor =  {
+    let newProjectFilter: CompositeFilterDescriptor = {
       logic: "or",
-      filters: [{ field: "constructionCompany",
-      operator: "eq",
-      value: "All"}],
-    }
+      filters: [{ field: "constructionCompany", operator: "eq", value: "All" }],
+    };
 
-    for(let item of selectedConstructionCompanyList)
-    {
+    for (let item of selectedConstructionCompanyList) {
       newProjectFilter.filters.push({
         field: "constructionCompany",
         operator: "eq",
-        value: item.constructionCompany
+        value: item.constructionCompany,
       });
     }
 
-    setProjectFilter(newProjectFilter)
+    setProjectFilter(newProjectFilter);
   }, [selectedConstructionCompanyList]);
+
+  useEffect(() => {
+    console.log(projectFilter);
+    setFilteredProjectList(filterBy(projectList, projectFilter));
+  }, [projectFilter]);
 
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
@@ -191,33 +193,31 @@ const InsightList = (props: any) => {
     );
   };
 
-  useEffect(() => {
-   console.log(projectFilter)
-    setFilteredProjectList(filterBy(projectList, projectFilter));
-  }, [projectFilter]);
+  const getGraph = () => {
+    const fetchData = async () => {
+      try {
+        const selectedScenario:number = selectedInsightIndexInList;
+        const selectedProjectId:number[] = [];
+        const selectedConstructionCompany:[]=[];
 
-  // const expandedState = (
-  //   item: unknown,
-  //   dataItemKey: string,
-  //   expanded: string[]
-  // ) => {
-  //   const nextExpanded = expanded.slice();
-  //   const keyGetter = getter(dataItemKey);
-  //   const itemKey = keyGetter(item);
-  //   const index = expanded.findIndex((currentKey) => {
-  //     return currentKey === itemKey;
-  //   });
-  //   index === -1 ? nextExpanded.push(itemKey) : nextExpanded.splice(index, 1);
+        selectedProjectList.map((item) => {
+          selectedProjectId.push(item.id);
+        });
+       
+        const response = await axios.get(
+          urlPrefix.IP_port + "/insight/customed",
+          { params: selectedProjectId }
+        );
+        const data = JSON.parse(response.data);
 
-  //   return nextExpanded;
-  // };
-  // const onProjectExpandChange = React.useCallback(
-  //   (event: MultiSelectTreeExpandEvent) =>
-  //     setExpandedProject(
-  //       expandedState(event.item, dataItemKey, expandedProject)
-  //     ),
-  //   [expandedProject]
-  // );
+        console.log(data)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  };
 
   return (
     <div>
@@ -253,11 +253,17 @@ const InsightList = (props: any) => {
         checkIndeterminateField={checkIndeterminateField}
         expandField={expandField}
         tags={
-          selectedProjectList.length >0
-            ? [{ text: `${selectedProjectList.length} projects selected`, data: [...selectedProjectList] }]
+          selectedProjectList.length > 0
+            ? [
+                {
+                  text: `${selectedProjectList.length} projects selected`,
+                  data: [...selectedProjectList],
+                },
+              ]
             : []
         }
       />
+      <Button onClick={getGraph}>Search</Button>
     </div>
   );
 };
