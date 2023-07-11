@@ -164,7 +164,7 @@ const SubBuildingAnalysisTable = (props: any) => {
               <div className="analysis-table-container">
                 <br></br>
                 <header className="analysis-table-type">콘크리트(㎥)</header>
-                <div>
+                <div  style={{width:"30%"}}>
                   <Grid
                     data={concreteData}
                     style={{ width: "100%" }}
@@ -190,7 +190,7 @@ const SubBuildingAnalysisTable = (props: any) => {
 
               <div className="analysis-table-container">
                 <header className="analysis-table-type">거푸집(㎡)</header>
-                <div>
+                <div style={{width:"30%"}}>
                   <Grid
                     data={formworkData}
                     // style={{ width: "50%" }}
@@ -214,9 +214,9 @@ const SubBuildingAnalysisTable = (props: any) => {
                 <br></br>
               </div>
 
-              <div className="analysis-table-container">
+              <div className="analysis-table-container" >
                 <header className="analysis-table-type">철근(Ton)</header>
-                <div>
+                <div style={{width:"30%"}}>
                   <Grid
                     data={rebarData}
                     scrollable="scrollable"
@@ -243,6 +243,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                                 format="{0:n2}"
                                 headerClassName="custom-header-cell"
                                 className="custom-number-cell"
+                                width={"100%"}
                               />
                             ))}
                           </GridColumn>
