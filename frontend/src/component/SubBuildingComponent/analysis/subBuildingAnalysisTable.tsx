@@ -161,94 +161,97 @@ const SubBuildingAnalysisTable = (props: any) => {
         <div>
           {concreteData.length > 0 ? (
             <div>
-              <br></br>
-              <header className="analysis-table-type">콘크리트(㎥)</header>
-              <div>
-                <Grid
-                  data={concreteData}
-                  style={{ width: "50%" }}
-                  scrollable="scrollable"
-                  fixedScroll={true}
-                >
-                  {concreteData !== undefined &&
-                    Object.keys(concreteData[0]).map((item, index) => (
-                      <GridColumn
-                        //key={key}
-                        field={Object.keys(concreteData[0])[index]}
-                        title={Object.keys(concreteData[0])[index]}
-                        format="{0:n2}"
-                        headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                        width={"100vw"}
-                      />
-                    ))}
-                </Grid>
+              <div className="analysis-table-container">
+                <br></br>
+                <header className="analysis-table-type">콘크리트(㎥)</header>
+                <div>
+                  <Grid
+                    data={concreteData}
+                    style={{ width: "100%" }}
+                    scrollable="scrollable"
+                    fixedScroll={true}
+                  >
+                    {concreteData !== undefined &&
+                      Object.keys(concreteData[0]).map((item, index) => (
+                        <GridColumn
+                          //key={key}
+                          field={Object.keys(concreteData[0])[index]}
+                          title={Object.keys(concreteData[0])[index]}
+                          format="{0:n2}"
+                          headerClassName="custom-header-cell"
+                          className="custom-number-cell"
+                          width={"100%"}
+                        />
+                      ))}
+                  </Grid>
+                </div>
+                <br></br>
               </div>
-              <br></br>
 
-              <header className="analysis-table-type">거푸집(㎡)</header>
-              <div>
-                <Grid
-                  data={formworkData}
-                  style={{ width: "50%" }}
-                  scrollable="scrollable"
-                  fixedScroll={true}
-                >
-                  {formworkData !== undefined &&
-                    Object.keys(formworkData[0]).map((item, index) => (
-                      <GridColumn
-                        //key={key}
-                        field={Object.keys(formworkData[0])[index]}
-                        title={Object.keys(formworkData[0])[index]}
-                        format="{0:n2}"
-                        headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                        width={"100vw"}
-                      />
-                    ))}
-                </Grid>
+              <div className="analysis-table-container">
+                <header className="analysis-table-type">거푸집(㎡)</header>
+                <div>
+                  <Grid
+                    data={formworkData}
+                    // style={{ width: "50%" }}
+                    scrollable="scrollable"
+                    fixedScroll={true}
+                  >
+                    {formworkData !== undefined &&
+                      Object.keys(formworkData[0]).map((item, index) => (
+                        <GridColumn
+                          //key={key}
+                          field={Object.keys(formworkData[0])[index]}
+                          title={Object.keys(formworkData[0])[index]}
+                          format="{0:n2}"
+                          headerClassName="custom-header-cell"
+                          className="custom-number-cell"
+                          width={"100%"}
+                        />
+                      ))}
+                  </Grid>
+                </div>
+                <br></br>
               </div>
-              <br></br>
 
-              <header className="analysis-table-type">철근(Ton)</header>
-              <div>
-              <Grid
-                data={rebarData}
-                style={{ width: "50%" }}
-                scrollable="scrollable"
-                fixedScroll={true}
-              >
-                {rebarData.map((item, index) => {
-                  const subColumns = Object.entries(item).filter(
-                    ([key]) => key !== ""
-                  );
-                  return subColumns.map(([key, subColumnData]) => {
-                    const subColumnKeys = Object.keys(subColumnData);
-                    return (
-                      <GridColumn
-                        key={`${index}_${key}`}
-                        field={key}
-                        title={key}
-                        headerClassName="custom-header-cell"
-                      >
-                        {subColumnKeys.map((subKey) => (
+              <div className="analysis-table-container">
+                <header className="analysis-table-type">철근(Ton)</header>
+                <div>
+                  <Grid
+                    data={rebarData}
+                    scrollable="scrollable"
+                    fixedScroll={true}
+                  >
+                    {rebarData.map((item, index) => {
+                      const subColumns = Object.entries(item).filter(
+                        ([key]) => key !== ""
+                      );
+                      return subColumns.map(([key, subColumnData]) => {
+                        const subColumnKeys = Object.keys(subColumnData);
+                        return (
                           <GridColumn
-                            key={`${index}_${key}_${subKey}`}
-                            field={`${key}.${subKey}`}
-                            title={`D${subKey}`}
-                            format="{0:n2}"
+                            key={`${index}_${key}`}
+                            field={key}
+                            title={key}
                             headerClassName="custom-header-cell"
-                            className="custom-number-cell"
-                            width={"100vw"}
-                          />
-                        ))}
-                      </GridColumn>
-                    );
-                  });
-                })}
-              </Grid>
+                          >
+                            {subColumnKeys.map((subKey) => (
+                              <GridColumn
+                                key={`${index}_${key}_${subKey}`}
+                                field={`${key}.${subKey}`}
+                                title={`D${subKey}`}
+                                format="{0:n2}"
+                                headerClassName="custom-header-cell"
+                                className="custom-number-cell"
+                              />
+                            ))}
+                          </GridColumn>
+                        );
+                      });
+                    })}
+                  </Grid>
+                </div>
               </div>
-
             </div>
           ) : (
             <div>No data available</div>
