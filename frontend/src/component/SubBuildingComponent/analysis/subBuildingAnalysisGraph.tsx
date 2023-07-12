@@ -3,6 +3,9 @@ import {
   Chart,
   ChartSeries,
   ChartSeriesItem,
+  ChartCategoryAxis,
+  ChartValueAxis,
+  ChartCategoryAxisItem,
 } from "@progress/kendo-react-charts";
 import axios from "axios";
 
@@ -41,25 +44,28 @@ const SubBuildingAnalysisGraph = (props: any) => {
   }, [props]);
 
   // 데이터를 그룹화
-  const groupedData = graphDataRebar.reduce((acc: any, item: RebarJson) => {
-    const { component_type, rebar_grade, total_weight } = item;
-    const key = `${component_type}-${rebar_grade}`;
+  const groupedDataRebar = graphDataRebar.reduce(
+    (acc: any, item: RebarJson) => {
+      const { component_type, rebar_grade, total_weight } = item;
+      const key = `${component_type}-${rebar_grade}`;
 
-    if (acc[key]) {
-      acc[key].total_weight += total_weight;
-    } else {
-      acc[key] = {
-        component_type,
-        rebar_grade,
-        total_weight,
-      };
-    }
+      if (acc[key]) {
+        acc[key].total_weight += total_weight;
+      } else {
+        acc[key] = {
+          component_type,
+          rebar_grade,
+          total_weight,
+        };
+      }
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 
-  // 그룹화된 데이터를 배열로 변환
-  const groupedChartData = Object.values(groupedData);
+  // 그룹화된 Rebar 데이터를 배열로 변환
+  const groupedChartData = Object.values(groupedDataRebar);
 
   return (
     <div>
@@ -70,9 +76,10 @@ const SubBuildingAnalysisGraph = (props: any) => {
               <ChartSeriesItem
                 key={index}
                 type="bar"
-                stack={item.rebar_grade}
+                stack={item.component_type}
                 data={[item.total_weight]}
                 name={`${item.component_type} - ${item.rebar_grade}`}
+                visibleInLegend={false}
               />
             ))}
           </ChartSeries>

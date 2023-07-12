@@ -6,6 +6,7 @@ import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingConcreteAnalysisTable from "./subBuildingAnalysisTable";
 import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
+import "./../../../styles/analysisTab.scss";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 
@@ -43,7 +44,7 @@ const AnalysisTab = (props: any) => {
   
 
   return (
-    <div style={{width: "99%"}}>
+    <div>
       <Grid data={headerData} scrollable="none" fixedScroll={false}>
         <GridColumn
           title="프로젝트명"
