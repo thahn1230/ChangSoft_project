@@ -1,7 +1,9 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 import pandas as pd
+import plotly.graph_objects as go
 import json
+import plotly
 
 from dbAccess import create_db_connection
 
@@ -371,6 +373,39 @@ def get_analysis_rebar_data2(sub_building_id: int):
         rebar_analysis_data_df.to_json(force_ascii=False, orient="records")
     )
 
+
+@router.get("/sub_building/analysis_table/{sub_building_id}/concrete/table")
+def draw_analysis_concrete2(sub_building_id: int):
+    concrete_query = f"""
+        SELECT component_type, material_name, 
+        SUM(concrete.volume) AS total_volume FROM concrete
+        JOIN component ON concrete.component_id = component.id
+        JOIN sub_building ON component.sub_building_id = sub_building.id
+        WHERE sub_building.id = {sub_building_id}
+        GROUP BY component_type, material_name
+        ORDER BY component_type
+    """
+
+    concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
+    concrete_analysis_data_pivot_df = concrete_analysis_data_df.pivot(
+        index="component_type",
+        columns="material_name",
+        values="total_volume",
+    )
+    
+    fig = go.Figure(data=[
+    go.Bar(name=material, x=concrete_analysis_data_pivot_df.index, y=concrete_analysis_data_pivot_df[material])
+    for material in concrete_analysis_data_pivot_df.columns
+    ])
+    fig.update_layout(
+    barmode='stack',
+    xaxis={'categoryorder':'total descending'},
+    width=700  # setting the width to 700
+    )
+    
+    figures_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    
+    return figures_json
 
 ## 층별총집계표
 # 층별총집계표에서의 concrete
