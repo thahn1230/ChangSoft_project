@@ -72,7 +72,6 @@ const InsightGraph = (props: any) => {
 
   return (
     <div style={{ justifyContent: "center", alignItems: "center" }}>
-      <hr style={{ border: "solid 1px", color: "#162F84", width: "1000px" }} />
 
       <div >
       {props.isLoading ? <img alt="loader" src={spinner} /> : returnDiv}
