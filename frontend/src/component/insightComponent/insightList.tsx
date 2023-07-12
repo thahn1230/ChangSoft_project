@@ -121,6 +121,8 @@ const InsightList = (props: any) => {
     });
 
   const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
+  const [analyzeNotice, setAnalyzeNotice]= useState<string>("시나리오를 선택해주세요");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -185,6 +187,22 @@ const InsightList = (props: any) => {
     setFilteredBuildingList(filterBy(buildingList, buildingFilter));
   }, [buildingFilter]);
 
+
+  //initialize lower filters when upper filter changes
+  useEffect(()=>{
+    setSelectedConstructionCompanyList([]);
+    setSelectedProjectList([]);
+    setSelectedBuildingList([]);
+  }, [selectedInsightIndexInList])
+  useEffect(()=>{
+    setSelectedProjectList([]);
+    setSelectedBuildingList([]);
+  }, [selectedConstructionCompanyList])
+   useEffect(()=>{
+    setSelectedBuildingList([]);
+  }, [selectedProjectList])
+
+  
   //update checkbox of projectList
   useEffect(() => {
     const updatedFilteredProjectList = filteredProjectList.map((item) => {
@@ -467,8 +485,6 @@ const InsightList = (props: any) => {
     selectedProjectList,
     selectedBuildingList,
   ]);
-
-  useEffect(()=>{console.log(isAnalyzable)}, [isAnalyzable])
 
   const calculateAnalyzableCondition = () => {
     let analyzable = false;

@@ -23,6 +23,8 @@ import { project_interface } from "./../../interface/project_interface";
 import "./../../styles/ProjectList.scss";
 import { returnFalse } from "@progress/kendo-react-inputs/dist/npm/maskedtextbox/utils";
 
+import loadingBars from "./../../resource/loadingBars.gif"
+
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
 
@@ -57,6 +59,8 @@ const ProjectList = (props: any) => {
     []
   );
   const [totalAreaMinMax, setTotalAreaMinMax] = useState<number[]>([0, 0]);
+
+  const [isLoading , setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -148,6 +152,11 @@ const ProjectList = (props: any) => {
 
   //apply,reset
   const applyFilter = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
     projectFilter.filters = projectFilter.filters.filter((filter) => {
       return !("field" in filter && filter.field === "building_area");
     });
@@ -181,7 +190,7 @@ const ProjectList = (props: any) => {
 
     setFilteredData(filterBy(data, projectFilter));
   };
-  //reset 구현중
+  
   const resetFilter = async () => {
     setBuildingAreaMinMax([0, buildingAreaSliderValues[0]]);
     setTotalAreaMinMax([0, totalAreaSliderValues[0]]);
@@ -449,6 +458,7 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="button-container">
+        { isLoading ? <img alt="loader" src={loadingBars} style={{width:"2%", height:"2%"}} /> : null }
           <Button onClick={applyFilter} className="apply-filter-button">
             Apply filters
           </Button>
