@@ -24,6 +24,7 @@ const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
 const expandField = "expanded";
+const subItemsField = "items";
 // const projectsTextField = "projectName";
 // const constructionCompanyTextField = "constructionCompany";
 
@@ -32,7 +33,7 @@ const selectDropDownFields = {
   checkField,
   checkIndeterminateField,
   expandField,
-  //subItemsField,
+  subItemsField,
 };
 
 const InsightList = (props: any) => {
@@ -80,14 +81,13 @@ const InsightList = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-
         const response = await axios.get(
           urlPrefix.IP_port + "/dashboard/project"
         );
         const data = JSON.parse(response.data);
 
         setProjectList(
-          [{ projectName : "All" , id: 0,constructionCompany: "All" }].concat(
+          [{ projectName: "All", id: 0, constructionCompany: "All" }].concat(
             data.map((item: any) => {
               return {
                 projectName: item.project_name,
@@ -159,7 +159,15 @@ const InsightList = (props: any) => {
   const onNewConstructionCompanySelection = (
     event: MultiSelectTreeChangeEvent
   ) => {
-    if (event.items[0].constructionCompany === "All") {
+    if (event.items[0] === undefined) {
+      setSelectedConstructionCompanyList(
+        getMultiSelectTreeValue([], {
+          ...selectDropDownFields,
+          ...event,
+          value: [],
+        })
+      );
+    } else if (event.items[0].constructionCompany === "All") {
       setSelectedConstructionCompanyList(
         getMultiSelectTreeValue(constructionCompanyList, {
           ...selectDropDownFields,
@@ -178,35 +186,54 @@ const InsightList = (props: any) => {
     }
   };
 
+  //위에 construction이랑 똑같이 바꿔야됨
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
-    setSelectedProjectList(
-      getMultiSelectTreeValue(projectList, {
-        ...selectDropDownFields,
-        ...event,
-        value: selectedProjectList,
-      })
-    );
+    if (event.items[0] === undefined) {
+      setSelectedProjectList(
+        getMultiSelectTreeValue([], {
+          ...selectDropDownFields,
+          ...event,
+          value: [],
+        })
+      );
+    } else if (event.items[0].projectName === "All") {
+      setSelectedProjectList(
+        getMultiSelectTreeValue(projectList, {
+          ...selectDropDownFields,
+          ...event,
+          value: filteredProjectList,
+        })
+      );
+    } else {
+      setSelectedProjectList(
+        getMultiSelectTreeValue(projectList, {
+          ...selectDropDownFields,
+          ...event,
+          value: selectedProjectList,
+        })
+      );
+    }
   };
 
   const getGraph = () => {
-    props.setIsLoading(true)
+    props.setIsLoading(true);
     props.setSelectedInsightIndex(selectedInsightIndexInList);
     setSelectedInsightIndex(selectedInsightIndexInList);
 
     const fetchData = async () => {
       try {
-        console.log("sent")
-        const selectedProjectId = selectedProjectList.map(item => item.id);
+        console.log("sent");
+        const selectedProjectId = selectedProjectList.map((item) => item.id);
         const params = new URLSearchParams();
-        params.append('project_ids_str', JSON.stringify(selectedProjectId));
-        
+        params.append("project_ids_str", JSON.stringify(selectedProjectId));
+
         const response = await axios.get(
           `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }
         );
         const data = JSON.parse(response.data);
-        console.log(data)
-        props.setGraphInfo(data)
+        console.log(data);
+        props.setGraphInfo(data);
       } catch (error) {
         console.error(error);
       }
@@ -215,9 +242,62 @@ const InsightList = (props: any) => {
     fetchData();
   };
 
-  useEffect(()=>{
-props.setIsLoading(false)
-  },[props.graphInfo])
+  useEffect(() => {
+    props.setIsLoading(false);
+  }, [props.graphInfo]);
+
+  const getValueMap = (value: any, idGetter: any) => {
+    const map: { [index: string]: any } = {};
+  
+    if (value && value.length) {
+      value.forEach((item: string) => {
+        map[idGetter(item)] = true;
+      });
+    }
+  
+    return map;
+  };
+  const mapMultiSelectTreeData = (data: any, options: any) => {
+    const {
+      keyGetter,
+      subItemGetter,
+      subItemSetter,
+      checkSetter,
+      expandedSetter,
+      checkIndeterminateSetter,
+      valueMap,
+      expandedMap,
+    }: any = options;
+  
+    if (!data || !data.length) {
+      return [data, false];
+    }
+  
+    let hasChecked = false;
+    const newData = [...data].map((dataItem) => {
+      const [children, hasCheckedChildren] = mapMultiSelectTreeData(
+        subItemGetter(dataItem),
+        options
+      );
+  
+      const isChecked = valueMap[keyGetter(dataItem)];
+      if (isChecked || hasCheckedChildren) {
+        hasChecked = true;
+      }
+  
+      const newItem = { ...dataItem };
+  
+      expandedSetter(newItem, expandedMap[keyGetter(newItem)]);
+      subItemSetter(newItem, children);
+      checkSetter(newItem, isChecked);
+      checkIndeterminateSetter(newItem, !isChecked && hasCheckedChildren);
+  
+      return newItem;
+    });
+  
+    return [newData, hasChecked];
+  };
+  
 
   return (
     <div>
@@ -250,6 +330,7 @@ props.setIsLoading(false)
         dataItemKey="id"
         checkField={checkField}
         checkIndeterminateField={checkIndeterminateField}
+        disabled={selectedConstructionCompanyList.length === 0}
         expandField={expandField}
         tags={
           selectedProjectList.length > 0
