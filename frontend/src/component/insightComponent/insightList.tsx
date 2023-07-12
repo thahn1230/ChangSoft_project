@@ -20,6 +20,8 @@ import { getter, setter } from "@progress/kendo-react-common";
 import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
 import { filter } from "@progress/kendo-data-query/dist/npm/transducers";
 
+import "./../../styles/insightList.scss";
+
 const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
@@ -241,9 +243,8 @@ const InsightList = (props: any) => {
         !updatedConstructionCompanyList[0].checked;
       setConstructionCompanyList(updatedConstructionCompanyList);
     } else setConstructionCompanyList(updatedConstructionCompanyList);
-
   }, [selectedConstructionCompanyList]);
-  
+
   useEffect(() => {
     const updatedFilteredProjectList = filteredProjectList.map((item) => {
       const matchingItem = selectedProjectList.find(
@@ -517,90 +518,100 @@ const InsightList = (props: any) => {
   };
 
   return (
-    <div>
-      <label>Insight : </label>
-      <DropDownList
-        data={insightList}
-        value={selectedInsightInList}
-        onChange={onSelectedInsightChange}
-        style={{ width: "30%", margin: "10px" }}
-      />
+    <div className="filters-button-container">
+      <div className="first-line-container">
+        <label style={{ marginTop: "1%" }}>Insight : </label>
+        <DropDownList
+          data={insightList}
+          value={selectedInsightInList}
+          onChange={onSelectedInsightChange}
+          style={{ width: "60%", margin: "10px" }}
+        />
 
-      <label>Company : </label>
-      <MultiSelectTree
-        style={{ width: "20%", margin: "10px" }}
-        data={constructionCompanyList}
-        value={selectedConstructionCompanyList}
-        onChange={onNewConstructionCompanySelection}
-        textField="constructionCompany"
-        dataItemKey="id"
-        checkField="checked"
-        checkIndeterminateField={checkIndeterminateField}
-        expandField={expandField}
-      />
+        <label style={{ marginTop: "1%" }}>Company : </label>
+        <MultiSelectTree
+          style={{ width: "25%", margin: "10px" }}
+          data={constructionCompanyList}
+          value={selectedConstructionCompanyList}
+          onChange={onNewConstructionCompanySelection}
+          textField="constructionCompany"
+          dataItemKey="id"
+          checkField="checked"
+          checkIndeterminateField={checkIndeterminateField}
+          expandField={expandField}
+        />
+      </div>
+      <div className="second-line-container">
+        <label style={{ marginTop: "1%" }}>Project : </label>
+        <MultiSelectTree
+          style={{ width: "20%", margin: "10px" }}
+          data={filteredProjectList}
+          value={selectedProjectList}
+          onChange={onNewProjectSelection}
+          textField="projectName"
+          dataItemKey="id"
+          checkField="checked"
+          checkIndeterminateField={checkIndeterminateField}
+          disabled={
+            selectedConstructionCompanyList.length === 0 ||
+            selectedInsightIndexInList + 1 === 4
+          }
+          expandField={expandField}
+          tags={
+            selectedProjectList.length > 0
+              ? [
+                  {
+                    text: `${selectedProjectList.length} projects selected`,
+                    data: [...selectedProjectList],
+                  },
+                ]
+              : []
+          }
+        />
 
-      <br />
-
-      <label>Project : </label>
-      <MultiSelectTree
-        style={{ width: "20%", margin: "10px" }}
-        data={filteredProjectList}
-        value={selectedProjectList}
-        onChange={onNewProjectSelection}
-        textField="projectName"
-        dataItemKey="id"
-        checkField="checked"
-        checkIndeterminateField={checkIndeterminateField}
-        disabled={
-          selectedConstructionCompanyList.length === 0 ||
-          selectedInsightIndexInList + 1 === 4
-        }
-        expandField={expandField}
-        tags={
-          selectedProjectList.length > 0
-            ? [
-                {
-                  text: `${selectedProjectList.length} projects selected`,
-                  data: [...selectedProjectList],
-                },
-              ]
-            : []
-        }
-      />
-
-      <label>Building : </label>
-      <MultiSelectTree
-        style={{ width: "20%", margin: "10px" }}
-        data={filteredBuildingList}
-        value={selectedBuildingList}
-        onChange={onNewBuildingSelection}
-        textField="buildingName"
-        dataItemKey="id"
-        checkField="checked"
-        checkIndeterminateField={checkIndeterminateField}
-        disabled={
-          !(
-            selectedInsightIndexInList + 1 === 6 &&
-            selectedProjectList.length === 1
-          )
-        }
-        expandField={expandField}
-        tags={
-          selectedBuildingList.length > 0
-            ? [
-                {
-                  text: `${selectedBuildingList.length} buildings selected`,
-                  data: [...selectedBuildingList],
-                },
-              ]
-            : []
-        }
-      />
-
-      <br />
-      <Button onClick={getGraph} disabled={!isAnalyzable}>
-        Analyze
-      </Button>
+        <label style={{ marginTop: "1%" }}>Building : </label>
+        <MultiSelectTree
+          style={{ width: "20%", margin: "10px" }}
+          data={filteredBuildingList}
+          value={selectedBuildingList}
+          onChange={onNewBuildingSelection}
+          textField="buildingName"
+          dataItemKey="id"
+          checkField="checked"
+          checkIndeterminateField={checkIndeterminateField}
+          disabled={
+            !(
+              selectedInsightIndexInList + 1 === 6 &&
+              selectedProjectList.length === 1
+            )
+          }
+          expandField={expandField}
+          tags={
+            selectedBuildingList.length > 0
+              ? [
+                  {
+                    text: `${selectedBuildingList.length} buildings selected`,
+                    data: [...selectedBuildingList],
+                  },
+                ]
+              : []
+          }
+        />
+      </div>
+      <div className="button-container">
+        <Button
+          onClick={getGraph}
+          disabled={!isAnalyzable}
+          style={{
+            backgroundColor: "rgb(25, 101, 203)",
+            color: "white",
+            width: "6vw",
+            height: "4vh",
+          }}
+        >
+          Analyze
+        </Button>
+      </div>
     </div>
   );
 };

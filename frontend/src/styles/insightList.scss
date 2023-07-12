@@ -1,0 +1,21 @@
+.filters-button-container {
+    margin: 1%;
+    border: 3px solid rgb(57, 119, 201) !important;
+}
+
+.first-line-container {
+    display: flex;
+    justify-items: left;
+    margin-left: 1%;
+}
+
+.second-line-container {
+    justify-items: left;
+    display: flex;
+    margin-left: 1%;
+}
+
+.button-container {
+    justify-self: flex-end;
+    margin-right: 1%;
+}
