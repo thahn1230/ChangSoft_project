@@ -179,7 +179,13 @@ const InsightList = (props: any) => {
   useEffect(() => {
     setFilteredProjectList(filterBy(projectList, projectFilter));
     setSelectedProjectList([])
+    setSelectedBuildingList([])
   }, [projectFilter]);
+
+  // useEffect(()=>{
+  //   setFilteredBuildingList(filterBy(buildingList, buildingFilter));
+  //   setSelectedBuildingList([])
+  // },[buildingFilter])
 
   useEffect(() => {
     setFilteredBuildingList(buildingList);
