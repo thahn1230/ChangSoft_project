@@ -52,10 +52,10 @@ const tiles: Tile[] = [
     header: "프로젝트별 위치",
     body: <DistributionMap />,
   },
-  {
-    header: "회사별 연면적",
-    body: ""
-  },
+  // {
+  //   header: "회사별 연면적",
+  //   body: ""
+  // },
 ];
 
 export const Home: React.FC = () => {
@@ -70,7 +70,7 @@ export const Home: React.FC = () => {
     { col: 1, colSpan: 3, rowSpan: 2 }, // Total Area
     { col: 4, colSpan: 2, rowSpan: 2 }, // Floor Count
     { col: 6, colSpan: 2, rowSpan: 2 }, // Map
-    { col: 1, colSpan: 7, rowSpan: 2 }, // Total Area by Company
+    // { col: 1, colSpan: 7, rowSpan: 2 }, // Total Area by Company
   ]);
 
   const handleReposition = (e: TileLayoutRepositionEvent) => {
