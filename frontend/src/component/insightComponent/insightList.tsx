@@ -55,19 +55,36 @@ const InsightList = (props: any) => {
 
   //constructionCompanyList's id is useless
   const [constructionCompanyList, setConstructionCompanyList] = useState<
-    { constructionCompany: string; id: number }[]
+    { constructionCompany: string; id: number; checked: boolean }[]
   >([]);
   const [selectedConstructionCompanyList, setSelectedConstructionCompanyList] =
-    useState<{ constructionCompany: string; id: number }[]>([]);
+    useState<{ constructionCompany: string; id: number; checked: boolean }[]>(
+      []
+    );
 
   const [projectList, setProjectList] = useState<
-    { projectName: string; id: number; constructionCompany: string }[]
+    {
+      projectName: string;
+      id: number;
+      constructionCompany: string;
+      checked: boolean;
+    }[]
   >([]);
   const [filteredProjectList, setFilteredProjectList] = useState<
-    { projectName: string; id: number; constructionCompany: string }[]
+    {
+      projectName: string;
+      id: number;
+      constructionCompany: string;
+      checked: boolean;
+    }[]
   >([]);
   const [selectedProjectList, setSelectedProjectList] = useState<
-    { projectName: string; id: number; constructionCompany: string }[]
+    {
+      projectName: string;
+      id: number;
+      constructionCompany: string;
+      checked: boolean;
+    }[]
   >([]);
   //const [expandedProject, setExpandedProject] = useState<string[]>([]);
 
@@ -87,12 +104,20 @@ const InsightList = (props: any) => {
         const data = JSON.parse(response.data);
 
         setProjectList(
-          [{ projectName: "All", id: 0, constructionCompany: "All" }].concat(
+          [
+            {
+              projectName: "All",
+              id: 0,
+              constructionCompany: "All",
+              checked: false,
+            },
+          ].concat(
             data.map((item: any) => {
               return {
                 projectName: item.project_name,
                 id: item.id,
                 constructionCompany: item.construction_company,
+                checked: false,
               };
             })
           )
@@ -102,12 +127,12 @@ const InsightList = (props: any) => {
           new Set(data.map((item: any) => item.construction_company))
         );
         setConstructionCompanyList(
-          [{ constructionCompany: "All", id: 0 }].concat(
+          [{ constructionCompany: "All", id: 0, checked: false }].concat(
             uniqueConstructionCompanies.map((constructionCompany: any) => {
               const item = data.find(
                 (item: any) => item.construction_company === constructionCompany
               );
-              return { constructionCompany, id: item.id };
+              return { constructionCompany, id: item.id, checked: false };
             })
           )
         );
@@ -122,9 +147,12 @@ const InsightList = (props: any) => {
   useEffect(() => {
     setFilteredProjectList(projectList);
   }, [projectList]);
-
-  // set filter here
   useEffect(() => {
+    setFilteredProjectList(filterBy(projectList, projectFilter));
+  }, [projectFilter]);
+
+  useEffect(() => {
+    // set filter here
     setProjectFilter({
       logic: "or",
       filters: [],
@@ -142,13 +170,51 @@ const InsightList = (props: any) => {
         value: item.constructionCompany,
       });
     }
-
     setProjectFilter(newProjectFilter);
+
+    console.log(constructionCompanyList);
+    //set checkboxes
+    const updatedConstructionCompanyList = constructionCompanyList.map(
+      (item) => {
+        const matchingItem = selectedConstructionCompanyList.find(
+          (selectedItem) => selectedItem.id === item.id
+        );
+
+        if (matchingItem) {
+          return { ...item, checked: true };
+        } else return { ...item, checked: false };
+      }
+    );
+
+    if (
+      constructionCompanyList.length ===
+      selectedConstructionCompanyList.length + 1
+    ) {
+      updatedConstructionCompanyList[0].checked =
+        !updatedConstructionCompanyList[0].checked;
+      setConstructionCompanyList(updatedConstructionCompanyList);
+    } else setConstructionCompanyList(updatedConstructionCompanyList);
   }, [selectedConstructionCompanyList]);
 
+  //update checkbox of projectList
   useEffect(() => {
-    setFilteredProjectList(filterBy(projectList, projectFilter));
-  }, [projectFilter]);
+    console.log(selectedProjectList);
+    const updatedFilteredProjectList = filteredProjectList.map((item) => {
+      const matchingItem = selectedProjectList.find(
+        (selectedItem) => selectedItem.id === item.id
+      );
+
+      if (matchingItem) {
+        return { ...item, checked: true };
+      } else return { ...item, checked: false };
+    });
+
+    if (filteredProjectList.length === selectedProjectList.length + 1) {
+      updatedFilteredProjectList[0].checked =
+        !updatedFilteredProjectList[0].checked;
+      setFilteredProjectList(updatedFilteredProjectList);
+    } else setFilteredProjectList(updatedFilteredProjectList);
+  }, [selectedProjectList]);
 
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
@@ -161,60 +227,76 @@ const InsightList = (props: any) => {
   ) => {
     if (event.items[0] === undefined) {
       setSelectedConstructionCompanyList(
-        getMultiSelectTreeValue([], {
+        getMultiSelectTreeValue(constructionCompanyList, {
           ...selectDropDownFields,
           ...event,
           value: [],
         })
       );
     } else if (event.items[0].constructionCompany === "All") {
-      setSelectedConstructionCompanyList(
-        getMultiSelectTreeValue(constructionCompanyList, {
-          ...selectDropDownFields,
-          ...event,
-          value: constructionCompanyList,
-        })
-      );
+      if (event.items[0].checked) {
+        setSelectedConstructionCompanyList([]);
+      } else {
+        setSelectedConstructionCompanyList(
+          getMultiSelectTreeValue(constructionCompanyList, {
+            ...selectDropDownFields,
+            ...event,
+            value: constructionCompanyList,
+          }).map((item) => ({ ...item, checked: true }))
+        );
+      }
     } else {
       setSelectedConstructionCompanyList(
         getMultiSelectTreeValue(constructionCompanyList, {
           ...selectDropDownFields,
           ...event,
           value: selectedConstructionCompanyList,
-        })
+        }).map((item) => ({ ...item, checked: true }))
       );
     }
   };
-
-  //위에 construction이랑 똑같이 바꿔야됨
+  //위에 construction도 똑같이 바꿔야됨
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
     if (event.items[0] === undefined) {
       setSelectedProjectList(
-        getMultiSelectTreeValue([], {
+        getMultiSelectTreeValue(projectList, {
           ...selectDropDownFields,
           ...event,
           value: [],
         })
       );
     } else if (event.items[0].projectName === "All") {
-      setSelectedProjectList(
+      console.log(
         getMultiSelectTreeValue(projectList, {
           ...selectDropDownFields,
           ...event,
-          value: filteredProjectList,
-        })
+          value: [],
+        }).map((item) => ({ ...item, checked: false }))
       );
+
+      if (event.items[0].checked) {
+        setSelectedProjectList([]);
+      } else {
+        setSelectedProjectList(
+          getMultiSelectTreeValue(projectList, {
+            ...selectDropDownFields,
+            ...event,
+            value: filteredProjectList,
+          }).map((item) => ({ ...item, checked: true }))
+        );
+      }
     } else {
       setSelectedProjectList(
         getMultiSelectTreeValue(projectList, {
           ...selectDropDownFields,
           ...event,
           value: selectedProjectList,
-        })
+        }).map((item) => ({ ...item, checked: true }))
       );
     }
   };
 
+  // 이 형식으로 [계룡건설, 우미건설]
   const getGraph = () => {
     props.setIsLoading(true);
     props.setSelectedInsightIndex(selectedInsightIndexInList);
@@ -222,17 +304,32 @@ const InsightList = (props: any) => {
 
     const fetchData = async () => {
       try {
-        console.log("sent");
-        const selectedProjectId = selectedProjectList.map((item) => item.id);
         const params = new URLSearchParams();
-        params.append("project_ids_str", JSON.stringify(selectedProjectId));
 
+        if (selectedInsightIndexInList + 1 === 4) {
+          const selectedCompanyName = selectedConstructionCompanyList.map(
+            (item) => item.constructionCompany
+          );
+          params.append(
+            "company_name_str",
+            JSON.stringify(selectedCompanyName)
+          );
+        } else if (
+          selectedInsightIndexInList + 1 === 5 ||
+          selectedInsightIndexInList + 1 === 6
+        ) {
+          const selectedProjectId = selectedProjectList.map((item) => item.id);
+          params.append("project_id_str", JSON.stringify(selectedProjectId));
+        } else {
+          const selectedProjectId = selectedProjectList.map((item) => item.id);
+          params.append("project_ids_str", JSON.stringify(selectedProjectId));
+        }
+        //console.log(params.values)
         const response = await axios.get(
           `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }
         );
         const data = JSON.parse(response.data);
-        console.log(data);
         props.setGraphInfo(data);
       } catch (error) {
         console.error(error);
@@ -245,59 +342,6 @@ const InsightList = (props: any) => {
   useEffect(() => {
     props.setIsLoading(false);
   }, [props.graphInfo]);
-
-  const getValueMap = (value: any, idGetter: any) => {
-    const map: { [index: string]: any } = {};
-  
-    if (value && value.length) {
-      value.forEach((item: string) => {
-        map[idGetter(item)] = true;
-      });
-    }
-  
-    return map;
-  };
-  const mapMultiSelectTreeData = (data: any, options: any) => {
-    const {
-      keyGetter,
-      subItemGetter,
-      subItemSetter,
-      checkSetter,
-      expandedSetter,
-      checkIndeterminateSetter,
-      valueMap,
-      expandedMap,
-    }: any = options;
-  
-    if (!data || !data.length) {
-      return [data, false];
-    }
-  
-    let hasChecked = false;
-    const newData = [...data].map((dataItem) => {
-      const [children, hasCheckedChildren] = mapMultiSelectTreeData(
-        subItemGetter(dataItem),
-        options
-      );
-  
-      const isChecked = valueMap[keyGetter(dataItem)];
-      if (isChecked || hasCheckedChildren) {
-        hasChecked = true;
-      }
-  
-      const newItem = { ...dataItem };
-  
-      expandedSetter(newItem, expandedMap[keyGetter(newItem)]);
-      subItemSetter(newItem, children);
-      checkSetter(newItem, isChecked);
-      checkIndeterminateSetter(newItem, !isChecked && hasCheckedChildren);
-  
-      return newItem;
-    });
-  
-    return [newData, hasChecked];
-  };
-  
 
   return (
     <div>
@@ -316,7 +360,7 @@ const InsightList = (props: any) => {
         onChange={onNewConstructionCompanySelection}
         textField="constructionCompany"
         dataItemKey="id"
-        checkField={checkField}
+        checkField="checked"
         checkIndeterminateField={checkIndeterminateField}
         expandField={expandField}
       />
@@ -328,9 +372,12 @@ const InsightList = (props: any) => {
         onChange={onNewProjectSelection}
         textField="projectName"
         dataItemKey="id"
-        checkField={checkField}
+        checkField="checked"
         checkIndeterminateField={checkIndeterminateField}
-        disabled={selectedConstructionCompanyList.length === 0}
+        disabled={
+          selectedConstructionCompanyList.length === 0 ||
+          selectedInsightIndexInList + 1 === 4
+        }
         expandField={expandField}
         tags={
           selectedProjectList.length > 0
@@ -343,7 +390,7 @@ const InsightList = (props: any) => {
             : []
         }
       />
-      <Button onClick={getGraph}>Search</Button>
+      <Button onClick={getGraph}>Analyze</Button>
     </div>
   );
 };
