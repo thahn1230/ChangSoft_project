@@ -434,14 +434,14 @@ const InsightList = (props: any) => {
           paramName = "project_id_str";
           paramContent = JSON.stringify(selectedProjectId);
         } else if (selectedInsightIndexInList + 1 === 6) {
-          const selectedProjectId = selectedProjectList[0].id;
+          const selectedProjectId = [selectedProjectList[0].id];
           const selectedBuildingId = selectedBuildingList.map(
             (item) => item.id
           );
 
           paramName = "project_building_ids_str";
           paramContent = JSON.stringify(
-            selectedBuildingId.concat(selectedProjectId)
+            selectedProjectId.concat(selectedBuildingId)
           );
         } else {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
