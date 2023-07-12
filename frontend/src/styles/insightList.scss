@@ -19,3 +19,10 @@
     justify-self: flex-end;
     margin-right: 1%;
 }
+
+.k-checkbox:checked {
+    background-color: rgb(57, 119, 201) !important;
+    color: white !important;
+    box-shadow: 0 0 1px blue !important;
+    border-color: blue !important;
+}
