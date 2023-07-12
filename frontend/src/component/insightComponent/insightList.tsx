@@ -37,8 +37,8 @@ const selectDropDownFields = {
 
 const InsightList = (props: any) => {
   const [insightList, setInsightList] = useState<string[]>([
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값에 대한 분석",
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석 (BoxPlot)",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
     "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
     "건설사들(선택)에 대한 콘크리트당 철근중량 비교",
     "건설사(선택)의 한 프로젝트(선택)에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
@@ -61,7 +61,7 @@ const InsightList = (props: any) => {
 
   const [projectList, setProjectList] = useState<
     { projectName: string; id: number; constructionCompany: string }[]
-  >([{ projectName: "All", id: 0, constructionCompany: "All" }]);
+  >([]);
   const [filteredProjectList, setFilteredProjectList] = useState<
     { projectName: string; id: number; constructionCompany: string }[]
   >([]);
@@ -80,13 +80,14 @@ const InsightList = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+
         const response = await axios.get(
           urlPrefix.IP_port + "/dashboard/project"
         );
         const data = JSON.parse(response.data);
 
         setProjectList(
-          projectList.concat(
+          [{ projectName : "All" , id: 0,constructionCompany: "All" }].concat(
             data.map((item: any) => {
               return {
                 projectName: item.project_name,
@@ -146,18 +147,12 @@ const InsightList = (props: any) => {
   }, [selectedConstructionCompanyList]);
 
   useEffect(() => {
-    console.log(projectFilter);
     setFilteredProjectList(filterBy(projectList, projectFilter));
   }, [projectFilter]);
 
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
     setSelectedInsightInList(e.value);
-  };
-
-  const onButtonClick = () => {
-    props.setSelectedInsightIndex(selectedInsightIndexInList);
-    setSelectedInsightIndex(selectedInsightIndexInList);
   };
 
   // 여기에서는 선택된 건설회사만 set
@@ -194,28 +189,24 @@ const InsightList = (props: any) => {
   };
 
   const getGraph = () => {
+    props.setIsLoading(true)
+    props.setSelectedInsightIndex(selectedInsightIndexInList);
+    setSelectedInsightIndex(selectedInsightIndexInList);
+
     const fetchData = async () => {
       try {
-        const selectedProjectId: number[] = [];
-
-        selectedProjectList.map((item) => {
-          selectedProjectId.push(item.id);
-        });
-
-        console.log( urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
-        { params:{
-          project_ids: selectedProjectId
-        }}
-      );
+        console.log("sent")
+        const selectedProjectId = selectedProjectList.map(item => item.id);
+        const params = new URLSearchParams();
+        params.append('project_ids_str', JSON.stringify(selectedProjectId));
+        
         const response = await axios.get(
-          urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
-          { params:{
-            project_ids: [4,5,6]
-          }}
+          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
+          { params }
         );
         const data = JSON.parse(response.data);
-
-        console.log(data);
+        console.log(data)
+        props.setGraphInfo(data)
       } catch (error) {
         console.error(error);
       }
@@ -223,6 +214,10 @@ const InsightList = (props: any) => {
 
     fetchData();
   };
+
+  useEffect(()=>{
+props.setIsLoading(false)
+  },[props.graphInfo])
 
   return (
     <div>
@@ -233,7 +228,6 @@ const InsightList = (props: any) => {
         onChange={onSelectedInsightChange}
         style={{ width: "30%", margin: "10px" }}
       />
-      <Button onClick={onButtonClick}>Search</Button>
 
       <MultiSelectTree
         style={{ width: "20%", margin: "10px" }}
