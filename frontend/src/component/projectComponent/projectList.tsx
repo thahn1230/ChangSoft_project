@@ -23,7 +23,7 @@ import { project_interface } from "./../../interface/project_interface";
 import "./../../styles/ProjectList.scss";
 import { returnFalse } from "@progress/kendo-react-inputs/dist/npm/maskedtextbox/utils";
 
-import loadingBars from "./../../resource/loadingBars.gif"
+import loadingBars from "./../../resource/loadingBars.gif";
 
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
@@ -60,7 +60,7 @@ const ProjectList = (props: any) => {
   );
   const [totalAreaMinMax, setTotalAreaMinMax] = useState<number[]>([0, 0]);
 
-  const [isLoading , setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -190,7 +190,7 @@ const ProjectList = (props: any) => {
 
     setFilteredData(filterBy(data, projectFilter));
   };
-  
+
   const resetFilter = async () => {
     setBuildingAreaMinMax([0, buildingAreaSliderValues[0]]);
     setTotalAreaMinMax([0, totalAreaSliderValues[0]]);
@@ -357,7 +357,7 @@ const ProjectList = (props: any) => {
                 max={buildingAreaSliderValues[0]}
                 onChange={buildingAreaSliderOnClick}
                 className="range-slider"
-                style={{width: "23vw"}}
+                style={{ width: "23vw" }}
               >
                 {buildingAreaSliderValues.map((perc, i) => (
                   <SliderLabel key={i} position={perc}>
@@ -416,7 +416,7 @@ const ProjectList = (props: any) => {
                 max={totalAreaSliderValues[0]}
                 onChange={totalAreaSliderOnClick}
                 className="range-slider"
-                style={{width: "23vw"}}
+                style={{ width: "23vw" }}
               >
                 {totalAreaSliderValues.map((perc, i) => (
                   <SliderLabel key={i} position={perc}>
@@ -458,11 +458,35 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="button-container">
-        { isLoading ? <img alt="loader" src={loadingBars} style={{width:"2%", height:"2%"}} /> : null }
-          <Button onClick={applyFilter} className="apply-filter-button">
+          {isLoading ? (
+            <img
+              alt="loader"
+              src={loadingBars}
+              style={{ width: "2%", height: "2%" }}
+            />
+          ) : null}
+          <Button
+            onClick={applyFilter}
+            className="apply-filter-button"
+            style={{
+              backgroundColor: "rgb(25, 101, 203)",
+              color: "white",
+              width: "6vw",
+              height: "4vh",
+            }}
+          >
             Apply filters
           </Button>
-          <Button onClick={resetFilter} className="reset-filter-button">
+          <Button
+            onClick={resetFilter}
+            className="reset-filter-button"
+            style={{
+              backgroundColor: "rgb(25, 101, 203)",
+              color: "white",
+              width: "6vw",
+              height: "4vh",
+            }}
+          >
             Reset filters
           </Button>
         </div>
