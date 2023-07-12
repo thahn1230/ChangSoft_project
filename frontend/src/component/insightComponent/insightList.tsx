@@ -544,7 +544,7 @@ const InsightList = (props: any) => {
       <div className="second-line-container">
         <label style={{ marginTop: "1%" }}>Project : </label>
         <MultiSelectTree
-          style={{ width: "20%", margin: "10px" }}
+          style={{ width: "30%", margin: "10px" }}
           data={filteredProjectList}
           value={selectedProjectList}
           onChange={onNewProjectSelection}
