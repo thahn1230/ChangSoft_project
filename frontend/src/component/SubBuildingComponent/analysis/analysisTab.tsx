@@ -41,7 +41,7 @@ const AnalysisTab = (props: any) => {
 
   return (
     <div>
-      <Grid data={headerData}>
+      <Grid data={headerData} scrollable="none" fixedScroll={false}>
         <GridColumn
           title="프로젝트명"
           field="projectName"
@@ -58,7 +58,7 @@ const AnalysisTab = (props: any) => {
         <GridColumn
           title="건물명 구분"
           cell={() => (
-            <div style={{textAlign:"center"}}>
+            <div style={{ textAlign: "center" }}>
               <SubBuildingList
                 buildingInfo={props.buildingInfo}
                 projectName={props.projectName}
