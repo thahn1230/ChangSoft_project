@@ -5,6 +5,8 @@ import SubBuildingList from "./subBuildingList";
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingConcreteAnalysisTable from "./subBuildingAnalysisTable";
+import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
+import "./../../../styles/analysisTab.scss";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 
@@ -39,9 +41,11 @@ const AnalysisTab = (props: any) => {
     fetchData();
   }, [props.buildingInfo]);
 
+  
+
   return (
     <div>
-      <Grid data={headerData}>
+      <Grid data={headerData} scrollable="none" fixedScroll={false}>
         <GridColumn
           title="프로젝트명"
           field="projectName"
@@ -58,7 +62,7 @@ const AnalysisTab = (props: any) => {
         <GridColumn
           title="건물명 구분"
           cell={() => (
-            <div style={{textAlign:"center"}}>
+            <div style={{ textAlign: "center" }}>
               <SubBuildingList
                 buildingInfo={props.buildingInfo}
                 projectName={props.projectName}
@@ -75,12 +79,20 @@ const AnalysisTab = (props: any) => {
           className="custom-text-cell"
         />
       </Grid>
-
-      <SubBuildingConcreteAnalysisTable
-        buildingInfo={props.buildingInfo}
-        projectName={props.projectName}
-        selectedSubBuildingId={selectedSubBuildingId}
-      ></SubBuildingConcreteAnalysisTable>
+      <div className="analysis-table-chart-container">
+        <div className="analysis-table-container">
+          <SubBuildingConcreteAnalysisTable
+            buildingInfo={props.buildingInfo}
+            projectName={props.projectName}
+            selectedSubBuildingId={selectedSubBuildingId}
+          ></SubBuildingConcreteAnalysisTable>
+        </div>
+        <div className="analysis-chart-container">
+          <SubBuildingAnalysisGraph
+            selectedSubBuildingId={selectedSubBuildingId}
+          ></SubBuildingAnalysisGraph>
+        </div>
+      </div>
     </div>
   );
 };

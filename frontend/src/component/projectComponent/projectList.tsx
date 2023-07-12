@@ -348,6 +348,7 @@ const ProjectList = (props: any) => {
                 max={buildingAreaSliderValues[0]}
                 onChange={buildingAreaSliderOnClick}
                 className="range-slider"
+                style={{width: "23vw"}}
               >
                 {buildingAreaSliderValues.map((perc, i) => (
                   <SliderLabel key={i} position={perc}>
@@ -406,6 +407,7 @@ const ProjectList = (props: any) => {
                 max={totalAreaSliderValues[0]}
                 onChange={totalAreaSliderOnClick}
                 className="range-slider"
+                style={{width: "23vw"}}
               >
                 {totalAreaSliderValues.map((perc, i) => (
                   <SliderLabel key={i} position={perc}>
