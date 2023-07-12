@@ -163,6 +163,7 @@ def get_materials_data_by_project_ids_company(construction_company: str, project
     for project_id in project_ids:
         project_ids_str = ", ".join(str(project_id) for project_id in project_ids)
     
+    print(project_ids_str)
     query_projects = f"""
     SELECT project_name
     FROM project
@@ -524,30 +525,36 @@ def get_insight_3(project_ids_str):
 
 
 @router.get("/insight/4")
-def get_insight_4():
+def get_insight_4(company_name_str):
     # 예제 4번
     # 건설사별 콘크리트당 철근중량 비교
     # 그래프1 : 건설사별 콘크리트당 철근중량 비교
-
+    
+    company_name = json.loads(company_name_str)
+    company_names=', '.join(f'"{x}"' for x in company_name)
+    print(company_name)
+    print(company_names)
     # SQL 쿼리 작성 - construction_company 별 concrete volume 합계
-    concrete_query = """
+    concrete_query = f"""
     SELECT p.construction_company, SUM(co.volume) AS total_concrete_volume
     FROM component AS comp
     JOIN concrete AS co ON comp.id = co.component_id
     JOIN floor AS f ON comp.floor_id = f.id
     JOIN building AS b ON f.building_id = b.id
     JOIN project AS p ON b.project_id = p.id
+    WHERE p.construction_company IN ({company_names})
     GROUP BY p.construction_company
     """
 
     # SQL 쿼리 작성 - construction_company 별 rebar weight 합계
-    rebar_query = """
+    rebar_query = f"""
     SELECT p.construction_company, SUM(r.rebar_weight) AS total_rebar_weight
     FROM component AS comp
     JOIN rebar AS r ON comp.id = r.component_id
     JOIN floor AS f ON comp.floor_id = f.id
     JOIN building AS b ON f.building_id = b.id
     JOIN project AS p ON b.project_id = p.id
+    WHERE p.construction_company IN ({company_names})
     GROUP BY p.construction_company
     """
 
@@ -587,7 +594,7 @@ def get_insight_4():
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     # Add a new 'explanation' key-value pair to the dictionary
-    explanation = """이 그래프는 각 건설사의 모든 프로젝트에서 철근 사용 효율성을 비교하는 것입니다. 
+    explanation = """이 그래프는 선택한 각 건설사의 모든 프로젝트에서 철근 사용 효율성을 비교하는 것입니다. 
     각 바는 특정 건설사를 나타내며, 높이는 해당 건설사의 모든 프로젝트에서 사용한 철근의 무게를 콘크리트 볼륨 당 톤으로 나타낸 평균값입니다. 
     즉, 높이가 높을수록 해당 건설사의 프로젝트에서 더 많은 철근이 콘크리트 볼륨 당 사용되었음을 의미합니다.
     바의 색상은 건설사별로 다르게 표현되어, 어떤 건설사의 데이터인지 쉽게 구분할 수 있게 해줍니다. 
@@ -601,7 +608,18 @@ def get_insight_4():
 
 
 @router.get("/insight/5")
-def get_insight_5():
+def get_insight_5(project_id_str):
+    project_id = json.loads(project_id_str)[0]
+    query=f"""
+        SELECT *
+        FROM project
+        WHERE id = {project_id}
+    """
+    project_df = pd.read_sql(query, engine)
+    project_name = project_df["project_name"].values[0]
+    company_name = project_df["construction_company"].values[0]
+    
+    
     # Define the SQL query to load data where 'component_type' is '내력벽'
     query = """
     SELECT *
@@ -614,12 +632,12 @@ def get_insight_5():
 
     df["group_name"] = df["section_name"].apply(extract_keywords)
 
-    sql_query = """
+    sql_query = f"""
     SELECT component.*
     FROM (
         SELECT * FROM project
-        WHERE construction_company = '우미건설'
-        LIMIT 4
+        WHERE construction_company = "{company_name}"
+        AND project.id = {project_id}
     ) AS limited_project
     JOIN building ON limited_project.id = building.project_id
     JOIN floor ON building.id = floor.building_id
@@ -644,7 +662,7 @@ def get_insight_5():
     INNER JOIN floor f ON comp.floor_id = f.id
     INNER JOIN building b ON f.building_id = b.id
     INNER JOIN project p ON b.project_id = p.id
-    WHERE p.construction_company = '우미건설' AND c.component_id IN {component_ids_tuple} /* 이미 component_ids_tuple이 '우미건설'을 통해 필터링된 것들이지만 여기서 다시 우미건설을 필터링하는 것이 훨씬 빠르다.*/
+    WHERE p.construction_company = "{company_name}" AND c.component_id IN {component_ids_tuple}
     GROUP BY c.component_id
     """
     sql_query_rebar_weight = f"""
@@ -654,7 +672,7 @@ def get_insight_5():
     INNER JOIN floor f ON comp.floor_id = f.id
     INNER JOIN building b ON f.building_id = b.id
     INNER JOIN project p ON b.project_id = p.id
-    WHERE p.construction_company = '우미건설' AND r.component_id IN {component_ids_tuple}/* 이미 component_ids_tuple이 '우미건설'을 통해 필터링된 것들이지만 여기서 다시 우미건설을 필터링하는 것이 훨씬 빠르다.*/
+    WHERE p.construction_company = "{company_name}" AND r.component_id IN {component_ids_tuple}
     GROUP BY r.component_id
     """
 
@@ -699,7 +717,7 @@ def get_insight_5():
         df_summary,
         x="group_name",
         y="rebar_weight_per_concrete",
-        title="'우미건설' 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
+        title=f"{company_name}의 {project_name} 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
         labels={
             "group_name": "내력벽 그룹명",
             "rebar_weight_per_concrete": "콘크리트당 철근량 (ton/㎥)",
@@ -719,7 +737,7 @@ def get_insight_5():
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     # Add a new 'explanation' key-value pair to the dictionary
-    explanation = """이 그래프는 '우미건설' 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근량의 비교를 나타냅니다. 
+    explanation = f"""이 그래프는 {company_name}의 {project_name} 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근량의 비교를 나타냅니다. 
     내력벽은 서로 다른 역할을 수행하기 때문에 각각 다른 이름으로 그루핑되어 설계가 이루어집니다. 
     이 그래프를 통해 각 그룹의 콘크리트당 철근량 값이 어떻게 다른지 비교할 수 있습니다. 
     값이 높을수록 해당 그룹의 내력벽이 더 많은 철근을 필요로 하며, 값이 낮을수록 철근 사용량이 적습니다. 
@@ -732,14 +750,22 @@ def get_insight_5():
 
 
 @router.get("/insight/6")
-def get_insight_6():
+def get_insight_6(project_building_ids_str):
     # 예제 6번
     # 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석
     # 그래프 1 : 층별로 각각의 철근 타입에 대해서 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석
     # 그래프 2 : 부재타입별로 각각의 철근 타입에 대해서 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석
 
-    project_name = "신세계_어바인시티"  # Replace with your project name
-    building_name = "1bl_고층부"  # Replace with your building name
+    project_id = json.loads(project_building_ids_str)[0]
+    building_id = json.loads(project_building_ids_str)[1]
+    query = f"""
+        SELECT * FROM project
+        JOIN building ON project.id = building.project_id
+        WHERE building.id = {building_id}
+    """
+    data_df = pd.read_sql(query, engine)
+    project_name = data_df["project_name"].values[0]  # Replace with your project name
+    building_name = data_df["building_name"].values[0]  # Replace with your building name
 
     query = f"""
     SELECT fl.floor_name, fl.floor_number, r.rebar_type, SUM(r.rebar_weight) as total_rebar_weight

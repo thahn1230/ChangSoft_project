@@ -22,3 +22,14 @@ def get_project_detail_data(project_id: int):
 
     project_detail_df = pd.read_sql(query, engine)
     return JSONResponse(project_detail_df.to_json(force_ascii=False, orient="records"))
+
+@router.get("/project/{project_id}/building_detail")
+def get_building_details_by_project_id(project_id: int):
+    query=f"""
+        SELECT building.* 
+        FROM project
+        JOIN building ON project.id = building.project_id
+        WHERE project.id = {project_id}
+    """
+    building_detail_df = pd.read_sql(query, engine)
+    return JSONResponse(building_detail_df.to_json(force_ascii=False, orient="records"))
