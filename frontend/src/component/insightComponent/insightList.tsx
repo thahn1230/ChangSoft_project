@@ -180,8 +180,18 @@ const InsightList = (props: any) => {
   }, [projectList]);
   useEffect(() => {
     setFilteredProjectList(filterBy(projectList, projectFilter));
+<<<<<<< HEAD
     setSelectedProjectList([]);
+=======
+    setSelectedProjectList([])
+    setSelectedBuildingList([])
+>>>>>>> 8e5975b3d8e4fd037bc292bc7ba0cd83d9a4b297
   }, [projectFilter]);
+
+  // useEffect(()=>{
+  //   setFilteredBuildingList(filterBy(buildingList, buildingFilter));
+  //   setSelectedBuildingList([])
+  // },[buildingFilter])
 
   useEffect(() => {
     setFilteredBuildingList(buildingList);
@@ -435,14 +445,14 @@ const InsightList = (props: any) => {
           paramName = "project_id_str";
           paramContent = JSON.stringify(selectedProjectId);
         } else if (selectedInsightIndexInList + 1 === 6) {
-          const selectedProjectId = selectedProjectList[0].id;
+          const selectedProjectId = [selectedProjectList[0].id];
           const selectedBuildingId = selectedBuildingList.map(
             (item) => item.id
           );
 
           paramName = "project_building_ids_str";
           paramContent = JSON.stringify(
-            selectedBuildingId.concat(selectedProjectId)
+            selectedProjectId.concat(selectedBuildingId)
           );
         } else {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
