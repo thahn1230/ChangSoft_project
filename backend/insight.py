@@ -808,20 +808,15 @@ def get_insight_6(project_building_ids_str):
     
     # Calculate the dynamic height based on the number of values per row
     if(num_values_per_col/num_values_per_row > 12) :
-        row_height = 100  # Set the height of each row (adjust as needed)
+        row_height = 90  # Set the height of each row (adjust as needed)
         col_width = 40
     else :
         row_height = 50  # Set the height of each row (adjust as needed)
         col_width = 40
     
-    
     height = row_height * num_values_per_row
     width = col_width * num_values_per_col
     
-    
-    
-    print(num_values_per_col)
-    print(num_values_per_row)
     # Define heatmap
     heatmap = go.Heatmap(
         z=z_data, x=x_data, y=y_data, colorscale="RdBu_r", showscale=True
@@ -841,7 +836,7 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=8)
+                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
                 )
             )   
     
@@ -886,6 +881,7 @@ def get_insight_6(project_building_ids_str):
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
+    df['rebar_type'] = df['rebar_type'].fillna('Unknown')
     pivot_df = df.pivot(
         index="component_type", columns="rebar_type", values="total_rebar_weight"
     )
@@ -894,6 +890,21 @@ def get_insight_6(project_building_ids_str):
     z_data = np.log10(pivot_df.values)  # Apply log scale
     x_data = list(pivot_df.columns)
     y_data = list(pivot_df.index)
+    
+    # Calculate the number of values
+    num_values_per_col = len(x_data)  # Assuming each row has the same number of values
+    num_values_per_row = len(y_data)
+    
+    # Calculate the dynamic height based on the number of values per row
+    if(num_values_per_col/num_values_per_row > 12) :
+        row_height = 90  # Set the height of each row (adjust as needed)
+        col_width = 40
+    else :
+        row_height = 50  # Set the height of each row (adjust as needed)
+        col_width = 40
+    
+    height = row_height * num_values_per_row
+    width = col_width * num_values_per_col
 
     # Define heatmap
     heatmap = go.Heatmap(
@@ -914,7 +925,7 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False
+                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
                 )
             )
 
@@ -922,7 +933,8 @@ def get_insight_6(project_building_ids_str):
     layout = go.Layout(
         annotations=annotations,
         plot_bgcolor="rgba(0,0,0,0)",
-        width=1400,
+        width=width,
+        height=height,
         # paper_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(
             gridcolor="lightgray",
