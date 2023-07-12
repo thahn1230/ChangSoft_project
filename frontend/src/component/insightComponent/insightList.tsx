@@ -38,12 +38,12 @@ const selectDropDownFields = {
 
 const InsightList = (props: any) => {
   const [insightList, setInsightList] = useState<string[]>([
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
-    "건설사들(선택)에 대한 콘크리트당 철근중량 비교",
-    "건설사(선택)의 한 프로젝트(선택)에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
-    "건설사(선택)의 한 프로젝트(선택)에 대해서 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석",
+    "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
+    "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
+    "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
+    "건설사들에 대한 콘크리트당 철근중량 비교",
+    "건설사의 한 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
+    "건설사의 한 프로젝트에 대해서 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석",
   ]);
 
   //only in list
@@ -86,14 +86,41 @@ const InsightList = (props: any) => {
       checked: boolean;
     }[]
   >([]);
-  //const [expandedProject, setExpandedProject] = useState<string[]>([]);
-
   const [projectFilter, setProjectFilter] = useState<CompositeFilterDescriptor>(
     {
       logic: "or",
       filters: [],
     }
   );
+
+  const [buildingList, setBuildingList] = useState<
+    {
+      buildingName: string;
+      id: number;
+      checked: boolean;
+    }[]
+  >([]);
+  const [filteredBuildingList, setFilteredBuildingList] = useState<
+    {
+      buildingName: string;
+      id: number;
+      checked: boolean;
+    }[]
+  >([]);
+  const [selectedBuildingList, setSelectedBuildingList] = useState<
+    {
+      buildingName: string;
+      id: number;
+      checked: boolean;
+    }[]
+  >([]);
+  const [buildingFilter, setBuildingFilter] =
+    useState<CompositeFilterDescriptor>({
+      logic: "or",
+      filters: [],
+    });
+
+  const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -152,6 +179,65 @@ const InsightList = (props: any) => {
   }, [projectFilter]);
 
   useEffect(() => {
+    setFilteredBuildingList(buildingList);
+  }, [buildingList]);
+  useEffect(() => {
+    setFilteredBuildingList(filterBy(buildingList, buildingFilter));
+  }, [buildingFilter]);
+
+  //update checkbox of projectList
+  useEffect(() => {
+    const updatedFilteredProjectList = filteredProjectList.map((item) => {
+      const matchingItem = selectedProjectList.find(
+        (selectedItem) => selectedItem.id === item.id
+      );
+
+      if (matchingItem) {
+        return { ...item, checked: true };
+      } else return { ...item, checked: false };
+    });
+
+    if (filteredProjectList.length === selectedProjectList.length + 1) {
+      updatedFilteredProjectList[0].checked =
+        !updatedFilteredProjectList[0].checked;
+      setFilteredProjectList(updatedFilteredProjectList);
+    } else setFilteredProjectList(updatedFilteredProjectList);
+
+    if (
+      selectedInsightIndexInList + 1 === 6 &&
+      selectedProjectList.length === 1
+    ) {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            urlPrefix.IP_port +
+              "/project/" +
+              selectedProjectList[0].id +
+              "/building_detail"
+          );
+          const data = JSON.parse(response.data);
+
+          setBuildingList(
+            [{ buildingName: "All", id: 0, checked: false }].concat(
+              data.map((item: any) => {
+                return {
+                  buildingName: item.building_name,
+                  id: item.id,
+                  checked: false,
+                };
+              })
+            )
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchData();
+    }
+  }, [selectedProjectList]);
+
+  useEffect(() => {
     // set filter here
     setProjectFilter({
       logic: "or",
@@ -171,8 +257,6 @@ const InsightList = (props: any) => {
       });
     }
     setProjectFilter(newProjectFilter);
-
-    console.log(constructionCompanyList);
     //set checkboxes
     const updatedConstructionCompanyList = constructionCompanyList.map(
       (item) => {
@@ -196,11 +280,9 @@ const InsightList = (props: any) => {
     } else setConstructionCompanyList(updatedConstructionCompanyList);
   }, [selectedConstructionCompanyList]);
 
-  //update checkbox of projectList
   useEffect(() => {
-    console.log(selectedProjectList);
-    const updatedFilteredProjectList = filteredProjectList.map((item) => {
-      const matchingItem = selectedProjectList.find(
+    const updatedFilteredBuildingList = filteredBuildingList.map((item) => {
+      const matchingItem = selectedBuildingList.find(
         (selectedItem) => selectedItem.id === item.id
       );
 
@@ -209,19 +291,19 @@ const InsightList = (props: any) => {
       } else return { ...item, checked: false };
     });
 
-    if (filteredProjectList.length === selectedProjectList.length + 1) {
-      updatedFilteredProjectList[0].checked =
-        !updatedFilteredProjectList[0].checked;
-      setFilteredProjectList(updatedFilteredProjectList);
-    } else setFilteredProjectList(updatedFilteredProjectList);
-  }, [selectedProjectList]);
+    if (filteredBuildingList.length === selectedBuildingList.length + 1) {
+      updatedFilteredBuildingList[0].checked =
+        !updatedFilteredBuildingList[0].checked;
+      setFilteredBuildingList(updatedFilteredBuildingList);
+    } else setFilteredBuildingList(updatedFilteredBuildingList);
+  }, [selectedBuildingList]);
 
   const onSelectedInsightChange = (e: any) => {
     setSelectedInsightIndexInList(e.target.index);
     setSelectedInsightInList(e.value);
   };
 
-  // 여기에서는 선택된 건설회사만 set
+  // 여기에서는 selected list만 set
   const onNewConstructionCompanySelection = (
     event: MultiSelectTreeChangeEvent
   ) => {
@@ -255,7 +337,6 @@ const InsightList = (props: any) => {
       );
     }
   };
-  //위에 construction도 똑같이 바꿔야됨
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
     if (event.items[0] === undefined) {
       setSelectedProjectList(
@@ -266,14 +347,6 @@ const InsightList = (props: any) => {
         })
       );
     } else if (event.items[0].projectName === "All") {
-      console.log(
-        getMultiSelectTreeValue(projectList, {
-          ...selectDropDownFields,
-          ...event,
-          value: [],
-        }).map((item) => ({ ...item, checked: false }))
-      );
-
       if (event.items[0].checked) {
         setSelectedProjectList([]);
       } else {
@@ -295,6 +368,37 @@ const InsightList = (props: any) => {
       );
     }
   };
+  const onNewBuildingSelection = (event: MultiSelectTreeChangeEvent) => {
+    if (event.items[0] === undefined) {
+      setSelectedBuildingList(
+        getMultiSelectTreeValue(buildingList, {
+          ...selectDropDownFields,
+          ...event,
+          value: [],
+        })
+      );
+    } else if (event.items[0].buildingName === "All") {
+      if (event.items[0].checked) {
+        setSelectedBuildingList([]);
+      } else {
+        setSelectedBuildingList(
+          getMultiSelectTreeValue(buildingList, {
+            ...selectDropDownFields,
+            ...event,
+            value: filteredBuildingList,
+          }).map((item) => ({ ...item, checked: true }))
+        );
+      }
+    } else {
+      setSelectedBuildingList(
+        getMultiSelectTreeValue(buildingList, {
+          ...selectDropDownFields,
+          ...event,
+          value: selectedBuildingList,
+        }).map((item) => ({ ...item, checked: true }))
+      );
+    }
+  };
 
   // 이 형식으로 [계룡건설, 우미건설]
   const getGraph = () => {
@@ -305,26 +409,38 @@ const InsightList = (props: any) => {
     const fetchData = async () => {
       try {
         const params = new URLSearchParams();
-
+        let paramName;
+        let paramContent;
         if (selectedInsightIndexInList + 1 === 4) {
           const selectedCompanyName = selectedConstructionCompanyList.map(
             (item) => item.constructionCompany
           );
-          params.append(
-            "company_name_str",
-            JSON.stringify(selectedCompanyName)
-          );
-        } else if (
-          selectedInsightIndexInList + 1 === 5 ||
-          selectedInsightIndexInList + 1 === 6
-        ) {
+
+          paramName = "company_name_str";
+          paramContent = JSON.stringify(selectedCompanyName);
+        } else if (selectedInsightIndexInList + 1 === 5) {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
-          params.append("project_id_str", JSON.stringify(selectedProjectId));
+
+          paramName = "project_id_str";
+          paramContent = JSON.stringify(selectedProjectId);
+        } else if (selectedInsightIndexInList + 1 === 6) {
+          const selectedProjectId = selectedProjectList[0].id;
+          const selectedBuildingId = selectedBuildingList.map(
+            (item) => item.id
+          );
+
+          paramName = "project_building_ids_str";
+          paramContent = JSON.stringify(
+            selectedBuildingId.concat(selectedProjectId)
+          );
         } else {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
-          params.append("project_ids_str", JSON.stringify(selectedProjectId));
+
+          paramName = "project_ids_str";
+          paramContent = JSON.stringify(selectedProjectId);
         }
-        //console.log(params.values)
+
+        params.append(paramName, paramContent);
         const response = await axios.get(
           `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }
@@ -342,6 +458,50 @@ const InsightList = (props: any) => {
   useEffect(() => {
     props.setIsLoading(false);
   }, [props.graphInfo]);
+
+  useEffect(() => {
+    setIsAnalyzable(calculateAnalyzableCondition());
+  }, [
+    selectedInsightIndexInList,
+    selectedConstructionCompanyList,
+    selectedProjectList,
+    selectedBuildingList,
+  ]);
+
+  useEffect(()=>{console.log(isAnalyzable)}, [isAnalyzable])
+
+  const calculateAnalyzableCondition = () => {
+    let analyzable = false;
+    switch (selectedInsightIndexInList + 1) {
+      case 1:
+      case 2:
+      case 3:
+        if (selectedProjectList.length >= 1) analyzable = true;
+        else analyzable = false;
+
+        break;
+      case 4:
+        if (selectedConstructionCompanyList.length >= 1) analyzable = true;
+        else analyzable = false;
+
+        break;
+      case 5:
+        if (selectedProjectList.length === 1) analyzable = true;
+        else analyzable = false;
+
+        break;
+      case 6:
+        if (
+          selectedBuildingList.length === 1 &&
+          selectedProjectList.length === 1
+        )
+          analyzable = true;
+        else analyzable = false;
+        break;
+    }
+    return analyzable;
+  };
+
 
   return (
     <div>
@@ -390,7 +550,37 @@ const InsightList = (props: any) => {
             : []
         }
       />
-      <Button onClick={getGraph}>Analyze</Button>
+
+      <MultiSelectTree
+        style={{ width: "20%", margin: "10px" }}
+        data={filteredBuildingList}
+        value={selectedBuildingList}
+        onChange={onNewBuildingSelection}
+        textField="buildingName"
+        dataItemKey="id"
+        checkField="checked"
+        checkIndeterminateField={checkIndeterminateField}
+        disabled={
+          !(
+            selectedInsightIndexInList + 1 === 6 &&
+            selectedProjectList.length === 1
+          )
+        }
+        expandField={expandField}
+        tags={
+          selectedBuildingList.length > 0
+            ? [
+                {
+                  text: `${selectedBuildingList.length} buildings selected`,
+                  data: [...selectedBuildingList],
+                },
+              ]
+            : []
+        }
+      />
+      <Button onClick={getGraph} disabled={!isAnalyzable}>
+        Analyze
+      </Button>
     </div>
   );
 };
