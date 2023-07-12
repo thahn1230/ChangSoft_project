@@ -143,51 +143,51 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
             <div>
               <br></br>
               <header className="floorAnalysisTableType">콘크리트(㎥)</header>
-              {splitColumns(concreteData, 15).map((chunk, index) => (
-                <div>
+              <div>
                   <Grid
-                    key={index}
                     data={concreteData}
                     style={{ width: "100%" }}
+                    scrollable="scrollable"
+                    fixedScroll={true}
                   >
-                    {chunk.map((key) => (
-                      <GridColumn
-                        key={key}
-                        field={key}
-                        title={key}
-                        format="{0:n2}"
-                        headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                      />
-                    ))}
+                    {concreteData !== undefined &&
+                      Object.keys(concreteData[0]).map((item, index) => (
+                        <GridColumn
+                          //key={key}
+                          field={Object.keys(concreteData[0])[index]}
+                          title={Object.keys(concreteData[0])[index]}
+                          format="{0:n2}"
+                          headerClassName="custom-header-cell"
+                          className="custom-number-cell"
+                          width={"100%"}
+                        />
+                      ))}
                   </Grid>
-                  <br></br>
                 </div>
-              ))}
               <br></br>
 
               <header className="floorAnalysisTableType">거푸집(㎡)</header>
-              {splitColumns(formworkData, 15).map((chunk, index) => (
-                <div>
+              <div>
                   <Grid
-                    key={index}
                     data={formworkData}
-                    style={{ width: "100%" }}
+                    // style={{ width: "50%" }}
+                    scrollable="scrollable"
+                    fixedScroll={true}
                   >
-                    {chunk.map((key) => (
-                      <GridColumn
-                        key={key}
-                        field={key}
-                        title={key}
-                        format="{0:n2}"
-                        headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                      />
-                    ))}
+                    {formworkData !== undefined &&
+                      Object.keys(formworkData[0]).map((item, index) => (
+                        <GridColumn
+                          //key={key}
+                          field={Object.keys(formworkData[0])[index]}
+                          title={Object.keys(formworkData[0])[index]}
+                          format="{0:n2}"
+                          headerClassName="custom-header-cell"
+                          className="custom-number-cell"
+                          width={"100%"}
+                        />
+                      ))}
                   </Grid>
-                  <br></br>
                 </div>
-              ))}
               <br></br>
 
               <header className="floorAnalysisTableType">철근(Ton)</header>

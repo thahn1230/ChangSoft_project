@@ -16,7 +16,6 @@ const InsightGraph = (props: any) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -28,15 +27,38 @@ const InsightGraph = (props: any) => {
   useEffect(() => {
     let newRes: JSX.Element[] = [];
     if (props.graphInfo !== undefined) {
-      console.log(props.graphInfo)
+      console.log(props.graphInfo);
       for (let idx = 0; idx < props.graphInfo.length; idx++) {
         newRes.push(
-          <div style={{textAlign:"center"}}>
-            <Plot data={props.graphInfo[idx].data} layout={props.graphInfo[idx].layout} style={{display:"inline-block"}} />
-            <p style={{textAlign:"left", width:"80%",display:"inline-block"}}> {props.graphInfo[idx].explanation}</p>
-            <br></br><br></br>
-            <hr style={{border:"solid 1px" ,color:"#162F84", width:"1000px"}}/>
-            <br></br><br></br>
+          <div  style={{marginLeft:"8vw" }}>
+            <div
+              style={{
+                width: "80vw",
+                overflow: "scroll",
+              }}
+            >
+              <Plot
+                data={props.graphInfo[idx].data}
+                layout={props.graphInfo[idx].layout}
+                style={{ display: "inline-block" }}
+              />
+            </div>
+            <p
+              style={{
+                textAlign: "left",
+                width: "80vw",
+              }}
+            >
+              {" "}
+              {props.graphInfo[idx].explanation}
+            </p>
+            <br></br>
+            <br></br>
+            <hr
+              style={{ border: "solid 1px", color: "#162F84", width: "1000px" }}
+            />
+            <br></br>
+            <br></br>
           </div>
         );
       }
@@ -48,11 +70,13 @@ const InsightGraph = (props: any) => {
     if (returnDiv.length !== 0) props.setIsLoading(false);
   }, [returnDiv]);
 
-
   return (
-    <div>
-      <hr style={{border:"solid 1px" ,color:"#162F84", width:"1000px"}}/>
-      { props.isLoading ? <img alt="loader" src={spinner} /> : returnDiv }
+    <div style={{ justifyContent: "center", alignItems: "center" }}>
+      <hr style={{ border: "solid 1px", color: "#162F84", width: "1000px" }} />
+
+      <div >
+      {props.isLoading ? <img alt="loader" src={spinner} /> : returnDiv}
+      </div>
     </div>
   );
 };

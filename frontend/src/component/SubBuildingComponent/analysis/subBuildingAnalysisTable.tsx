@@ -214,7 +214,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                 <br></br>
               </div>
 
-              <div className="analysis-table-container" >
+              <div className="analysis-table-container">
                 <header className="analysis-table-type">철근(Ton)</header>
                 <div>
                   <Grid
