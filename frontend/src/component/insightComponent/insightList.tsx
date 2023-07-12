@@ -24,6 +24,7 @@ const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
 const expandField = "expanded";
+const subItemsField = "items";
 // const projectsTextField = "projectName";
 // const constructionCompanyTextField = "constructionCompany";
 
@@ -32,13 +33,13 @@ const selectDropDownFields = {
   checkField,
   checkIndeterminateField,
   expandField,
-  //subItemsField,
+  subItemsField,
 };
 
 const InsightList = (props: any) => {
   const [insightList, setInsightList] = useState<string[]>([
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값에 대한 분석",
-    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석 (BoxPlot)",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
+    "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
     "건설사(선택)의 프로젝트들(선택)에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
     "건설사들(선택)에 대한 콘크리트당 철근중량 비교",
     "건설사(선택)의 한 프로젝트(선택)에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
@@ -61,7 +62,7 @@ const InsightList = (props: any) => {
 
   const [projectList, setProjectList] = useState<
     { projectName: string; id: number; constructionCompany: string }[]
-  >([{ projectName: "All", id: 0, constructionCompany: "All" }]);
+  >([]);
   const [filteredProjectList, setFilteredProjectList] = useState<
     { projectName: string; id: number; constructionCompany: string }[]
   >([]);
@@ -86,7 +87,7 @@ const InsightList = (props: any) => {
         const data = JSON.parse(response.data);
 
         setProjectList(
-          projectList.concat(
+          [{ projectName: "All", id: 0, constructionCompany: "All" }].concat(
             data.map((item: any) => {
               return {
                 projectName: item.project_name,
@@ -146,7 +147,6 @@ const InsightList = (props: any) => {
   }, [selectedConstructionCompanyList]);
 
   useEffect(() => {
-    console.log(projectFilter);
     setFilteredProjectList(filterBy(projectList, projectFilter));
   }, [projectFilter]);
 
@@ -155,16 +155,19 @@ const InsightList = (props: any) => {
     setSelectedInsightInList(e.value);
   };
 
-  const onButtonClick = () => {
-    props.setSelectedInsightIndex(selectedInsightIndexInList);
-    setSelectedInsightIndex(selectedInsightIndexInList);
-  };
-
   // 여기에서는 선택된 건설회사만 set
   const onNewConstructionCompanySelection = (
     event: MultiSelectTreeChangeEvent
   ) => {
-    if (event.items[0].constructionCompany === "All") {
+    if (event.items[0] === undefined) {
+      setSelectedConstructionCompanyList(
+        getMultiSelectTreeValue([], {
+          ...selectDropDownFields,
+          ...event,
+          value: [],
+        })
+      );
+    } else if (event.items[0].constructionCompany === "All") {
       setSelectedConstructionCompanyList(
         getMultiSelectTreeValue(constructionCompanyList, {
           ...selectDropDownFields,
@@ -183,39 +186,54 @@ const InsightList = (props: any) => {
     }
   };
 
+  //위에 construction이랑 똑같이 바꿔야됨
   const onNewProjectSelection = (event: MultiSelectTreeChangeEvent) => {
-    setSelectedProjectList(
-      getMultiSelectTreeValue(projectList, {
-        ...selectDropDownFields,
-        ...event,
-        value: selectedProjectList,
-      })
-    );
+    if (event.items[0] === undefined) {
+      setSelectedProjectList(
+        getMultiSelectTreeValue([], {
+          ...selectDropDownFields,
+          ...event,
+          value: [],
+        })
+      );
+    } else if (event.items[0].projectName === "All") {
+      setSelectedProjectList(
+        getMultiSelectTreeValue(projectList, {
+          ...selectDropDownFields,
+          ...event,
+          value: filteredProjectList,
+        })
+      );
+    } else {
+      setSelectedProjectList(
+        getMultiSelectTreeValue(projectList, {
+          ...selectDropDownFields,
+          ...event,
+          value: selectedProjectList,
+        })
+      );
+    }
   };
 
   const getGraph = () => {
+    props.setIsLoading(true);
+    props.setSelectedInsightIndex(selectedInsightIndexInList);
+    setSelectedInsightIndex(selectedInsightIndexInList);
+
     const fetchData = async () => {
       try {
-        const selectedProjectId: number[] = [];
+        console.log("sent");
+        const selectedProjectId = selectedProjectList.map((item) => item.id);
+        const params = new URLSearchParams();
+        params.append("project_ids_str", JSON.stringify(selectedProjectId));
 
-        selectedProjectList.map((item) => {
-          selectedProjectId.push(item.id);
-        });
-
-        console.log( urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
-        { params:{
-          project_ids: selectedProjectId
-        }}
-      );
         const response = await axios.get(
-          urlPrefix.IP_port + "/insight/" + (selectedInsightIndexInList + 1),
-          { params:{
-            project_ids: [4,5,6]
-          }}
+          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
+          { params }
         );
         const data = JSON.parse(response.data);
-
         console.log(data);
+        props.setGraphInfo(data);
       } catch (error) {
         console.error(error);
       }
@@ -223,6 +241,63 @@ const InsightList = (props: any) => {
 
     fetchData();
   };
+
+  useEffect(() => {
+    props.setIsLoading(false);
+  }, [props.graphInfo]);
+
+  const getValueMap = (value: any, idGetter: any) => {
+    const map: { [index: string]: any } = {};
+  
+    if (value && value.length) {
+      value.forEach((item: string) => {
+        map[idGetter(item)] = true;
+      });
+    }
+  
+    return map;
+  };
+  const mapMultiSelectTreeData = (data: any, options: any) => {
+    const {
+      keyGetter,
+      subItemGetter,
+      subItemSetter,
+      checkSetter,
+      expandedSetter,
+      checkIndeterminateSetter,
+      valueMap,
+      expandedMap,
+    }: any = options;
+  
+    if (!data || !data.length) {
+      return [data, false];
+    }
+  
+    let hasChecked = false;
+    const newData = [...data].map((dataItem) => {
+      const [children, hasCheckedChildren] = mapMultiSelectTreeData(
+        subItemGetter(dataItem),
+        options
+      );
+  
+      const isChecked = valueMap[keyGetter(dataItem)];
+      if (isChecked || hasCheckedChildren) {
+        hasChecked = true;
+      }
+  
+      const newItem = { ...dataItem };
+  
+      expandedSetter(newItem, expandedMap[keyGetter(newItem)]);
+      subItemSetter(newItem, children);
+      checkSetter(newItem, isChecked);
+      checkIndeterminateSetter(newItem, !isChecked && hasCheckedChildren);
+  
+      return newItem;
+    });
+  
+    return [newData, hasChecked];
+  };
+  
 
   return (
     <div>
@@ -233,7 +308,6 @@ const InsightList = (props: any) => {
         onChange={onSelectedInsightChange}
         style={{ width: "30%", margin: "10px" }}
       />
-      <Button onClick={onButtonClick}>Search</Button>
 
       <MultiSelectTree
         style={{ width: "20%", margin: "10px" }}
@@ -256,6 +330,7 @@ const InsightList = (props: any) => {
         dataItemKey="id"
         checkField={checkField}
         checkIndeterminateField={checkIndeterminateField}
+        disabled={selectedConstructionCompanyList.length === 0}
         expandField={expandField}
         tags={
           selectedProjectList.length > 0
