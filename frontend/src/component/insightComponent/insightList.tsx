@@ -180,12 +180,8 @@ const InsightList = (props: any) => {
   }, [projectList]);
   useEffect(() => {
     setFilteredProjectList(filterBy(projectList, projectFilter));
-<<<<<<< HEAD
-    setSelectedProjectList([]);
-=======
     setSelectedProjectList([])
     setSelectedBuildingList([])
->>>>>>> 8e5975b3d8e4fd037bc292bc7ba0cd83d9a4b297
   }, [projectFilter]);
 
   // useEffect(()=>{
