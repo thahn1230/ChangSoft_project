@@ -166,21 +166,6 @@ const SubBuildingAnalysisTable = (props: any) => {
     setRebarColumns(tempRebarColumns);
   }, [rebarData]);
 
-  const splitColumns = (data: gridData, count: number) => {
-    const keys = Object.keys(data[0]);
-    const chunks = [];
-    let start = 0;
-    while (start < keys.length) {
-      const chunk = keys.slice(start, start + count);
-      if (chunks.length > 0 && start === count) {
-        chunk.unshift(keys[0]);
-      }
-      chunks.push(chunk);
-      start += count;
-    }
-    return chunks;
-  };
-
   return (
     <div>
       {isLoading ? (
@@ -192,7 +177,7 @@ const SubBuildingAnalysisTable = (props: any) => {
               <div className="analysis-table-container">
                 <br></br>
                 <header className="analysis-table-type">콘크리트(㎥)</header>
-                <div>
+                <div style={{width:"100%"}}>
                   <Grid
                     data={concreteData}
                     style={{ width: "100%" }}
@@ -207,8 +192,8 @@ const SubBuildingAnalysisTable = (props: any) => {
                           title={Object.keys(concreteData[0])[index]}
                           format="{0:n2}"
                           headerClassName="custom-header-cell"
-                          className="custom-number-cell"
-                          width={"100%"}
+                          className={Object.keys(concreteData[0])[index]==="" ? "" : "custom-number-cell"}
+                          width={Object.keys(concreteData[0])[index].length >6 ? "130%": "100%"}
                         />
                       ))}
                   </Grid>
@@ -218,10 +203,10 @@ const SubBuildingAnalysisTable = (props: any) => {
 
               <div className="analysis-table-container">
                 <header className="analysis-table-type">거푸집(㎡)</header>
-                <div>
+                <div style={{width:"100%"}}>
                   <Grid
                     data={formworkData}
-                    // style={{ width: "50%" }}
+                    style={{ width: "100%" }}
                     scrollable="scrollable"
                     fixedScroll={true}
                   >
@@ -233,8 +218,8 @@ const SubBuildingAnalysisTable = (props: any) => {
                           title={Object.keys(formworkData[0])[index]}
                           format="{0:n2}"
                           headerClassName="custom-header-cell"
-                          className="custom-number-cell"
-                          width={"100%"}
+                          className={Object.keys(formworkData[0])[index]==="" ? "" : "custom-number-cell"}
+                          width={Object.keys(formworkData[0])[index].length >6 ? "130%": "100%"}
                         />
                       ))}
                   </Grid>
@@ -244,9 +229,10 @@ const SubBuildingAnalysisTable = (props: any) => {
 
               <div className="analysis-table-container">
                 <header className="analysis-table-type">철근(Ton)</header>
-                <div>
+                <div style={{width:"100%"}}>
                   <Grid
                     data={rebarData}
+                    style={{ width: "100%" }}
                     scrollable="scrollable"
                     fixedScroll={true}
                   >
@@ -254,7 +240,6 @@ const SubBuildingAnalysisTable = (props: any) => {
                       title=""
                       field=""
                       headerClassName="custom-header-cell"
-                      className="custom-number-cell"
                       width={"100%"}
                     ></GridColumn>
                     {rebarColumns !== undefined &&

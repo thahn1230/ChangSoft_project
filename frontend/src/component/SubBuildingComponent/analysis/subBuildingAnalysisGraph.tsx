@@ -183,9 +183,9 @@ const SubBuildingAnalysisGraph = (props: any) => {
     );
   };
 
-  return (groupedChartDataConcrete.length > 0 &&
+  return groupedChartDataConcrete.length > 0 &&
     groupedChartDataFormwork.length > 0 &&
-    groupedChartDataRebar.length > 0) ? (
+    groupedChartDataRebar.length > 0 ? (
     <div>
       <Chart>
         <ChartTooltip />
