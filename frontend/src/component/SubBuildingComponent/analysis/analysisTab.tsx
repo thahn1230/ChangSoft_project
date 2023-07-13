@@ -41,8 +41,6 @@ const AnalysisTab = (props: any) => {
     fetchData();
   }, [props.buildingInfo]);
 
-  
-
   return (
     <div>
       <Grid data={headerData} scrollable="none" fixedScroll={false}>
@@ -89,6 +87,7 @@ const AnalysisTab = (props: any) => {
         </div>
         <div className="analysis-chart-container">
           <SubBuildingAnalysisGraph
+            buildingInfo={props.buildingInfo}
             selectedSubBuildingId={selectedSubBuildingId}
           ></SubBuildingAnalysisGraph>
         </div>
