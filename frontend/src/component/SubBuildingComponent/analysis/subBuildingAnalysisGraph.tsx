@@ -183,74 +183,66 @@ const SubBuildingAnalysisGraph = (props: any) => {
     );
   };
 
-  
-  return (
+  return (groupedChartDataConcrete.length > 0 &&
+    groupedChartDataFormwork.length > 0 &&
+    groupedChartDataRebar.length > 0) ? (
     <div>
-      {" "}
-      {groupedChartDataConcrete.length > 0 ? (
-        <Chart>
-          <ChartTooltip />
-          <ChartSeries>
-            {groupedChartDataConcrete.map((item: any, index) => (
-              <ChartSeriesItem
-                key={index}
-                type="bar"
-                stack={item.component_type}
-                data={[item.total_volume]}
-                name={`${item.component_type} - ${item.material_name}`}
-                visibleInLegend={false}
-              >
-                <ChartSeriesItemTooltip render={toolTipRender} />
-              </ChartSeriesItem>
-            ))}
-          </ChartSeries>
-        </Chart>
-      ) : (
-        <div>Loading...</div>
-      )}
-      {groupedChartDataFormwork.length > 0 ? (
-        <Chart>
+      <Chart>
         <ChartTooltip />
-          <ChartSeries>
-            {groupedChartDataFormwork.map((item: any, index) => (
-              <ChartSeriesItem
-                key={index}
-                type="bar"
-                stack={item.component_type}
-                data={[item.total_area]}
-                name={`${item.component_type} - ${item.formwork_type}`}
-                visibleInLegend={false}
-              >
-                <ChartSeriesItemTooltip render={toolTipRender} />
-              </ChartSeriesItem>
-            ))}
-          </ChartSeries>
-        </Chart>
-      ) : (
-        <div>Loading...</div>
-      )}
-      {groupedChartDataRebar.length > 0 ? (
-        <Chart>
+        <ChartSeries>
+          {groupedChartDataConcrete.map((item: any, index) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_volume]}
+              name={`${item.component_type} - ${item.material_name}`}
+              visibleInLegend={false}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
+
+      <Chart>
         <ChartTooltip />
-          <ChartSeries>
-            {groupedChartDataRebar.map((item: any, index) => (
-              <ChartSeriesItem
-                key={index}
-                type="bar"
-                stack={item.component_type}
-                data={[item.total_weight]}
-                name={`${item.component_type} - ${item.rebar_grade}`}
-                visibleInLegend={false}
-              >
-                <ChartSeriesItemTooltip render={toolTipRender} />
-              </ChartSeriesItem>
-            ))}
-          </ChartSeries>
-        </Chart>
-      ) : (
-        <div>Loading...</div>
-      )}
+        <ChartSeries>
+          {groupedChartDataFormwork.map((item: any, index) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_area]}
+              name={`${item.component_type} - ${item.formwork_type}`}
+              visibleInLegend={false}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
+
+      <Chart>
+        <ChartTooltip />
+        <ChartSeries>
+          {groupedChartDataRebar.map((item: any, index) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_weight]}
+              name={`${item.component_type} - ${item.rebar_grade}`}
+              visibleInLegend={false}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
     </div>
+  ) : (
+    <div>Loading...</div>
   );
 };
 

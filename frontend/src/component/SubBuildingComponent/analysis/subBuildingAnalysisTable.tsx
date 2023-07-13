@@ -272,7 +272,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                             {subColumns.map((diameter: string) => {
                               return (
                                 <GridColumn
-                                  title={diameter}
+                                  title= {"D" + diameter}
                                   field={strengthName + "." + diameter}
                                   format="{0:n2}"
                                   headerClassName="custom-header-cell"
