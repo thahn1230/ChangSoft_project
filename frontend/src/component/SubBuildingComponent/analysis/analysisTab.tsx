@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import SubBuildingList from "./subBuildingList";
 
-import { Splitter, SplitterOnChangeEvent } from "@progress/kendo-react-layout";
+import {
+  Splitter,
+  SplitterBar,
+  SplitterOnChangeEvent,
+} from "@progress/kendo-react-layout";
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
@@ -365,11 +369,10 @@ const AnalysisTab = (props: any) => {
         <Splitter panes={panes} onChange={onChange}>
           <div className="analysis-table-container">
             <SubBuildingAnalysisTable
-            concreteData={concreteData}
-            formworkData={formworkData}
-            rebarData={rebarData}
-            rebarColumns={rebarColumns}
-            
+              concreteData={concreteData}
+              formworkData={formworkData}
+              rebarData={rebarData}
+              rebarColumns={rebarColumns}
             ></SubBuildingAnalysisTable>
           </div>
           <div className="analysis-chart-container">
