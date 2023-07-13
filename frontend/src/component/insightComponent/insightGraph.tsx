@@ -30,7 +30,7 @@ const InsightGraph = (props: any) => {
       console.log(props.graphInfo);
       for (let idx = 0; idx < props.graphInfo.length; idx++) {
         newRes.push(
-          <div  style={{marginLeft:"8vw" }}>
+          <div style={{ marginLeft: "8vw" }}>
             <div
               style={{
                 width: "80vw",
@@ -72,9 +72,20 @@ const InsightGraph = (props: any) => {
 
   return (
     <div style={{ justifyContent: "center", alignItems: "center" }}>
-
-      <div >
-      {props.isLoading ? <img alt="loader" src={spinner} /> : returnDiv}
+      <div>
+        {props.isLoading ? (
+          <img
+            alt="loader"
+            src={spinner}
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "10%",
+            }}
+          />
+        ) : (
+          returnDiv
+        )}
       </div>
     </div>
   );

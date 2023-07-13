@@ -304,6 +304,9 @@ def get_insight_1(project_ids_str):
         xaxis_title="콘크리트 볼륨(㎥)당 철근량(ton)",
         yaxis_title="빈도(빌딩수)",
         bargap=0.1,  # gap between bars of adjacent location coordinates
+        autosize=False,
+        width=1200,
+        height=720,
     )
 
     # Create a fig from data and layout, and plot the fig
@@ -348,8 +351,8 @@ def get_insight_1(project_ids_str):
         xaxis=dict(title="프로젝트명"),
         yaxis=dict(title="콘크리트 볼륨(㎥)당 철근량(ton)의 평균값"),
         autosize=False,
-        width=1000,
-        height=600,
+        width=1200,
+        height=720,
         margin=go.layout.Margin(
             l=50,
             r=50,
@@ -758,6 +761,7 @@ def get_insight_6(project_building_ids_str):
 
     project_id = json.loads(project_building_ids_str)[0]
     building_id = json.loads(project_building_ids_str)[1]
+    
     query = f"""
         SELECT * FROM project
         JOIN building ON project.id = building.project_id
@@ -780,6 +784,7 @@ def get_insight_6(project_building_ids_str):
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
+    df['rebar_type'] = df['rebar_type'].fillna('Unknown')
 
     # Pivot the DataFrame to prepare it for the heatmap
     pivot_df = df.pivot(
@@ -796,19 +801,32 @@ def get_insight_6(project_building_ids_str):
     x_data = list(pivot_df.columns)
     y_data = list(pivot_df.index)
 
+
+    # Calculate the number of values
+    num_values_per_col = len(x_data)  # Assuming each row has the same number of values
+    num_values_per_row = len(y_data)
+    
+    # Calculate the dynamic height based on the number of values per row
+    if(num_values_per_col/num_values_per_row > 12) :
+        row_height = 90  # Set the height of each row (adjust as needed)
+        col_width = 40
+    else :
+        row_height = 50  # Set the height of each row (adjust as needed)
+        col_width = 40
+    
+    height = row_height * num_values_per_row
+    width = col_width * num_values_per_col
+    
     # Define heatmap
     heatmap = go.Heatmap(
         z=z_data, x=x_data, y=y_data, colorscale="RdBu_r", showscale=True
     )
 
-    # Create empty annotations
-    # annotations = []
-
     # Create a mask for NaN values to avoid annotations on NaN values
     mask = np.isnan(z_data)
 
     annotation_text = [
-        [f"{val:.2f}" if not mask[i, j] else "" for j, val in enumerate(row)]
+        [f"{val:.2f}" if not mask[i][j] else "" for j, val in enumerate(row)]
         for i, row in enumerate(z_data)
     ]
 
@@ -818,16 +836,16 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False
+                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
                 )
-            )
-
+            )   
+    
     # Create layout with annotations
     layout = go.Layout(
         annotations=annotations,
         plot_bgcolor="rgba(0,0,0,0)",
-        width=1400,
-        height=1400,
+        width=width,
+        height=height,
         # paper_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(
             gridcolor="lightgray",
@@ -845,7 +863,7 @@ def get_insight_6(project_building_ids_str):
     fig = go.Figure(data=[heatmap], layout=layout)
 
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    explanation1 = f"""이 히트맵은 {project_name}의 {building_name}에 대해 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
+    explanation1 = f"""이 히트맵은 {project_name}의 {building_name}에 대해서 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
     색의 진하기는 값을 로그 스케일로 표현하며, 색이 진할수록 콘크리트 볼륨 당 더 많은 무게의 철근이 사용되었음을 의미합니다. 로그 스케일은 철근의 무게가 크게 다른 경우에도 모든 정보를 명확하게 표시하도록 해줍니다.
     이 정보를 통해 건축팀은 각 층에서 어떤 종류의 철근이 얼마나 사용되었는지, 어떤 층에서 철근의 사용량이 많았는지 등을 한눈에 파악할 수 있습니다. 이는 효율적인 자원 관리와 계획을 수립하는 데 도움이 될 것입니다."""
     fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
@@ -863,6 +881,7 @@ def get_insight_6(project_building_ids_str):
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
+    df['rebar_type'] = df['rebar_type'].fillna('Unknown')
     pivot_df = df.pivot(
         index="component_type", columns="rebar_type", values="total_rebar_weight"
     )
@@ -871,6 +890,21 @@ def get_insight_6(project_building_ids_str):
     z_data = np.log10(pivot_df.values)  # Apply log scale
     x_data = list(pivot_df.columns)
     y_data = list(pivot_df.index)
+    
+    # Calculate the number of values
+    num_values_per_col = len(x_data)  # Assuming each row has the same number of values
+    num_values_per_row = len(y_data)
+    
+    # Calculate the dynamic height based on the number of values per row
+    if(num_values_per_col/num_values_per_row > 12) :
+        row_height = 90  # Set the height of each row (adjust as needed)
+        col_width = 40
+    else :
+        row_height = 50  # Set the height of each row (adjust as needed)
+        col_width = 40
+    
+    height = row_height * num_values_per_row
+    width = col_width * num_values_per_col
 
     # Define heatmap
     heatmap = go.Heatmap(
@@ -891,7 +925,7 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False
+                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
                 )
             )
 
@@ -899,7 +933,8 @@ def get_insight_6(project_building_ids_str):
     layout = go.Layout(
         annotations=annotations,
         plot_bgcolor="rgba(0,0,0,0)",
-        width=1400,
+        width=width,
+        height=height,
         # paper_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(
             gridcolor="lightgray",

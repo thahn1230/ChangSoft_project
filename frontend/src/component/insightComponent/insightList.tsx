@@ -180,8 +180,8 @@ const InsightList = (props: any) => {
   }, [projectList]);
   useEffect(() => {
     setFilteredProjectList(filterBy(projectList, projectFilter));
-    setSelectedProjectList([])
-    setSelectedBuildingList([])
+    setSelectedProjectList([]);
+    setSelectedBuildingList([]);
   }, [projectFilter]);
 
   // useEffect(()=>{
@@ -527,10 +527,12 @@ const InsightList = (props: any) => {
           onChange={onSelectedInsightChange}
           style={{ width: "60%", margin: "10px" }}
         />
-
-        <label style={{ marginTop: "1%" }}>Company : </label>
+      </div>
+      
+      <div className="second-line-container">
+        <label style={{ marginTop: "1%", textAlign: "left" }}>Company : </label>
         <MultiSelectTree
-          style={{ width: "25%", margin: "10px" }}
+          style={{ width: "25%", margin: "10px"}}
           data={constructionCompanyList}
           value={selectedConstructionCompanyList}
           onChange={onNewConstructionCompanySelection}
@@ -540,11 +542,9 @@ const InsightList = (props: any) => {
           checkIndeterminateField={checkIndeterminateField}
           expandField={expandField}
         />
-      </div>
-      <div className="second-line-container">
         <label style={{ marginTop: "1%" }}>Project : </label>
         <MultiSelectTree
-          style={{ width: "20%", margin: "10px" }}
+          style={{ width: "30%", margin: "10px" }}
           data={filteredProjectList}
           value={selectedProjectList}
           onChange={onNewProjectSelection}
