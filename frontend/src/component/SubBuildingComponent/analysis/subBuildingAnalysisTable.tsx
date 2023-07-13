@@ -20,9 +20,7 @@ const SubBuildingAnalysisTable = (props: any) => {
   const [rebarData, setRebarData] = useState<gridData>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const concreteScrollRef = useRef(null);
-  const formworkScrollRef = useRef(null);
-  const rebarScrollRef = useRef(null);
+  const [rebarColumns, setRebarColumns] = useState<{}[]>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -136,8 +134,40 @@ const SubBuildingAnalysisTable = (props: any) => {
   }, [props]);
 
   useEffect(() => {
+    const temp: string[] = [];
+    const tempRebarColumns = [{}];
+    rebarData.map((item, index) => {
+      Object.entries(item).map((cols) => {
+        temp.push(cols[0]);
+      });
+    });
+    temp.sort();
+    const tempSet = new Set(temp);
+
+
+    Array.from(tempSet).map((strength) => {
+      const DiametersInStrength: string[] = rebarData.reduce(
+        (keys: string[], obj) => {
+          for (const key in obj) {
+            if (key === strength) {
+              keys.push(...Object.keys(obj[key]));
+            }
+          }
+          keys.sort();
+          const keysSet = new Set(keys);
+          return Array.from(keysSet);
+        },
+        []
+      );
+
+      tempRebarColumns.push({ [strength]: DiametersInStrength });
+    });
+
+    setRebarColumns(tempRebarColumns);
+    console.log("rebardata:");
     console.log(rebarData);
   }, [rebarData]);
+
   const splitColumns = (data: gridData, count: number) => {
     const keys = Object.keys(data[0]);
     const chunks = [];
@@ -222,34 +252,40 @@ const SubBuildingAnalysisTable = (props: any) => {
                     scrollable="scrollable"
                     fixedScroll={true}
                   >
-                    {rebarData.map((item, index) => {
-                      const subColumns = Object.entries(item).filter(
-                        ([key]) => key !== ""
-                      );
-                      return subColumns.map(([key, subColumnData]) => {
-                        const subColumnKeys = Object.keys(subColumnData);
-                        return (
+                    <GridColumn
+                      title=""
+                      field=""
+                      headerClassName="custom-header-cell"
+                      className="custom-number-cell"
+                      width={"100%"}
+                    ></GridColumn>
+                    {rebarColumns !== undefined &&
+                      rebarColumns.map((item: { [key: string]: any }) => {
+                        const strengthName = Object.keys(item)[0];
+                        const subColumns = item[strengthName];
+
+                        return Object.keys(item)[0] !== "" &&
+                          Object.keys(item)[0] !== undefined ? (
                           <GridColumn
-                            key={`${index}_${key}`}
-                            field={key}
-                            title={key}
+                            title={Object.keys(item)[0]}
                             headerClassName="custom-header-cell"
+                            className="custom-number-cell"
                           >
-                            {subColumnKeys.map((subKey) => (
-                              <GridColumn
-                                key={`${index}_${key}_${subKey}`}
-                                field={`${key}.${subKey}`}
-                                title={`D${subKey}`}
-                                format="{0:n2}"
-                                headerClassName="custom-header-cell"
-                                className="custom-number-cell"
-                                width={"100%"}
-                              />
-                            ))}
+                            {subColumns.map((diameter: string) => {
+                              return (
+                                <GridColumn
+                                  title={diameter}
+                                  field={strengthName + "." + diameter}
+                                  format="{0:n2}"
+                                  headerClassName="custom-header-cell"
+                                  className="custom-number-cell"
+                                  width={"100%"}
+                                ></GridColumn>
+                              );
+                            })}
                           </GridColumn>
-                        );
-                      });
-                    })}
+                        ) : null;
+                      })}
                   </Grid>
                 </div>
               </div>
