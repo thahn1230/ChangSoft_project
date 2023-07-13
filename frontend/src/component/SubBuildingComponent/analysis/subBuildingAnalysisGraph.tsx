@@ -3,11 +3,13 @@ import {
   Chart,
   ChartSeries,
   ChartSeriesItem,
-  ChartCategoryAxis,
   ChartValueAxis,
   ChartTooltip,
-  ChartCategoryAxisItem,
   ChartSeriesItemTooltip,
+  ChartValueAxisItem,
+  ChartCategoryAxis,
+  ChartCategoryAxisItem,
+  ChartCategoryAxisTitle,
 } from "@progress/kendo-react-charts";
 import axios from "axios";
 
@@ -169,7 +171,6 @@ const SubBuildingAnalysisGraph = (props: any) => {
   );
 
   // 그룹화된데이터를 배열로 변환
-
   const groupedChartDataConcrete = Object.values(groupedDataConcrete);
   const groupedChartDataFormwork = Object.values(groupedDataFormwork);
   const groupedChartDataRebar = Object.values(groupedDataRebar);
@@ -181,29 +182,33 @@ const SubBuildingAnalysisGraph = (props: any) => {
 
     if (component_type.includes("Concrete")) {
       unit = "㎥";
-      component_type = component_type.slice(9, component_type.length)
+      component_type = component_type.slice(9, component_type.length);
     } else if (component_type.includes("Formwork")) {
       unit = "㎡";
-      component_type = component_type.slice(9, component_type.length)
+      component_type = component_type.slice(9, component_type.length);
     } else if (component_type.includes("Rebar")) {
       unit = "Ton";
-      component_type = component_type.slice(7, component_type.length)
+      component_type = component_type.slice(7, component_type.length);
     }
-  
+
     return (
       <div>
         <p>구분: {component_type}</p>
-        <p>값: {value} {unit}</p>
+        <p>
+          값: {value} {unit}
+        </p>
       </div>
     );
   };
-  
 
   return groupedChartDataConcrete.length > 0 &&
     groupedChartDataFormwork.length > 0 &&
     groupedChartDataRebar.length > 0 ? (
     <div>
       <Chart>
+        <ChartValueAxis>
+          <ChartValueAxisItem title={{ text: "콘크리트 (㎥)" }} />
+        </ChartValueAxis>
         <ChartTooltip />
         <ChartSeries>
           {groupedChartDataConcrete.map((item: any, index) => (
@@ -222,6 +227,9 @@ const SubBuildingAnalysisGraph = (props: any) => {
       </Chart>
 
       <Chart>
+        <ChartValueAxis>
+          <ChartValueAxisItem title={{ text: "거푸집 (㎡)" }} />
+        </ChartValueAxis>
         <ChartTooltip />
         <ChartSeries>
           {groupedChartDataFormwork.map((item: any, index) => (
@@ -240,6 +248,9 @@ const SubBuildingAnalysisGraph = (props: any) => {
       </Chart>
 
       <Chart>
+        <ChartValueAxis>
+          <ChartValueAxisItem title={{ text: "철근 (Ton)" }} />
+        </ChartValueAxis>
         <ChartTooltip />
         <ChartSeries>
           {groupedChartDataRebar.map((item: any, index) => (
