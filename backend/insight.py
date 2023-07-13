@@ -863,7 +863,7 @@ def get_insight_6(project_building_ids_str):
     fig = go.Figure(data=[heatmap], layout=layout)
 
     fig_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-    explanation1 = f"""이 히트맵은 하나의 {building_name}에 대해서 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
+    explanation1 = f"""이 히트맵은 {project_name}의 {building_name}에 대해서 각 층별로 사용된 철근의 무게를 콘크리트 볼륨 당 철근의 무게로 나타냅니다. X축은 철근의 타입을, Y축은 건물의 각 층을 나타냅니다.
     색의 진하기는 값을 로그 스케일로 표현하며, 색이 진할수록 콘크리트 볼륨 당 더 많은 무게의 철근이 사용되었음을 의미합니다. 로그 스케일은 철근의 무게가 크게 다른 경우에도 모든 정보를 명확하게 표시하도록 해줍니다.
     이 정보를 통해 건축팀은 각 층에서 어떤 종류의 철근이 얼마나 사용되었는지, 어떤 층에서 철근의 사용량이 많았는지 등을 한눈에 파악할 수 있습니다. 이는 효율적인 자원 관리와 계획을 수립하는 데 도움이 될 것입니다."""
     fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
