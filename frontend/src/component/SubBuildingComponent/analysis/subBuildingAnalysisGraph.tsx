@@ -31,12 +31,8 @@ interface RebarJson {
 }
 
 const SubBuildingAnalysisGraph = (props: any) => {
-  const [graphDataConcrete, setGraphDataConcrete] = useState<ConcreteJson[]>(
-    []
-  );
-  const [graphDataFormwork, setGraphDataFormwork] = useState<FormworkJson[]>(
-    []
-  );
+  const [graphDataConcrete, setGraphDataConcrete] = useState<ConcreteJson[]>([]);
+  const [graphDataFormwork, setGraphDataFormwork] = useState<FormworkJson[]>([]);
   const [graphDataRebar, setGraphDataRebar] = useState<RebarJson[]>([]);
 
   useEffect(() => {
