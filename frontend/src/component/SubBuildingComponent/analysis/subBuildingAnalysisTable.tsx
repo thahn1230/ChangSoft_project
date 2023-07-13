@@ -180,7 +180,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                 <div style={{width:"100%"}}>
                   <Grid
                     data={concreteData}
-                    style={{ width: "100%" }}
+                    style={ { width: "100%" }}
                     scrollable="scrollable"
                     fixedScroll={true}
                   >
