@@ -41,8 +41,6 @@ const AnalysisTab = (props: any) => {
     fetchData();
   }, [props.buildingInfo]);
 
-  
-
   return (
     <div className="pageDiv" >
       <Grid data={headerData}>
