@@ -5,7 +5,9 @@ import {
   ChartSeriesItem,
   ChartCategoryAxis,
   ChartValueAxis,
+  ChartTooltip,
   ChartCategoryAxisItem,
+  ChartSeriesItemTooltip,
 } from "@progress/kendo-react-charts";
 import axios from "axios";
 
@@ -31,8 +33,12 @@ interface RebarJson {
 }
 
 const SubBuildingAnalysisGraph = (props: any) => {
-  const [graphDataConcrete, setGraphDataConcrete] = useState<ConcreteJson[]>([]);
-  const [graphDataFormwork, setGraphDataFormwork] = useState<FormworkJson[]>([]);
+  const [graphDataConcrete, setGraphDataConcrete] = useState<ConcreteJson[]>(
+    []
+  );
+  const [graphDataFormwork, setGraphDataFormwork] = useState<FormworkJson[]>(
+    []
+  );
   const [graphDataRebar, setGraphDataRebar] = useState<RebarJson[]>([]);
 
   useEffect(() => {
@@ -168,11 +174,22 @@ const SubBuildingAnalysisGraph = (props: any) => {
   const groupedChartDataFormwork = Object.values(groupedDataFormwork);
   const groupedChartDataRebar = Object.values(groupedDataRebar);
 
+  const toolTipRender = (e: any) => {
+    return (
+      <div>
+        <p>구분: {e.point.series.name}</p>
+        <p>값: {e.point.dataItem.toFixed(2)}</p>
+      </div>
+    );
+  };
+
+  
   return (
     <div>
       {" "}
       {groupedChartDataConcrete.length > 0 ? (
         <Chart>
+          <ChartTooltip />
           <ChartSeries>
             {groupedChartDataConcrete.map((item: any, index) => (
               <ChartSeriesItem
@@ -181,8 +198,10 @@ const SubBuildingAnalysisGraph = (props: any) => {
                 stack={item.component_type}
                 data={[item.total_volume]}
                 name={`${item.component_type} - ${item.material_name}`}
-                visibleInLegend={true}
-              />
+                visibleInLegend={false}
+              >
+                <ChartSeriesItemTooltip render={toolTipRender} />
+              </ChartSeriesItem>
             ))}
           </ChartSeries>
         </Chart>
@@ -191,6 +210,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
       )}
       {groupedChartDataFormwork.length > 0 ? (
         <Chart>
+        <ChartTooltip />
           <ChartSeries>
             {groupedChartDataFormwork.map((item: any, index) => (
               <ChartSeriesItem
@@ -199,8 +219,10 @@ const SubBuildingAnalysisGraph = (props: any) => {
                 stack={item.component_type}
                 data={[item.total_area]}
                 name={`${item.component_type} - ${item.formwork_type}`}
-                visibleInLegend={true}
-              />
+                visibleInLegend={false}
+              >
+                <ChartSeriesItemTooltip render={toolTipRender} />
+              </ChartSeriesItem>
             ))}
           </ChartSeries>
         </Chart>
@@ -209,6 +231,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
       )}
       {groupedChartDataRebar.length > 0 ? (
         <Chart>
+        <ChartTooltip />
           <ChartSeries>
             {groupedChartDataRebar.map((item: any, index) => (
               <ChartSeriesItem
@@ -217,8 +240,10 @@ const SubBuildingAnalysisGraph = (props: any) => {
                 stack={item.component_type}
                 data={[item.total_weight]}
                 name={`${item.component_type} - ${item.rebar_grade}`}
-                visibleInLegend={true}
-              />
+                visibleInLegend={false}
+              >
+                <ChartSeriesItemTooltip render={toolTipRender} />
+              </ChartSeriesItem>
             ))}
           </ChartSeries>
         </Chart>

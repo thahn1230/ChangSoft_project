@@ -44,8 +44,8 @@ const AnalysisTab = (props: any) => {
   
 
   return (
-    <div>
-      <Grid data={headerData} scrollable="none" fixedScroll={false}>
+    <div className="pageDiv" >
+      <Grid data={headerData}>
         <GridColumn
           title="프로젝트명"
           field="projectName"
@@ -79,6 +79,7 @@ const AnalysisTab = (props: any) => {
           className="custom-text-cell"
         />
       </Grid>
+      
       <div className="analysis-table-chart-container">
         <div className="analysis-table-container">
           <SubBuildingConcreteAnalysisTable

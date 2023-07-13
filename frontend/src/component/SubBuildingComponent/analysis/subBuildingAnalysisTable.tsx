@@ -164,8 +164,6 @@ const SubBuildingAnalysisTable = (props: any) => {
     });
 
     setRebarColumns(tempRebarColumns);
-    console.log("rebardata:");
-    console.log(rebarData);
   }, [rebarData]);
 
   const splitColumns = (data: gridData, count: number) => {
