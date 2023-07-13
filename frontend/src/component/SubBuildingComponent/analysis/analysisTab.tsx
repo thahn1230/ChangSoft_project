@@ -89,6 +89,7 @@ const AnalysisTab = (props: any) => {
         </div>
         <div className="analysis-chart-container">
           <SubBuildingAnalysisGraph
+            buildingInfo={props.buildingInfo}
             selectedSubBuildingId={selectedSubBuildingId}
           ></SubBuildingAnalysisGraph>
         </div>
