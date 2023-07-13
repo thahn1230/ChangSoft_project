@@ -181,23 +181,40 @@ const SubBuildingAnalysisGraph = (props: any) => {
 
     if (component_type.includes("Concrete")) {
       unit = "㎥";
-      component_type = component_type.slice(9, component_type.length)
+      component_type = component_type.slice(9, component_type.length);
     } else if (component_type.includes("Formwork")) {
       unit = "㎡";
-      component_type = component_type.slice(9, component_type.length)
+      component_type = component_type.slice(9, component_type.length);
     } else if (component_type.includes("Rebar")) {
       unit = "Ton";
-      component_type = component_type.slice(7, component_type.length)
+      component_type = component_type.slice(7, component_type.length);
     }
-  
+
     return (
       <div>
         <p>구분: {component_type}</p>
-        <p>값: {value} {unit}</p>
+        <p>
+          값: {value} {unit}
+        </p>
       </div>
     );
   };
-  
+
+  const colorMapping: { [key: string]: string } = {};
+
+  const getColor = (key: string) => {
+    if (!colorMapping[key]) {
+      colorMapping[key] = getRandomColor(); // 랜덤 색상 생성 또는 원하는 색상을 할당할 수 있습니다.
+    }
+
+    return colorMapping[key];
+  };
+
+  const getRandomColor = () => {
+    const blueShades = ["#E6F0FF", "#B3D9FF", "#80C1FF", "#4DA9FF", "#1A91FF"];
+    const randomIndex = Math.floor(Math.random() * blueShades.length);
+    return blueShades[randomIndex];
+  };  
 
   return groupedChartDataConcrete.length > 0 &&
     groupedChartDataFormwork.length > 0 &&
@@ -214,6 +231,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               data={[item.total_volume]}
               name={`Concrete ${item.component_type} - ${item.material_name}`}
               visibleInLegend={false}
+              color={getColor(`${item.material_name}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
             </ChartSeriesItem>
@@ -232,6 +250,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               data={[item.total_area]}
               name={`Formwork ${item.component_type} - ${item.formwork_type}`}
               visibleInLegend={false}
+              color={getColor(`${item.formwork_type}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
             </ChartSeriesItem>
@@ -250,6 +269,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               data={[item.total_weight]}
               name={`Rebar ${item.component_type} - ${item.rebar_grade}`}
               visibleInLegend={false}
+              color={getColor(`${item.formwork_type}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
             </ChartSeriesItem>
