@@ -175,13 +175,29 @@ const SubBuildingAnalysisGraph = (props: any) => {
   const groupedChartDataRebar = Object.values(groupedDataRebar);
 
   const toolTipRender = (e: any) => {
+    let value = e.point.dataItem.toFixed(2);
+    let unit = "";
+    let component_type = e.point.series.name;
+
+    if (component_type.includes("Concrete")) {
+      unit = "㎥";
+      component_type = component_type.slice(9, component_type.length)
+    } else if (component_type.includes("Formwork")) {
+      unit = "㎡";
+      component_type = component_type.slice(9, component_type.length)
+    } else if (component_type.includes("Rebar")) {
+      unit = "Ton";
+      component_type = component_type.slice(7, component_type.length)
+    }
+  
     return (
       <div>
-        <p>구분: {e.point.series.name}</p>
-        <p>값: {e.point.dataItem.toFixed(2)}</p>
+        <p>구분: {component_type}</p>
+        <p>값: {value} {unit}</p>
       </div>
     );
   };
+  
 
   return groupedChartDataConcrete.length > 0 &&
     groupedChartDataFormwork.length > 0 &&
@@ -196,7 +212,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               type="bar"
               stack={item.component_type}
               data={[item.total_volume]}
-              name={`${item.component_type} - ${item.material_name}`}
+              name={`Concrete ${item.component_type} - ${item.material_name}`}
               visibleInLegend={false}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
@@ -214,7 +230,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               type="bar"
               stack={item.component_type}
               data={[item.total_area]}
-              name={`${item.component_type} - ${item.formwork_type}`}
+              name={`Formwork ${item.component_type} - ${item.formwork_type}`}
               visibleInLegend={false}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
@@ -232,7 +248,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
               type="bar"
               stack={item.component_type}
               data={[item.total_weight]}
-              name={`${item.component_type} - ${item.rebar_grade}`}
+              name={`Rebar ${item.component_type} - ${item.rebar_grade}`}
               visibleInLegend={false}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
