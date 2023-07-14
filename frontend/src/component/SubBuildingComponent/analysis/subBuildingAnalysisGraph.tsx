@@ -54,15 +54,6 @@ const getRandomColor = () => {
 };
 
 const SubBuildingAnalysisGraph2 = (props: any) => {
-  const legendItem = (options:any)=>{
-console.log(options)
-    return (
-      <span>
-        <span className="legend-icon" style={{ backgroundColor: options.dataItem.color }}></span>
-        <span className="legend-label">{options.text}</span>
-      </span>
-    );
-  }
   return (
     props.data.length && (
       <div>
@@ -72,8 +63,12 @@ console.log(options)
             {props.data.map((item: any, index: number) => {
               const componentType = String(Object.values(item)[0]);
               const materialType = String(Object.values(item)[1]);
-              const value = String(Object.values(item)[2]);
+              const value = Number(Object.values(item)[2]);
 
+              console.log("compt");
+              console.log(componentType);
+              console.log(item.component_type);
+              console.log(index)
               return (
                 <ChartSeriesItem
                   key={index}
@@ -84,7 +79,6 @@ console.log(options)
                   visibleInLegend={true}
                   color={getColor(`${materialType}`)}
                 >
-                  
                   <ChartSeriesItemTooltip render={toolTipRender} />
                 </ChartSeriesItem>
               );
