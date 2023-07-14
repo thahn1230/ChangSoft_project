@@ -3,12 +3,17 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
 
 const FloorAnalysisTab = (props: any) => {
-  let headerData = [
+  const headerData = [
     {
       projectName: props.projectName,
       building_name: props.buildingInfo?.building_name,
     },
   ];
+
+  
+
+
+
   return (
     <div>
       <Grid data={headerData}>

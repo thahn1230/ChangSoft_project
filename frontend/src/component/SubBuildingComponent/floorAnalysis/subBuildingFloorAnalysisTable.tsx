@@ -149,23 +149,6 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
     console.log(rebarData);
   }, [rebarData]);
 
-  const splitColumns = (data: gridData, count: number) => {
-    const keys = Object.keys(data[0]);
-    const chunks = [];
-    let start = 0;
-    while (start < keys.length) {
-      const chunk = keys.slice(start, start + count);
-      if (chunks.length > 0 && start === count) {
-        chunk.unshift(keys[0]);
-      }
-      chunks.push(chunk);
-      start += count;
-    }
-    console.log(chunks);
-    console.log(rebarData);
-    return chunks;
-  };
-
   return (
     <div>
       {isLoading ? (
@@ -191,8 +174,16 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
                         title={Object.keys(concreteData[0])[index]}
                         format="{0:n2}"
                         headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                        width={"100%"}
+                        className={
+                          Object.keys(concreteData[0])[index] === ""
+                            ? ""
+                            : "custom-number-cell"
+                        }
+                        width={
+                          Object.keys(concreteData[0])[index].length > 6
+                            ? "130%"
+                            : "100%"
+                        }
                       />
                     ))}
                 </Grid>
@@ -203,7 +194,7 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
               <div>
                 <Grid
                   data={formworkData}
-                  // style={{ width: "50%" }}
+                  style={{ width: "100%" }}
                   scrollable="scrollable"
                   fixedScroll={true}
                 >
@@ -215,8 +206,16 @@ const SubBuildingFloorAnalysisTable = (props: any) => {
                         title={Object.keys(formworkData[0])[index]}
                         format="{0:n2}"
                         headerClassName="custom-header-cell"
-                        className="custom-number-cell"
-                        width={"100%"}
+                        className={
+                          Object.keys(formworkData[0])[index] === ""
+                            ? ""
+                            : "custom-number-cell"
+                        }
+                        width={
+                          Object.keys(formworkData[0])[index].length > 6
+                            ? "130%"
+                            : "100%"
+                        }
                       />
                     ))}
                 </Grid>

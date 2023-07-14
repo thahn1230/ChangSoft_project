@@ -5,14 +5,6 @@ import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import "./../../../styles/subBuildingAnalysisTable.scss";
 
-// interface RebarJson {
-//   component_type: string;
-//   rebar_grade: string;
-//   rebar_diameter: number;
-//   total_weight: number;
-// }
-
-// type gridData = Array<{ [key: string]: any } & { "": string }>;
 
 const SubBuildingAnalysisTable = (props: any) => {
   return (
