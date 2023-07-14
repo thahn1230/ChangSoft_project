@@ -99,7 +99,7 @@ const SubBuildingAnalysisTable = (props: any) => {
                   props.rebarColumns.map((item: { [key: string]: any }) => {
                     const strengthName = Object.keys(item)[0];
                     const subColumns = item[strengthName];
-
+                    
                     return Object.keys(item)[0] !== "" &&
                       Object.keys(item)[0] !== undefined ? (
                       <GridColumn
