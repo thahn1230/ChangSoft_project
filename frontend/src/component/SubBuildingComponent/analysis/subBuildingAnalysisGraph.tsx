@@ -64,18 +64,17 @@ const SubBuildingAnalysisGraph = (props: any) => {
 
   const getColor = (key: string) => {
     if (!colorMapping[key]) {
-      colorMapping[key] = getRandomColor(); // 랜덤 색상 생성 또는 원하는 색상을 할당할 수 있습니다.
+      colorMapping[key] = getRandomColor();
     }
-
     return colorMapping[key];
-  };
-
-  const getRandomColor = () => {
-    const blueShades = ["#E6F0FF", "#B3D9FF", "#80C1FF", "#4DA9FF", "#1A91FF"];
-    const randomIndex = Math.floor(Math.random() * blueShades.length);
-    return blueShades[randomIndex];
   };  
 
+  const getRandomColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor;
+  };
+  
+  
   return props.groupedChartDataConcrete.length > 0 &&
   props.groupedChartDataFormwork.length > 0 &&
   props.groupedChartDataRebar.length > 0 ? (
