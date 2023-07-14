@@ -328,7 +328,7 @@ const AnalysisTab = (props: any) => {
 
   return (
     <div className="pageDiv">
-      <div className="analysis-table-graph-container">
+      <div className="info-table-container">
         <Grid data={headerData}>
           <GridColumn
             title="프로젝트명"
@@ -376,10 +376,25 @@ const AnalysisTab = (props: any) => {
             ></SubBuildingAnalysisTable>
           </div>
           <div className="analysis-chart-container">
-            <SubBuildingAnalysisGraph
+            {/* <SubBuildingAnalysisGraph
               groupedChartDataConcrete={groupedChartDataConcrete}
               groupedChartDataFormwork={groupedChartDataFormwork}
               groupedChartDataRebar={groupedChartDataRebar}
+            ></SubBuildingAnalysisGraph> */}
+
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataConcrete}
+              componentType={"Concrete"}
+            ></SubBuildingAnalysisGraph>
+
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataFormwork}
+              componentType={"Formwork"}
+            ></SubBuildingAnalysisGraph>
+
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataRebar}
+              componentType={"Rebar"}
             ></SubBuildingAnalysisGraph>
           </div>
         </Splitter>
