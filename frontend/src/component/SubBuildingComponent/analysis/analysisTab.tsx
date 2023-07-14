@@ -10,8 +10,8 @@ import {
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
+import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
 import "./../../../styles/analysisTab.scss";
-import SubBuildingAnalysisGraph from "./SubBuildingAnalysisGraph";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 

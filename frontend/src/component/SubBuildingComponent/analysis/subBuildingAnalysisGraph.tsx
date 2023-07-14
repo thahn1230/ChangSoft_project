@@ -14,7 +14,6 @@ const toolTipRender = (e: any) => {
   let value = parseFloat(e.point.dataItem).toFixed(2);
   let unit = "";
   let component_type = e.point.series.name.split(" ").slice(1).join(" ");
-  console.log(component_type)
   
   switch(e.point.series.name.split(" ")[0])
   {
