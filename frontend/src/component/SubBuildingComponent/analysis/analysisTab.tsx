@@ -10,6 +10,8 @@ import {
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
+import SubBuildingAnalysisTableSingleCol from "./subBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "./subBuildingAnalysisTable_subCol";
 import SubBuildingAnalysisGraph from "./SubBuildingAnalysisGraph";
 import "./../../../styles/analysisTab.scss";
 
@@ -60,12 +62,29 @@ const AnalysisTab = (props: any) => {
     },
   ];
 
-  const [panes, setPanes] = React.useState<Array<any>>([
+  const [concretePanes, setConcretePanes] = React.useState<Array<any>>([
     { size: "60%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
-  const onChange = (event: SplitterOnChangeEvent) => {
-    setPanes(event.newState);
+  const [formworkPanes, setFormworkPanes] = React.useState<Array<any>>([
+    { size: "60%", min: "20px", collapsible: true, scrollable: false },
+    { scrollable: false },
+  ]);
+  const [rebarPanes, setRebarPanes] = React.useState<Array<any>>([
+    { size: "60%", min: "20px", collapsible: true, scrollable: false },
+    { scrollable: false },
+  ]);
+
+  const onConcretePaneChange = (event: SplitterOnChangeEvent) => {
+    setConcretePanes(event.newState);
+  };
+
+  const onFormworkPaneChange = (event: SplitterOnChangeEvent) => {
+    setFormworkPanes(event.newState);
+  };
+
+  const onRebarPaneChange = (event: SplitterOnChangeEvent) => {
+    setRebarPanes(event.newState);
   };
 
   useEffect(() => {
@@ -366,41 +385,83 @@ const AnalysisTab = (props: any) => {
       </div>
 
       <div className="analysis-table-chart-container">
-        <Splitter panes={panes} onChange={onChange}>
+        {/* <Splitter panes={panes} onChange={onChange}>
           <div className="analysis-table-container">
-            <SubBuildingAnalysisTable
-              concreteData={concreteData}
-              formworkData={formworkData}
-              rebarData={rebarData}
-              rebarColumns={rebarColumns}
-            ></SubBuildingAnalysisTable>
+            <SubBuildingAnalysisTableSingleCol
+              data={concreteData}
+              componentType={"콘크리트(㎥)"}
+            ></SubBuildingAnalysisTableSingleCol>
+            <SubBuildingAnalysisTableSingleCol
+              data={formworkData}
+              componentType={"거푸집(㎡)"}
+            ></SubBuildingAnalysisTableSingleCol>
+            <SubBuildingAnalysisTableSubCol
+              data={rebarData}
+              componentType={"철근(Ton)"}
+              columns={rebarColumns}
+            ></SubBuildingAnalysisTableSubCol>
           </div>
           <div className="analysis-chart-container">
-            {/* <SubBuildingAnalysisGraph
-              groupedChartDataConcrete={groupedChartDataConcrete}
-              groupedChartDataFormwork={groupedChartDataFormwork}
-              groupedChartDataRebar={groupedChartDataRebar}
-            ></SubBuildingAnalysisGraph> */}
-            
-            
-            
             <SubBuildingAnalysisGraph
               data={groupedChartDataConcrete}
               componentType={"Concrete"}
             ></SubBuildingAnalysisGraph>
-
 
             <SubBuildingAnalysisGraph
               data={groupedChartDataFormwork}
               componentType={"Formwork"}
             ></SubBuildingAnalysisGraph>
 
-            
             <SubBuildingAnalysisGraph
               data={groupedChartDataRebar}
               componentType={"Rebar"}
             ></SubBuildingAnalysisGraph>
+          </div>
+        </Splitter> */}
 
+        <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
+          <div className="analysis-table-container">
+            <SubBuildingAnalysisTableSingleCol
+              data={concreteData}
+              componentType={"콘크리트(㎥)"}
+            ></SubBuildingAnalysisTableSingleCol>
+          </div>
+          <div className="analysis-chart-container">
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataConcrete}
+              componentType={"Concrete"}
+            ></SubBuildingAnalysisGraph>
+          </div>
+        </Splitter>
+
+        <Splitter panes={formworkPanes} onChange={onFormworkPaneChange}>
+          <div className="analysis-table-container">
+            <SubBuildingAnalysisTableSingleCol
+              data={formworkData}
+              componentType={"거푸집(㎡)"}
+            ></SubBuildingAnalysisTableSingleCol>
+          </div>
+          <div className="analysis-chart-container">
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataFormwork}
+              componentType={"Formwork"}
+            ></SubBuildingAnalysisGraph>
+          </div>
+        </Splitter>
+
+        <Splitter panes={rebarPanes} onChange={onRebarPaneChange}>
+          <div className="analysis-table-container">
+            <SubBuildingAnalysisTableSubCol
+              data={rebarData}
+              componentType={"철근(Ton)"}
+              columns={rebarColumns}
+            ></SubBuildingAnalysisTableSubCol>
+          </div>
+          <div className="analysis-chart-container">
+            <SubBuildingAnalysisGraph
+              data={groupedChartDataRebar}
+              componentType={"Rebar"}
+            ></SubBuildingAnalysisGraph>
           </div>
         </Splitter>
       </div>

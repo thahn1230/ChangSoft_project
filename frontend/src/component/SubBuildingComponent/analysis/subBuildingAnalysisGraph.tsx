@@ -8,6 +8,7 @@ import {
   ChartTooltip,
   ChartCategoryAxisItem,
   ChartSeriesItemTooltip,
+  ChartLegend,
 } from "@progress/kendo-react-charts";
 
 const toolTipRender = (e: any) => {
@@ -54,6 +55,15 @@ const getRandomColor = () => {
 };
 
 const SubBuildingAnalysisGraph2 = (props: any) => {
+  const legendItem = (options:any)=>{
+console.log(options)
+    return (
+      <span>
+        <span className="legend-icon" style={{ backgroundColor: options.dataItem.color }}></span>
+        <span className="legend-label">{options.text}</span>
+      </span>
+    );
+  }
   return (
     props.data.length && (
       <div>
@@ -72,9 +82,10 @@ const SubBuildingAnalysisGraph2 = (props: any) => {
                   stack={componentType}
                   data={[value]}
                   name={`${props.componentType} ${componentType} - ${materialType}`}
-                  visibleInLegend={false}
+                  visibleInLegend={true}
                   color={getColor(`${materialType}`)}
                 >
+                  
                   <ChartSeriesItemTooltip render={toolTipRender} />
                 </ChartSeriesItem>
               )})}

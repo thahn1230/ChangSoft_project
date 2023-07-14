@@ -11,7 +11,7 @@ import {
 
 import urlPrefix from "../../../resource/URL_prefix.json";
 
-import "./../../../styles/FloorAnalysisTab.scss"
+import "./../../../styles/FloorAnalysisTab.scss";
 
 interface RebarJson {
   floor_name: string;
@@ -165,34 +165,34 @@ const FloorAnalysisTab = (props: any) => {
   return (
     <div className="pageDiv">
       <div className="info-table-container">
-      <Grid data={headerData}>
-        <GridColumn
-          title="프로젝트명"
-          field="projectName"
-          headerClassName="custom-header-cell"
-          className="custom-text-cell"
-        />
-        <GridColumn
-          title="빌딩명"
-          field="building_name"
-          headerClassName="custom-header-cell"
-          className="custom-text-cell"
-        />
-      </Grid>
+        <Grid data={headerData}>
+          <GridColumn
+            title="프로젝트명"
+            field="projectName"
+            headerClassName="custom-header-cell"
+            className="custom-text-cell"
+          />
+          <GridColumn
+            title="빌딩명"
+            field="building_name"
+            headerClassName="custom-header-cell"
+            className="custom-text-cell"
+          />
+        </Grid>
       </div>
 
       <div className="analysis-table-chart-container">
-      <Splitter panes={panes} onChange={onChange}>
-        <div className = "analysis-table-container">
-          <SubBuildingFloorAnalysisTable
-            concreteData={concreteData}
-            formworkData={formworkData}
-            rebarData={rebarData}
-            rebarColumns={rebarColumns}
-          ></SubBuildingFloorAnalysisTable>
-        </div>
-        <div className="analysis-chart-container">Graph</div>
-      </Splitter>
+        <Splitter panes={panes} onChange={onChange}>
+          <div className="analysis-table-container">
+            <SubBuildingFloorAnalysisTable
+              concreteData={concreteData}
+              formworkData={formworkData}
+              rebarData={rebarData}
+              rebarColumns={rebarColumns}
+            ></SubBuildingFloorAnalysisTable>
+          </div>
+          <div className="analysis-chart-container">Graph</div>
+        </Splitter>
       </div>
     </div>
   );
