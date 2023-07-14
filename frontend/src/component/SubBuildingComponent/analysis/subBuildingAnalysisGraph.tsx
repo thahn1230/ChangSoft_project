@@ -73,7 +73,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor;
   };
-  
+
   
   return props.groupedChartDataConcrete.length > 0 &&
   props.groupedChartDataFormwork.length > 0 &&
