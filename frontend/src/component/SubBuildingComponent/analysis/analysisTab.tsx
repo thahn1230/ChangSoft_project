@@ -12,7 +12,7 @@ import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
 import SubBuildingAnalysisTableSingleCol from "./subBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "./subBuildingAnalysisTable_subCol";
-import SubBuildingAnalysisGraph from "./SubBuildingAnalysisGraph";
+import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
 import "./../../../styles/analysisTab.scss";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";

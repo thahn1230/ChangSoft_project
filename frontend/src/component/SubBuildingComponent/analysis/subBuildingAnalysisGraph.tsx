@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Chart,
   ChartSeries,
@@ -8,92 +8,135 @@ import {
   ChartTooltip,
   ChartCategoryAxisItem,
   ChartSeriesItemTooltip,
-  ChartLegend,
 } from "@progress/kendo-react-charts";
+import axios from "axios";
 
-const toolTipRender = (e: any) => {
-  let value = parseFloat(e.point.dataItem).toFixed(2);
-  let unit = "";
-  let component_type = e.point.series.name.split(" ").slice(1).join(" ");
+import urlPrefix from "../../../resource/URL_prefix.json";
 
-  switch (e.point.series.name.split(" ")[0]) {
-    case "Concrete":
+interface ConcreteJson {
+  component_type: string;
+  material_name: string;
+  total_volume: number;
+}
+
+interface FormworkJson {
+  component_type: string;
+  formwork_type: string;
+  total_area: number;
+}
+
+interface RebarJson {
+  component_type: string;
+  rebar_grade: string;
+  rebar_diameter: number;
+  total_weight: number;
+}
+
+const SubBuildingAnalysisGraph = (props: any) => {
+  const toolTipRender = (e: any) => {
+    let value = e.point.dataItem.toFixed(2);
+    let unit = "";
+    let component_type = e.point.series.name;
+
+    if (component_type.includes("Concrete")) {
       unit = "㎥";
-      break;
-    case "Formwork":
+      component_type = component_type.slice(9, component_type.length);
+    } else if (component_type.includes("Formwork")) {
       unit = "㎡";
-      break;
-    case "Rebar":
+      component_type = component_type.slice(9, component_type.length);
+    } else if (component_type.includes("Rebar")) {
       unit = "Ton";
-      break;
-  }
+      component_type = component_type.slice(7, component_type.length);
+    }
 
-  return (
-    <div>
-      <p>구분: {component_type}</p>
-      <p>
-        값: {value} {unit}
-      </p>
-    </div>
-  );
-};
-const colorMapping: { [key: string]: string } = {};
-
-const getColor = (key: string) => {
-  if (!colorMapping[key]) {
-    colorMapping[key] = getRandomColor(); // 랜덤 색상 생성 또는 원하는 색상을 할당할 수 있습니다.
-  }
-
-  return colorMapping[key];
-};
-
-const getRandomColor = () => {
-  const blueShades = ["#E6F0FF", "#B3D9FF", "#80C1FF", "#4DA9FF", "#1A91FF"];
-  const randomIndex = Math.floor(Math.random() * blueShades.length);
-  return blueShades[randomIndex];
-};
-
-const SubBuildingAnalysisGraph2 = (props: any) => {
-  const legendItem = (options:any)=>{
-console.log(options)
     return (
-      <span>
-        <span className="legend-icon" style={{ backgroundColor: options.dataItem.color }}></span>
-        <span className="legend-label">{options.text}</span>
-      </span>
-    );
-  }
-  return (
-    props.data.length && (
       <div>
-        <Chart>
-          <ChartTooltip />
-          <ChartSeries>
-            {props.data.map((item: any, index: number) => {
-              const componentType = String(Object.values(item)[0]);
-              const materialType = String(Object.values(item)[1]);
-              const value = String(Object.values(item)[2]);
-
-              return (
-                <ChartSeriesItem
-                  key={index}
-                  type="bar"
-                  stack={componentType}
-                  data={[value]}
-                  name={`${props.componentType} ${componentType} - ${materialType}`}
-                  visibleInLegend={true}
-                  color={getColor(`${materialType}`)}
-                >
-                  
-                  <ChartSeriesItemTooltip render={toolTipRender} />
-                </ChartSeriesItem>
-              );
-            })}
-          </ChartSeries>
-        </Chart>
+        <p>구분: {component_type}</p>
+        <p>
+          값: {value} {unit}
+        </p>
       </div>
-    )
+    );
+  };
+
+  const colorMapping: { [key: string]: string } = {};
+
+  const getColor = (key: string) => {
+    if (!colorMapping[key]) {
+      colorMapping[key] = getRandomColor();
+    }
+    return colorMapping[key];
+  };
+
+  const getRandomColor = () => {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return "#" + randomColor;
+  };
+
+  return props.groupedChartDataConcrete.length > 0 &&
+    props.groupedChartDataFormwork.length > 0 &&
+    props.groupedChartDataRebar.length > 0 ? (
+    <div>
+      <Chart>
+        <ChartTooltip />
+        <ChartSeries>
+          {props.groupedChartDataConcrete.map((item: any, index: number) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_volume]}
+              name={`Concrete ${item.component_type} - ${item.material_name}`}
+              visibleInLegend={false}
+              color={getColor(`${item.material_name}`)}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
+
+      <Chart>
+        <ChartTooltip />
+        <ChartSeries>
+          {props.groupedChartDataFormwork.map((item: any, index: number) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_area]}
+              name={`Formwork ${item.component_type} - ${item.formwork_type}`}
+              visibleInLegend={false}
+              color={getColor(`${item.formwork_type}`)}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
+
+      <Chart>
+        <ChartTooltip />
+        <ChartSeries>
+          {props.groupedChartDataRebar.map((item: any, index: number) => (
+            <ChartSeriesItem
+              key={index}
+              type="bar"
+              stack={item.component_type}
+              data={[item.total_weight]}
+              name={`Rebar ${item.component_type} - ${item.rebar_grade}`}
+              visibleInLegend={false}
+              color={getColor(`${item.formwork_type}`)}
+            >
+              <ChartSeriesItemTooltip render={toolTipRender} />
+            </ChartSeriesItem>
+          ))}
+        </ChartSeries>
+      </Chart>
+    </div>
+  ) : (
+    <div>Loading...</div>
   );
 };
 
-export default SubBuildingAnalysisGraph2;
+export default SubBuildingAnalysisGraph;
