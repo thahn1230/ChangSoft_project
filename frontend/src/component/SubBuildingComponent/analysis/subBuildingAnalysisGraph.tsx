@@ -15,20 +15,19 @@ const toolTipRender = (e: any) => {
   let value = parseFloat(e.point.dataItem).toFixed(2);
   let unit = "";
   let component_type = e.point.series.name.split(" ").slice(1).join(" ");
-  
-  switch(e.point.series.name.split(" ")[0])
-  {
-    case "Concrete" : 
-    unit = "㎥";
-    break;
-    case "Formwork" : 
-    unit = "㎡";
-    break;
-    case "Rebar" : 
-    unit = "Ton";
-    break;
+
+  switch (e.point.series.name.split(" ")[0]) {
+    case "Concrete":
+      unit = "㎥";
+      break;
+    case "Formwork":
+      unit = "㎡";
+      break;
+    case "Rebar":
+      unit = "Ton";
+      break;
   }
-  
+
   return (
     <div>
       <p>구분: {component_type}</p>
@@ -71,11 +70,11 @@ console.log(options)
           <ChartTooltip />
           <ChartSeries>
             {props.data.map((item: any, index: number) => {
-                const componentType = String(Object.values(item)[0]);
-                const materialType= String(Object.values(item)[1]);
-                const value = String(Object.values(item)[2]);
+              const componentType = String(Object.values(item)[0]);
+              const materialType = String(Object.values(item)[1]);
+              const value = String(Object.values(item)[2]);
 
-                return(
+              return (
                 <ChartSeriesItem
                   key={index}
                   type="bar"
@@ -88,7 +87,8 @@ console.log(options)
                   
                   <ChartSeriesItemTooltip render={toolTipRender} />
                 </ChartSeriesItem>
-              )})}
+              );
+            })}
           </ChartSeries>
         </Chart>
       </div>
