@@ -33,7 +33,6 @@ interface RebarJson {
 }
 
 const SubBuildingAnalysisGraph = (props: any) => {
- 
   const toolTipRender = (e: any) => {
     let value = e.point.dataItem.toFixed(2);
     let unit = "";
@@ -67,29 +66,28 @@ const SubBuildingAnalysisGraph = (props: any) => {
       colorMapping[key] = getRandomColor();
     }
     return colorMapping[key];
-  };  
+  };
 
   const getRandomColor = () => {
     const randomColor = Math.floor(Math.random() * 16777215).toString(16);
     return "#" + randomColor;
   };
-  
-  
+
   return props.groupedChartDataConcrete.length > 0 &&
-  props.groupedChartDataFormwork.length > 0 &&
-  props.groupedChartDataRebar.length > 0 ? (
+    props.groupedChartDataFormwork.length > 0 &&
+    props.groupedChartDataRebar.length > 0 ? (
     <div>
       <Chart>
         <ChartTooltip />
         <ChartSeries>
-          {props.groupedChartDataConcrete.map((item: any, index:number) => (
+          {props.groupedChartDataConcrete.map((item: any, index: number) => (
             <ChartSeriesItem
               key={index}
               type="bar"
               stack={item.component_type}
               data={[item.total_volume]}
               name={`Concrete ${item.component_type} - ${item.material_name}`}
-              visibleInLegend={false}
+              visibleInLegend={true}
               color={getColor(`${item.material_name}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
@@ -101,14 +99,14 @@ const SubBuildingAnalysisGraph = (props: any) => {
       <Chart>
         <ChartTooltip />
         <ChartSeries>
-          {props.groupedChartDataFormwork.map((item: any, index:number) => (
+          {props.groupedChartDataFormwork.map((item: any, index: number) => (
             <ChartSeriesItem
               key={index}
               type="bar"
               stack={item.component_type}
               data={[item.total_area]}
               name={`Formwork ${item.component_type} - ${item.formwork_type}`}
-              visibleInLegend={false}
+              visibleInLegend={true}
               color={getColor(`${item.formwork_type}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
@@ -120,14 +118,14 @@ const SubBuildingAnalysisGraph = (props: any) => {
       <Chart>
         <ChartTooltip />
         <ChartSeries>
-          {props.groupedChartDataRebar.map((item: any, index:number) => (
+          {props.groupedChartDataRebar.map((item: any, index: number) => (
             <ChartSeriesItem
               key={index}
               type="bar"
               stack={item.component_type}
               data={[item.total_weight]}
               name={`Rebar ${item.component_type} - ${item.rebar_grade}`}
-              visibleInLegend={false}
+              visibleInLegend={true}
               color={getColor(`${item.formwork_type}`)}
             >
               <ChartSeriesItemTooltip render={toolTipRender} />
