@@ -8,11 +8,10 @@ const SubBuildingAnalysisTableSubCol  = (props: any) => {
       <div>
         {props.data.length > 0 ? (
          <div className="analysis-table-container">
-         <header className="analysis-table-type">{props.componentType}</header>
-         <div style={{ width: "100%" }}>
+         <div>
            <Grid
              data={props.data}
-             style={{ width: "100%" }}
+             style={{ width:"100%",height: "60vh" }}
              scrollable="scrollable"
              fixedScroll={true}
            >

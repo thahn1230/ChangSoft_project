@@ -37,8 +37,8 @@ const SubBuildingAnalysisGraph = (props: any) => {
   const [isLoaded, setIsLoaded] =useState<Boolean>(false);
 
   useEffect(() => {
-    //console.log(props.data)
     if (props.data !== undefined && props.data.length !== 0) {
+      console.log(props.data.length)
       setCategories(Object.keys(props.data[0]));
       setIsLoaded(true);
     }
@@ -46,8 +46,8 @@ const SubBuildingAnalysisGraph = (props: any) => {
 
   return (
     (isLoaded ? (
-    <div>
-      <Chart>
+    <div style={{height: "60vh",  overflow: "scroll"}}>
+      <Chart style={{height: `${props.data.length * 5}vh`}}>
         <ChartTooltip />
         <ChartSeries>
           {categories.map((item: any, index: number) => {
