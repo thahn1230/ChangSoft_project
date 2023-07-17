@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Chart,
   ChartSeries,
@@ -8,34 +8,12 @@ import {
   ChartTooltip,
   ChartCategoryAxisItem,
   ChartSeriesItemTooltip,
+  ChartCategoryAxisTitle,
   ChartLegend,
 } from "@progress/kendo-react-charts";
 
 const toolTipRender = (e: any) => {
-  let value = parseFloat(e.point.dataItem).toFixed(2);
-  let unit = "";
-  let component_type = e.point.series.name.split(" ").slice(1).join(" ");
-
-  switch (e.point.series.name.split(" ")[0]) {
-    case "Concrete":
-      unit = "㎥";
-      break;
-    case "Formwork":
-      unit = "㎡";
-      break;
-    case "Rebar":
-      unit = "Ton";
-      break;
-  }
-
-  return (
-    <div>
-      <p>구분: {component_type}</p>
-      <p>
-        값: {value} {unit}
-      </p>
-    </div>
-  );
+  return (<div><div>구분 :{e.point.series.name} </div>< div> 값 :{e.point.dataItem}</div></div>);
 };
 const colorMapping: { [key: string]: string } = {};
 
@@ -53,41 +31,49 @@ const getRandomColor = () => {
   return blueShades[randomIndex];
 };
 
-const SubBuildingAnalysisGraph2 = (props: any) => {
-  return (
-    props.data.length && (
-      <div>
-        <Chart>
-          <ChartTooltip />
-          <ChartSeries>
-            {props.data.map((item: any, index: number) => {
-              const componentType = String(Object.values(item)[0]);
-              const materialType = String(Object.values(item)[1]);
-              const value = Number(Object.values(item)[2]);
+const SubBuildingAnalysisGraph = (props: any) => {
+  const [categories, setCategories] = useState<string[]>([]);
 
-              console.log("compt");
-              console.log(componentType);
-              console.log(item.component_type);
-              console.log(index);
-              return (
-                <ChartSeriesItem
-                  key={index}
-                  type="bar"
-                  stack={componentType}
-                  data={[value]}
-                  name={`${props.componentType} ${componentType} - ${materialType}`}
-                  visibleInLegend={true}
-                  color={getColor(`${materialType}`)}
-                >
-                  <ChartSeriesItemTooltip render={toolTipRender} />
-                </ChartSeriesItem>
-              );
-            })}
-          </ChartSeries>
-        </Chart>
-      </div>
-    )
+  const [isLoaded, setIsLoaded] =useState<Boolean>(false);
+
+  useEffect(() => {
+    //console.log(props.data)
+    if (props.data !== undefined && props.data.length !== 0) {
+      setCategories(Object.keys(props.data[0]));
+      setIsLoaded(true);
+    }
+  }, [props.data]);
+
+  return (
+    (isLoaded ? (
+    <div>
+      <Chart>
+        <ChartTooltip />
+        <ChartSeries>
+          {categories.map((item: any, index: number) => {
+            return (
+              <ChartSeriesItem
+                type="bar"
+                stack={{group : ""}}
+                data={props.data.map((obj:any)=> obj[item])}
+                name={item}
+                visibleInLegend={true}
+                //color={getColor(`${materialType}`)}
+              >
+                <ChartSeriesItemTooltip render={toolTipRender} />
+              </ChartSeriesItem>
+            );
+          })}
+        </ChartSeries>
+        <ChartCategoryAxis>
+            <ChartCategoryAxisItem categories={props.data.map((obj:any)=>obj[""])}>
+              <ChartCategoryAxisTitle text="구분" />
+            </ChartCategoryAxisItem>
+          </ChartCategoryAxis>
+      </Chart>
+    </div>
+  ) : null)
   );
 };
 
-export default SubBuildingAnalysisGraph2;
+export default SubBuildingAnalysisGraph;

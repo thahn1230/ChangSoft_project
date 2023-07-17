@@ -53,6 +53,7 @@ const AnalysisTab = (props: any) => {
   const [concreteData, setConcreteData] = useState<gridData>([]);
   const [formworkData, setFormworkData] = useState<gridData>([]);
   const [rebarData, setRebarData] = useState<gridData>([]);
+  const [rebarDataNonSubKey, setRebarDataNonSubKey] = useState<gridData>([]);
   const [rebarColumns, setRebarColumns] = useState<{}[]>();
 
   let headerData = [
@@ -229,6 +230,7 @@ const AnalysisTab = (props: any) => {
           }
         }
 
+        //얘네 필요없음
         setGraphDataConcrete(concreteJson);
         setGraphDataFormwork(formworkJson);
         setGraphDataRebar(rebarJson);
@@ -257,7 +259,6 @@ const AnalysisTab = (props: any) => {
     });
     temp.sort();
     const tempSet = new Set(temp);
-
     Array.from(tempSet).map((strength) => {
       const DiametersInStrength: string[] = rebarData.reduce(
         (keys: string[], obj) => {
@@ -275,75 +276,53 @@ const AnalysisTab = (props: any) => {
 
       tempRebarColumns.push({ [strength]: DiametersInStrength });
     });
-
     setRebarColumns(tempRebarColumns);
+
+
+
+    
+    let nonSubKeyData = rebarData.map((item) => {
+      const newObj: { [key: string]: any } = { "": item[""] };
+      for (const key in item) {
+        if (key !== "") {
+          const subItem = item[key];
+          for (const subKey in subItem) {
+            newObj[`${key}_${subKey}`] = subItem[subKey];
+          }
+        }
+      }
+      return newObj;
+    });
+
+    let allSubKeys= new Set<string>();
+    nonSubKeyData.map((item)=>{
+        for(const key of Object.keys(item))
+        {
+          if(key !== "")
+          allSubKeys.add(key)
+        }
+    })
+    nonSubKeyData = nonSubKeyData.map((item: any) => {
+      const newObj: { [key: string]: any } = {};
+      newObj[""] = item[""];
+    
+      for (const key of Array.from(allSubKeys)) {
+        newObj[key] = item[key] === undefined ? null :  item[key];
+      }
+    
+      return newObj;
+    });
+
+    console.log(nonSubKeyData)
+    setRebarDataNonSubKey(nonSubKeyData as gridData);
   }, [rebarData]);
 
-  const groupedDataConcrete = graphDataConcrete.reduce(
-    (acc: any, item: ConcreteJson) => {
-      const { component_type, material_name, total_volume } = item;
-      const key = `${component_type}-${material_name}`;
-
-      if (acc[key]) {
-        acc[key].total_volume += total_volume;
-      } else {
-        acc[key] = {
-          component_type,
-          material_name,
-          total_volume,
-        };
-      }
-
-      return acc;
-    },
-    {}
-  );
-
-  const groupedDataFormwork = graphDataFormwork.reduce(
-    (acc: any, item: FormworkJson) => {
-      const { component_type, formwork_type, total_area } = item;
-      const key = `${component_type}-${formwork_type}`;
-
-      if (acc[key]) {
-        acc[key].total_area += total_area;
-      } else {
-        acc[key] = {
-          component_type,
-          formwork_type,
-          total_area,
-        };
-      }
-
-      return acc;
-    },
-    {}
-  );
-
-  const groupedDataRebar = graphDataRebar.reduce(
-    (acc: any, item: RebarJson) => {
-      const { component_type, rebar_grade, total_weight } = item;
-      const key = `${component_type}-${rebar_grade}`;
-
-      if (acc[key]) {
-        acc[key].total_weight += total_weight;
-      } else {
-        acc[key] = {
-          component_type,
-          rebar_grade,
-          total_weight,
-        };
-      }
-
-      return acc;
-    },
-    {}
-  );
-
-  // 그룹화된데이터를 배열로 변환
-
-  const groupedChartDataConcrete = Object.values(groupedDataConcrete);
-  const groupedChartDataFormwork = Object.values(groupedDataFormwork);
-  const groupedChartDataRebar = Object.values(groupedDataRebar);
+  useEffect(() => {
+    //console.log(rebarDataNonSubKey);
+  }, [rebarDataNonSubKey]);
+  useEffect(() => {
+    //console.log(rebarData);
+  }, [rebarData]);
 
   return (
     <div className="pageDiv">
@@ -385,40 +364,6 @@ const AnalysisTab = (props: any) => {
       </div>
 
       <div className="analysis-table-chart-container">
-        {/* <Splitter panes={panes} onChange={onChange}>
-          <div className="analysis-table-container">
-            <SubBuildingAnalysisTableSingleCol
-              data={concreteData}
-              componentType={"콘크리트(㎥)"}
-            ></SubBuildingAnalysisTableSingleCol>
-            <SubBuildingAnalysisTableSingleCol
-              data={formworkData}
-              componentType={"거푸집(㎡)"}
-            ></SubBuildingAnalysisTableSingleCol>
-            <SubBuildingAnalysisTableSubCol
-              data={rebarData}
-              componentType={"철근(Ton)"}
-              columns={rebarColumns}
-            ></SubBuildingAnalysisTableSubCol>
-          </div>
-          <div className="analysis-chart-container">
-            <SubBuildingAnalysisGraph
-              data={groupedChartDataConcrete}
-              componentType={"Concrete"}
-            ></SubBuildingAnalysisGraph>
-
-            <SubBuildingAnalysisGraph
-              data={groupedChartDataFormwork}
-              componentType={"Formwork"}
-            ></SubBuildingAnalysisGraph>
-
-            <SubBuildingAnalysisGraph
-              data={groupedChartDataRebar}
-              componentType={"Rebar"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter> */}
-
         <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
           <div className="analysis-table-container">
             <SubBuildingAnalysisTableSingleCol
@@ -428,7 +373,7 @@ const AnalysisTab = (props: any) => {
           </div>
           <div className="analysis-chart-container">
             <SubBuildingAnalysisGraph
-              data={groupedChartDataConcrete}
+              data={concreteData}
               componentType={"Concrete"}
             ></SubBuildingAnalysisGraph>
           </div>
@@ -443,7 +388,7 @@ const AnalysisTab = (props: any) => {
           </div>
           <div className="analysis-chart-container">
             <SubBuildingAnalysisGraph
-              data={groupedChartDataFormwork}
+              data={formworkData}
               componentType={"Formwork"}
             ></SubBuildingAnalysisGraph>
           </div>
@@ -459,7 +404,7 @@ const AnalysisTab = (props: any) => {
           </div>
           <div className="analysis-chart-container">
             <SubBuildingAnalysisGraph
-              data={groupedChartDataRebar}
+              data={rebarDataNonSubKey}
               componentType={"Rebar"}
             ></SubBuildingAnalysisGraph>
           </div>
