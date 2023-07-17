@@ -528,11 +528,11 @@ const InsightList = (props: any) => {
           style={{ width: "60%", margin: "10px" }}
         />
       </div>
-      
+
       <div className="second-line-container">
         <label style={{ marginTop: "1%", textAlign: "left" }}>Company : </label>
         <MultiSelectTree
-          style={{ width: "25%", margin: "10px"}}
+          style={{ width: "25%", margin: "10px" }}
           data={constructionCompanyList}
           value={selectedConstructionCompanyList}
           onChange={onNewConstructionCompanySelection}
@@ -554,7 +554,12 @@ const InsightList = (props: any) => {
           checkIndeterminateField={checkIndeterminateField}
           disabled={
             selectedConstructionCompanyList.length === 0 ||
-            selectedInsightIndexInList + 1 === 4
+            selectedInsightIndexInList + 1 === 4 ||
+            ((selectedInsightIndexInList + 1 === 1 ||
+              selectedInsightIndexInList + 1 === 2 ||
+              selectedInsightIndexInList + 1 === 3 ||
+              selectedInsightIndexInList + 1 === 5) &&
+              selectedConstructionCompanyList.length !== 1)
           }
           expandField={expandField}
           tags={
