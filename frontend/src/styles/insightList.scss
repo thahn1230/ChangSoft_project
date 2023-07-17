@@ -22,18 +22,13 @@
     border-color: blue !important;
 }
 
-.instruction-button-container {
-    display: flex;
-}
-
 .instruction-container {
-    justify-self: flex-start;
-    margin-top: 1%;
+    justify-self: flex-end;
+    margin-top: 1.25%;
     margin-left: 7vw;
 }
 
 .button-container {
     justify-self: flex-end;
-    padding-left: 65vw;
     margin-right: 1%;
 }
