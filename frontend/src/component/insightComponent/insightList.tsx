@@ -47,11 +47,12 @@ const InsightList = (props: any) => {
     "건설사의 한 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
     "하나의 빌딩에 대해서 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석",
   ]);
+  const [selectionInstruction, setSelectionInstruction] = useState<string>("");
 
   //only in list
   const [selectedInsightInList, setSelectedInsightInList] = useState<string>();
   const [selectedInsightIndexInList, setSelectedInsightIndexInList] =
-    useState(0);
+    useState(-1);
   //actually selected value
   const [selectedInsightIndex, setSelectedInsightIndex] = useState(-1);
 
@@ -199,6 +200,23 @@ const InsightList = (props: any) => {
   //initialize lower filters when upper filter changes
   useEffect(() => {
     setSelectedConstructionCompanyList([]);
+
+    switch (selectedInsightIndexInList + 1) {
+      case 1:
+      case 2:
+      case 3:
+      case 5:
+        setSelectionInstruction("한 개의 건설사만 선택해주세요")
+        break;
+      case 4:
+        setSelectionInstruction("비교할 건설사들을 선택해주세요")
+        break;
+      case 6:
+        setSelectionInstruction("한 개의 빌딩만 선택해주세요")
+        break;
+        default:
+          setSelectionInstruction("")
+    }
   }, [selectedInsightIndexInList]);
 
   //update checkboxes
@@ -528,11 +546,11 @@ const InsightList = (props: any) => {
           style={{ width: "60%", margin: "10px" }}
         />
       </div>
-      
+
       <div className="second-line-container">
         <label style={{ marginTop: "1%", textAlign: "left" }}>Company : </label>
         <MultiSelectTree
-          style={{ width: "25%", margin: "10px"}}
+          style={{ width: "25%", margin: "10px" }}
           data={constructionCompanyList}
           value={selectedConstructionCompanyList}
           onChange={onNewConstructionCompanySelection}
@@ -554,7 +572,12 @@ const InsightList = (props: any) => {
           checkIndeterminateField={checkIndeterminateField}
           disabled={
             selectedConstructionCompanyList.length === 0 ||
-            selectedInsightIndexInList + 1 === 4
+            selectedInsightIndexInList + 1 === 4 ||
+            ((selectedInsightIndexInList + 1 === 1 ||
+              selectedInsightIndexInList + 1 === 2 ||
+              selectedInsightIndexInList + 1 === 3 ||
+              selectedInsightIndexInList + 1 === 5) &&
+              selectedConstructionCompanyList.length !== 1)
           }
           expandField={expandField}
           tags={
@@ -598,6 +621,7 @@ const InsightList = (props: any) => {
           }
         />
       </div>
+      <div>{selectionInstruction}</div>
       <div className="button-container">
         <Button
           onClick={getGraph}
