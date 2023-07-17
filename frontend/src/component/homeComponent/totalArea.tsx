@@ -25,7 +25,7 @@ interface projectsTotalArea {
 
 const categoryContent = (e: any) => {
   return (
-    "&nbsp;&nbsp;" + (e.range_num * 25000).toString()
+    "&nbsp;&nbsp;&nbsp;" + (e.range_num * 25000).toString()
     // "&nbsp;&nbsp;&nbsp;" +
     // Math.floor(((e.max_val - e.min_val) / 8) * e.range_num).toString()
   );
