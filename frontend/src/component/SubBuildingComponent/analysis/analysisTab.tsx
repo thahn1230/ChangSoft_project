@@ -63,15 +63,15 @@ const AnalysisTab = (props: any) => {
   ];
 
   const [concretePanes, setConcretePanes] = React.useState<Array<any>>([
-    { size: "60%", min: "20px", collapsible: true, scrollable: false },
+    { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
   const [formworkPanes, setFormworkPanes] = React.useState<Array<any>>([
-    { size: "60%", min: "20px", collapsible: true, scrollable: false },
+    { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
   const [rebarPanes, setRebarPanes] = React.useState<Array<any>>([
-    { size: "60%", min: "20px", collapsible: true, scrollable: false },
+    { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
 

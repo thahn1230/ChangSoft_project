@@ -374,13 +374,18 @@ def get_analysis_concrete_data2(sub_building_id: int):
         JOIN sub_building ON component.sub_building_id = sub_building.id
         WHERE sub_building.id = {sub_building_id}
         GROUP BY component_type, material_name
-        ORDER BY component_type
+        ORDER BY material_name
     """
 
     concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
+    concrete_analysis_data_pivot_df = concrete_analysis_data_df.pivot(
+        index="material_name",
+        columns="component_type",
+        values="total_volume",
+    )
 
     return JSONResponse(
-        concrete_analysis_data_df.to_json(force_ascii=False, orient="records")
+        concrete_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
     
 
