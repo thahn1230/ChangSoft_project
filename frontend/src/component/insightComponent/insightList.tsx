@@ -545,6 +545,7 @@ const InsightList = (props: any) => {
           onChange={onSelectedInsightChange}
           style={{ width: "60%", margin: "10px" }}
         />
+        <div className="instruction-container">{selectionInstruction}</div>
       </div>
 
       <div className="second-line-container">
@@ -621,22 +622,19 @@ const InsightList = (props: any) => {
           }
         />
       </div>
-      <div className="instruction-button-container">
-        <div className="instruction-container">{selectionInstruction}</div>
-        <div className="button-container">
-          <Button
-            onClick={getGraph}
-            disabled={!isAnalyzable}
-            style={{
-              backgroundColor: "rgb(25, 101, 203)",
-              color: "white",
-              width: "6vw",
-              height: "4vh",
-            }}
-          >
-            Analyze
-          </Button>
-        </div>
+      <div className="button-container">
+        <Button
+          onClick={getGraph}
+          disabled={!isAnalyzable}
+          style={{
+            backgroundColor: "rgb(25, 101, 203)",
+            color: "white",
+            width: "6vw",
+            height: "4vh",
+          }}
+        >
+          Analyze
+        </Button>
       </div>
     </div>
   );
