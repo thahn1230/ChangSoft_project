@@ -279,8 +279,6 @@ const AnalysisTab = (props: any) => {
     setRebarColumns(tempRebarColumns);
 
 
-
-    
     let nonSubKeyData = rebarData.map((item) => {
       const newObj: { [key: string]: any } = { "": item[""] };
       for (const key in item) {
