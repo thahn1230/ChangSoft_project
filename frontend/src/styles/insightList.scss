@@ -15,14 +15,25 @@
     margin-left: 1%;
 }
 
-.button-container {
-    justify-self: flex-end;
-    margin-right: 1%;
-}
-
 .k-checkbox:checked {
     background-color: rgb(57, 119, 201) !important;
     color: white !important;
     box-shadow: 0 0 1px blue !important;
     border-color: blue !important;
+}
+
+.instruction-button-container {
+    display: flex;
+}
+
+.instruction-container {
+    justify-self: flex-start;
+    margin-top: 1%;
+    margin-left: 7vw;
+}
+
+.button-container {
+    justify-self: flex-end;
+    padding-left: 65vw;
+    margin-right: 1%;
 }

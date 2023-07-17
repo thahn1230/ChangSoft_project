@@ -206,16 +206,16 @@ const InsightList = (props: any) => {
       case 2:
       case 3:
       case 5:
-        setSelectionInstruction("한 개의 건설사만 선택해주세요")
+        setSelectionInstruction("한 개의 건설사만 선택해주세요");
         break;
       case 4:
-        setSelectionInstruction("비교할 건설사들을 선택해주세요")
+        setSelectionInstruction("비교할 건설사들을 선택해주세요");
         break;
       case 6:
-        setSelectionInstruction("한 개의 빌딩만 선택해주세요")
+        setSelectionInstruction("한 개의 빌딩만 선택해주세요");
         break;
-        default:
-          setSelectionInstruction("")
+      default:
+        setSelectionInstruction("");
     }
   }, [selectedInsightIndexInList]);
 
@@ -621,20 +621,22 @@ const InsightList = (props: any) => {
           }
         />
       </div>
-      <div>{selectionInstruction}</div>
-      <div className="button-container">
-        <Button
-          onClick={getGraph}
-          disabled={!isAnalyzable}
-          style={{
-            backgroundColor: "rgb(25, 101, 203)",
-            color: "white",
-            width: "6vw",
-            height: "4vh",
-          }}
-        >
-          Analyze
-        </Button>
+      <div className="instruction-button-container">
+        <div className="instruction-container">{selectionInstruction}</div>
+        <div className="button-container">
+          <Button
+            onClick={getGraph}
+            disabled={!isAnalyzable}
+            style={{
+              backgroundColor: "rgb(25, 101, 203)",
+              color: "white",
+              width: "6vw",
+              height: "4vh",
+            }}
+          >
+            Analyze
+          </Button>
+        </div>
       </div>
     </div>
   );
