@@ -47,7 +47,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
   return (
     (isLoaded ? (
     <div style={{height: "60vh",  overflow: "scroll"}}>
-      <Chart style={{height: `${props.data.length * 5}vh`}}>
+      <Chart style={{height: `${props.data.length * 5 + 10}vh`}}>
         <ChartTooltip />
         <ChartSeries>
           {categories.map((item: any, index: number) => {
