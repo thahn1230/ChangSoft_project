@@ -187,7 +187,6 @@ const FloorAnalysisTab = (props: any) => {
 
     setRebarColumns(tempRebarColumns);
 
-
     let nonSubKeyData = rebarData.map((item) => {
       const newObj: { [key: string]: any } = { "": item[""] };
       for (const key in item) {
@@ -201,26 +200,24 @@ const FloorAnalysisTab = (props: any) => {
       return newObj;
     });
 
-    let allSubKeys= new Set<string>();
-    nonSubKeyData.map((item)=>{
-        for(const key of Object.keys(item))
-        {
-          if(key !== "")
-          allSubKeys.add(key)
-        }
-    })
+    let allSubKeys = new Set<string>();
+    nonSubKeyData.map((item) => {
+      for (const key of Object.keys(item)) {
+        if (key !== "") allSubKeys.add(key);
+      }
+    });
     nonSubKeyData = nonSubKeyData.map((item: any) => {
       const newObj: { [key: string]: any } = {};
       newObj[""] = item[""];
-    
+
       for (const key of Array.from(allSubKeys)) {
-        newObj[key] = item[key] === undefined ? null :  item[key];
+        newObj[key] = item[key] === undefined ? null : item[key];
       }
-    
+
       return newObj;
     });
 
-    console.log(nonSubKeyData)
+    console.log(nonSubKeyData);
     setRebarDataNonSubKey(nonSubKeyData as gridData);
   }, [rebarData]);
 
@@ -256,6 +253,7 @@ const FloorAnalysisTab = (props: any) => {
           <div className="analysis-chart-container">Graph</div>
         </Splitter> */}
 
+        <header className="analysis-table-type">콘크리트(㎥)</header>
         <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
           <div>
             <SubBuildingAnalysisTableSingleCol
@@ -264,13 +262,14 @@ const FloorAnalysisTab = (props: any) => {
             ></SubBuildingAnalysisTableSingleCol>
           </div>
           <div>
-          <SubBuildingAnalysisGraph
+            <SubBuildingAnalysisGraph
               data={concreteData}
               componentType={"Concrete"}
             ></SubBuildingAnalysisGraph>
-
           </div>
         </Splitter>
+
+        <header className="analysis-table-type">거푸집(㎡)</header>
         <Splitter panes={formworkPanes} onChange={onFormworkPaneChange}>
           <div>
             <SubBuildingAnalysisTableSingleCol
@@ -279,12 +278,14 @@ const FloorAnalysisTab = (props: any) => {
             ></SubBuildingAnalysisTableSingleCol>
           </div>
           <div>
-          <SubBuildingAnalysisGraph
+            <SubBuildingAnalysisGraph
               data={formworkData}
               componentType={"Formwork"}
             ></SubBuildingAnalysisGraph>
           </div>
         </Splitter>
+
+        <header className="analysis-table-type">철근(Ton)</header>
         <Splitter panes={rebarPanes} onChange={onRebarPaneChange}>
           <div>
             <SubBuildingAnalysisTableSubCol
@@ -294,7 +295,7 @@ const FloorAnalysisTab = (props: any) => {
             ></SubBuildingAnalysisTableSubCol>
           </div>
           <div>
-          <SubBuildingAnalysisGraph
+            <SubBuildingAnalysisGraph
               data={rebarDataNonSubKey}
               componentType={"Rebar"}
             ></SubBuildingAnalysisGraph>

@@ -14,11 +14,11 @@ const SubBuildingAnalysisTable = (props: any) => {
           <div className="analysis-table-container">
             <br></br>
             <header className="analysis-table-type">콘크리트(㎥)</header>
-            <div style={{ width: "100%" }}>
+            <div>
               <Grid
                 data={props.concreteData}
-                style={{ width: "100%" }}
-                scrollable="scrollable"
+                style={{ width: "30%" }}
+                scrollable={"scrollable"}
                 fixedScroll={true}
               >
                 {props.concreteData !== undefined &&
