@@ -368,51 +368,6 @@ const AnalysisTab = (props: any) => {
       </div>
 
       <div className="analysis-table-chart-container">
-<<<<<<< HEAD
-      <Splitter panes={panes} onChange={onPaneChange}>
-          <div className="analysis-table-container">
-            <div className="analysis-table">
-              <header className="analysis-table-type">콘크리트(㎥)</header>
-              <SubBuildingAnalysisTableSingleCol
-                data={concreteData}
-              ></SubBuildingAnalysisTableSingleCol>
-            </div>
-            
-            <div className="analysis-table">
-              <header className="analysis-table-type">거푸집(㎡)</header>
-              <SubBuildingAnalysisTableSingleCol
-                data={formworkData}
-              ></SubBuildingAnalysisTableSingleCol>
-            </div>
-
-            <div className="analysis-table">
-              <header className="analysis-table-type">철근(Ton)</header>
-              <SubBuildingAnalysisTableSubCol
-                data={rebarData}
-                columns={rebarColumns}
-              ></SubBuildingAnalysisTableSubCol>
-            </div>
-          </div>
-          <div className="analysis-chart-container">
-            <div className="analysis-chart">
-              <SubBuildingAnalysisGraph
-                data={concreteData}
-                componentType={"Concrete"}
-              ></SubBuildingAnalysisGraph>
-            </div>
-            <div className="analysis-chart">
-              <SubBuildingAnalysisGraph
-                data={formworkData}
-                componentType={"Formwork"}
-              ></SubBuildingAnalysisGraph>
-            </div>
-            <div className="analysis-chart">
-              <SubBuildingAnalysisGraph
-                data={rebarDataNonSubKey}
-                componentType={"Rebar"}
-              ></SubBuildingAnalysisGraph>
-            </div>
-=======
         <header className="analysis-table-type">콘크리트(㎥)</header>
         <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
           <div className="analysis-table-container">
@@ -456,7 +411,6 @@ const AnalysisTab = (props: any) => {
               data={rebarDataNonSubKey}
               componentType={"Rebar"}
             ></SubBuildingAnalysisGraph>
->>>>>>> dba6e08427be6acf354d73e3e1ec172a8e7427b7
           </div>
         </Splitter>
       </div>

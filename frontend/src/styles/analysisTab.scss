@@ -1,5 +1,6 @@
 .analysis-chart-container {
-    float: right;
+    // float: right;
+    justify-content: center;
     margin-left: 0.6%;
     width: 95%
 }
@@ -15,15 +16,5 @@
 .k-splitbar:focus {
     color: white !important;
     background-color: rgb(22, 101, 203) !important;
-<<<<<<< HEAD
-    width: 4px !important;
-}
-
-.analysis-chart-container {
-    justify-content: center;
-}
-=======
     width : 4px !important;
 }
-
->>>>>>> dba6e08427be6acf354d73e3e1ec172a8e7427b7
