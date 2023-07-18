@@ -38,16 +38,17 @@ const SubBuildingAnalysisGraph = (props: any) => {
 
   useEffect(() => {
     if (props.data !== undefined && props.data.length !== 0) {
-      console.log(props.data.length)
       setCategories(Object.keys(props.data[0]));
       setIsLoaded(true);
+
+      console.log(props.data)
     }
   }, [props.data]);
 
   return (
     (isLoaded ? (
     <div style={{height: "60vh",  overflow: "scroll"}}>
-      <Chart style={{height: `${props.data.length * 5}vh`}}>
+      <Chart style={{height: `${props.data.length * 5 + 10}vh`}}>
         <ChartTooltip />
         <ChartSeries>
           {categories.map((item: any, index: number) => {

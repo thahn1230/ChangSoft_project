@@ -125,7 +125,7 @@ const BuildingDetail = (props: any) => {
           />
           <GridColumn
             field="plane_shape"
-            title="평면현상"
+            title="평면형상"
             headerClassName={headerClassName}
           />
           <GridColumn

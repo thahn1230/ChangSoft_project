@@ -270,9 +270,8 @@ def extract_keywords(input_string):
     else:
         return "etc."
 
-
-@router.get("/insight/1")
-def get_insight_1(project_ids_str):
+#@router.get("/insight/1")
+def get_insight_1(project_ids_str: str):
     # 예제 1번
     # company_name의 모든 프로젝트에 있는 빌딩별, 콘크리트 M3당 철근량(ton) 값에 대한 분석
     # 그래프 1 : 빌딩별 콘크리트 M3당 철근량(ton) 값의 분포 히스토그램
@@ -390,7 +389,7 @@ def get_insight_1(project_ids_str):
     return figures_json
 
 
-@router.get("/insight/2")
+#@router.get("/insight/2")
 def get_insight_2(project_ids_str):
     # 예제 2번
     # company_name의 모든 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석
@@ -447,7 +446,7 @@ def get_insight_2(project_ids_str):
     return json.dumps(response_data)
 
 
-@router.get("/insight/3")
+#@router.get("/insight/3")
 def get_insight_3(project_ids_str):
     # 예제 3번
     # company_name의 4개 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교
@@ -527,7 +526,7 @@ def get_insight_3(project_ids_str):
     return json.dumps(response_data)
 
 
-@router.get("/insight/4")
+#@router.get("/insight/4")
 def get_insight_4(company_name_str):
     # 예제 4번
     # 건설사별 콘크리트당 철근중량 비교
@@ -610,7 +609,7 @@ def get_insight_4(company_name_str):
     return json.dumps(response_data)
 
 
-@router.get("/insight/5")
+#@router.get("/insight/5")
 def get_insight_5(project_id_str):
     project_id = json.loads(project_id_str)[0]
     query=f"""
@@ -752,7 +751,7 @@ def get_insight_5(project_id_str):
     return json.dumps(response_data)
 
 
-@router.get("/insight/6")
+#@router.get("/insight/6")
 def get_insight_6(project_building_ids_str):
     # 예제 6번
     # 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석
@@ -967,3 +966,21 @@ def get_insight_6(project_building_ids_str):
     figures_json = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
 
     return figures_json
+
+@router.get("/insight/{example_id}")
+def get_insight(example_id: int, data: str):
+    if example_id == 1:
+        result_json = get_insight_1(data)
+    elif example_id == 2:
+        result_json = get_insight_2(data)
+    elif example_id == 3:
+        result_json = get_insight_3(data)
+    elif example_id == 4:
+        result_json = get_insight_4(data)
+    elif example_id == 5:
+        result_json = get_insight_5(data)
+    elif example_id == 6:
+        result_json = get_insight_6(data) 
+    else:
+        return []
+    return result_json

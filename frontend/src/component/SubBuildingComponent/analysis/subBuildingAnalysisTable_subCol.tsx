@@ -19,7 +19,7 @@ const SubBuildingAnalysisTableSubCol  = (props: any) => {
                title=""
                field=""
                headerClassName="custom-header-cell"
-               width={"100%"}
+               width={"130"}
              ></GridColumn>
              {props.columns !== undefined &&
                props.columns.map((item: { [key: string]: any }) => {
@@ -41,7 +41,7 @@ const SubBuildingAnalysisTableSubCol  = (props: any) => {
                            format="{0:n2}"
                            headerClassName="custom-header-cell"
                            className="custom-number-cell"
-                           width={"100%"}
+                           width={"130"}
                          ></GridColumn>
                        );
                      })}
