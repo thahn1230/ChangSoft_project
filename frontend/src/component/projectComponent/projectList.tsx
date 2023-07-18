@@ -464,6 +464,7 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
+              fontSize: "80%"
             }}
           >
             Reset filters
@@ -474,6 +475,7 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
+              fontSize: "80%"
             }}
           >
             Apply filters
@@ -482,7 +484,7 @@ const ProjectList = (props: any) => {
             <img
               alt="loader"
               src={loadingBars}
-              style={{ width: "2%", height: "2%" }}
+              style={{ width: "2%", height: "2%", marginLeft: "1%", marginRight: "1%" }}
             />
           ) : null}
         </div>
