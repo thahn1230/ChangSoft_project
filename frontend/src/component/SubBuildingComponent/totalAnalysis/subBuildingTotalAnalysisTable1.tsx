@@ -73,6 +73,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
   //여기에서 테이블 수정
   useEffect(() => {
+    props.setSelectedSubBuildingId(selectedSubBuildingId)
     const fetchData = async () => {
       try {
         if (selectedSubBuildingId === undefined) return;
