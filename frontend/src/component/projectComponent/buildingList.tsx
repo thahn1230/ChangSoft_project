@@ -131,7 +131,7 @@ const BuildingList = (props: any) => {
   return (
     <div className="building-list-container">
       <Grid
-        style={{ height: "60vh", width: "100%" }}
+        style={{ height: "60vh", width: "97.5%" }}
         data={buildingList.slice(page.skip, page.take + page.skip)}
         skip={page.skip}
         take={page.take}

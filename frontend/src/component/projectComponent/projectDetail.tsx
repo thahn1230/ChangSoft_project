@@ -48,7 +48,7 @@ const ProjectDetail = (props: any) => {
 
   return (
     <div>
-      <Grid data={projectData}>
+      <Grid data={projectData} style={{width: "96.5%"}}>
         <GridColumn
           field="project_name"
           title="프로젝트명"
@@ -62,7 +62,7 @@ const ProjectDetail = (props: any) => {
         />
       </Grid>
 
-      <Grid data={projectData}>
+      <Grid data={projectData} style={{width: "96.5%"}}>
         <GridColumn
           field="building_area"
           title="건축면적(㎡)"
@@ -89,7 +89,7 @@ const ProjectDetail = (props: any) => {
         />
       </Grid>
 
-      <Grid data={projectData}>
+      <Grid data={projectData} style={{width: "96.5%"}}>
         <GridColumn title="프로젝트 기간" headerClassName={headerClassName}>
           <GridColumn
             field="construction_start"

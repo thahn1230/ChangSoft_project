@@ -458,37 +458,35 @@ const ProjectList = (props: any) => {
         </div>
 
         <div className="button-container">
-          {isLoading ? (
-            <img
-              alt="loader"
-              src={loadingBars}
-              style={{ width: "2%", height: "2%" }}
-            />
-          ) : null}
-          <Button
-            onClick={applyFilter}
-            className="apply-filter-button"
-            style={{
-              backgroundColor: "rgb(25, 101, 203)",
-              color: "white",
-              width: "6vw",
-              height: "4vh",
-            }}
-          >
-            Apply filters
-          </Button>
           <Button
             onClick={resetFilter}
             className="reset-filter-button"
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
-              width: "6vw",
-              height: "4vh",
+              fontSize: "80%"
             }}
           >
             Reset filters
           </Button>
+          <Button
+            onClick={applyFilter}
+            className="apply-filter-button"
+            style={{
+              backgroundColor: "rgb(25, 101, 203)",
+              color: "white",
+              fontSize: "80%"
+            }}
+          >
+            Apply filters
+          </Button>
+          {isLoading ? (
+            <img
+              alt="loader"
+              src={loadingBars}
+              style={{ width: "2%", height: "2%", marginLeft: "1%", marginRight: "1%" }}
+            />
+          ) : null}
         </div>
       </div>
     </div>

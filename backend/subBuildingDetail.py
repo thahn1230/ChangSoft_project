@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import json
 import plotly
 
+from typing import List
 from dbAccess import create_db_connection
 
 router = APIRouter()
@@ -257,25 +258,6 @@ def get_pivot_analysis_concrete_data1(building_id: int):
     )
 
 
-@router.get("/sub_building/analysis_table_all/{building_id}/concrete/non_pivot")
-def get_analysis_concrete_data1(building_id: int):
-    concrete_query = f"""
-        SELECT component_type, material_name, 
-        SUM(concrete.volume) AS total_volume FROM concrete
-        JOIN component ON concrete.component_id = component.id
-        JOIN sub_building ON component.sub_building_id = sub_building.id
-        WHERE sub_building.building_id = {building_id}
-        GROUP BY component_type, material_name
-        ORDER BY component_type
-    """
-
-    concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
-
-    return JSONResponse(
-        concrete_analysis_data_df.to_json(force_ascii=False, orient="records")
-    )
-
-
 # 분석표 전체 sub_building에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/formwork")
 def get_pivot_analysis_formwork_data1(building_id: int):
@@ -300,24 +282,6 @@ def get_pivot_analysis_formwork_data1(building_id: int):
         formwork_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
     
-@router.get("/sub_building/analysis_table_all/{building_id}/formwork/non_pivot")
-def get_analysis_formwork_data1(building_id: int):
-    formwork_query = f"""
-        SELECT component_type, formwork_type, 
-        SUM(formwork.area) AS total_area FROM formwork
-        JOIN component ON formwork.component_id = component.id
-        JOIN sub_building ON component.sub_building_id = sub_building.id
-        WHERE sub_building.building_id = {building_id}
-        GROUP BY component_type, formwork_type
-        ORDER BY component_type
-    """
-
-    formwork_analysis_data_df = pd.read_sql(formwork_query, engine)
-
-    return JSONResponse(
-        formwork_analysis_data_df.to_json(force_ascii=False, orient="records")
-    )
-
 
 # 분석표 전체 sub_building에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/rebar")
@@ -365,30 +329,6 @@ def get_pivot_analysis_concrete_data2(sub_building_id: int):
     )
 
 
-@router.get("/sub_building/analysis_table/{sub_building_id}/concrete/non_pivot")
-def get_analysis_concrete_data2(sub_building_id: int):
-    concrete_query = f"""
-        SELECT component_type, material_name, 
-        SUM(concrete.volume) AS total_volume FROM concrete
-        JOIN component ON concrete.component_id = component.id
-        JOIN sub_building ON component.sub_building_id = sub_building.id
-        WHERE sub_building.id = {sub_building_id}
-        GROUP BY component_type, material_name
-        ORDER BY material_name
-    """
-
-    concrete_analysis_data_df = pd.read_sql(concrete_query, engine)
-    concrete_analysis_data_pivot_df = concrete_analysis_data_df.pivot(
-        index="material_name",
-        columns="component_type",
-        values="total_volume",
-    )
-
-    return JSONResponse(
-        concrete_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
-    )
-    
-
 # 분석표 sub_building 1개에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/formwork")
 def get_pivot_analysis_formwork_data2(sub_building_id: int):
@@ -413,25 +353,6 @@ def get_pivot_analysis_formwork_data2(sub_building_id: int):
         formwork_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
 
-
-@router.get("/sub_building/analysis_table/{sub_building_id}/formwork/non_pivot")
-def get_analysis_formwork_data2(sub_building_id: int):
-    formwork_query = f"""
-        SELECT component_type, formwork_type, 
-        SUM(formwork.area) AS total_area FROM formwork
-        JOIN component ON formwork.component_id = component.id
-        JOIN sub_building ON component.sub_building_id = sub_building.id
-        WHERE sub_building.id = {sub_building_id}
-        GROUP BY component_type, formwork_type
-        ORDER BY component_type
-    """
-
-    formwork_analysis_data_df = pd.read_sql(formwork_query, engine)
-
-    return JSONResponse(
-        formwork_analysis_data_df.to_json(force_ascii=False, orient="records")
-    )
-    
 
 # 분석표 sub_building 1개에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/rebar")
@@ -488,18 +409,44 @@ def draw_analysis_concrete2(sub_building_id: int):
     return figures_json
 
 ## 층별총집계표
-# 층별총집계표에서의 concrete
-@router.get("/sub_building/floor_analysis_table/{building_id}/concrete")
-def get_floor_analysis_concrete_data(building_id: int):
+# 부재별층잡계표
+# 빌딩 안에 어떠한 component_type이 있는지 알려주는 함수
+@router.get("/sub_building/floor_analysis_table/{building_id}/component_type")
+def get_floor_analysis_component_type_data(building_id: int):
+    query=f"""
+        SELECT component_type FROM formwork
+        JOIN component ON component.id = formwork.component_id
+        JOIN sub_building ON sub_building.id = component.sub_building_id
+        JOIN building ON building.id = sub_building	.building_id
+        WHERE building.id = {building_id}
+        GROUP BY component_type
+        ORDER BY component_type
+    """
+    
+    component_type_data = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        component_type_data.to_json(force_ascii=False, orient="records")
+    )
+
+# 콘크리트
+@router.get("/sub_building/floor_analysis_table/{building_id}/concrete/filter")
+def get_floor_analysis_concrete_filtered(building_id: int, component_types: str):
+    component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
+    if component_types is "":
+        return []
+    
     query = f"""
-        SELECT floor_name, material_name, 
+        SELECT floor_name, material_name, floor_number,
         SUM(concrete.volume) AS total_volume FROM concrete
         JOIN component ON concrete.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        GROUP BY floor_name, concrete.material_name, floor.id
-        ORDER BY floor.id
+        AND component.component_type IN ({component_types})
+        GROUP BY floor_name, concrete.material_name, floor_number
+        ORDER BY floor_number DESC
     """
 
     concrete_floor_analysis_data_df = pd.read_sql(query, engine)
@@ -507,42 +454,52 @@ def get_floor_analysis_concrete_data(building_id: int):
         index="floor_name",
         columns="material_name",
         values="total_volume",
+        sort=False,
     )
 
     return JSONResponse(
         concrete_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
-
-
-# 층별총집계표에서의 formwork
-@router.get("/sub_building/floor_analysis_table/{building_id}/formwork")
-def get_floor_analysis_formwork_data(building_id: int):
+    
+# 거푸집
+@router.get("/sub_building/floor_analysis_table/{building_id}/formwork/filter")
+def get_floor_analysis_formwork_filtered(building_id: int, component_types: str):
+    component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
+    if component_types is "":
+        return []
+    
     query = f"""
-        SELECT floor_name, formwork_type, 
+        SELECT floor_name, formwork_type, floor_number,
         SUM(formwork.area) AS total_area FROM formwork
         JOIN component ON formwork.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        GROUP BY floor_name, formwork_type
+        AND component.component_type IN ({component_types})
+        GROUP BY floor_name, formwork_type, floor_number
+        ORDER BY floor_number DESC
     """
 
     formwork_floor_analysis_data_df = pd.read_sql(query, engine)
 
-    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot(
+    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot_table(
         index="floor_name",
         columns="formwork_type",
         values="total_area",
+        sort=False,
     )
 
     return JSONResponse(
         formwork_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
     )
-
-
-# 층별총집계표에서의 rebar
-@router.get("/sub_building/floor_analysis_table/{building_id}/rebar")
-def get_floor_analysis_rebar_data(building_id: int):
+    
+# 철근
+@router.get("/sub_building/floor_analysis_table/{building_id}/rebar/filter")
+def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
+    component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
+    
     query = f"""
         SELECT floor_name, rebar_grade, 
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
@@ -551,6 +508,7 @@ def get_floor_analysis_rebar_data(building_id: int):
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
+        AND component.component_type IN ({component_types})
         GROUP BY floor_name, rebar_grade, rebar_diameter
     """
 
