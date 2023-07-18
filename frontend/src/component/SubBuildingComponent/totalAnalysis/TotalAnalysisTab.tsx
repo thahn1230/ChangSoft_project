@@ -55,8 +55,6 @@ const TotalAnalysisTab = (props: any) => {
   const [valueInfo, setValueInfo] =
     useState<subBuildingAnalysisValue_interface[]>();
 
-  useEffect(()=>{console.log(selectedSubBuildingId)},[selectedSubBuildingId])
-  
   useEffect(() => {
     const fetchData = async () => {
       try {

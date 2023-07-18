@@ -47,9 +47,7 @@ const FloorAnalysisTab = (props: any) => {
 
   const [selectedType, setSelectedType] = useState("Concrete");
   const [selectedTypeHeader, setSelectedTypeHeader] = useState("콘크리트(㎥)");
-  const [selectedGridChart, setSelectedGridChart] = useState(
-    <div>부재를 선택해주세요.</div>
-  );
+  const [selectedGridChart, setSelectedGridChart] = useState(<div></div>);
 
   const [componentTypeList, setComponentTypeList] = useState<
     { componentType: string; id: number; checked: boolean }[]
@@ -62,7 +60,7 @@ const FloorAnalysisTab = (props: any) => {
     { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
-  const [fetched,setFetched]=useState<boolean>(false);
+  const [fetched, setFetched] = useState<boolean>(false);
 
   const onPaneChange = (event: SplitterOnChangeEvent) => {
     setPanes(event.newState);
@@ -94,16 +92,17 @@ const FloorAnalysisTab = (props: any) => {
   }, [props.buildingInfo]);
 
   useEffect(() => {
-    if(fetched)
-      return;
+    if (fetched) return;
 
-    if (componentTypeList.length > 0) { 
+    if (componentTypeList.length > 0) {
       setFetched(true);
-      const listWithoutAll = componentTypeList.map((item)=>({...item,checked:true}));
+      const listWithoutAll = componentTypeList.map((item) => ({
+        ...item,
+        checked: true,
+      }));
       listWithoutAll.shift();
-      setSelectedComponentType(listWithoutAll)
+      setSelectedComponentType(listWithoutAll);
     }
-
   }, [componentTypeList]);
 
   useEffect(() => {
@@ -199,7 +198,11 @@ const FloorAnalysisTab = (props: any) => {
       }
     };
 
-    fetchData();
+    if (selectedComponentType.length === 0) {
+      setSelectedGridChart(<div>부재를 선택해주세요.</div>);
+    } else {
+      fetchData();
+    }
   }, [selectedComponentType]);
 
   useEffect(() => {
@@ -267,6 +270,21 @@ const FloorAnalysisTab = (props: any) => {
   }, [rebarData]);
 
   useEffect(() => {
+    if(selectedComponentType.length===0)
+    {
+      switch (selectedType) {
+        case "Concrete":
+          setSelectedTypeHeader("콘크리트(㎥)");
+          break;
+        case "Formwork":
+          setSelectedTypeHeader("거푸집(㎡)");
+          break;
+        case "Rebar":
+          setSelectedTypeHeader("철근(Ton)");
+          break;
+      }
+      return;
+    }
     switch (selectedType) {
       case "Concrete":
         setSelectedTypeHeader("콘크리트(㎥)");
@@ -347,6 +365,10 @@ const FloorAnalysisTab = (props: any) => {
     [setSelectedType]
   );
 
+  const onSelectedTypeChange = (e: any) => {
+    setSelectedType(e.value);
+  };
+
   return (
     <div className="pageDiv">
       <div className="info-table-container">
@@ -373,29 +395,11 @@ const FloorAnalysisTab = (props: any) => {
           setComponentTypeList={setComponentTypeList}
           setSelectedComponentType={setSelectedComponentType}
         />
-        <RadioButton
-          value="Concrete"
-          checked={selectedType === "Concrete"}
-          label="콘크리트"
-          onChange={onTypeChange}
-          style={{ marginLeft: "10px" }}
-          className="k-radio-button"
-        />
-        <RadioButton
-          value="Formwork"
-          checked={selectedType === "Formwork"}
-          label="거푸집"
-          onChange={onTypeChange}
-          style={{ marginLeft: "10px" }}
-          className="k-radio-button"
-        />
-        <RadioButton
-          value="Rebar"
-          checked={selectedType === "Rebar"}
-          label="철근"
-          onChange={onTypeChange}
-          style={{ marginLeft: "10px" }}
-          className="k-radio-button"
+
+        <DropDownList
+          data={["Concrete", "Formwork", "Rebar"]}
+          value={selectedType}
+          onChange={onSelectedTypeChange}
         />
       </div>
 
