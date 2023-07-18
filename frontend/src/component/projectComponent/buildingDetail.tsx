@@ -69,7 +69,7 @@ const BuildingDetail = (props: any) => {
             <Button
               onClick={onClick}
               style={{
-                backgroundColor: "rgb(55, 62, 237)",
+                backgroundColor: "rgb(25, 101, 203)",
                 color: "white",
                 marginBottom: "10px",
                 marginTop: "5px",
@@ -125,7 +125,7 @@ const BuildingDetail = (props: any) => {
           />
           <GridColumn
             field="plane_shape"
-            title="평면형상"
+            title="평면현상"
             headerClassName={headerClassName}
           />
           <GridColumn

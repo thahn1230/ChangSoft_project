@@ -464,8 +464,6 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
-              width: "6vw",
-              height: "4vh",
             }}
           >
             Reset filters
@@ -476,8 +474,6 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
-              width: "6vw",
-              height: "4vh",
             }}
           >
             Apply filters
