@@ -63,6 +63,11 @@ const AnalysisTab = (props: any) => {
     },
   ];
 
+  const [panes, setPanes] = useState<Array<any>>([
+    { size: "40%", min: "20px", collapsible: true, scrollable: false },
+    { scrollable: false },
+  ]);
+
   const [concretePanes, setConcretePanes] = React.useState<Array<any>>([
     { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
@@ -75,6 +80,10 @@ const AnalysisTab = (props: any) => {
     { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
+
+  const onPaneChange = (event: SplitterOnChangeEvent) => {
+    setPanes(event.newState);
+  };
 
   const onConcretePaneChange = (event: SplitterOnChangeEvent) => {
     setConcretePanes(event.newState);
@@ -278,7 +287,6 @@ const AnalysisTab = (props: any) => {
     });
     setRebarColumns(tempRebarColumns);
 
-
     let nonSubKeyData = rebarData.map((item) => {
       const newObj: { [key: string]: any } = { "": item[""] };
       for (const key in item) {
@@ -292,26 +300,24 @@ const AnalysisTab = (props: any) => {
       return newObj;
     });
 
-    let allSubKeys= new Set<string>();
-    nonSubKeyData.map((item)=>{
-        for(const key of Object.keys(item))
-        {
-          if(key !== "")
-          allSubKeys.add(key)
-        }
-    })
+    let allSubKeys = new Set<string>();
+    nonSubKeyData.map((item) => {
+      for (const key of Object.keys(item)) {
+        if (key !== "") allSubKeys.add(key);
+      }
+    });
     nonSubKeyData = nonSubKeyData.map((item: any) => {
       const newObj: { [key: string]: any } = {};
       newObj[""] = item[""];
-    
+
       for (const key of Array.from(allSubKeys)) {
-        newObj[key] = item[key] === undefined ? null :  item[key];
+        newObj[key] = item[key] === undefined ? null : item[key];
       }
-    
+
       return newObj;
     });
 
-    console.log(nonSubKeyData)
+    console.log(nonSubKeyData);
     setRebarDataNonSubKey(nonSubKeyData as gridData);
   }, [rebarData]);
 
@@ -362,49 +368,49 @@ const AnalysisTab = (props: any) => {
       </div>
 
       <div className="analysis-table-chart-container">
-        <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
+      <Splitter panes={panes} onChange={onPaneChange}>
           <div className="analysis-table-container">
-            <SubBuildingAnalysisTableSingleCol
-              data={concreteData}
-              componentType={"콘크리트(㎥)"}
-            ></SubBuildingAnalysisTableSingleCol>
-          </div>
-          <div className="analysis-chart-container">
-            <SubBuildingAnalysisGraph
-              data={concreteData}
-              componentType={"Concrete"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter>
+            <div className="analysis-table">
+              <header className="analysis-table-type">콘크리트(㎥)</header>
+              <SubBuildingAnalysisTableSingleCol
+                data={concreteData}
+              ></SubBuildingAnalysisTableSingleCol>
+            </div>
+            
+            <div className="analysis-table">
+              <header className="analysis-table-type">거푸집(㎡)</header>
+              <SubBuildingAnalysisTableSingleCol
+                data={formworkData}
+              ></SubBuildingAnalysisTableSingleCol>
+            </div>
 
-        <Splitter panes={formworkPanes} onChange={onFormworkPaneChange}>
-          <div className="analysis-table-container">
-            <SubBuildingAnalysisTableSingleCol
-              data={formworkData}
-              componentType={"거푸집(㎡)"}
-            ></SubBuildingAnalysisTableSingleCol>
+            <div className="analysis-table">
+              <header className="analysis-table-type">철근(Ton)</header>
+              <SubBuildingAnalysisTableSubCol
+                data={rebarData}
+                columns={rebarColumns}
+              ></SubBuildingAnalysisTableSubCol>
+            </div>
           </div>
           <div className="analysis-chart-container">
-            <SubBuildingAnalysisGraph
-              data={formworkData}
-              componentType={"Formwork"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter>
-
-        <Splitter panes={rebarPanes} onChange={onRebarPaneChange}>
-          <div className="analysis-table-container">
-            <SubBuildingAnalysisTableSubCol
-              data={rebarData}
-              componentType={"철근(Ton)"}
-              columns={rebarColumns}
-            ></SubBuildingAnalysisTableSubCol>
-          </div>
-          <div className="analysis-chart-container">
-            <SubBuildingAnalysisGraph
-              data={rebarDataNonSubKey}
-              componentType={"Rebar"}
-            ></SubBuildingAnalysisGraph>
+            <div className="analysis-chart">
+              <SubBuildingAnalysisGraph
+                data={concreteData}
+                componentType={"Concrete"}
+              ></SubBuildingAnalysisGraph>
+            </div>
+            <div className="analysis-chart">
+              <SubBuildingAnalysisGraph
+                data={formworkData}
+                componentType={"Formwork"}
+              ></SubBuildingAnalysisGraph>
+            </div>
+            <div className="analysis-chart">
+              <SubBuildingAnalysisGraph
+                data={rebarDataNonSubKey}
+                componentType={"Rebar"}
+              ></SubBuildingAnalysisGraph>
+            </div>
           </div>
         </Splitter>
       </div>
