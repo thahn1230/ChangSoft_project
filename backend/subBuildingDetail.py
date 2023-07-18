@@ -409,77 +409,6 @@ def draw_analysis_concrete2(sub_building_id: int):
     return figures_json
 
 ## 층별총집계표
-# 층별총집계표에서의 concrete
-@router.get("/sub_building/floor_analysis_table/{building_id}/concrete")
-def get_floor_analysis_concrete_data(building_id: int):
-    query = f"""
-        SELECT floor_name, material_name, 
-        SUM(concrete.volume) AS total_volume FROM concrete
-        JOIN component ON concrete.component_id = component.id
-        JOIN floor ON component.floor_id = floor.id
-        JOIN building ON floor.building_id = building.id
-        WHERE building.id = {building_id}
-        GROUP BY floor_name, concrete.material_name
-    """
-
-    concrete_floor_analysis_data_df = pd.read_sql(query, engine)
-    concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot_table(
-        index="floor_name",
-        columns="material_name",
-        values="total_volume",
-    )
-
-    return JSONResponse(
-        concrete_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
-    )
-
-
-# 층별총집계표에서의 formwork
-@router.get("/sub_building/floor_analysis_table/{building_id}/formwork")
-def get_floor_analysis_formwork_data(building_id: int):
-    query = f"""
-        SELECT floor_name, formwork_type, 
-        SUM(formwork.area) AS total_area FROM formwork
-        JOIN component ON formwork.component_id = component.id
-        JOIN floor ON component.floor_id = floor.id
-        JOIN building ON floor.building_id = building.id
-        WHERE building.id = {building_id}
-        GROUP BY floor_name, formwork_type
-    """
-
-    formwork_floor_analysis_data_df = pd.read_sql(query, engine)
-
-    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot(
-        index="floor_name",
-        columns="formwork_type",
-        values="total_area",
-    )
-
-    return JSONResponse(
-        formwork_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")
-    )
-
-
-# 층별총집계표에서의 rebar
-@router.get("/sub_building/floor_analysis_table/{building_id}/rebar")
-def get_floor_analysis_rebar_data(building_id: int):
-    query = f"""
-        SELECT floor_name, rebar_grade, 
-        CAST(rebar_diameter AS signed integer) AS rebar_diameter,
-        SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
-        JOIN component ON rebar.component_id = component.id
-        JOIN floor ON component.floor_id = floor.id
-        JOIN building ON floor.building_id = building.id
-        WHERE building.id = {building_id}
-        GROUP BY floor_name, rebar_grade, rebar_diameter
-    """
-
-    rebar_floor_analysis_data_df = pd.read_sql(query, engine)
-
-    return JSONResponse(
-        rebar_floor_analysis_data_df.to_json(force_ascii=False, orient="records")
-    )
-    
 # 부재별층잡계표
 # 빌딩 안에 어떠한 component_type이 있는지 알려주는 함수
 @router.get("/sub_building/floor_analysis_table/{building_id}/component_type")
@@ -504,16 +433,20 @@ def get_floor_analysis_component_type_data(building_id: int):
 @router.get("/sub_building/floor_analysis_table/{building_id}/concrete/filter")
 def get_floor_analysis_concrete_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
+    if component_types is "":
+        return []
     
     query = f"""
-        SELECT floor_name, material_name, 
+        SELECT floor_name, material_name, floor_number,
         SUM(concrete.volume) AS total_volume FROM concrete
         JOIN component ON concrete.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        AND component.component_type IN ("{component_types}")
-        GROUP BY floor_name, concrete.material_name
+        AND component.component_type IN ({component_types})
+        GROUP BY floor_name, concrete.material_name, floor_number
+        ORDER BY floor_number DESC
     """
 
     concrete_floor_analysis_data_df = pd.read_sql(query, engine)
@@ -521,6 +454,7 @@ def get_floor_analysis_concrete_filtered(building_id: int, component_types: str)
         index="floor_name",
         columns="material_name",
         values="total_volume",
+        sort=False,
     )
 
     return JSONResponse(
@@ -531,24 +465,29 @@ def get_floor_analysis_concrete_filtered(building_id: int, component_types: str)
 @router.get("/sub_building/floor_analysis_table/{building_id}/formwork/filter")
 def get_floor_analysis_formwork_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
+    if component_types is "":
+        return []
     
     query = f"""
-        SELECT floor_name, formwork_type, 
+        SELECT floor_name, formwork_type, floor_number,
         SUM(formwork.area) AS total_area FROM formwork
         JOIN component ON formwork.component_id = component.id
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        AND component.component_type IN ("{component_types}")
-        GROUP BY floor_name, formwork_type
+        AND component.component_type IN ({component_types})
+        GROUP BY floor_name, formwork_type, floor_number
+        ORDER BY floor_number DESC
     """
 
     formwork_floor_analysis_data_df = pd.read_sql(query, engine)
 
-    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot(
+    formwork_floor_analysis_data_pivot_df = formwork_floor_analysis_data_df.pivot_table(
         index="floor_name",
         columns="formwork_type",
         values="total_area",
+        sort=False,
     )
 
     return JSONResponse(
@@ -559,6 +498,7 @@ def get_floor_analysis_formwork_filtered(building_id: int, component_types: str)
 @router.get("/sub_building/floor_analysis_table/{building_id}/rebar/filter")
 def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
+    component_types=', '.join(f'"{x}"' for x in component_types)
     
     query = f"""
         SELECT floor_name, rebar_grade, 
@@ -568,7 +508,7 @@ def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
-        AND component.component_type IN ("{component_types}")
+        AND component.component_type IN ({component_types})
         GROUP BY floor_name, rebar_grade, rebar_diameter
     """
 
