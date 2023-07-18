@@ -17,7 +17,6 @@ const SubBuildingAnalysisTableSingleCol = (props: any) => {
             >
               {props.data !== undefined &&
                 Object.keys(props.data[0]).map((item, index) => {
-                  console.log(Object.keys(props.data[0])[index]);
                   return (
                     <GridColumn
                       //key={key}

@@ -82,18 +82,6 @@ const AnalysisTab = (props: any) => {
 
       try {
         if (selectedSubBuildingId === 0) {
-          concreteResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/concrete/non_pivot"
-          );
-          formworkResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/formwork/non_pivot"
-          );
           concretePivotResponse = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/analysis_table_all/" +
@@ -113,18 +101,6 @@ const AnalysisTab = (props: any) => {
               "/rebar"
           );
         } else {
-          concreteResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              selectedSubBuildingId +
-              "/concrete/non_pivot"
-          );
-          formworkResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              selectedSubBuildingId +
-              "/formwork/non_pivot"
-          );
           concretePivotResponse = await axios.get(
             urlPrefix.IP_port +
               "/sub_building/analysis_table/" +
@@ -145,8 +121,6 @@ const AnalysisTab = (props: any) => {
           );
         }
 
-        const concreteJson = JSON.parse(concreteResponse.data);
-        const formworkJson = JSON.parse(formworkResponse.data);
         const concretePivotJson = JSON.parse(concretePivotResponse.data);
         const formworkPivotJson = JSON.parse(formworkPivotResponse.data);
         const rebarJson = JSON.parse(rebarResponse.data);

@@ -27,8 +27,6 @@ const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
 const expandField = "expanded";
 const subItemsField = "items";
-// const projectsTextField = "projectName";
-// const constructionCompanyTextField = "constructionCompany";
 
 const selectDropDownFields = {
   dataItemKey,

@@ -41,7 +41,6 @@ const SubBuildingAnalysisGraph = (props: any) => {
       setCategories(Object.keys(props.data[0]));
       setIsLoaded(true);
 
-      console.log(props.data)
     }
   }, [props.data]);
 

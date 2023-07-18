@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 import {
   RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
-
-import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
-import SubBuildingAnalysisGraph from "../analysis/subBuildingAnalysisGraph";
-import SubBuildingAnalysisTableSingleCol from "../analysis/subBuildingAnalysisTable_singleCol";
-import SubBuildingAnalysisTableSubCol from "../analysis/subBuildingAnalysisTable_subCol";
-
 import {
   Splitter,
   SplitterBar,
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
+
+import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
+import SubBuildingAnalysisGraph from "../analysis/subBuildingAnalysisGraph";
+import SubBuildingAnalysisTableSingleCol from "../analysis/subBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "../analysis/subBuildingAnalysisTable_subCol";
+import ComponentTypeList from "./ComponentTypeList";
 
 import urlPrefix from "../../../resource/URL_prefix.json";
 
@@ -46,20 +47,74 @@ const FloorAnalysisTab = (props: any) => {
 
   const [selectedType, setSelectedType] = useState("Concrete");
   const [selectedTypeHeader, setSelectedTypeHeader] = useState("콘크리트(㎥)");
-  const [selectedGridChart, setSelectedGridChart] = useState(<div></div>);
+  const [selectedGridChart, setSelectedGridChart] = useState(
+    <div>부재를 선택해주세요.</div>
+  );
+
+  const [componentTypeList, setComponentTypeList] = useState<
+    { componentType: string; id: number; checked: boolean }[]
+  >([]);
+  const [selectedComponentType, setSelectedComponentType] = useState<
+    { componentType: string; id: number; checked: boolean }[]
+  >([]);
 
   const [panes, setPanes] = React.useState<Array<any>>([
     { size: "40%", min: "20px", collapsible: true, scrollable: false },
     { scrollable: false },
   ]);
+  const [fetched,setFetched]=useState<boolean>(false);
 
   const onPaneChange = (event: SplitterOnChangeEvent) => {
     setPanes(event.newState);
   };
 
+  useEffect(() => {
+    let idx = 0;
+    axios
+      .get(
+        urlPrefix.IP_port +
+          "/sub_building/floor_analysis_table/" +
+          props.buildingInfo.id +
+          "/component_type"
+      )
+      .then((response) => {
+        setComponentTypeList(
+          [{ componentType: "All", id: idx++, checked: false }].concat(
+            JSON.parse(response.data).map((item: any) => {
+              return {
+                componentType: item.component_type,
+                id: idx++,
+                checked: false,
+              };
+            })
+          )
+        );
+      })
+      .catch(console.error);
+  }, [props.buildingInfo]);
+
+  useEffect(() => {
+    if(fetched)
+      return;
+
+    if (componentTypeList.length > 0) { 
+      setFetched(true);
+      const listWithoutAll = componentTypeList.map((item)=>({...item,checked:true}));
+      listWithoutAll.shift();
+      setSelectedComponentType(listWithoutAll)
+    }
+
+  }, [componentTypeList]);
 
   useEffect(() => {
     const fetchData = async () => {
+      const params = new URLSearchParams();
+      const paramName = "component_types";
+      const paramContent = JSON.stringify(
+        selectedComponentType.map((item) => item.componentType)
+      );
+      params.append(paramName, paramContent);
+
       let concreteResponse;
       let formworkResponse;
       let rebarResponse;
@@ -69,19 +124,22 @@ const FloorAnalysisTab = (props: any) => {
           urlPrefix.IP_port +
             "/sub_building/floor_analysis_table/" +
             props.buildingInfo.id +
-            "/concrete"
+            "/concrete/filter",
+          { params }
         );
         formworkResponse = await axios.get(
           urlPrefix.IP_port +
             "/sub_building/floor_analysis_table/" +
             props.buildingInfo.id +
-            "/formwork"
+            "/formwork/filter",
+          { params }
         );
         rebarResponse = await axios.get(
           urlPrefix.IP_port +
             "/sub_building/floor_analysis_table/" +
             props.buildingInfo.id +
-            "/rebar"
+            "/rebar/filter",
+          { params }
         );
 
         const concreteJson = JSON.parse(concreteResponse.data);
@@ -142,7 +200,7 @@ const FloorAnalysisTab = (props: any) => {
     };
 
     fetchData();
-  }, [props.buildingInfo]);
+  }, [selectedComponentType]);
 
   useEffect(() => {
     const temp: string[] = [];
@@ -205,7 +263,6 @@ const FloorAnalysisTab = (props: any) => {
       return newObj;
     });
 
-    console.log(nonSubKeyData);
     setRebarDataNonSubKey(nonSubKeyData as gridData);
   }, [rebarData]);
 
@@ -273,8 +330,15 @@ const FloorAnalysisTab = (props: any) => {
         );
         break;
     }
-  }, [selectedType, concreteData, formworkData, rebarData, rebarDataNonSubKey,rebarColumns,panes]);
-
+  }, [
+    selectedType,
+    concreteData,
+    formworkData,
+    rebarData,
+    rebarDataNonSubKey,
+    rebarColumns,
+    panes,
+  ]);
 
   const onTypeChange = React.useCallback(
     (e: RadioButtonChangeEvent) => {
@@ -303,6 +367,12 @@ const FloorAnalysisTab = (props: any) => {
       </div>
 
       <div className="button-container">
+        <ComponentTypeList
+          componentTypeList={componentTypeList}
+          selectedComponentType={selectedComponentType}
+          setComponentTypeList={setComponentTypeList}
+          setSelectedComponentType={setSelectedComponentType}
+        />
         <RadioButton
           value="Concrete"
           checked={selectedType === "Concrete"}
@@ -330,7 +400,7 @@ const FloorAnalysisTab = (props: any) => {
       </div>
 
       <div className="analysis-table-chart-container">
-      <div>
+        <div>
           <header className="analysis-table-type">{selectedTypeHeader}</header>
           {selectedGridChart}
         </div>
