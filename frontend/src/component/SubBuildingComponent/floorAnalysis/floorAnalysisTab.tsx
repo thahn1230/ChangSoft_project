@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
+import {
+  RadioButton,
+  RadioButtonChangeEvent,
+} from "@progress/kendo-react-inputs";
 
+import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
 import SubBuildingAnalysisGraph from "../analysis/subBuildingAnalysisGraph";
 import SubBuildingAnalysisTableSingleCol from "../analysis/subBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "../analysis/subBuildingAnalysisTable_subCol";
@@ -40,35 +44,19 @@ const FloorAnalysisTab = (props: any) => {
   const [rebarDataNonSubKey, setRebarDataNonSubKey] = useState<gridData>([]);
   const [rebarColumns, setRebarColumns] = useState<{}[]>();
 
-  const [panes, setPanes] = React.useState<Array<any>>([
-    { size: "60%", min: "20px", collapsible: true, scrollable: false },
-    { scrollable: false },
-  ]);
-  const [concretePanes, setConcretePanes] = React.useState<Array<any>>([
-    { size: "40%", min: "20px", collapsible: true, scrollable: false },
-    { scrollable: false },
-  ]);
-  const [formworkPanes, setFormworkPanes] = React.useState<Array<any>>([
-    { size: "40%", min: "20px", collapsible: true, scrollable: false },
-    { scrollable: false },
-  ]);
-  const [rebarPanes, setRebarPanes] = React.useState<Array<any>>([
-    { size: "40%", min: "20px", collapsible: true, scrollable: false },
-    { scrollable: false },
-  ]);
-  const onConcretePaneChange = (event: SplitterOnChangeEvent) => {
-    setConcretePanes(event.newState);
-  };
-  const onFormworkPaneChange = (event: SplitterOnChangeEvent) => {
-    setFormworkPanes(event.newState);
-  };
-  const onRebarPaneChange = (event: SplitterOnChangeEvent) => {
-    setRebarPanes(event.newState);
-  };
+  const [selectedType, setSelectedType] = useState("Concrete");
+  const [selectedTypeHeader, setSelectedTypeHeader] = useState("콘크리트(㎥)");
+  const [selectedGridChart, setSelectedGridChart] = useState(<div></div>);
 
-  const onChange = (event: SplitterOnChangeEvent) => {
+  const [panes, setPanes] = React.useState<Array<any>>([
+    { size: "40%", min: "20px", collapsible: true, scrollable: false },
+    { scrollable: false },
+  ]);
+
+  const onPaneChange = (event: SplitterOnChangeEvent) => {
     setPanes(event.newState);
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -221,6 +209,80 @@ const FloorAnalysisTab = (props: any) => {
     setRebarDataNonSubKey(nonSubKeyData as gridData);
   }, [rebarData]);
 
+  useEffect(() => {
+    switch (selectedType) {
+      case "Concrete":
+        setSelectedTypeHeader("콘크리트(㎥)");
+        setSelectedGridChart(
+          <div>
+            <Splitter panes={panes} onChange={onPaneChange}>
+              <div className="analysis-table-container">
+                <SubBuildingAnalysisTableSingleCol
+                  data={concreteData}
+                ></SubBuildingAnalysisTableSingleCol>
+              </div>
+              <div className="analysis-chart-container">
+                <SubBuildingAnalysisGraph
+                  data={concreteData}
+                  componentType={"Concrete"}
+                ></SubBuildingAnalysisGraph>
+              </div>
+            </Splitter>
+          </div>
+        );
+        break;
+      case "Formwork":
+        setSelectedTypeHeader("거푸집(㎡)");
+        setSelectedGridChart(
+          <div>
+            <Splitter panes={panes} onChange={onPaneChange}>
+              <div className="analysis-table-container">
+                <SubBuildingAnalysisTableSingleCol
+                  data={formworkData}
+                ></SubBuildingAnalysisTableSingleCol>
+              </div>
+              <div className="analysis-chart-container">
+                <SubBuildingAnalysisGraph
+                  data={formworkData}
+                  componentType={"Formwork"}
+                ></SubBuildingAnalysisGraph>
+              </div>
+            </Splitter>
+          </div>
+        );
+        break;
+      case "Rebar":
+        setSelectedTypeHeader("철근(Ton)");
+        setSelectedGridChart(
+          <div>
+            <Splitter panes={panes} onChange={onPaneChange}>
+              <div className="analysis-table-container">
+                <SubBuildingAnalysisTableSubCol
+                  data={rebarData}
+                  columns={rebarColumns}
+                ></SubBuildingAnalysisTableSubCol>
+              </div>
+              <div className="analysis-chart-container">
+                <SubBuildingAnalysisGraph
+                  data={rebarDataNonSubKey}
+                  componentType={"Rebar"}
+                ></SubBuildingAnalysisGraph>
+              </div>
+            </Splitter>
+          </div>
+        );
+        break;
+    }
+  }, [selectedType, concreteData, formworkData, rebarData, rebarDataNonSubKey,rebarColumns,panes]);
+
+
+  const onTypeChange = React.useCallback(
+    (e: RadioButtonChangeEvent) => {
+      setSelectedType(e.value);
+    },
+    [setSelectedType]
+  );
+
   return (
     <div className="pageDiv">
       <div className="info-table-container">
@@ -240,67 +302,38 @@ const FloorAnalysisTab = (props: any) => {
         </Grid>
       </div>
 
+      <div className="button-container">
+        <RadioButton
+          value="Concrete"
+          checked={selectedType === "Concrete"}
+          label="콘크리트"
+          onChange={onTypeChange}
+          style={{ marginLeft: "10px" }}
+          className="k-radio-button"
+        />
+        <RadioButton
+          value="Formwork"
+          checked={selectedType === "Formwork"}
+          label="거푸집"
+          onChange={onTypeChange}
+          style={{ marginLeft: "10px" }}
+          className="k-radio-button"
+        />
+        <RadioButton
+          value="Rebar"
+          checked={selectedType === "Rebar"}
+          label="철근"
+          onChange={onTypeChange}
+          style={{ marginLeft: "10px" }}
+          className="k-radio-button"
+        />
+      </div>
+
       <div className="analysis-table-chart-container">
-        {/* <Splitter panes={panes} onChange={onChange}>
-          <div className="analysis-table-container">
-            <SubBuildingFloorAnalysisTable
-              concreteData={concreteData}
-              formworkData={formworkData}
-              rebarData={rebarData}
-              rebarColumns={rebarColumns}
-            ></SubBuildingFloorAnalysisTable>
-          </div>
-          <div className="analysis-chart-container">Graph</div>
-        </Splitter> */}
-
-        <header className="analysis-table-type">콘크리트(㎥)</header>
-        <Splitter panes={concretePanes} onChange={onConcretePaneChange}>
-          <div>
-            <SubBuildingAnalysisTableSingleCol
-              data={concreteData}
-              componentType={"콘크리트(㎥)"}
-            ></SubBuildingAnalysisTableSingleCol>
-          </div>
-          <div>
-            <SubBuildingAnalysisGraph
-              data={concreteData}
-              componentType={"Concrete"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter>
-
-        <header className="analysis-table-type">거푸집(㎡)</header>
-        <Splitter panes={formworkPanes} onChange={onFormworkPaneChange}>
-          <div>
-            <SubBuildingAnalysisTableSingleCol
-              data={formworkData}
-              componentType={"거푸집(㎡)"}
-            ></SubBuildingAnalysisTableSingleCol>
-          </div>
-          <div>
-            <SubBuildingAnalysisGraph
-              data={formworkData}
-              componentType={"Formwork"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter>
-
-        <header className="analysis-table-type">철근(Ton)</header>
-        <Splitter panes={rebarPanes} onChange={onRebarPaneChange}>
-          <div>
-            <SubBuildingAnalysisTableSubCol
-              data={rebarData}
-              componentType={"철근(Ton)"}
-              columns={rebarColumns}
-            ></SubBuildingAnalysisTableSubCol>
-          </div>
-          <div>
-            <SubBuildingAnalysisGraph
-              data={rebarDataNonSubKey}
-              componentType={"Rebar"}
-            ></SubBuildingAnalysisGraph>
-          </div>
-        </Splitter>
+      <div>
+          <header className="analysis-table-type">{selectedTypeHeader}</header>
+          {selectedGridChart}
+        </div>
       </div>
     </div>
   );

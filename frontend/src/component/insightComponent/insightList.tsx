@@ -451,12 +451,12 @@ const InsightList = (props: any) => {
             (item) => item.constructionCompany
           );
 
-          paramName = "company_name_str";
+          paramName = "data";
           paramContent = JSON.stringify(selectedCompanyName);
         } else if (selectedInsightIndexInList + 1 === 5) {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
 
-          paramName = "project_id_str";
+          paramName = "data";
           paramContent = JSON.stringify(selectedProjectId);
         } else if (selectedInsightIndexInList + 1 === 6) {
           const selectedProjectId = [selectedProjectList[0].id];
@@ -464,24 +464,25 @@ const InsightList = (props: any) => {
             (item) => item.id
           );
 
-          paramName = "project_building_ids_str";
+          paramName = "data";
           paramContent = JSON.stringify(
             selectedProjectId.concat(selectedBuildingId)
           );
         } else {
           const selectedProjectId = selectedProjectList.map((item) => item.id);
 
-          paramName = "project_ids_str";
+          paramName = "data";
           paramContent = JSON.stringify(selectedProjectId);
         }
-
+        
         params.append(paramName, paramContent);
         const response = await axios.get(
-          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
+          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}` ,
           { params }
         );
         const data = JSON.parse(response.data);
         props.setGraphInfo(data);
+
       } catch (error) {
         console.error(error);
       }
