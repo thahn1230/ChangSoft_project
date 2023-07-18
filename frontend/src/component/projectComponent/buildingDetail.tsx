@@ -69,7 +69,7 @@ const BuildingDetail = (props: any) => {
             <Button
               onClick={onClick}
               style={{
-                backgroundColor: "rgb(25, 101, 203)",
+                backgroundColor: "rgb(53, 53, 219)",
                 color: "white",
                 marginBottom: "10px",
                 marginTop: "5px",
