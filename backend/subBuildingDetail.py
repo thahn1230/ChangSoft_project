@@ -501,7 +501,7 @@ def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
     component_types=', '.join(f'"{x}"' for x in component_types)
     
     query = f"""
-        SELECT floor_name, rebar_grade, 
+        SELECT floor_name, rebar_grade, floor_number,
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
         SUM(rebar.rebar_unit_weight) AS total_rebar FROM rebar
         JOIN component ON rebar.component_id = component.id
@@ -509,7 +509,8 @@ def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
         JOIN building ON floor.building_id = building.id
         WHERE building.id = {building_id}
         AND component.component_type IN ({component_types})
-        GROUP BY floor_name, rebar_grade, rebar_diameter
+        GROUP BY floor_name, rebar_grade, rebar_diameter, floor_number
+        ORDER BY floor_number DESC
     """
 
     rebar_floor_analysis_data_df = pd.read_sql(query, engine)

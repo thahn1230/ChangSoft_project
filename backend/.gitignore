@@ -1,6 +1,7 @@
 add_middleware.py
 dbAccess.py
 origins.py
+aiQuery.py
 
 Others/
 __pycache__/
