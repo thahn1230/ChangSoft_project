@@ -45,12 +45,14 @@ const AIQuery = () => {
     };
     addNewMessage(userMessage);
 
+    setIsResponding(true);
     const botResponseText = await SendMessageToChatGPT(event.message.text);
 
     const botResponse: Message = {
       author: bot,
       text: botResponseText,
     };
+    setIsResponding(false);
     addNewMessage(botResponse);
   };
 
