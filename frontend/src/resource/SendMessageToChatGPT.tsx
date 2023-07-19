@@ -1,39 +1,41 @@
-import axios from "axios";
-import chatGPT from "./chatGPT_api.json";
+import axios, { AxiosResponse } from 'axios';
+import apiKey from "./chatGPT_api.json";
 
-const SendMessageToChatGPT = async (messageText: string): Promise<string> => {
- 
+interface ChatGPTResponse {
+  choices: any;
+  data: {
+    choices: {
+      message: {
+        content: string;
+      };
+    }[];
+  };
+}
+
+const SendMessageToChatGPT = async (message: string): Promise<string> => {
   try {
-    //console.log(`Bearer ${chatGPT.API_key}`);
-
-    console.log("??")
-    //message: messageText,
-    const data = JSON.stringify({
-      "model":"gpt-3.5-turbo",
-      "messages":[
-        {"role":"system", "content":""},
-        {"role":"user", "content":messageText}
-      ]
-    })
-    const response = await fetch(
-      "https://api.openai.com/v1/chat/completions",
+    const response: AxiosResponse<ChatGPTResponse> = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
       {
-      method:"POST",
-      headers: {
-        "content-type": "application/json",
-        Authorization: "Bearer " + chatGPT.API_key,
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'You are User' },
+          { role: 'user', content: message },
+          { role: 'assistant', content: '' },
+        ],
       },
-      body: data,
-    }
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey.API_key}`,
+        },
+      }
     );
 
-    console.log(response)
-    // console.log(response.data.choices[0].message);
-    // return response.data;
-    return "hello";
+    return response.data.choices[0].message.content;
   } catch (error) {
-    console.error("Chat GPT API 오류:", error);
-    return "챗봇과의 통신 중 오류가 발생했습니다.";
+    console.error('Error:', error);
+    throw new Error('Chat GPT API 요청에 실패했습니다.');
   }
 };
 

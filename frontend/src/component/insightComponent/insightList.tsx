@@ -472,15 +472,14 @@ const InsightList = (props: any) => {
           paramName = "data";
           paramContent = JSON.stringify(selectedProjectId);
         }
-        
+
         params.append(paramName, paramContent);
         const response = await axios.get(
-          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}` ,
+          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }
         );
         const data = JSON.parse(response.data);
         props.setGraphInfo(data);
-
       } catch (error) {
         console.error(error);
       }
@@ -620,20 +619,20 @@ const InsightList = (props: any) => {
               : []
           }
         />
-      </div>
-      <div className="button-container">
-        <Button
-          onClick={getGraph}
-          disabled={!isAnalyzable}
-          style={{
-            backgroundColor: "rgb(25, 101, 203)",
-            color: "white",
-            width: "6vw",
-            height: "4vh",
-          }}
-        >
-          Analyze
-        </Button>
+        <div className="button-container">
+          <Button
+            onClick={getGraph}
+            disabled={!isAnalyzable}
+            style={{
+              backgroundColor: "rgb(25, 101, 203)",
+              color: "white",
+              width: "5vw",
+              height: "4vh",
+            }}
+          >
+            Analyze
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ const AIQuery = () => {
       messages={messages}
       user={user}
       onMessageSend={handleSend}
-      placeholder={'메시지를 입력하세요...'}
+      placeholder={'Enter your message...'}
     />
   );
 };
