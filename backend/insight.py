@@ -779,6 +779,7 @@ def get_insight_6(project_building_ids_str):
     INNER JOIN project p ON b.project_id = p.id
     WHERE p.project_name = '{project_name}' AND b.building_name = '{building_name}'
     GROUP BY fl.floor_name, fl.floor_number, r.rebar_type
+    ORDER BY fl.floor_number
     """
 
     # Execute the query and create a DataFrame
@@ -786,14 +787,14 @@ def get_insight_6(project_building_ids_str):
     df['rebar_type'] = df['rebar_type'].fillna('Unknown')
 
     # Pivot the DataFrame to prepare it for the heatmap
-    pivot_df = df.pivot(
-        index="floor_name", columns="rebar_type", values="total_rebar_weight"
+    pivot_df = df.pivot_table(
+        index="floor_name", columns="rebar_type", values="total_rebar_weight", sort=False,
     )
 
     # Sorting by floor_number
-    pivot_df["floor_number"] = df["floor_number"]
-    pivot_df.sort_values("floor_number", ascending=False, inplace=True)
-    pivot_df.drop("floor_number", axis=1, inplace=True)
+    # pivot_df["floor_number"] = df["floor_number"]
+    # pivot_df.sort_values("floor_number", ascending=False, inplace=True)
+    # pivot_df.drop("floor_number", axis=1, inplace=True)
 
     # Prepare data for heatmap
     z_data = np.log10(pivot_df.values)  # Apply log scale
@@ -868,22 +869,26 @@ def get_insight_6(project_building_ids_str):
     fig_json_with_explanation1 = add_explanation(fig_json, explanation1)
 
     query = f"""
-    SELECT comp.component_type, r.rebar_type, SUM(r.rebar_weight) as total_rebar_weight
+    SELECT comp.component_type, r.rebar_type, SUM(r.rebar_weight) as total_rebar_weight,
+    fl.floor_number
     FROM rebar r
     INNER JOIN component comp ON r.component_id = comp.id
     INNER JOIN floor fl ON comp.floor_id = fl.id
     INNER JOIN building b ON fl.building_id = b.id
     INNER JOIN project p ON b.project_id = p.id
     WHERE p.project_name = '{project_name}' AND b.building_name = '{building_name}'
-    GROUP BY comp.component_type, r.rebar_type
+    GROUP BY comp.component_type, r.rebar_type, fl.floor_number
+    ORDER BY fl.floor_number DESC
     """
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
     df['rebar_type'] = df['rebar_type'].fillna('Unknown')
-    pivot_df = df.pivot(
-        index="component_type", columns="rebar_type", values="total_rebar_weight"
+    pivot_df = df.pivot_table(
+        index="component_type", columns="rebar_type", values="total_rebar_weight", sort=False,
     )
+    
+    print(pivot_df)
 
     # Prepare data for heatmap
     z_data = np.log10(pivot_df.values)  # Apply log scale
