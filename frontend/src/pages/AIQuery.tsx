@@ -6,7 +6,7 @@ import "./../styles/AIQuery.scss";
 
 const AIQuery = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isResponding, setIsResponding] = useState(false);
+  const [isResponding, setIsResponding] = useState<boolean>(false);
 
   const addNewMessage = (message: Message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -45,6 +45,7 @@ const AIQuery = () => {
     };
     addNewMessage(userMessage);
 
+    setIsResponding(true);
     const botResponseText = await SendMessageToChatGPT(event.message.text);
 
     const botResponse: Message = {
@@ -52,6 +53,7 @@ const AIQuery = () => {
       text: botResponseText,
     };
     addNewMessage(botResponse);
+    setIsResponding(false);
   };
 
   return (
