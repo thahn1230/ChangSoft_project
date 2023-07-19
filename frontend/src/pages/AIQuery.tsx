@@ -6,7 +6,7 @@ import "./../styles/AIQuery.scss";
 
 const AIQuery = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isResponding, setIsResponding] = useState(false);
+  const [isResponding, setIsResponding] = useState<boolean>(false);
 
   const addNewMessage = (message: Message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -30,11 +30,11 @@ const AIQuery = () => {
         {
           author: { id: 0, name: "챗봇" },
           selectionIndex: 0,
-          text: "생각중 >,<",
+          text: "Generating response.",
         },
       ]);
     } else if (!isResponding) {
-      setMessages(messages.filter((message)=>{return message.text !== "생각중 >,<"}))
+      setMessages(messages.filter((message)=>{return message.text !== "Generating response."}))
     }
   }, [isResponding]);
 
@@ -54,6 +54,7 @@ const AIQuery = () => {
     };
     setIsResponding(false);
     addNewMessage(botResponse);
+    setIsResponding(false);
   };
 
   return (
