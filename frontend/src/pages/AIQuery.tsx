@@ -6,7 +6,6 @@ import "./../styles/AIQuery.scss";
 
 const AIQuery = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [isResponding, setIsResponding] = useState<boolean>(false);
 
   const addNewMessage = (message: Message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
@@ -23,10 +22,6 @@ const AIQuery = () => {
     name: "사용자",
   };
 
-  useEffect(() => {
-    console.log(isResponding);
-  }, [isResponding]);
-
   const handleSend = async (event: any) => {
     const userMessage: Message = {
       author: user,
@@ -34,7 +29,6 @@ const AIQuery = () => {
     };
     addNewMessage(userMessage);
 
-    setIsResponding(true);
     const botResponseText = await SendMessageToChatGPT(event.message.text);
 
     const botResponse: Message = {
@@ -42,21 +36,16 @@ const AIQuery = () => {
       text: botResponseText,
     };
     addNewMessage(botResponse);
-    setIsResponding(false);
   };
 
   return (
-    <div>
-      <Chat
-        messages={messages}
-        user={user}
-        onMessageSend={handleSend}
-        placeholder={"Enter your message..."}
-        width={"98%"}
-      ></Chat>
-
-      {isResponding ? <div>is loading</div> : <div>입력하세요</div>}
-    </div>
+    <Chat
+      messages={messages}
+      user={user}
+      onMessageSend={handleSend}
+      placeholder={"Enter your message..."}
+      width={"98%"}
+    />
   );
 };
 
