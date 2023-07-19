@@ -28,3 +28,4 @@ totalAreaByCompany.tsx
 src/resource/project_pictures
 src/resource/URL_prefix.json
 src/resource/chatGPT_api.json
+.DS_Store
