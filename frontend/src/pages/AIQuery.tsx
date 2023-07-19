@@ -24,7 +24,18 @@ const AIQuery = () => {
   };
 
   useEffect(() => {
-    console.log(isResponding);
+    if (isResponding) {
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          author: { id: 0, name: "챗봇" },
+          selectionIndex: 0,
+          text: "생각중 >,<",
+        },
+      ]);
+    } else if (!isResponding) {
+      setMessages(messages.filter((message)=>{return message.text !== "생각중 >,<"}))
+    }
   }, [isResponding]);
 
   const handleSend = async (event: any) => {
@@ -53,7 +64,7 @@ const AIQuery = () => {
         onMessageSend={handleSend}
         placeholder={"Enter your message..."}
         width={"98%"}
-      ></Chat>
+      />
 
       {isResponding ? <div>is loading</div> : <div>입력하세요</div>}
     </div>
