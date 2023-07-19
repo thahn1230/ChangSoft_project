@@ -343,7 +343,7 @@ const AnalysisTab = (props: any) => {
           <GridColumn
             title="건물명 구분"
             cell={() => (
-              <div style={{ textAlign: "center" }}>
+              <div style={{ textAlign: "center", margin:"3px" }}>
                 <SubBuildingList
                   buildingInfo={props.buildingInfo}
                   projectName={props.projectName}

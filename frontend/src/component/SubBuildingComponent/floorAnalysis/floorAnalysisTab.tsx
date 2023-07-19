@@ -45,7 +45,7 @@ const FloorAnalysisTab = (props: any) => {
   const [rebarDataNonSubKey, setRebarDataNonSubKey] = useState<gridData>([]);
   const [rebarColumns, setRebarColumns] = useState<{}[]>();
 
-  const [selectedType, setSelectedType] = useState("Concrete");
+  const [selectedType, setSelectedType] = useState("콘크리트(㎥)");
   const [selectedTypeHeader, setSelectedTypeHeader] = useState("콘크리트(㎥)");
   const [selectedGridChart, setSelectedGridChart] = useState(<div></div>);
 
@@ -270,23 +270,22 @@ const FloorAnalysisTab = (props: any) => {
   }, [rebarData]);
 
   useEffect(() => {
-    if(selectedComponentType.length===0)
-    {
+    if (selectedComponentType.length === 0) {
       switch (selectedType) {
-        case "Concrete":
+        case "콘크리트(㎥)":
           setSelectedTypeHeader("콘크리트(㎥)");
           break;
-        case "Formwork":
+        case "거푸집(㎡)":
           setSelectedTypeHeader("거푸집(㎡)");
           break;
-        case "Rebar":
+        case "철근(Ton)":
           setSelectedTypeHeader("철근(Ton)");
           break;
       }
       return;
     }
     switch (selectedType) {
-      case "Concrete":
+      case "콘크리트(㎥)":
         setSelectedTypeHeader("콘크리트(㎥)");
         setSelectedGridChart(
           <div>
@@ -306,7 +305,7 @@ const FloorAnalysisTab = (props: any) => {
           </div>
         );
         break;
-      case "Formwork":
+      case "거푸집(㎡)":
         setSelectedTypeHeader("거푸집(㎡)");
         setSelectedGridChart(
           <div>
@@ -326,7 +325,7 @@ const FloorAnalysisTab = (props: any) => {
           </div>
         );
         break;
-      case "Rebar":
+      case "철근(Ton)":
         setSelectedTypeHeader("철근(Ton)");
         setSelectedGridChart(
           <div>
@@ -395,9 +394,8 @@ const FloorAnalysisTab = (props: any) => {
           setComponentTypeList={setComponentTypeList}
           setSelectedComponentType={setSelectedComponentType}
         />
-
         <DropDownList
-          data={["Concrete", "Formwork", "Rebar"]}
+          data={["콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"]}
           value={selectedType}
           onChange={onSelectedTypeChange}
         />
