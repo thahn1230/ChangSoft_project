@@ -5,16 +5,22 @@
 }
 
 .type-selection-dropdown{
-    margin-left:1vw;
+    margin-left:1%;
     width:35vw;
 }
 
 .component-type-selection{
-    margin-right:1vw;
-    width:48vw;
+    // margin-right:1%;
+    width: 52vw;
 }
 
 .type-selection-container{
     display: flex;
     justify-content: space-between;
+}
+
+.list-label{
+    margin-left: 1%;
+    text-align: center;
+    justify-self: center;
 }

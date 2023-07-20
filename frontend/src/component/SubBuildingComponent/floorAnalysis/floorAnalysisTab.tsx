@@ -394,6 +394,7 @@ const FloorAnalysisTab = (props: any) => {
           {/* <header className="analysis-table-type">{selectedTypeHeader}</header> */}
 
           <div className="type-selection-container">
+            <label className="list-label">구분: </label>
             <div className="type-selection-dropdown">
               <DropDownList
                 data={["콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"]}
@@ -401,6 +402,7 @@ const FloorAnalysisTab = (props: any) => {
                 onChange={onSelectedTypeChange}
               />
             </div>
+            <label className="list-label">부재: </label>
             <div className="component-type-selection">
               <ComponentTypeList
                 componentTypeList={componentTypeList}
