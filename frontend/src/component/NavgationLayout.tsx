@@ -33,7 +33,7 @@ export const items: MenuItem[] = [
     icon: "k-i-align-bottom-element",
   },
   {
-    text: "AI Query",
+    text: "AI Query (Beta)",
     selected: false,
     route: "/ai_query",
     icon: "k-i-comment",
