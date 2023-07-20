@@ -12,7 +12,7 @@ const SendMessageToChatGPT = async (message: string): Promise<string> => {
     });
 
     //console.log(await response.json());
-    const res = (await response.json());
+    const res = await response.json();
     return res;
   };
 
