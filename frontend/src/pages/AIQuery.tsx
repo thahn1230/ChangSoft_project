@@ -68,7 +68,7 @@ const AIQuery = () => {
         width={"98%"}
       />
 
-      {isResponding ? <div>is loading</div> : <div>입력하세요</div>}
+      {/* {isResponding ? <div>is loading</div> : <div>입력하세요</div>} */}
     </div>
   );
 };
