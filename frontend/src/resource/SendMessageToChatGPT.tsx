@@ -3,7 +3,7 @@ import urlPrefix from "./URL_prefix.json";
 const SendMessageToChatGPT = async (message: string): Promise<string> => {
   const fetchData = async () => {
     try {
-      return "a"
+      return "hello";
       const response = await fetch(urlPrefix.IP_port + "/query", {
         method: "POST",
         headers: {
