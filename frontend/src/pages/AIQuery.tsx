@@ -64,7 +64,7 @@ const AIQuery = () => {
         messages={messages}
         user={user}
         onMessageSend={handleSend}
-        placeholder={"Enter your message..."}
+        placeholder={isResponding ? "is Loading..." : "Enter your message..."}
         width={"98%"}
       />
 
