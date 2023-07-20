@@ -536,7 +536,7 @@ const InsightList = (props: any) => {
   return (
     <div className="filters-button-container">
       <div className="first-line-container">
-        <label style={{ marginTop: "1%" }}>Insight : </label>
+        <label style={{ marginTop: "1.4%" }}>Insight: </label>
         <DropDownList
           data={insightList}
           value={selectedInsightInList}
@@ -547,7 +547,7 @@ const InsightList = (props: any) => {
       </div>
 
       <div className="second-line-container">
-        <label style={{ marginTop: "1%", textAlign: "left" }}>Company : </label>
+        <label style={{ marginTop: "1.4%", textAlign: "left" }}>Company: </label>
         <MultiSelectTree
           style={{ width: "24%", margin: "1%" }}
           data={constructionCompanyList}
@@ -559,7 +559,7 @@ const InsightList = (props: any) => {
           checkIndeterminateField={checkIndeterminateField}
           expandField={expandField}
         />
-        <label style={{ marginTop: "1%" }}>Project : </label>
+        <label style={{ marginTop: "1.4%" }}>Project: </label>
         <MultiSelectTree
           style={{ width: "29%", margin: "1%" }}
           data={filteredProjectList}
@@ -591,7 +591,7 @@ const InsightList = (props: any) => {
           }
         />
 
-        <label style={{ marginTop: "1%" }}>Building : </label>
+        <label style={{ marginTop: "1.4%" }}>Building: </label>
         <MultiSelectTree
           style={{ width: "19%", margin: "1%" }}
           data={filteredBuildingList}

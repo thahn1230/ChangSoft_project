@@ -43,7 +43,6 @@ const AIQuery = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTo({
         top: chatContainerRef.current.scrollHeight,
-        // behavior: "smooth", // You can remove this line if you want an instant scroll
       });
     }
   };
