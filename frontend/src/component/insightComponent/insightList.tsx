@@ -541,7 +541,7 @@ const InsightList = (props: any) => {
           data={insightList}
           value={selectedInsightInList}
           onChange={onSelectedInsightChange}
-          style={{ width: "60%", margin: "10px" }}
+          style={{ width: "59%", margin: "1%" }}
         />
         <div className="instruction-container">{selectionInstruction}</div>
       </div>
@@ -549,7 +549,7 @@ const InsightList = (props: any) => {
       <div className="second-line-container">
         <label style={{ marginTop: "1%", textAlign: "left" }}>Company : </label>
         <MultiSelectTree
-          style={{ width: "25%", margin: "10px" }}
+          style={{ width: "24%", margin: "1%" }}
           data={constructionCompanyList}
           value={selectedConstructionCompanyList}
           onChange={onNewConstructionCompanySelection}
@@ -561,7 +561,7 @@ const InsightList = (props: any) => {
         />
         <label style={{ marginTop: "1%" }}>Project : </label>
         <MultiSelectTree
-          style={{ width: "30%", margin: "10px" }}
+          style={{ width: "29%", margin: "1%" }}
           data={filteredProjectList}
           value={selectedProjectList}
           onChange={onNewProjectSelection}
@@ -593,7 +593,7 @@ const InsightList = (props: any) => {
 
         <label style={{ marginTop: "1%" }}>Building : </label>
         <MultiSelectTree
-          style={{ width: "20%", margin: "10px" }}
+          style={{ width: "19%", margin: "1%" }}
           data={filteredBuildingList}
           value={selectedBuildingList}
           onChange={onNewBuildingSelection}

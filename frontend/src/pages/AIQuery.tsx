@@ -62,15 +62,16 @@ const AIQuery = () => {
 
   return (
     <div>
+      <q>이 기능은 실험적인 기능이므로 여러가지 오류와 제한이 존재할 수 있습니다.</q>
       <Chat
         messages={messages}
         user={user}
         onMessageSend={handleSend}
-        placeholder={"Enter your message..."}
+        placeholder={isResponding ? "is Loading..." : "Enter your message..."}
         width={"98%"}
       />
 
-      {isResponding ? <div>is loading</div> : <div>입력하세요</div>}
+      {/* {isResponding ? <div>is loading</div> : <div>입력하세요</div>} */}
     </div>
   );
 };
