@@ -2,18 +2,23 @@ import urlPrefix from "./URL_prefix.json";
 
 const SendMessageToChatGPT = async (message: string): Promise<string> => {
   const fetchData = async () => {
-    const response = await fetch(urlPrefix.IP_port + "/query", {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ query: message }),
-    });
+    try {
+      const response = await fetch(urlPrefix.IP_port + "/query", {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query: message }),
+      });
 
-    //console.log(await response.json());
-    const res = (await response.json());
-    return res;
+      console.log(await response);
+
+      const res = await response.json();
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const response = await fetchData();

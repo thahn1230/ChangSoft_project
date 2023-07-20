@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Chat, Message, User } from "@progress/kendo-react-conversational-ui";
+import { Attachment, Chat, Message, User } from "@progress/kendo-react-conversational-ui";
 import SendMessageToChatGPT from "../resource/SendMessageToChatGPT";
 import chatgptLogo from "./../resource/chatgpt_logo.png";
 import "./../styles/AIQuery.scss";
@@ -48,10 +48,13 @@ const AIQuery = () => {
     setIsResponding(true);
     const botResponseText = await SendMessageToChatGPT(event.message.text);
 
+    const exampleAttachment:Attachment[] = [{contentType:"jsx" ,content: (<div>hello</div>)},{contentType:"jsx" ,content: (<div>hello2</div>)}]
     const botResponse: Message = {
       author: bot,
       text: botResponseText,
+      attachments:exampleAttachment,
     };
+    
     setIsResponding(false);
     addNewMessage(botResponse);
     setIsResponding(false);
