@@ -27,8 +27,6 @@ const Insight: React.FC = () => {
         setIsLoading={setIsLoading}
         isLoading={isLoading}
       ></InsightGraph>
-
-      <div>asd</div>
     </div>
   );
 };
