@@ -4,9 +4,24 @@
     margin-left: 0.6%;
     width: 95%
 }
+
 // .analysis-table-container{
 //     width:100%;
 // }
+
+.radio-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1%;
+
+    .k-radio-button:checked {
+        background-color: blue !important;
+        border-color: blue !important;
+        color: blue !important;
+        box-shadow: 0 0 1px blue !important;
+    }
+}
+
 .pageDiv {
     width: 95vw;
 }
@@ -18,5 +33,5 @@
 .k-splitbar:focus {
     color: white !important;
     background-color: rgb(22, 101, 203) !important;
-    width : 4px !important;
+    width: 4px !important;
 }

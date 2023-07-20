@@ -362,7 +362,7 @@ const AnalysisTab = (props: any) => {
         </Grid>
       </div>
 
-      <div className="button-container">
+      <div className="radio-button-container">
         <RadioButton
           value="Concrete"
           checked={selectedType === "Concrete"}
