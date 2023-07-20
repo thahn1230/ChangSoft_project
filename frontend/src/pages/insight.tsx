@@ -13,23 +13,6 @@ const Insight: React.FC = () => {
   const [graphInfo, setGraphInfo] = useState<graphInfoI[]>();
   const [isLoading, setIsLoading] = useState(false);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://10.221.72.46:8000/query", {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: "How many projects are there in DB?" }),
-      });
-
-      console.log(await response.json())
-    };
-    fetchData();
-  }, []);
-
   return (
     <div>
       <InsightList

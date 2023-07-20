@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+import urlPrefix from "./URL_prefix.json";
 
 const SendMessageToChatGPT = async (message: string): Promise<string> => {
   const fetchData = async () => {
-    const response = await fetch("http://10.221.72.46:8000/query", {
+    const response = await fetch(urlPrefix.IP_port + "/query", {
       method: "POST",
       headers: {
         accept: "application/json",
@@ -17,7 +17,6 @@ const SendMessageToChatGPT = async (message: string): Promise<string> => {
   };
 
   const response = await fetchData();
-  console.log(response)
   return response;
 };
 
