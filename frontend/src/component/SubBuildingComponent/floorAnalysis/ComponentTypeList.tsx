@@ -104,7 +104,6 @@ const ComponentTypeList = (props: ComponentTypeListProps) => {
   return (
     <div>
       <MultiSelectTree
-        style={{ width: "400px" }}
         data={props.componentTypeList}
         value={props.selectedComponentType}
         onChange={onNewSelectedComponentTypeSelection}

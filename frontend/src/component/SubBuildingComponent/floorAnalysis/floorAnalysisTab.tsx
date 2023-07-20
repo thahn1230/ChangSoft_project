@@ -387,23 +387,29 @@ const FloorAnalysisTab = (props: any) => {
         </Grid>
       </div>
 
-      <div className="button-container">
-        <ComponentTypeList
-          componentTypeList={componentTypeList}
-          selectedComponentType={selectedComponentType}
-          setComponentTypeList={setComponentTypeList}
-          setSelectedComponentType={setSelectedComponentType}
-        />
-        <DropDownList
-          data={["콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"]}
-          value={selectedType}
-          onChange={onSelectedTypeChange}
-        />
-      </div>
+      <div className="component-type-selection"></div>
 
       <div className="analysis-table-chart-container">
         <div>
-          <header className="analysis-table-type">{selectedTypeHeader}</header>
+          {/* <header className="analysis-table-type">{selectedTypeHeader}</header> */}
+
+          <div className="type-selection-container">
+            <div className="type-selection-dropdown">
+              <DropDownList
+                data={["콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"]}
+                value={selectedType}
+                onChange={onSelectedTypeChange}
+              />
+            </div>
+            <div className="component-type-selection">
+              <ComponentTypeList
+                componentTypeList={componentTypeList}
+                selectedComponentType={selectedComponentType}
+                setComponentTypeList={setComponentTypeList}
+                setSelectedComponentType={setSelectedComponentType}
+              />
+            </div>
+          </div>
           {selectedGridChart}
         </div>
       </div>
