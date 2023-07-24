@@ -9,6 +9,7 @@ import Insight from "./pages/insight";
 import { buildingInfo_interface } from "./interface/buildingInfo_interface";
 import SubBuildingTabLayout from "./component/subBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
+import LoginPage from "./pages/Login";
 
 function App() {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -20,6 +21,7 @@ function App() {
     <div className="App">
       <NavigationLayout>
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<Home />} />
           <Route
             path="/projects"
