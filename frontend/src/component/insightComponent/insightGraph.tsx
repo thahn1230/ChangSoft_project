@@ -27,7 +27,10 @@ const InsightGraph = (props: any) => {
   useEffect(() => {
     let newRes: JSX.Element[] = [];
     if (props.graphInfo !== undefined) {
-      console.log(props.graphInfo);
+
+      console.log("insight data:")
+      console.log(JSON.stringify(props.graphInfo))
+
       for (let idx = 0; idx < props.graphInfo.length; idx++) {
         newRes.push(
           <div style={{ marginLeft: "8vw" }}>

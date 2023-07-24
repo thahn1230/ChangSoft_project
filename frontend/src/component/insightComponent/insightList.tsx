@@ -474,11 +474,13 @@ const InsightList = (props: any) => {
         }
 
         params.append(paramName, paramContent);
+
         const response = await axios.get(
           `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }
         );
         const data = JSON.parse(response.data);
+
         props.setGraphInfo(data);
       } catch (error) {
         console.error(error);
