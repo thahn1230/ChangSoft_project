@@ -167,6 +167,10 @@ const LoginPage = () => {
     window.open(link, "_blank");
   };
 
+  const goToHome = () => {
+    window.navigator(link);
+  }
+
   const onJoin = () => {
     history.push("/login/join");
   };
