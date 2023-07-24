@@ -1,17 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React,  { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { useMutation } from "react-query";
+import axios from 'axios';
 import { useNavigate } from "react-router-dom"
 import {
   LoginHeader,
-  LoginOptionButtons,
-} from "../component/LoginComponents.jsx";
+} from "../component/LoginComponents";
 import styled from "styled-components";
-import { Input } from "@progress/kendo-react-inputs";
+import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import { Error } from '@progress/kendo-react-labels';
-import { LOGIN } from 'src/queries/user.mutation';
-import { setSessionStorage } from 'src/lib/utils/common';
-import urlPrefix from "./../resource/URL_prefix.json"
+//import { LOGIN } from 'src/queries/user.mutation';
+//import { setSessionStorage } from 'src/lib/utils/common';
+import urlPrefix from "../resource/URL_prefix.json"
+
+interface LoginInterface {
+  id: string;
+  name: string;
+  job_position: string;
+  company: string;
+  email_address: string;
+  phone_number: string;
+  user_type: string;
+}
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -113,70 +123,105 @@ const LoginWrapper = styled.div`
 `;
 
 const LoginPage = () => {
-  const link = urlPrefix + "/login";
+  const link = urlPrefix.IP_port + "/login";
   const history = useNavigate();
-  const [login, loginResult] = useMutation(LOGIN);
   const [inputValues, setInputValues] = useState({
     loginId: "",
     password: "",
   });
-  useEffect(() => {
-    const loginId = localStorage.getItem("loginId") ?? undefined;
-    setInputValues((inputValues) => ({
-      ...inputValues,
-      loginId,
-    }));
-  }, []);
 
-  useEffect(() => {
-    if (loginResult.data?.login?.accessToken) {
-      const { userId, fullName, accessToken, isMaster } =
-        loginResult.data.login;
-      const loginform = "normal";
-      setSessionStorage("user", {
-        userId,
-        fullName,
-        accessToken,
-        isMaster,
-        loginform,
-      });
-      history.push(
-        history.location?.state?.from?.pathname ||
-          process.env.REACT_APP_LANDING_URL
-      );
-    }
-  }, [loginResult, history]);
+  // useEffect(() => {
+  //   const loginId = localStorage.getItem("loginId") ?? undefined;
+  //   setInputValues((inputValues:) => ({
+  //     ...inputValues,
+  //     loginId,
+  //   }));
+  // }, []);
 
-  const onChange = ({ target: { name, value } }) => {
-    setInputValues({ ...inputValues, [name]: value });
+  // useEffect(() => {
+  //   if (loginResult.data?.login?.accessToken) {
+  //     const { userId, fullName, accessToken, isMaster } =
+  //       loginResult.data.login;
+  //     const loginform = "normal";
+  //     setSessionStorage("user", {
+  //       userId,
+  //       fullName,
+  //       accessToken,
+  //       isMaster,
+  //       loginform,
+  //     });
+  //     history.push(
+  //       history.location?.state?.from?.pathname ||
+  //         process.env.REACT_APP_LANDING_URL
+  //     );
+  //   }
+  // }, [loginResult, history]);
+
+
+  const onChange = (event : InputChangeEvent) => {
+    const {name , value} = event.target
+    if(name !== undefined)
+      setInputValues({...inputValues,[name]:value});
   };
 
-  const onSubmit = useCallback(
-    (ev) => {
-      console.info("onsubmit ");
-      ev.preventDefault();
-      const { loginId, password } = inputValues;
-      login({
-        variables: { input: { loginId, password } },
-      });
-    },
-    [(login, inputValues)]
-  );
+  const sha256 = async (message:string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  };
+
+  const login = async (id: string, password: string) => {
+    try {
+      const params = new URLSearchParams();
+      const hashedPassword = await sha256(password)
+      console.log('Hashed Password:', hashedPassword);
+
+      params.append(id, hashedPassword)
+
+      const response = await axios.post(
+        `${urlPrefix.IP_port}/login`,
+        { params }
+      );
+      //const isLoginSuccessful: LoginInterface = response.data;
+      const isLoginSuccessful = response.data;
+      return isLoginSuccessful;
+    } catch (error) {
+      console.error('Error occurred during login:', error);
+      return false;
+    }
+  };
+
+  const onSubmit = (ev:React.FormEvent<HTMLFormElement>)=>{
+    console.info("onsubmit ");
+    ev.preventDefault();
+    const { loginId, password } = inputValues;
+    login( loginId, password  )
+    
+  }
 
   const goToJira = () => {
     window.open(link, "_blank");
   };
 
   const goToHome = () => {
-    window.navigator(link);
+    //window.navigator(link);
   }
 
   const onJoin = () => {
-    history.push("/login/join");
+    //history.push("/login/join");
   };
 
+  const onclick = ()=>{
+    window.open("http://localhost:3000/home")
+    window.close();
+  }
   return (
     <div>
+      <Button onClick={onclick}></Button>
+      로그인페이지~
       <LoginWrapper>
         <LoginHeader />
         <div className="container">
@@ -189,7 +234,7 @@ const LoginPage = () => {
                   name={"loginId"}
                   type={"text"}
                   placeholder="id를 입력해주세요"
-                  autoFocus={!inputValues.saveLoginId}
+                  //autoFocus={!inputValues.saveLoginId}
                   value={inputValues.loginId}
                   onChange={onChange}
                 />
@@ -205,13 +250,13 @@ const LoginPage = () => {
                   onChange={onChange}
                 />
               </div>
-              {loginResult.called && !loginResult.loading && (
+              {/* {loginResult.called && !loginResult.loading && (
                 <div>
                   <Error>아이디 또는 비밀번호를 확인해주세요.</Error>
                 </div>
-              )}
+              )} */}
             </fieldset>
-            <Button className="loginBtn defaultButton" primary type={"submit"}>
+            <Button className="loginBtn defaultButton" type={"submit"}>
               로그인
             </Button>
           </form>
@@ -220,7 +265,7 @@ const LoginPage = () => {
               프로그램 구매 문의
             </Button>
           </div>
-          <LoginOptionButtons />
+          {/* <LoginOptionButtons /> */}
           <div className="join">
             <span className="joinText" onClick={onJoin}>
               계정이 없으신가요?

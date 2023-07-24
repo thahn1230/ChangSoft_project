@@ -17,7 +17,7 @@ export const items: MenuItem[] = [
   {
     text: "Home",
     selected: false,
-    route: "/",
+    route: "/home",
     icon: "home",
   },
   {

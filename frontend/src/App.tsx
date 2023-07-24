@@ -21,8 +21,8 @@ function App() {
     <div className="App">
       <NavigationLayout>
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/home" element={<Home />} />
           <Route
             path="/projects"
             element={
