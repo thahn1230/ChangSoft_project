@@ -31,10 +31,6 @@ const LoginHeaderWrapper = styled.div`
   }
 
   span {
-<<<<<<< HEAD
-    /* font-size: ${(props) => props.theme.font.size.xl}; */
-=======
->>>>>>> 76474f1aa306733f35cac48adedbd6e3f9ee42d6
     font-size: 2rem;
   }
   a {
