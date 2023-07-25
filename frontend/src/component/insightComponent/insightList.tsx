@@ -474,7 +474,7 @@ const InsightList = (props: any) => {
         }
 
         params.append(paramName, paramContent);
-
+        console.log(paramContent)
         const response = await axios.get(
           `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
           { params }

@@ -10,7 +10,7 @@ import SendMessageToChatGPT from "../resource/SendMessageToChatGPT";
 import chatgptLogo from "./../resource/chatgpt_logo.png";
 import "./../styles/AIQuery.scss";
 
-const AIQuery = () => {
+const AIQuery = (props:any) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isResponding, setIsResponding] = useState<boolean>(false);
 
