@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useMutation } from "react-query";
+// import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom"
 import {
   LoginHeader,
@@ -9,9 +9,21 @@ import styled from "styled-components";
 import { Input } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import { Error } from '@progress/kendo-react-labels';
-import { LOGIN } from 'src/queries/user.mutation';
-import { setSessionStorage } from 'src/lib/utils/common';
-import urlPrefix from "./../resource/URL_prefix.json"
+//import { LOGIN } from 'src/queries/user.mutation';
+//import { setSessionStorage } from 'src/lib/utils/common';
+import urlPrefix from "../resource/URL_prefix.json";
+import axios from 'axios';
+import crypto from 'crypto';
+
+interface LoginInterface {
+  id: string;
+  name: string;
+  job_position: string;
+  company: string;
+  email_address: string;
+  phone_number: string;
+  user_type: string;
+}
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -115,14 +127,13 @@ const LoginWrapper = styled.div`
 const LoginPage = () => {
   const link = urlPrefix + "/login";
   const history = useNavigate();
-  const [login, loginResult] = useMutation(LOGIN);
   const [inputValues, setInputValues] = useState({
     loginId: "",
     password: "",
   });
   useEffect(() => {
     const loginId = localStorage.getItem("loginId") ?? undefined;
-    setInputValues((inputValues) => ({
+    setInputValues((inputValues:) => ({
       ...inputValues,
       loginId,
     }));
@@ -146,6 +157,26 @@ const LoginPage = () => {
       );
     }
   }, [loginResult, history]);
+
+  const login = async (id: string, password: string) => {
+    try {
+      const params = new URLSearchParams();
+      const hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
+      console.log('Hashed Password:', hashedPassword);
+
+      params.append(id, hashedPassword)
+
+      const response = await axios.post(
+        `${urlPrefix.IP_port}/login`,
+        { params }
+      );
+      const isLoginSuccessful: LoginInterface = response.data; // Replace 'success' with the appropriate key in the server response
+      return isLoginSuccessful;
+    } catch (error) {
+      console.error('Error occurred during login:', error);
+      return false;
+    }
+  };
 
   const onChange = ({ target: { name, value } }) => {
     setInputValues({ ...inputValues, [name]: value });
@@ -175,8 +206,14 @@ const LoginPage = () => {
     history.push("/login/join");
   };
 
+  const onclick = ()=>{
+    window.open("http://localhost:3000/home")
+    window.close();
+  }
   return (
     <div>
+      <Button onClick={onclick}></Button>
+      로그인페이지~
       <LoginWrapper>
         <LoginHeader />
         <div className="container">

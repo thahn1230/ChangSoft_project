@@ -26,7 +26,7 @@ from enum import Enum
 from sqlalchemy import text
 from dbAccess import create_db_connection
 
-from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey, plotly_data_example
+from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey
 
 class Role(Enum):
     System = "system"
@@ -55,7 +55,13 @@ pymysql.install_as_MySQLdb()
 
 openai.api_key = APIkey
 
-stackedMessage = []
+stackedMessage = [Message(Role.System, """ Imports : {imports},
+    code_condition : {code_condition},
+    db_schema : {db_schema},
+    db_explanation: {db_explanation},
+    db_query_example : {db_query_example}
+    dictionary : {pron_dict}
+    """)]
 
 class Query(BaseModel):
     query: str
@@ -102,9 +108,13 @@ def prepare_answer(query, answer, error):
     """  
     system_prompt = f""" 
     """
+    assistant_prompt = f""" 
+    """
 
-    message = system_prompt + "\n\n" + prompt # gpt-3.5 한정
-    final_answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    # message = system_prompt + "\n\n" + prompt # gpt-3.5 한정
+    final_answer = ask_gpt(stackedMessage)
     
     return final_answer
 
@@ -122,18 +132,23 @@ def correct_code(code, pron_dict, error):
     db_explanation: {db_explanation},
     db_query_example : {db_query_example}
     dictionary : {pron_dict},
-    plotyly_data_example: {plotly_data_example}
     """
-
-    correct_code = ask_gpt(system_prompt + "\n\n" + prompt)
+    assistant_prompt = f""" 
+    """
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    correct_code = ask_gpt(stackedMessage)
     
     prompt =f"""You will be provided with a text string delimited by triple quotes.
     Extract only the Python code part from the string, and if there is a syntax error, correct it. When you answer, Never add additional words like 'Here it is' or 'I have modified ~', etc. Only the code. Don't wrap it with any quotes either.
 
         ```{correct_code}```
     """  
-    system_prompt = ""
-    correct_code = ask_gpt(system_prompt + "\n\n" + prompt)
+    assistant_prompt = f""" 
+    """
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    correct_code = ask_gpt(stackedMessage)
 
     return correct_code
 
@@ -183,8 +198,11 @@ def process_prompt(question: str, pron_dict : str) -> str:
         db_explanation: {db_explanation},
         dictionary : {pron_dict},
     """
-
-    answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    assistant_prompt = f""" 
+    """
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    answer = ask_gpt(stackedMessage)
     answer = json.loads(answer)
     if str.lower(answer['answer']).strip() == 'no':
         return "", answer['reason']
@@ -214,8 +232,12 @@ def process_prompt(question: str, pron_dict : str) -> str:
 
         ```{answer}```
     """  
-    system_prompt = ""
-    code = ask_gpt(system_prompt + "\n\n" + prompt)
+    system_prompt = ""    
+    assistant_prompt = f""" 
+    """
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    code = ask_gpt(stackedMessage)
         
     
     return code, ""
@@ -237,7 +259,11 @@ def prepare_pronoun_dictionary(question: str):
     
     system_prompt = f"""
     """
-    answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    assistant_prompt = f""" 
+    """
+    stackedMessage.append(Message(Role.User, prompt))
+    stackedMessage.append(Message(Role.Assistant, assistant_prompt))
+    answer = ask_gpt(stackedMessage)
     pro_dict = json.loads(answer)
 
     return pro_dict
