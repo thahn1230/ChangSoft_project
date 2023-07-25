@@ -70,6 +70,9 @@ const AIQuery = () => {
               layout={JSON.parse(item.plot)[index].layout}
             />
             <p>{item.explanation}</p>
+            <hr
+              style={{ border: "solid 1px", color: "#162F84", width: "1000px" }}
+            />
           </div>
         ),
       );

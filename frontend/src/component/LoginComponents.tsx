@@ -31,7 +31,10 @@ const LoginHeaderWrapper = styled.div`
   }
 
   span {
+<<<<<<< HEAD
     /* font-size: ${(props) => props.theme.font.size.xl}; */
+=======
+>>>>>>> 76474f1aa306733f35cac48adedbd6e3f9ee42d6
     font-size: 2rem;
   }
   a {
@@ -58,7 +61,7 @@ const LoginHeaderWrapper = styled.div`
   }
 `;
 
-export const LoginHeader = (props) => {
+export const LoginHeader = (props:any) => {
   return (
     <LoginHeaderWrapper tabIndex={-1} {...props}>
       <a href='/' tabIndex={-1}>
@@ -93,107 +96,107 @@ const SignupAgreementWrapper = styled.div`
   }
 `;
 
-export const SignupAgreement = () => {
-  const history = useNavigate();
-  const handleClick = useCallback(
-    (ev) => {
-      ev.preventDefault();
-      history.push(ev.target.getAttribute('href'));
-    },
-    [history],
-  );
-  return (
-    <SignupAgreementWrapper>
-      <span className='right-space'>본인은</span>
-      <span className='bold'>만 14세 이상</span>
-      이며<span className='right-space'>,</span>
-      {PolicyAgreementList &&
-        PolicyAgreementList.map(({ title, link }, idx) => {
-          return (
-            <Fragment key={String(idx)}>
-              {idx > 0 ? (
-                <span key={idx} className='right-space'>
-                  {','}
-                </span>
-              ) : (
-                ''
-              )}
-              <span>
-                <a href={link} onClick={handleClick}>
-                  {title}
-                </a>
-              </span>
-            </Fragment>
-          );
-        })}
-      <span className='right-space' />
-      <span className='right-space'>내용을 확인하였으며</span>
-      <span className='bold'>동의합니다.</span>
-    </SignupAgreementWrapper>
-  );
-};
+// export const SignupAgreement = () => {
+//   const history = useNavigate();
+//   const handleClick = useCallback(
+//     (ev:any) => {
+//       ev.preventDefault();
+//       history.push(ev.target.getAttribute('href'));
+//     },
+//     [history],
+//   );
+//   return (
+//     <SignupAgreementWrapper>
+//       <span className='right-space'>본인은</span>
+//       <span className='bold'>만 14세 이상</span>
+//       이며<span className='right-space'>,</span>
+//       {PolicyAgreementList &&
+//         PolicyAgreementList.map(({ title, link }, idx) => {
+//           return (
+//             <Fragment key={String(idx)}>
+//               {idx > 0 ? (
+//                 <span key={idx} className='right-space'>
+//                   {','}
+//                 </span>
+//               ) : (
+//                 ''
+//               )}
+//               <span>
+//                 <a href={link} onClick={handleClick}>
+//                   {title}
+//                 </a>
+//               </span>
+//             </Fragment>
+//           );
+//         })}
+//       <span className='right-space' />
+//       <span className='right-space'>내용을 확인하였으며</span>
+//       <span className='bold'>동의합니다.</span>
+//     </SignupAgreementWrapper>
+//   );
+// };
 
-const LoginOptionButtonsWrapper = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  /* align-items: center; */
-  margin-top: 10px;
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    flex-flow: row nowrap;
-    li {
-      a {
-        color: gray;
-        /* font-size: 0.8rem; */
-        font-size: ${(p) => p.theme.font.size.md};
-        text-decoration: none;
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-    li + li::before {
-      content: '•';
-      content: '|';
-      margin: 0px 4px;
-    }
-  }
-`;
+// const LoginOptionButtonsWrapper = styled.div`
+//   display: flex;
+//   flex-flow: row nowrap;
+//   justify-content: center;
+//   /* align-items: center; */
+//   margin-top: 10px;
+//   ul {
+//     margin: 0;
+//     padding: 0;
+//     list-style: none;
+//     display: flex;
+//     flex-flow: row nowrap;
+//     li {
+//       a {
+//         color: gray;
+//         /* font-size: 0.8rem; */
+//         font-size: ${(p) => p.theme.font.size.md};
+//         text-decoration: none;
+//         &:hover {
+//           text-decoration: underline;
+//         }
+//       }
+//     }
+//     li + li::before {
+//       content: '•';
+//       content: '|';
+//       margin: 0px 4px;
+//     }
+//   }
+// `;
 
-export const LoginCardContainer = ({ children }) => (
+export const LoginCardContainer = ({ children }:any) => (
   <div className='card-container' style={{ maxWidth: '400px' }}>
     {children}
   </div>
 );
 
-export const LoginOptionButtons = () => {
-  const history = useNavigate();
-  const handleClick = (ev) => {
-    ev.preventDefault();
-    history.push(ev.target.getAttribute('href'));
-  };
-  return (
-    <LoginOptionButtonsWrapper>
-      <ul>
-        <li>
-          <a href={'/login/id'} onClick={handleClick}>
-            아이디 찾기
-          </a>
-        </li>
-        <li>
-          <a
-            href={'/login/password/reset'}
-            value={'/login/password/reset'}
-            onClick={handleClick}
-          >
-            비밀번호 찾기
-          </a>
-        </li>
-      </ul>
-    </LoginOptionButtonsWrapper>
-  );
-};
+// export const LoginOptionButtons = () => {
+//   const history = useNavigate();
+//   const handleClick = (ev:any) => {
+//     ev.preventDefault();
+//     history.push(ev.target.getAttribute('href'));
+//   };
+//   return (
+//     <LoginOptionButtonsWrapper>
+//       <ul>
+//         <li>
+//           <a href={'/login/id'} onClick={handleClick}>
+//             아이디 찾기
+//           </a>
+//         </li>
+//         <li>
+//           <a
+//             href={'/login/password/reset'}
+//             value={'/login/password/reset'}
+//             onClick={handleClick}
+//           >
+//             비밀번호 찾기
+//           </a>
+//         </li>
+//       </ul>
+//     </LoginOptionButtonsWrapper>
+//   );
+// };
