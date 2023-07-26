@@ -1,100 +1,96 @@
-import React, { Fragment, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { Fragment, useCallback } from "react";
+// import styled from 'styled-components';
 import logo from "./../resource/changSoft_logo.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const PolicyAgreementList = [
   {
-    title: '창소프트아이디씨(Changsoft IDC) 이용약관',
-    link: '/policy#conditions-and-terms',
-    anchor: 'conditions-and-terms',
-    key: 'c1',
+    title: "창소프트아이디씨(Changsoft IDC) 이용약관",
+    link: "/policy#conditions-and-terms",
+    anchor: "conditions-and-terms",
+    key: "c1",
   },
   {
-    title: '개인정보수집및이용',
-    link: '/policy#privacy-policy',
-    anchor: 'privacy-policy',
-    key: 'c3',
+    title: "개인정보수집및이용",
+    link: "/policy#privacy-policy",
+    anchor: "privacy-policy",
+    key: "c3",
   },
 ];
 
-const LoginHeaderWrapper = styled.div`
-  background: transparent;
-  height: 50px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  &:hover {
-    cursor: pointer;
-  }
+// const LoginHeaderWrapper = styled.div`
+//   background: transparent;
+//   height: 50px;
+//   display: flex;
+//   flex-flow: row nowrap;
+//   justify-content: center;
+//   align-items: center;
+//   outline: none;
+//   &:hover {
+//     cursor: pointer;
+//   }
 
-  span {
-<<<<<<< HEAD
-    /* font-size: ${(props) => props.theme.font.size.xl}; */
-=======
->>>>>>> 76474f1aa306733f35cac48adedbd6e3f9ee42d6
-    font-size: 2rem;
-  }
-  a {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    div {
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
-      img {
-        height: 100%;
-      }
-      span {
-        font-weight: bold;
-      }
-    }
-  }
-`;
+//   span {
+//     font-size: 2rem;
+//   }
+//   a {
+//     width: 100%;
+//     height: 100%;
+//     display: flex;
+//     flex-flow: row nowrap;
+//     justify-content: center;
+//     align-items: center;
+//     color: black;
+//     div {
+//       display: flex;
+//       flex-flow: row nowrap;
+//       justify-content: center;
+//       align-items: center;
+//       height: 100%;
+//       img {
+//         height: 100%;
+//       }
+//       span {
+//         font-weight: bold;
+//       }
+//     }
+//   }
+// `;
 
-export const LoginHeader = (props:any) => {
+export const LoginHeader = (props: any) => {
   return (
     <LoginHeaderWrapper tabIndex={-1} {...props}>
-      <a href='/' tabIndex={-1}>
+      <a href="/" tabIndex={-1}>
         <div>
-          <img id='logo' src={logo} alt={'Changsoft'} />
+          <img id="logo" src={logo} alt={"Changsoft"} />
         </div>
         <div>
-          <span className='name'>{'Changsoft IDC'}</span>
+          <span className="name">{"Changsoft IDC"}</span>
         </div>
       </a>
     </LoginHeaderWrapper>
   );
 };
 
-const SignupAgreementWrapper = styled.div`
-  margin-top: 10px;
-  font-size: ${(p) => p.theme.font.size.sm};
-  a {
-    font-size: ${(p) => p.theme.font.size.sm};
-  }
-  span.bold {
-    font-size: ${(p) => p.theme.font.size.sm};
-    font-weight: bold;
-  }
-  span.right-space {
-    font-size: ${(p) => p.theme.font.size.sm};
-    margin-right: 0.2em;
-  }
-  span {
-    font-size: ${(p) => p.theme.font.size.sm};
-    line-break: anywhere;
-  }
-`;
+// const SignupAgreementWrapper = styled.div`
+//   margin-top: 10px;
+//   font-size: ${(p) => p.theme.font.size.sm};
+//   a {
+//     font-size: ${(p) => p.theme.font.size.sm};
+//   }
+//   span.bold {
+//     font-size: ${(p) => p.theme.font.size.sm};
+//     font-weight: bold;
+//   }
+//   span.right-space {
+//     font-size: ${(p) => p.theme.font.size.sm};
+//     margin-right: 0.2em;
+//   }
+//   span {
+//     font-size: ${(p) => p.theme.font.size.sm};
+//     line-break: anywhere;
+//   }
+// `;
 
 // export const SignupAgreement = () => {
 //   const history = useNavigate();
@@ -167,8 +163,8 @@ const SignupAgreementWrapper = styled.div`
 //   }
 // `;
 
-export const LoginCardContainer = ({ children }:any) => (
-  <div className='card-container' style={{ maxWidth: '400px' }}>
+export const LoginCardContainer = ({ children }: any) => (
+  <div className="card-container" style={{ maxWidth: "400px" }}>
     {children}
   </div>
 );

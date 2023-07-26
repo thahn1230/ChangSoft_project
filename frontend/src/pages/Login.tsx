@@ -1,16 +1,14 @@
-import React,  { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from "react-router-dom"
-import {
-  LoginHeader,
-} from "../component/LoginComponents";
-import styled from "styled-components";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { LoginHeader } from "../component/LoginComponents";
+// import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
-import { Error } from '@progress/kendo-react-labels';
+import { Error } from "@progress/kendo-react-labels";
 //import { LOGIN } from 'src/queries/user.mutation';
 //import { setSessionStorage } from 'src/lib/utils/common';
-import urlPrefix from "../resource/URL_prefix.json"
+import urlPrefix from "../resource/URL_prefix.json";
 
 interface LoginInterface {
   id: string;
@@ -22,104 +20,104 @@ interface LoginInterface {
   user_type: string;
 }
 
-const LoginWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: whitesmoke;
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
+// const LoginWrapper = styled.div`
+//   width: 100%;
+//   height: 100vh;
+//   background-color: whitesmoke;
+//   display: flex;
+//   flex-flow: column nowrap;
+//   justify-content: center;
+//   align-items: center;
 
-  .container {
-    margin-top: 1rem;
-    background-color: white;
-    padding: 30px;
-    height: 400px;
-    border: 1px solid lightgray;
-    border-radius: 4px;
+//   .container {
+//     margin-top: 1rem;
+//     background-color: white;
+//     padding: 30px;
+//     height: 400px;
+//     border: 1px solid lightgray;
+//     border-radius: 4px;
 
-    .idField,
-    .pwField {
-      margin-bottom: 1rem;
-    }
+//     .idField,
+//     .pwField {
+//       margin-bottom: 1rem;
+//     }
 
-    .labelfield {
-      font-weight: bold;
-    }
+//     .labelfield {
+//       font-weight: bold;
+//     }
 
-    .inputfield {
-      margin-top: 5px;
-      width: 300px;
-      height: 40px;
-      border-radius: 4px;
-      border: 1px solid lightgray;
-    }
+//     .inputfield {
+//       margin-top: 5px;
+//       width: 300px;
+//       height: 40px;
+//       border-radius: 4px;
+//       border: 1px solid lightgray;
+//     }
 
-    .loginBtn {
-      width: 300px;
-      height: 40px;
-      // background-color: #1e90ff;
-      border: none;
-      margin-top: 3rem;
-      margin-bottom: 0.5rem;
-    }
-  }
+//     .loginBtn {
+//       width: 300px;
+//       height: 40px;
+//       // background-color: #1e90ff;
+//       border: none;
+//       margin-top: 3rem;
+//       margin-bottom: 0.5rem;
+//     }
+//   }
 
-  .checkbox {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 1rem;
-  }
+//   .checkbox {
+//     display: flex;
+//     flex-flow: row nowrap;
+//     justify-content: flex-start;
+//     align-items: center;
+//     margin-top: 1rem;
+//   }
 
-  .orText {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    margin: 0.7rem 0;
-    font-size: 0.7rem;
-  }
-  .auth {
-    display: flex;
-    flex-flow: column nowrap;
-  }
+//   .orText {
+//     display: flex;
+//     flex-flow: row nowrap;
+//     justify-content: center;
+//     margin: 0.7rem 0;
+//     font-size: 0.7rem;
+//   }
+//   .auth {
+//     display: flex;
+//     flex-flow: column nowrap;
+//   }
 
-  .otherLogins {
-    display: flex;
-    flex-direction: column;
+//   .otherLogins {
+//     display: flex;
+//     flex-direction: column;
 
-    .kakaoBtn {
-      width: 300px;
-      height: 40px;
-      margin-bottom: 0.5rem;
-    }
+//     .kakaoBtn {
+//       width: 300px;
+//       height: 40px;
+//       margin-bottom: 0.5rem;
+//     }
 
-    .askBtn {
-      width: 300px;
-      height: 40px;
-      margin-bottom: 0.5rem;
-    }
+//     .askBtn {
+//       width: 300px;
+//       height: 40px;
+//       margin-bottom: 0.5rem;
+//     }
 
-    .faceBookBtn {
-      width: 300px;
-      height: 40px;
-    }
-  }
+//     .faceBookBtn {
+//       width: 300px;
+//       height: 40px;
+//     }
+//   }
 
-  .join {
-    text-align: center;
-    margin-top: 1rem;
-    color: gray;
-    font-weight: bold;
+//   .join {
+//     text-align: center;
+//     margin-top: 1rem;
+//     color: gray;
+//     font-weight: bold;
 
-    .joinText:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
-  }
-`;
+//     .joinText:hover {
+//       cursor: pointer;
+//       text-decoration: underline;
+//     }
+//   }
+// `;
 
 const LoginPage = () => {
   const link = urlPrefix.IP_port + "/login";
@@ -156,50 +154,48 @@ const LoginPage = () => {
   //   }
   // }, [loginResult, history]);
 
-
-  const onChange = (event : InputChangeEvent) => {
-    const {name , value} = event.target
-    if(name !== undefined)
-      setInputValues({...inputValues,[name]:value});
+  const onChange = (event: InputChangeEvent) => {
+    const { name, value } = event.target;
+    if (name !== undefined) setInputValues({ ...inputValues, [name]: value });
   };
 
-  const sha256 = async (message:string) => {
+  const sha256 = async (message: string) => {
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+    const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+    const hashHex = hashArray
+      .map((byte) => byte.toString(16).padStart(2, "0"))
+      .join("");
     return hashHex;
   };
 
   const login = async (id: string, password: string) => {
     try {
       const params = new URLSearchParams();
-      const hashedPassword = await sha256(password)
-      console.log('Hashed Password:', hashedPassword);
+      const hashedPassword = await sha256(password);
+      console.log("Hashed Password:", hashedPassword);
 
-      params.append(id, hashedPassword)
+      params.append(id, hashedPassword);
 
-      const response = await axios.post(
-        `${urlPrefix.IP_port}/login`,
-        { params }
-      );
+      const response = await axios.post(`${urlPrefix.IP_port}/login`, {
+        params,
+      });
       //const isLoginSuccessful: LoginInterface = response.data;
       const isLoginSuccessful = response.data;
       return isLoginSuccessful;
     } catch (error) {
-      console.error('Error occurred during login:', error);
+      console.error("Error occurred during login:", error);
       return false;
     }
   };
 
-  const onSubmit = (ev:React.FormEvent<HTMLFormElement>)=>{
+  const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     console.info("onsubmit ");
     ev.preventDefault();
     const { loginId, password } = inputValues;
-    login( loginId, password  )
-    
-  }
+    login(loginId, password);
+  };
 
   const goToJira = () => {
     window.open(link, "_blank");
@@ -207,16 +203,16 @@ const LoginPage = () => {
 
   const goToHome = () => {
     //window.navigator(link);
-  }
+  };
 
   const onJoin = () => {
     //history.push("/login/join");
   };
 
-  const onclick = ()=>{
-    window.open("http://localhost:3000/home")
+  const onclick = () => {
+    window.open("http://localhost:3000/home");
     window.close();
-  }
+  };
   return (
     <div>
       <Button onClick={onclick}></Button>
