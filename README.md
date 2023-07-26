@@ -27,7 +27,7 @@ main.py 안에 있는 app 모듈을 실행한다.
    netsh interface portproxy reset
 
 2. 기존 세팅 삭제
-   netsh interface portproxy delete v4tov4 listenport=8000 listenaddress=0.0.0.0
+   powershell```netsh interface portproxy delete v4tov4 listenport=8000 listenaddress=0.0.0.0```
    -> "지정된 파일을 찾을 수 없습니다" 떠도 괜찮습니다.
 
 3. 새로 포트포워딩 설정
