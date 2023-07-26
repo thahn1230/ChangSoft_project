@@ -192,7 +192,7 @@ const LoginPage = (props:any) => {
         navigator("/home")
         return true;
       } else {
-        //로그인실패
+        alert("아이디와 비밀번호를 확인해주세요");
         return false;
       }
     } catch (error) {
@@ -220,14 +220,8 @@ const LoginPage = (props:any) => {
     navigator("/join")
   };
 
-  const onclick = () => {
-    window.open("http://localhost:3000/home");
-    window.close();
-  };
-
   return (
     <div>
-      <Button onClick={onclick}></Button>
       로그인페이지~
       <LoginWrapper>
         <LoginHeader />

@@ -206,16 +206,7 @@ const Join = () => {
 
   //여기부터
 
-  const signup = async (newUserInfo: {
-    id: string;
-    password: string;
-    name: string;
-    job_position: string | null;
-    company: string;
-    email_address: string;
-    phone_number: string | null;
-    user_type: string;
-  }) => {
+  const signup = async (newUserInfo: JoinValueI) => {
     if (isIdDuplicate) {
       alert("아이디 중복확인을 해주세요.");
       return;
