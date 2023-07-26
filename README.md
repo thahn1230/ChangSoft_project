@@ -27,10 +27,12 @@ main.py 안에 있는 app 모듈을 실행한다.
    netsh interface portproxy reset
 
 2. 기존 세팅 삭제
-   powershell```netsh interface portproxy delete v4tov4 listenport=8000 listenaddress=0.0.0.0```
+   ```powershell
+   netsh interface portproxy delete v4tov4 listenport=8000 listenaddress=0.0.0.0
+   ```
    -> "지정된 파일을 찾을 수 없습니다" 떠도 괜찮습니다.
 
-3. 새로 포트포워딩 설정
+4. 새로 포트포워딩 설정
    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=????
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
 
