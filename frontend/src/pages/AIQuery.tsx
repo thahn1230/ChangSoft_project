@@ -10,25 +10,60 @@ import SendMessageToChatGPT from "../resource/SendMessageToChatGPT";
 import chatgptLogo from "./../resource/chatgpt_logo.png";
 import "./../styles/AIQuery.scss";
 
+
+const bot: User = {
+  id: 0,
+  name: "챗봇",
+  avatarUrl: chatgptLogo,
+};
+
+const user: User = {
+  id: 1,
+  name: "사용자",
+};
+const initialMessages = [
+  {
+    author: bot,
+    suggestedActions: [
+      {
+        type: "reply",
+        value: "Insight 1",
+      },
+      {
+        type: "reply",
+        value: "Insight 2",
+      },
+      {
+        type: "reply",
+        value: "Insight 3",
+      },
+      {
+        type: "reply",
+        value: "Insight 4",
+      },
+      {
+        type: "reply",
+        value: "Insight 5",
+      },
+      {
+        type: "reply",
+        value: "Insight 6",
+      },
+    ],
+    timestamp: new Date(),
+    text: "안녕하세요? 무엇을 도와드릴까요?",
+  },
+];
+
 const AIQuery = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [isResponding, setIsResponding] = useState<boolean>(false);
 
   const addNewMessage = (message: Message) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  const bot: User = {
-    id: 0,
-    name: "챗봇",
-    avatarUrl: chatgptLogo,
-  };
-
-  const user: User = {
-    id: 1,
-    name: "사용자",
-  };
-
+  
   useEffect(() => {
     if (isResponding) {
       setMessages((prevMessages) => [
