@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback } from "react";
-// import styled from 'styled-components';
+import styled from "styled-components";
 import logo from "./../resource/changSoft_logo.png";
 import { useNavigate } from "react-router-dom";
 
@@ -18,44 +18,44 @@ export const PolicyAgreementList = [
   },
 ];
 
-// const LoginHeaderWrapper = styled.div`
-//   background: transparent;
-//   height: 50px;
-//   display: flex;
-//   flex-flow: row nowrap;
-//   justify-content: center;
-//   align-items: center;
-//   outline: none;
-//   &:hover {
-//     cursor: pointer;
-//   }
+const LoginHeaderWrapper = styled.div`
+  background: transparent;
+  height: 50px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  outline: none;
+  &:hover {
+    cursor: pointer;
+  }
 
-//   span {
-//     font-size: 2rem;
-//   }
-//   a {
-//     width: 100%;
-//     height: 100%;
-//     display: flex;
-//     flex-flow: row nowrap;
-//     justify-content: center;
-//     align-items: center;
-//     color: black;
-//     div {
-//       display: flex;
-//       flex-flow: row nowrap;
-//       justify-content: center;
-//       align-items: center;
-//       height: 100%;
-//       img {
-//         height: 100%;
-//       }
-//       span {
-//         font-weight: bold;
-//       }
-//     }
-//   }
-// `;
+  span {
+    font-size: 2rem;
+  }
+  a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    div {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      img {
+        height: 100%;
+      }
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+`;
 
 export const LoginHeader = (props: any) => {
   return (
@@ -72,25 +72,25 @@ export const LoginHeader = (props: any) => {
   );
 };
 
-// const SignupAgreementWrapper = styled.div`
-//   margin-top: 10px;
-//   font-size: ${(p) => p.theme.font.size.sm};
-//   a {
-//     font-size: ${(p) => p.theme.font.size.sm};
-//   }
-//   span.bold {
-//     font-size: ${(p) => p.theme.font.size.sm};
-//     font-weight: bold;
-//   }
-//   span.right-space {
-//     font-size: ${(p) => p.theme.font.size.sm};
-//     margin-right: 0.2em;
-//   }
-//   span {
-//     font-size: ${(p) => p.theme.font.size.sm};
-//     line-break: anywhere;
-//   }
-// `;
+const SignupAgreementWrapper = styled.div`
+  margin-top: 10px;
+  font-size: ${(p) => p.theme.font.size.sm};
+  a {
+    font-size: ${(p) => p.theme.font.size.sm};
+  }
+  span.bold {
+    font-size: ${(p) => p.theme.font.size.sm};
+    font-weight: bold;
+  }
+  span.right-space {
+    font-size: ${(p) => p.theme.font.size.sm};
+    margin-right: 0.2em;
+  }
+  span {
+    font-size: ${(p) => p.theme.font.size.sm};
+    line-break: anywhere;
+  }
+`;
 
 // export const SignupAgreement = () => {
 //   const history = useNavigate();

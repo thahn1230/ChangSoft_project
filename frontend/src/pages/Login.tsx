@@ -2,131 +2,123 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
-// import styled from "styled-components";
+import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import { Error } from "@progress/kendo-react-labels";
 //import { LOGIN } from 'src/queries/user.mutation';
 //import { setSessionStorage } from 'src/lib/utils/common';
 import urlPrefix from "../resource/URL_prefix.json";
+import { UserInfoI } from "./../interface/userInfo_interface";
+import { useUserContext } from "./../UserInfoContext";
 
-interface LoginInterface {
-  id: string;
-  name: string;
-  job_position: string;
-  company: string;
-  email_address: string;
-  phone_number: string;
-  user_type: string;
-}
+const LoginWrapper = styled.div`
+  width: 100%;
+  height: 100vh;
+  background-color: whitesmoke;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
 
-// const LoginWrapper = styled.div`
-//   width: 100%;
-//   height: 100vh;
-//   background-color: whitesmoke;
-//   display: flex;
-//   flex-flow: column nowrap;
-//   justify-content: center;
-//   align-items: center;
+  .container {
+    margin-top: 1rem;
+    background-color: white;
+    padding: 30px;
+    height: 400px;
+    border: 1px solid lightgray;
+    border-radius: 4px;
 
-//   .container {
-//     margin-top: 1rem;
-//     background-color: white;
-//     padding: 30px;
-//     height: 400px;
-//     border: 1px solid lightgray;
-//     border-radius: 4px;
+    .idField,
+    .pwField {
+      margin-bottom: 1rem;
+    }
 
-//     .idField,
-//     .pwField {
-//       margin-bottom: 1rem;
-//     }
+    .labelfield {
+      font-weight: bold;
+    }
 
-//     .labelfield {
-//       font-weight: bold;
-//     }
+    .inputfield {
+      margin-top: 5px;
+      width: 300px;
+      height: 40px;
+      border-radius: 4px;
+      border: 1px solid lightgray;
+    }
 
-//     .inputfield {
-//       margin-top: 5px;
-//       width: 300px;
-//       height: 40px;
-//       border-radius: 4px;
-//       border: 1px solid lightgray;
-//     }
+    .loginBtn {
+      width: 300px;
+      height: 40px;
+      // background-color: #1e90ff;
+      border: none;
+      margin-top: 3rem;
+      margin-bottom: 0.5rem;
+    }
+  }
 
-//     .loginBtn {
-//       width: 300px;
-//       height: 40px;
-//       // background-color: #1e90ff;
-//       border: none;
-//       margin-top: 3rem;
-//       margin-bottom: 0.5rem;
-//     }
-//   }
+  .checkbox {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1rem;
+  }
 
-//   .checkbox {
-//     display: flex;
-//     flex-flow: row nowrap;
-//     justify-content: flex-start;
-//     align-items: center;
-//     margin-top: 1rem;
-//   }
+  .orText {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    margin: 0.7rem 0;
+    font-size: 0.7rem;
+  }
+  .auth {
+    display: flex;
+    flex-flow: column nowrap;
+  }
 
-//   .orText {
-//     display: flex;
-//     flex-flow: row nowrap;
-//     justify-content: center;
-//     margin: 0.7rem 0;
-//     font-size: 0.7rem;
-//   }
-//   .auth {
-//     display: flex;
-//     flex-flow: column nowrap;
-//   }
+  .otherLogins {
+    display: flex;
+    flex-direction: column;
 
-//   .otherLogins {
-//     display: flex;
-//     flex-direction: column;
+    .kakaoBtn {
+      width: 300px;
+      height: 40px;
+      margin-bottom: 0.5rem;
+    }
 
-//     .kakaoBtn {
-//       width: 300px;
-//       height: 40px;
-//       margin-bottom: 0.5rem;
-//     }
+    .askBtn {
+      width: 300px;
+      height: 40px;
+      margin-bottom: 0.5rem;
+    }
 
-//     .askBtn {
-//       width: 300px;
-//       height: 40px;
-//       margin-bottom: 0.5rem;
-//     }
+    .faceBookBtn {
+      width: 300px;
+      height: 40px;
+    }
+  }
 
-//     .faceBookBtn {
-//       width: 300px;
-//       height: 40px;
-//     }
-//   }
+  .join {
+    text-align: center;
+    margin-top: 1rem;
+    color: gray;
+    font-weight: bold;
 
-//   .join {
-//     text-align: center;
-//     margin-top: 1rem;
-//     color: gray;
-//     font-weight: bold;
+    .joinText:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+`;
 
-//     .joinText:hover {
-//       cursor: pointer;
-//       text-decoration: underline;
-//     }
-//   }
-// `;
-
-const LoginPage = () => {
+const LoginPage = (props: any) => {
   const link = urlPrefix.IP_port + "/login";
-  const history = useNavigate();
+  const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({
     loginId: "",
     password: "",
   });
-
+  const userInfoContext = useUserContext();
   // useEffect(() => {
   //   const loginId = localStorage.getItem("loginId") ?? undefined;
   //   setInputValues((inputValues:) => ({
@@ -172,18 +164,38 @@ const LoginPage = () => {
 
   const login = async (id: string, password: string) => {
     try {
+      console.log(id + " " + password);
       const params = new URLSearchParams();
       const hashedPassword = await sha256(password);
       console.log("Hashed Password:", hashedPassword);
 
-      params.append(id, hashedPassword);
+      params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
-      const response = await axios.post(`${urlPrefix.IP_port}/login`, {
-        params,
+      const response = await fetch(`${urlPrefix.IP_port}/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          login_info: { id: id, password: hashedPassword },
+        }),
       });
-      //const isLoginSuccessful: LoginInterface = response.data;
-      const isLoginSuccessful = response.data;
-      return isLoginSuccessful;
+
+      const loginData: UserInfoI[] = JSON.parse(await response.json());
+
+      // console.log("loginData.id");
+      // console.log(loginData[0]);
+
+      if (loginData.length !== 0) {
+        //로그인성공
+        userInfoContext?.setUser(loginData[0]);
+        navigator("/home");
+        return true;
+      } else {
+        //로그인실패
+        return false;
+      }
     } catch (error) {
       console.error("Error occurred during login:", error);
       return false;
@@ -206,13 +218,14 @@ const LoginPage = () => {
   };
 
   const onJoin = () => {
-    //history.push("/login/join");
+    navigator("/join");
   };
 
   const onclick = () => {
     window.open("http://localhost:3000/home");
     window.close();
   };
+
   return (
     <div>
       <Button onClick={onclick}></Button>
@@ -255,17 +268,20 @@ const LoginPage = () => {
               로그인
             </Button>
           </form>
-          <div className="otherLogins">
+
+          {/* <div className="otherLogins">
             <Button className="askBtn cancelButton" onClick={goToJira}>
               프로그램 구매 문의
             </Button>
-          </div>
+          </div> */}
           {/* <LoginOptionButtons /> */}
+
           <div className="join">
             <span className="joinText" onClick={onJoin}>
               계정이 없으신가요?
             </span>
           </div>
+
           <div className="join">
             <span className="joinText">상담 문의 : 02-563-1328</span>
           </div>

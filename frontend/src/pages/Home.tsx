@@ -58,7 +58,7 @@ const tiles: Tile[] = [
   // },
 ];
 
-export const Home: React.FC = () => {
+export const Home: React.FC = (props:any) => {
   const [data, setData] = useState<
     { col: number; colSpan: number; rowSpan: number }[]
   >([

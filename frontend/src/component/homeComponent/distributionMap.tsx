@@ -62,11 +62,9 @@ const DistributionMap = () => {
     const fetchData = async () => {
       try {
 
-        console.log("!");
         const response = await axios.get(urlPrefix.IP_port + "/dashboard/project/map");
         const data: coordinate[] = response.data;
 
-        console.log(data);
         setMarkers(data);
 
       } catch (error) {
