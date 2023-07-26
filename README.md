@@ -54,4 +54,4 @@ npm fund
 npm audit fix
 ```
 
-만약 ```powershell npm audit fix``` 명령어를 실행하였을때 작동이 안된다면 ```powershell npm --force audit fix```를 실행해주시면 됩니다.
+만약 ```npm audit fix``` 명령어를 실행하였을때 작동이 안된다면 ```npm --force audit fix```를 실행해주시면 됩니다.
