@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TileLayout,
   TileLayoutRepositionEvent,
@@ -12,6 +12,7 @@ import LocalPercentage from "../component/homeComponent/localPercentage";
 import TotalArea from "../component/homeComponent/totalArea";
 import FloorCount from "../component/homeComponent/floorCount";
 import { Button } from "@progress/kendo-react-buttons";
+import "./../styles/Home.scss"
 
 
 interface Tile {

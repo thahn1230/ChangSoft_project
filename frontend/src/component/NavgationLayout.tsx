@@ -6,6 +6,7 @@ import "./../styles/NavigationLayout.scss";
 import ChangSoftLogo from "./../resource/changSoft_logo.png";
 import ChatgptLogo from "./../resource/chatgpt_logo.png";
 import { useUserContext } from "../UserInfoContext";
+import exp from "constants";
 
 interface MenuItem {
   text: string;
@@ -74,6 +75,18 @@ export const NavigationLayout = (props: any) => {
     return "BuilderHub SmartDB System";
   };
 
+  const getUserContainerStyle = () => {
+    return expanded
+      ? { height: "200px" }
+      : { height: "200px", expanded: `${expanded}` };
+  };
+
+  const getMargin = () => {
+    return expanded
+      ? { marginTop: "-200px" }
+      : { marginTop: "0px"};
+  };
+
   return (
     <div>
       <div
@@ -104,7 +117,7 @@ export const NavigationLayout = (props: any) => {
       </div>
 
       <div>
-        {/* <div className="user-container">
+        {!expanded? <div style={getMargin()}></div>: <div className="user-container" style={getUserContainerStyle()}>
           <img alt="UserImg" src={ChangSoftLogo} width={190} />
           <h1>
             {userInfoContext !== null ? userInfoContext.userInfo?.name : null}
@@ -119,7 +132,7 @@ export const NavigationLayout = (props: any) => {
               Sign Out
             </Button>
           </Link>
-        </div> */}
+        </div>}
         <Drawer
           expanded={expanded}
           position="start"
@@ -134,8 +147,10 @@ export const NavigationLayout = (props: any) => {
           className="drawer"
         >
           <DrawerContent>
-            {props.children}
+            <div style={getMargin()}>
+              {props.children}
             <Outlet />
+            </div>
           </DrawerContent>
         </Drawer>
       </div>
