@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
-import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
 import "./../styles/NavigationLayout.scss";
 import ChangSoftLogo from "./../resource/changSoft_logo.png";
 import ChatgptLogo from "./../resource/chatgpt_logo.png";
+import { useUserContext } from "../UserInfoContext";
 
 interface MenuItem {
   text: string;
@@ -51,6 +52,7 @@ export const NavigationLayout = (props: any) => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState("");
+  const userInfoContext = useUserContext();
 
   const handleClick = () => {
     setExpanded(!expanded);
@@ -102,6 +104,22 @@ export const NavigationLayout = (props: any) => {
       </div>
 
       <div>
+        {/* <div className="user-container">
+          <img alt="UserImg" src={ChangSoftLogo} width={190} />
+          <h1>
+            {userInfoContext !== null ? userInfoContext.userInfo?.name : null}
+          </h1>
+          <div className="user-email">
+            {userInfoContext !== null
+              ? userInfoContext.userInfo?.email_address
+              : null}
+          </div>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base">
+              Sign Out
+            </Button>
+          </Link>
+        </div> */}
         <Drawer
           expanded={expanded}
           position="start"

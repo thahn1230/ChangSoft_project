@@ -2,6 +2,8 @@
     max-width: none !important;
     margin: 1%;
     box-shadow: rgb(22, 101, 203) !important;
+    max-height: none !important;
+    height: 85vh !important;
 
     // .k-button{
     //     color: red !important;
@@ -13,4 +15,9 @@
         color: white !important;
         box-shadow: rgb(22, 101, 203) !important;
     }
+}
+
+.k-widget .k-chat{
+    max-height: none !important;
+    height: 100000px;
 }
