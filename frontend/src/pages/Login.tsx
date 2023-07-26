@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useMutation } from "react-query";
 import axios from "axios";
 import {  useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
@@ -179,7 +178,7 @@ const LoginPage = (props:any) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ login_info: [id, hashedPassword] }),
+        body: JSON.stringify({ login_info: {id:id, password:hashedPassword} }),
       });
 
       const loginData:UserInfoI[] = JSON.parse(await response.json());
