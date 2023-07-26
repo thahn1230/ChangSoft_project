@@ -225,7 +225,6 @@ const Join = () => {
           user_type: "User",
         }
       );
-      console.log(joinValue);
       //params는 어케쓰지
       //여기도 수정좀 해야될듯
       const response = await fetch(`${urlPrefix.IP_port}/sign_up`, {
@@ -241,8 +240,8 @@ const Join = () => {
 
       if (signupData.length !== 0) {
         //회원가입 성공
-        userInfoContext?.setUser(signupData[0]);
-        history("/home");
+        //userInfoContext?.setUser(signupData[0]);
+        history("/");
         return true;
       } else {
         //회원가입 실패
@@ -268,7 +267,6 @@ const Join = () => {
       //console.log(await response.json())
       //const signupData: UserInfoI[] = JSON.parse(await response.json());
       const isIdValid = (await response.json()).result;
-      console.log(isIdValid);
 
       if (isIdValid) {
         //중복아님
@@ -324,7 +322,6 @@ const Join = () => {
   };
 
   const onPhoneConfirm = () => {
-    console.log(phoneNum);
     setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
   };
 
@@ -348,7 +345,6 @@ const Join = () => {
     }
 
     if (phoneVal && emailVal) {
-      console.log(joinValue);
       let signUpResult = await signup(
         //   id: joinValue.id,
         //   name: joinValue.name,
@@ -371,7 +367,6 @@ const Join = () => {
         alert("가입 완료되었습니다.");
 
         backToLogin();
-        console.log(signUpResult);
       } else {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
       }

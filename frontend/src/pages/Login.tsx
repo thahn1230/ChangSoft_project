@@ -163,12 +163,17 @@ const LoginPage = (props:any) => {
     return hashHex;
   };
 
+
+  
+  useEffect(()=>{
+    if(userInfoContext?.userInfo !== null)
+      navigator("/home")
+  },[userInfoContext?.userInfo])
+
   const login = async (id: string, password: string) => {
     try {
-      console.log(id + " " + password);
       const params = new URLSearchParams();
       const hashedPassword = await sha256(password);
-      console.log("Hashed Password:", hashedPassword);
 
       params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
@@ -189,7 +194,6 @@ const LoginPage = (props:any) => {
       if (loginData.length !== 0) {
         //로그인성공
         userInfoContext?.setUser(loginData[0])
-        navigator("/home")
         return true;
       } else {
         alert("아이디와 비밀번호를 확인해주세요");
@@ -222,7 +226,6 @@ const LoginPage = (props:any) => {
 
   return (
     <div>
-      로그인페이지~
       <LoginWrapper>
         <LoginHeader />
         <div className="container">
