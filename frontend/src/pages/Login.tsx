@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
@@ -9,8 +9,9 @@ import { Error } from "@progress/kendo-react-labels";
 //import { LOGIN } from 'src/queries/user.mutation';
 //import { setSessionStorage } from 'src/lib/utils/common';
 import urlPrefix from "../resource/URL_prefix.json";
-import { UserInfoI } from "./../interface/userInfo_interface";
+import {UserInfoI} from "./../interface/userInfo_interface"
 import { useUserContext } from "./../UserInfoContext";
+
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -111,7 +112,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const LoginPage = (props: any) => {
+const LoginPage = (props:any) => {
   const link = urlPrefix.IP_port + "/login";
   const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({
@@ -177,20 +178,18 @@ const LoginPage = (props: any) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          login_info: { id: id, password: hashedPassword },
-        }),
+        body: JSON.stringify({ login_info: {id:id, password:hashedPassword} }),
       });
 
-      const loginData: UserInfoI[] = JSON.parse(await response.json());
-
+      const loginData:UserInfoI[] = JSON.parse(await response.json());
+      
       // console.log("loginData.id");
       // console.log(loginData[0]);
 
       if (loginData.length !== 0) {
         //로그인성공
-        userInfoContext?.setUser(loginData[0]);
-        navigator("/home");
+        userInfoContext?.setUser(loginData[0])
+        navigator("/home")
         return true;
       } else {
         //로그인실패
@@ -218,7 +217,7 @@ const LoginPage = (props: any) => {
   };
 
   const onJoin = () => {
-    navigator("/join");
+    navigator("/join")
   };
 
   const onclick = () => {
