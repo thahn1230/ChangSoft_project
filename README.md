@@ -23,8 +23,10 @@ main.py 안에 있는 app 모듈을 실행한다.
 <포트포워딩 하는법>
 
 1. 윈도우 또는 WSL 재부팅시
+   ```powershell
    // powershell 관리자 권한으로 실행 후
    netsh interface portproxy reset
+   ```
 
 2. 기존 세팅 삭제
    ```powershell
@@ -33,7 +35,9 @@ main.py 안에 있는 app 모듈을 실행한다.
    -> "지정된 파일을 찾을 수 없습니다" 떠도 괜찮습니다.
 
 4. 새로 포트포워딩 설정
+   ```powershell
    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=????
+   ```
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
 
 ---
@@ -42,15 +46,12 @@ FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 
 이미지가 들어있는 project_pictures.zip을 /frontend/src/resource 디렉토리 안에 압축을 풀어 넣어주면 됩니다. 이때 저 압축파일들이 하나의 폴더 안에 들어가 있어야 하며 그 폴더명은 project_pictures여야 합니다.
 
 또한 기본적으로 frontEnd가 돌아갈 환경을 만들어주어야 하는데 package.json을 가지고 있다는 가정하에 다음과 같은 명령어를 입력해주시면 됩니다.
+```powershell
 npm install react
-
 npm install kendo-react-all
-
 npm install
-
 npm fund
-
 npm audit fix
+```
 
-
-만약 npm audit fix 명령어를 실행하였을때 작동이 안된다면 npm --force audit fix를 실행해주시면 됩니다.
+만약 ```powershell npm audit fix``` 명령어를 실행하였을때 작동이 안된다면 ```powershell npm --force audit fix```를 실행해주시면 됩니다.
