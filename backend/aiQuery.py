@@ -137,6 +137,8 @@ def prepare_answer(query, answer, error):
     """  
     system_prompt = f""" 
     """
+    assistant_prompt = f""" 
+    """
 
     # message = system_prompt + "\n\n" + prompt # gpt-3.5 한정
     final_answer = ask_gpt(stackedMessage)

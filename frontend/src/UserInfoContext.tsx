@@ -22,7 +22,7 @@ export const UserContextProvider=({ children }: { children:any }) => {
   const setUser = (newUserInfo: UserInfoI) => {
     setUserInfo(newUserInfo);
   };
-
+ 
   //useEffect(()=>{setUserInfo(children.userInfo)}, [children])
 
   return (
