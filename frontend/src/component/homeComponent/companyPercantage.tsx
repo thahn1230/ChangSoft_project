@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import {
   Chart,
   ChartLegend,
@@ -8,18 +8,23 @@ import {
   ChartTooltip,
 } from "@progress/kendo-react-charts";
 import urlPrefix from "./../../resource/URL_prefix.json";
+import { useTokenContext , addTokenToRequest} from "../../TokenContext";
 
 const CompanyPercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);
+  const tokenContext = useTokenContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if( tokenContext?.token===undefined)
+        return;
+        axios.interceptors.request.use((config: AxiosRequestConfig) => addTokenToRequest(config, tokenContext?.token));
         const response = await axios.get(
           urlPrefix.IP_port + "/dashboard/project/construction_company_ratio"
         );
         const data = JSON.parse(response.data);
-
+        // console.log(data)
         // 상위 5개 데이터 추출
         const top5 = data.slice(0, 5);
 

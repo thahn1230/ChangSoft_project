@@ -9,7 +9,7 @@ import { UserInfoI } from "./interface/userInfo_interface";
 
 type UserContextValue = {
   userInfo: UserInfoI | null;
-  setUser: (newUserInfo: UserInfoI) => void;
+  setUser: (newUserInfo: UserInfoI|null) => void;
 };
 
 const UserContext = createContext<UserContextValue | null>(null);

@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import {  useNavigate } from "react-router-dom";
+import {  Navigate, useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
@@ -11,7 +11,7 @@ import { Error } from "@progress/kendo-react-labels";
 import urlPrefix from "../resource/URL_prefix.json";
 import {UserInfoI} from "./../interface/userInfo_interface"
 import { useUserContext } from "./../UserInfoContext";
-
+import { useTokenContext } from "../TokenContext";
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -119,7 +119,9 @@ const LoginPage = (props:any) => {
     loginId: "",
     password: "",
   });
-  const userInfoContext = useUserContext();
+  //const userInfoContext = useUserContext();
+  const tokenContext = useTokenContext();
+
   // useEffect(() => {
   //   const loginId = localStorage.getItem("loginId") ?? undefined;
   //   setInputValues((inputValues:) => ({
@@ -166,9 +168,9 @@ const LoginPage = (props:any) => {
 
   
   useEffect(()=>{
-    if(userInfoContext?.userInfo !== null)
+    if(tokenContext?.token !== null)
       navigator("/home")
-  },[userInfoContext?.userInfo])
+  },[tokenContext?.token])
 
   const login = async (id: string, password: string) => {
     try {
@@ -186,14 +188,20 @@ const LoginPage = (props:any) => {
         body: JSON.stringify({ login_info: {id:id, password:hashedPassword} }),
       });
 
-      const loginData:UserInfoI[] = JSON.parse(await response.json());
-      
+      //const loginData:UserInfoI[] = JSON.parse(await response.json());
+      interface loginDataI{
+        token:string,
+        status:boolean
+      }
+      const loginData:loginDataI = (await response.json());
       // console.log("loginData.id");
-      // console.log(loginData[0]);
+      //console.log(loginData.token);
 
-      if (loginData.length !== 0) {
+      if (loginData.status) {
         //로그인성공
-        userInfoContext?.setUser(loginData[0])
+        //userInfoContext?.setUser(loginData[0])
+        tokenContext?.setToken(loginData.token)
+        //navigator("/home")
         return true;
       } else {
         alert("아이디와 비밀번호를 확인해주세요");

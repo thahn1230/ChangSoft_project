@@ -14,7 +14,8 @@ import {
 import urlPrefix from "../../resource/URL_prefix.json";
 import { location } from "../../interface/location";
 import { coordinate } from "../../interface/coordinate";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+import { useTokenContext , addTokenToRequest} from "../../TokenContext";
 // import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
 
 const tileSubdomains = ["a", "b", "c"];
@@ -57,11 +58,14 @@ const markerStyle = {
 
 const DistributionMap = () => {
   const [markers, setMarkers] = useState<coordinate[]>([]);
+  const tokenContext = useTokenContext();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-
+        if( tokenContext?.token===undefined)
+        return;
+        axios.interceptors.request.use((config: AxiosRequestConfig) => addTokenToRequest(config, tokenContext?.token));
         const response = await axios.get(urlPrefix.IP_port + "/dashboard/project/map");
         const data: coordinate[] = response.data;
 

@@ -18,6 +18,7 @@ import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
 import { UserInfoI } from "./interface/userInfo_interface";
 import { UserContextProvider, useUserContext } from "./UserInfoContext";
+import { TokenContextProvider } from "./TokenContext";
 import Join from "./pages/LoginPages/Join";
 
 export function App() {
@@ -26,12 +27,9 @@ export function App() {
   >();
   const [projectName, setProjectName] = useState<string>("");
   
-  const userInfoContext = useUserContext();
-  //const userInfoContext = useContext(UserContext);
-
 
   return (
-    <UserContextProvider>
+    <TokenContextProvider>
       {false ? (
         <div>{<LoginPage />}</div>
       ) : (
@@ -99,6 +97,6 @@ export function App() {
           </Routes>
         </div>
       )}
-    </UserContextProvider>
+    </TokenContextProvider>
   );
 }
