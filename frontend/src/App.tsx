@@ -12,7 +12,7 @@ import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
 import { UserInfoI } from "./interface/userInfo_interface";
 import { UserContextProvider } from "./UserInfoContext";
-import Join from "./pages/LoginPages/Join"
+import Join from "./pages/LoginPages/Join";
 
 export function App() {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -23,35 +23,39 @@ export function App() {
   return (
     <UserContextProvider>
       <div className="App">
-        <NavigationLayout>
-          <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/join" element={<Join />} />
+        <Routes>
+          {/* 로그인 페이지와 가입 페이지는 NavigationLayout 밖으로 이동 */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/join" element={<Join />} />
 
-            <Route path="/home" element={<Home />} />
-            <Route
-              path="/projects"
-              element={
+          {/* NavigationLayout 이하의 페이지들 */}
+          <Route path="/home" element={<NavigationLayout><Home /></NavigationLayout>} />
+          <Route
+            path="/projects"
+            element={
+              <NavigationLayout>
                 <Projects
                   setBuildingInfo={setBuildingInfo}
                   setProjectName={setProjectName}
                 />
-              }
-            />
-            <Route path="/insight" element={<Insight />} />
-            <Route path="/user_info" element={<UserPage />} />
-            <Route
-              path="/sub_building_detail"
-              element={
+              </NavigationLayout>
+            }
+          />
+          <Route path="/insight" element={<NavigationLayout><Insight /></NavigationLayout>} />
+          <Route path="/user_info" element={<NavigationLayout><UserPage /></NavigationLayout>} />
+          <Route
+            path="/sub_building_detail"
+            element={
+              <NavigationLayout>
                 <SubBuildingTabLayout
                   buildingInfo={buildingInfo}
                   projectName={projectName}
                 />
-              }
-            />
-            <Route path="/ai_query" element={<AIQuery />} />
-          </Routes>
-        </NavigationLayout>
+              </NavigationLayout>
+            }
+          />
+          <Route path="/ai_query" element={<NavigationLayout><AIQuery /></NavigationLayout>} />
+        </Routes>
       </div>
     </UserContextProvider>
   );
