@@ -1,20 +1,20 @@
-import React, { Fragment, useCallback } from 'react';
-import styled from 'styled-components';
+import React, { Fragment, useCallback } from "react";
+import styled from "styled-components";
 import logo from "./../resource/changSoft_logo.png";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export const PolicyAgreementList = [
   {
-    title: '창소프트아이디씨(Changsoft IDC) 이용약관',
-    link: '/policy#conditions-and-terms',
-    anchor: 'conditions-and-terms',
-    key: 'c1',
+    title: "창소프트아이디씨(Changsoft IDC) 이용약관",
+    link: "/policy#conditions-and-terms",
+    anchor: "conditions-and-terms",
+    key: "c1",
   },
   {
-    title: '개인정보수집및이용',
-    link: '/policy#privacy-policy',
-    anchor: 'privacy-policy',
-    key: 'c3',
+    title: "개인정보수집및이용",
+    link: "/policy#privacy-policy",
+    anchor: "privacy-policy",
+    key: "c3",
   },
 ];
 
@@ -57,15 +57,15 @@ const LoginHeaderWrapper = styled.div`
   }
 `;
 
-export const LoginHeader = (props:any) => {
+export const LoginHeader = (props: any) => {
   return (
     <LoginHeaderWrapper tabIndex={-1} {...props}>
-      <a href='/' tabIndex={-1}>
+      <a href="/" tabIndex={-1}>
         <div>
-          <img id='logo' src={logo} alt={'Changsoft'} />
+          <img id="logo" src={logo} alt={"Changsoft"} />
         </div>
         <div>
-          <span className='name'>{'Changsoft IDC'}</span>
+          <span className="name">{"Changsoft IDC"}</span>
         </div>
       </a>
     </LoginHeaderWrapper>
@@ -163,8 +163,8 @@ const SignupAgreementWrapper = styled.div`
 //   }
 // `;
 
-export const LoginCardContainer = ({ children }:any) => (
-  <div className='card-container' style={{ maxWidth: '400px' }}>
+export const LoginCardContainer = ({ children }: any) => (
+  <div className="card-container" style={{ maxWidth: "400px" }}>
     {children}
   </div>
 );
