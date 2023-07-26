@@ -64,9 +64,9 @@ export const LoginHeader = (props: any) => {
         <div>
           <img id="logo" src={logo} alt={"Changsoft"} />
         </div>
-        <div>
+        {/* <div>
           <span className="name">{"Changsoft IDC"}</span>
-        </div>
+        </div> */}
       </a>
     </LoginHeaderWrapper>
   );

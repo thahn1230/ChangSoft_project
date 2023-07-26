@@ -222,7 +222,6 @@ const LoginPage = (props:any) => {
 
   return (
     <div>
-      로그인페이지~
       <LoginWrapper>
         <LoginHeader />
         <div className="container">

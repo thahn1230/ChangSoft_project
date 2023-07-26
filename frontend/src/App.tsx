@@ -1,4 +1,4 @@
-import React, { useState, createContext, useContext, ReactNode } from "react";
+import React, { useState, createContext, useContext, ReactNode, useEffect } from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { NavigationLayout } from "./component/NavgationLayout";
@@ -11,7 +11,7 @@ import SubBuildingTabLayout from "./component/subBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
 import { UserInfoI } from "./interface/userInfo_interface";
-import { UserContextProvider } from "./UserInfoContext";
+import { UserContextProvider, useUserContext } from "./UserInfoContext";
 import Join from "./pages/LoginPages/Join";
 
 export function App() {
@@ -19,6 +19,7 @@ export function App() {
     buildingInfo_interface | undefined
   >();
   const [projectName, setProjectName] = useState<string>("");
+
 
   return (
     <UserContextProvider>
