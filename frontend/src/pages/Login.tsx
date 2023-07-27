@@ -1,14 +1,14 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import {  Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import { Error } from "@progress/kendo-react-labels";
-//import { LOGIN } from 'src/queries/user.mutation';
-//import { setSessionStorage } from 'src/lib/utils/common';
 import urlPrefix from "../resource/URL_prefix.json";
+import Join from "../pages/LoginPages/Join";
+import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -109,14 +109,14 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const LoginPage = (props:any) => {
+const LoginPage = (props: any) => {
   const link = urlPrefix.IP_port + "/login";
   const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({
     loginId: "",
     password: "",
   });
-  //const userInfoContext = useUserContext();
+  const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
 
   // useEffect(() => {
   //   const loginId = localStorage.getItem("loginId") ?? undefined;
@@ -161,7 +161,6 @@ const LoginPage = (props:any) => {
     return hashHex;
   };
 
-
   // useEffect(()=>{
   //   if(tokenContext?.token !== null)
   //     navigator("/home")
@@ -180,26 +179,28 @@ const LoginPage = (props:any) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ login_info: {id:id, password:hashedPassword} }),
+        body: JSON.stringify({
+          login_info: { id: id, password: hashedPassword },
+        }),
       });
 
       //const loginData:UserInfoI[] = JSON.parse(await response.json());
-      interface loginDataI{
-        token:string,
-        status:boolean
+      interface loginDataI {
+        token: string;
+        status: boolean;
       }
-      const loginData:loginDataI = (await response.json());
+      const loginData: loginDataI = await response.json();
       // console.log("loginData.id");
       //console.log(loginData.token);
 
       if (loginData.status) {
         //로그인성공
-        
+
         //token을 context가 아니고 localstorage로 관리하게 바꾸기
         //tokenContext?.setToken(loginData.token)
-        localStorage.setItem("token", loginData.token)
+        localStorage.setItem("token", loginData.token);
 
-        navigator("/home")
+        navigator("/home");
         return true;
       } else {
         alert("아이디와 비밀번호를 확인해주세요");
@@ -213,18 +214,13 @@ const LoginPage = (props:any) => {
 
   const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    if(inputValues.loginId === "")
-    {
-      alert("아이디를 입력하세요")
-    }
-    else if(inputValues.password === "")
-    {
-      alert("비밀번호를 입력해주세요")
-    }
-    else{
+    if (inputValues.loginId === "") {
+      alert("아이디를 입력하세요");
+    } else if (inputValues.password === "") {
+      alert("비밀번호를 입력해주세요");
+    } else {
       const { loginId, password } = inputValues;
       login(loginId, password);
-
     }
   };
 
@@ -237,7 +233,12 @@ const LoginPage = (props:any) => {
   };
 
   const onJoin = () => {
-    navigator("/join")
+    setIsJoinOpen(true);
+    //navigator("/join");
+  };
+
+  const onCloseJoin = () => {
+    setIsJoinOpen(false);
   };
 
   return (
@@ -299,6 +300,12 @@ const LoginPage = (props:any) => {
           </div>
         </div>
       </LoginWrapper>
+
+      {isJoinOpen && (
+        <Dialog title={"회원가입"} onClose={onCloseJoin}>
+          <Join onCloseJoin={onCloseJoin}></Join>
+        </Dialog>
+      )}
     </div>
   );
 };

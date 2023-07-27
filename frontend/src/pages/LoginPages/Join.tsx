@@ -1,3 +1,4 @@
+import { pagerTotalPages } from "@progress/kendo-react-grid/dist/npm/messages";
 import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -162,7 +163,7 @@ const sha256 = async (message: string) => {
   return hashHex;
 };
 
-const Join = () => {
+const Join = (props: any) => {
   const userInfoContext = useUserContext();
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
@@ -185,7 +186,7 @@ const Join = () => {
   });
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
-  const [isIdDuplicate, setIsIdDuplicate] = useState<boolean>(true);
+  const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 
   const telValidator = (data: any) => {
@@ -201,22 +202,17 @@ const Join = () => {
   };
 
   const backToLogin = () => {
-    history("/");
+    props.onCloseJoin();
   };
 
-  //여기부터
-
   const signup = async (newUserInfo: JoinValueI) => {
-    if (isIdDuplicate) {
+    if (isIdDuplicate === null) {
       alert("아이디 중복확인을 해주세요.");
       return;
     }
     try {
       const params = new URLSearchParams();
       const hashedPassword = await sha256(newUserInfo.password);
-      //setJoinValue
-      params.append("param", JSON.stringify(joinValue));
-
       setJoinValue(
         await {
           ...joinValue,
@@ -225,8 +221,8 @@ const Join = () => {
           user_type: "User",
         }
       );
-      //params는 어케쓰지
-      //여기도 수정좀 해야될듯
+
+      //params는 어떻게씀
       const response = await fetch(`${urlPrefix.IP_port}/sign_up`, {
         method: "POST",
         headers: {
@@ -236,12 +232,10 @@ const Join = () => {
         body: JSON.stringify({ join_info: joinValue }),
       });
 
-      const signupData: UserInfoI[] = JSON.parse(await response.json());
+      const signupData: UserInfoI[] = await response.json();
 
       if (signupData.length !== 0) {
         //회원가입 성공
-        //userInfoContext?.setUser(signupData[0]);
-        history("/");
         return true;
       } else {
         //회원가입 실패
@@ -270,9 +264,11 @@ const Join = () => {
 
       if (isIdValid) {
         //중복아님
+        alert("사용 가능한 아이디입니다.");
         setIsIdDuplicate(false);
       } else {
         //중복임
+        alert("중복된 아이디입니다. 다른 아이디를 입력해주세요.");
         setIsIdDuplicate(true);
       }
       return;
@@ -282,9 +278,8 @@ const Join = () => {
     }
   };
 
+  // 이거구현해야됨
   const emailDuplicate = async (inputEmail: string) => {};
-
-  //여기까지 구현해야됨
 
   const onIdChange = (e: any) => {
     setJoinValue({ ...joinValue, id: e.value });
@@ -330,42 +325,28 @@ const Join = () => {
   };
 
   const onSubmit = async () => {
-    //   if (!checked) {
-    //     alert('이용 약관을 동의하지 않았습니다.');
-    //     return;
-    //   }
     if (!joinValue.id || !joinValue.password) {
       alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
       return;
     }
-
     if (!joinValue.name) {
-      alert("이름을 입력하지 않았습니다");
+      alert("이름을 입력하지 않았습니다.");
+      return;
+    }
+    if (!emailVal) {
+      alert("이메일을 입력하지 않았습니다.");
+      return;
+    }
+    if (!phoneVal) {
+      alert("휴대폰 번호를 입력하지 않았습니다.");
       return;
     }
 
     if (phoneVal && emailVal) {
-      let signUpResult = await signup(
-        //   id: joinValue.id,
-        //   name: joinValue.name,
-        //   password: joinValue.password,
-        //   email: joinValue.email,
-        //   phone: phoneNum
-        {
-          id: "",
-          password: "",
-          name: "",
-          job_position: "",
-          company: "",
-          email_address: "",
-          phone_number: "",
-          user_type: "",
-        }
-      );
+      let signUpResult = await signup(joinValue);
 
       if (signUpResult) {
         alert("가입 완료되었습니다.");
-
         backToLogin();
       } else {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
