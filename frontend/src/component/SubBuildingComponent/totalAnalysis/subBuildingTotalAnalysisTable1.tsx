@@ -19,24 +19,50 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response1 = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/total_analysis_table_all/1/" +
-            props.buildingInfo?.id
-        );
-
-        setAnalysisTable1(JSON.parse(response1.data));
-      } catch (error) {
-        console.error("Error fetching data:", error);
+    fetch(
+      urlPrefix.IP_port +
+        "/sub_building/total_analysis_table_all/1/" +
+        props.buildingInfo?.id,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
       }
-    };
-
-    fetchData();
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        setAnalysisTable1(JSON.parse(response));
+        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        // setTotalfloor(arrayData);
+      })
+      .catch((error) => console.error("Error:", error));
   }, [props.buildingInfo]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response1 = await axios.get(
+  //         urlPrefix.IP_port +
+  //           "/sub_building/total_analysis_table_all/1/" +
+  //           props.buildingInfo?.id
+  //       );
+
+  //       setAnalysisTable1(JSON.parse(response1.data));
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [props.buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -71,35 +97,72 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     }
   }, [analysisTable1]);
 
-  //여기에서 테이블 수정
   useEffect(() => {
-    props.setSelectedSubBuildingId(selectedSubBuildingId)
-    const fetchData = async () => {
-      try {
-        if (selectedSubBuildingId === undefined) return;
+    props.setSelectedSubBuildingId(selectedSubBuildingId);
 
-        let response;
-        if (selectedSubBuildingId === 0) {
-          response = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/total_analysis_table_all/1/" +
-              props.buildingInfo?.id
-          );
-        } else {
-          response = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/total_analysis_table/1/" +
-              selectedSubBuildingId
-          );
-        }
-        setAnalysisTable1(JSON.parse(response.data));
-      } catch (error) {
-        console.error("Error fetching data:", error);
+    if (selectedSubBuildingId === undefined) return;
+
+    let url;
+
+    if (selectedSubBuildingId === 0) {
+      url = urlPrefix.IP_port + "/sub_building/total_analysis_table_all/1/" + props.buildingInfo?.id;
+    } else {
+      url = urlPrefix.IP_port + "/sub_building/total_analysis_table/1/" + selectedSubBuildingId;
+    }
+
+    fetch( url,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
       }
-    };
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        // setTotalfloor(arrayData);
+        setAnalysisTable1(JSON.parse(response));
+      })
+      .catch((error) => console.error("Error:", error));
 
-    fetchData();
   }, [selectedSubBuildingId, props.buildingInfo?.id]);
+
+  //여기에서 테이블 수정
+  // useEffect(() => {
+  //   props.setSelectedSubBuildingId(selectedSubBuildingId);
+  //   const fetchData = async () => {
+  //     try {
+  //       if (selectedSubBuildingId === undefined) return;
+
+  //       let response;
+  //       if (selectedSubBuildingId === 0) {
+  //         response = await axios.get(
+  //           urlPrefix.IP_port +
+  //             "/sub_building/total_analysis_table_all/1/" +
+  //             props.buildingInfo?.id
+  //         );
+  //       } else {
+  //         response = await axios.get(
+  //           urlPrefix.IP_port +
+  //             "/sub_building/total_analysis_table/1/" +
+  //             selectedSubBuildingId
+  //         );
+  //       }
+  //       setAnalysisTable1(JSON.parse(response.data));
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [selectedSubBuildingId, props.buildingInfo?.id]);
 
   return (
     <div className="table-container">
