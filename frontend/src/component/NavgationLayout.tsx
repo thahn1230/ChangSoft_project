@@ -6,7 +6,8 @@ import "./../styles/NavigationLayout.scss";
 import ChangSoftLogo from "./../resource/changSoft_logo.png";
 import ChatgptLogo from "./../resource/chatgpt_logo.png";
 import { useUserContext } from "../UserInfoContext";
-import {useTokenContext} from "./../TokenContext"
+import { useTokenContext } from "./../TokenContext";
+import exp from "constants";
 
 interface MenuItem {
   text: string;
@@ -82,6 +83,15 @@ export const NavigationLayout = (props: any) => {
   const signOutClicked = () => {
     tokenContext?.setToken(null);
   };
+  const getUserContainerStyle = () => {
+    return expanded
+      ? { height: "200px" }
+      : { height: "200px", expanded: `${expanded}` };
+  };
+
+  const getMargin = () => {
+    return expanded ? { marginTop: "-200px" } : { marginTop: "0px" };
+  };
 
   return (
     <div>
@@ -113,23 +123,26 @@ export const NavigationLayout = (props: any) => {
       </div>
 
       <div>
-        {/* <div className="user-container">
-          <img alt="UserImg" src={ChangSoftLogo} width={190} />
-          <h1>
-            {userInfoContext !== null ? userInfoContext.userInfo?.name : null}
-          </h1>
-          <div className="user-email">
-            {userInfoContext !== null
+        {!expanded ? (
+          <div style={getMargin()}></div>
+        ) : (
+          <div className="user-container" style={getUserContainerStyle()}>
+            <img alt="UserImg" src={ChangSoftLogo} width={190} />
+            <h1>
+              {/* {userInfoContext !== null ? userInfoContext.userInfo?.name : null} */}
+            </h1>
+            <div className="user-email">
+              {/* {userInfoContext !== null
               ? userInfoContext.userInfo?.email_address
-              : null}
+              : null} */}
+            </div>
+            <Link to="/" style={{ textDecoration: "none" }}>
+              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base">
+                Sign Out
+              </Button>
+            </Link>
           </div>
-          <Button
-            onClick={signOutClicked}
-            className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
-          >
-            Sign Out
-          </Button>
-        </div> */}
+        )}
         <Drawer
           expanded={expanded}
           position="start"
@@ -144,8 +157,10 @@ export const NavigationLayout = (props: any) => {
           className="drawer"
         >
           <DrawerContent>
-            {props.children}
-            <Outlet />
+            <div style={getMargin()}>
+              {props.children}
+              <Outlet />
+            </div>
           </DrawerContent>
         </Drawer>
       </div>
