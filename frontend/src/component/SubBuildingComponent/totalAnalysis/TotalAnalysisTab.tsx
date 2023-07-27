@@ -29,7 +29,7 @@ import urlPrefix from "../../../resource/URL_prefix.json";
 import "./../../../styles/SubBuildingDetail.scss";
 
 import Analyses from "../../../pages/analyses";
-import "./../../../styles/TotalAnalysisTab.scss"
+import "./../../../styles/TotalAnalysisTab.scss";
 
 const TotalAnalysisTab = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -70,21 +70,44 @@ const TotalAnalysisTab = (props: any) => {
   }, [props]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-        );
-
-        const subBuildings = JSON.parse(response.data);
+    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        const subBuildings = JSON.parse(response);
         setSubBuildingInfo(subBuildings);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        // setTotalfloor(arrayData);
+      })
+      .catch((error) => console.error("Error:", error));
   }, [buildingInfo, props.buildingInfo]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
+  //       );
+
+  //       const subBuildings = JSON.parse(response.data);
+  //       setSubBuildingInfo(subBuildings);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [buildingInfo, props.buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -164,9 +187,6 @@ const TotalAnalysisTab = (props: any) => {
           setValueInfo={setValueInfo}
           setPercentagesInfo={setPercentagesInfo}
         ></TotalAnalysisGrid2>
-
-       
-
       </div>
 
       <div className="right-components">
@@ -209,7 +229,6 @@ const TotalAnalysisTab = (props: any) => {
           ></SubBuildingTotalAnalysisPieChart>
         </div>
       </div>
-
     </div>
   );
 };
