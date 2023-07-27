@@ -8,28 +8,32 @@ import {
   ChartTooltip,
 } from "@progress/kendo-react-charts";
 import urlPrefix from "./../../resource/URL_prefix.json";
-import { useTokenContext , addTokenToRequest} from "../../TokenContext";
+import { useTokenContext, addTokenToRequest } from "../../TokenContext";
 
 const CompanyPercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);
   const tokenContext = useTokenContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if( tokenContext?.token===undefined)
-        return;
-        axios.interceptors.request.use((config: AxiosRequestConfig) => addTokenToRequest(config, tokenContext?.token));
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project/construction_company_ratio"
-        );
-        const data = JSON.parse(response.data);
-        // console.log(data)
-        // 상위 5개 데이터 추출
-        const top5 = data.slice(0, 5);
+    fetch(urlPrefix.IP_port + "/dashboard/project/construction_company_ratio", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const arrayData = JSON.parse(data)
+        const top5 = arrayData.slice(0, 5);
 
         // 나머지 데이터 합산하여 "Others" 데이터 생성
-        const othersPercentage = data
+        const othersPercentage = arrayData
           .slice(5)
           .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
         const othersData = { field: "Others", percentage: othersPercentage };
@@ -38,12 +42,8 @@ const CompanyPercentage = () => {
         const modifiedData = [...top5, othersData];
 
         setPercentages(modifiedData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   const renderTooltip = (e: any) => {

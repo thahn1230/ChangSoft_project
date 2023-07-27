@@ -45,11 +45,5 @@ export function addTokenToRequest(
     config.headers["Authorization"] = `Bearer ${token}`;
     // config.headers["Content-Type"] = "application/json";
   }
-
-  //just to check
-  if (config.url?.includes("construction_company_ratio")) {
-    console.log("config in construction company ratio");
-    console.log(config);
-  }
   return config;
 }

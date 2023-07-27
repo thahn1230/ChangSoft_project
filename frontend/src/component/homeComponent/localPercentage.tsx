@@ -12,23 +12,53 @@ import "./../../styles/ChartFont.scss";
 
 const LocalPercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);
-
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project/location_ratio"
-        );
-        const data = JSON.parse(response.data);
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       urlPrefix.IP_port + "/dashboard/project/location_ratio"
+    //     );
+    //     const data = JSON.parse(response.data);
 
-        // 데이터를 내림차순으로 정렬
-        // data.sort((a: any, b: any) => b.percentage - a.percentage);
+    //     // 데이터를 내림차순으로 정렬
+    //     // data.sort((a: any, b: any) => b.percentage - a.percentage);
 
-        // 상위 5개 데이터 추출
-        const top5 = data.slice(0, 5);
+    //     // 상위 5개 데이터 추출
+    //     const top5 = data.slice(0, 5);
+
+    //     // 나머지 데이터 합산하여 "Others" 데이터 생성
+    //     const othersPercentage = data
+    //       .slice(5)
+    //       .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
+    //     const othersData = { field: "Others", percentage: othersPercentage };
+
+    //     // "Others" 데이터를 포함하여 새로운 배열 생성
+    //     const modifiedData = [...top5, othersData];
+
+    //     setPercentages(modifiedData);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };    
+    fetch(urlPrefix.IP_port + "/dashboard/project/location_ratio", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const arrayData = JSON.parse(data)
+        const top5 = arrayData.slice(0, 5);
 
         // 나머지 데이터 합산하여 "Others" 데이터 생성
-        const othersPercentage = data
+        const othersPercentage = arrayData
           .slice(5)
           .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
         const othersData = { field: "Others", percentage: othersPercentage };
@@ -37,12 +67,8 @@ const LocalPercentage = () => {
         const modifiedData = [...top5, othersData];
 
         setPercentages(modifiedData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   const renderTooltip = (e: any) => {
