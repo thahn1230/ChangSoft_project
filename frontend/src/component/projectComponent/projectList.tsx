@@ -63,12 +63,21 @@ const ProjectList = (props: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project/"
-        );
-        const data = JSON.parse(response.data);
+    fetch(urlPrefix.IP_port + "/dashboard/project/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        const data = JSON.parse(response);
 
         const projectNames = data.map(
           (obj: projectList_interface) => obj.project_name
@@ -79,13 +88,34 @@ const ProjectList = (props: any) => {
         props.setData(data); //projects 페이지의 project data
         setProjectList(projectNames);
         setFileteredList(projectNames);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port + "/dashboard/project/"
+  //       );
+  //       const data = JSON.parse(response.data);
+
+  //       const projectNames = data.map(
+  //         (obj: projectList_interface) => obj.project_name
+  //       );
+
+  //       setData(data); //projectList의 project data
+  //       setFilteredData(data);
+  //       props.setData(data); //projects 페이지의 project data
+  //       setProjectList(projectNames);
+  //       setFileteredList(projectNames);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     setBuildingAreaSliderValue();
@@ -464,7 +494,7 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
-              fontSize: "80%"
+              fontSize: "80%",
             }}
           >
             Reset filters
@@ -475,7 +505,7 @@ const ProjectList = (props: any) => {
             style={{
               backgroundColor: "rgb(25, 101, 203)",
               color: "white",
-              fontSize: "80%"
+              fontSize: "80%",
             }}
           >
             Apply filters
@@ -484,7 +514,12 @@ const ProjectList = (props: any) => {
             <img
               alt="loader"
               src={loadingBars}
-              style={{ width: "2%", height: "2%", marginLeft: "1%", marginRight: "1%" }}
+              style={{
+                width: "2%",
+                height: "2%",
+                marginLeft: "1%",
+                marginRight: "1%",
+              }}
             />
           ) : null}
         </div>

@@ -21,23 +21,32 @@ const SubBuildingList = (props: any) => {
     useState<buildingInfo_interface>();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let prevSelectedSubBuilding = props.subBuildingInfo.find(
-          (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
-        );
-        if (prevSelectedSubBuilding === undefined) {
-          setSelectedSubBuildingName("전체동");
-        } else {
-          setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name);
+
+    let prevSelectedSubBuilding = props.subBuildingInfo.find(
+      (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
+    );
+    if (prevSelectedSubBuilding === undefined) {
+      setSelectedSubBuildingName("전체동");
+    } else {
+      setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name);
+    }
+
+    setSelectedBuilding(props.buildingInfo);
+    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
         }
-
-        setSelectedBuilding(props.buildingInfo);
-
-        const response = await axios.get(
-          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-        );
-        const data: subBuildingInfo_interface[] = JSON.parse(response.data); // assuming the API response contains an array of buildings
+        return response.json();
+      })
+      .then((response) => {
+        const data: subBuildingInfo_interface[] = JSON.parse(response); // assuming the API response contains an array of buildings
 
         let subBuildingNames: string[] = [];
         subBuildingNames.push("전체동");
@@ -47,13 +56,44 @@ const SubBuildingList = (props: any) => {
 
         setSubBuildingInfo(data);
         setSubBuildinglist(subBuildingNames);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, [props]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       let prevSelectedSubBuilding = props.subBuildingInfo.find(
+  //         (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
+  //       );
+  //       if (prevSelectedSubBuilding === undefined) {
+  //         setSelectedSubBuildingName("전체동");
+  //       } else {
+  //         setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name);
+  //       }
+
+  //       setSelectedBuilding(props.buildingInfo);
+
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
+  //       );
+  //       const data: subBuildingInfo_interface[] = JSON.parse(response.data); // assuming the API response contains an array of buildings
+
+  //       let subBuildingNames: string[] = [];
+  //       subBuildingNames.push("전체동");
+  //       for (let i = 0; i < data.length; i++) {
+  //         subBuildingNames.push(data[i].sub_building_name);
+  //       }
+
+  //       setSubBuildingInfo(data);
+  //       setSubBuildinglist(subBuildingNames);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [props]);
 
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);

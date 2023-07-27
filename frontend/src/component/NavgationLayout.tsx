@@ -4,9 +4,10 @@ import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
 import "./../styles/NavigationLayout.scss";
 import ChangSoftLogo from "./../resource/changSoft_logo.png";
-import ChatgptLogo from "./../resource/chatgpt_logo.png";
+import tempIMG from "./../resource/temp.jpg";
 import { useUserContext } from "../UserInfoContext";
 import { useTokenContext } from "./../TokenContext";
+import urlPrefix from "../resource/URL_prefix.json";
 import exp from "constants";
 
 interface MenuItem {
@@ -54,6 +55,8 @@ export const NavigationLayout = (props: any) => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState("");
+  const [name, setName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const tokenContext = useTokenContext();
 
   const handleClick = () => {
@@ -76,6 +79,27 @@ export const NavigationLayout = (props: any) => {
   //   if (tokenContext?.token === null) navigate("/");
   // }, [tokenContext?.token]);
 
+  useEffect(() => {
+    fetch(urlPrefix.IP_port + "/user/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setName(data.name);
+        setEmailAddress(data.email_address)
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
+
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";
   };
@@ -84,14 +108,15 @@ export const NavigationLayout = (props: any) => {
     localStorage.removeItem("token")
     navigate("/")
   };
+
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "200px" }
-      : { height: "200px", expanded: `${expanded}` };
+      ? { height: "300px" }
+      : { height: "300px", expanded: `${expanded}` };
   };
 
   const getMargin = () => {
-    return expanded ? { marginTop: "-200px" } : { marginTop: "0px" };
+    return expanded ? { marginTop: "-300px" } : { marginTop: "0px" };
   };
 
   return (
@@ -128,14 +153,12 @@ export const NavigationLayout = (props: any) => {
           <div style={getMargin()}></div>
         ) : (
           <div className="user-container" style={getUserContainerStyle()}>
-            <img alt="UserImg" src={ChangSoftLogo} width={190} />
+            <img alt="UserImg" src={tempIMG} width={100} />
             <h1>
-              {/* {userInfoContext !== null ? userInfoContext.userInfo?.name : null} */}
+              {name !== null ? name : null}
             </h1>
             <div className="user-email">
-              {/* {userInfoContext !== null
-              ? userInfoContext.userInfo?.email_address
-              : null} */}
+              {emailAddress !== null ? emailAddress : null}
             </div>
               <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
                 Sign Out

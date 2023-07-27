@@ -90,22 +90,45 @@ const BuildingList = (props: any) => {
   }, [initialBuildingList, projectFilter]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/building/additional_sub_info"
-        );
-        const data = JSON.parse(response.data);
+    fetch(urlPrefix.IP_port + "/building/additional_sub_info", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        const data = JSON.parse(response);
 
         setBuildingList(data);
         setInitialBuildingList(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port + "/building/additional_sub_info"
+  //       );
+  //       const data = JSON.parse(response.data);
+
+  //       setBuildingList(data);
+  //       setInitialBuildingList(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   const pageChange = (event: any) => {
     const targetEvent = event.targetEvent;

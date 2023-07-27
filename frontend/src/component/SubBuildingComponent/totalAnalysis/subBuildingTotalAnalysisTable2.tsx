@@ -20,30 +20,66 @@ const TotalAnalysisGrid2 = (props: any) => {
     useState<subBuildingTotalAnalysisTable2_interface[]>();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response;
-        if (props.selectedSubBuildingId === 0) {
-          response = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/total_analysis_table_all/2/" +
-              props.selectedBuildingId
-          );
-        } else {
-          response = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/total_analysis_table/2/" +
-              props.selectedSubBuildingId
-          );
-        }
+    let url;
 
-        setSelectedBuildingInfo(JSON.parse(response.data));
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+    if (props.selectedSubBuildingId === 0) {
+      url =
+        urlPrefix.IP_port +
+        "/sub_building/total_analysis_table_all/2/" +
+        props.selectedBuildingId;
+    } else {
+      url =
+        urlPrefix.IP_port +
+        "/sub_building/total_analysis_table/2/" +
+        props.selectedSubBuildingId;
+    }
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        // setTotalfloor(arrayData);
+        setSelectedBuildingInfo(JSON.parse(response));
+      })
+      .catch((error) => console.error("Error:", error));
   }, [props.selectedBuildingId, props.selectedSubBuildingId]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       let response;
+  //       if (props.selectedSubBuildingId === 0) {
+  //         response = await axios.get(
+  //           urlPrefix.IP_port +
+  //             "/sub_building/total_analysis_table_all/2/" +
+  //             props.selectedBuildingId
+  //         );
+  //       } else {
+  //         response = await axios.get(
+  //           urlPrefix.IP_port +
+  //             "/sub_building/total_analysis_table/2/" +
+  //             props.selectedSubBuildingId
+  //         );
+  //       }
+
+  //       setSelectedBuildingInfo(JSON.parse(response.data));
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [props.selectedBuildingId, props.selectedSubBuildingId]);
 
   useEffect(() => {
     if (
@@ -97,8 +133,7 @@ const TotalAnalysisGrid2 = (props: any) => {
           break;
       }
     }
-
-  }, [props.selectedType , selectedBuildingInfo]);
+  }, [props.selectedType, selectedBuildingInfo]);
 
   return (
     <div>
