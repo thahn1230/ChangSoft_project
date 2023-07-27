@@ -15,6 +15,7 @@ import "hammerjs";
 import axios from "axios";
 import urlPrefix from "./../../resource/URL_prefix.json";
 import "./../../styles/ChartFont.scss";
+import { useTokenContext, addTokenToRequest } from "../../TokenContext";
 
 interface ProjectsFloorCount {
   range_num: number;
@@ -27,22 +28,27 @@ const categoryContent = (e: any) => {
 
 const FloorCount = () => {
   const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
+  const tokenContext = useTokenContext();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/building/floor_count_histogram"
-        );
-        const data: ProjectsFloorCount[] = JSON.parse(response.data);
-
-        setTotalfloor(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    fetch(urlPrefix.IP_port + "/dashboard/building/floor_count_histogram", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        setTotalfloor(arrayData);
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   const renderTooltip = (e: any) => {
@@ -57,9 +63,7 @@ const FloorCount = () => {
     <div>
       <Chart style={{ height: "36vh" }}>
         <ChartCategoryAxis>
-          <ChartCategoryAxisItem
-            categories={totalfloor.map(categoryContent)}
-          >
+          <ChartCategoryAxisItem categories={totalfloor.map(categoryContent)}>
             <ChartCategoryAxisTitle text="Stories (층)" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>

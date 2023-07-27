@@ -72,16 +72,17 @@ export const NavigationLayout = (props: any) => {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
-    if (tokenContext?.token === null) navigate("/");
-  }, [tokenContext?.token]);
+  // useEffect(() => {
+  //   if (tokenContext?.token === null) navigate("/");
+  // }, [tokenContext?.token]);
 
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";
   };
 
   const signOutClicked = () => {
-    tokenContext?.setToken(null);
+    localStorage.removeItem("token")
+    navigate("/")
   };
   const getUserContainerStyle = () => {
     return expanded
@@ -136,11 +137,9 @@ export const NavigationLayout = (props: any) => {
               ? userInfoContext.userInfo?.email_address
               : null} */}
             </div>
-            <Link to="/" style={{ textDecoration: "none" }}>
-              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base">
+              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
                 Sign Out
               </Button>
-            </Link>
           </div>
         )}
         <Drawer

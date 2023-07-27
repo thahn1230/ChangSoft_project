@@ -6,7 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { NavigationLayout } from "./component/NavgationLayout";
 import { Home } from "./pages/Home";
 import Projects from "./pages/Projects";
@@ -26,11 +26,16 @@ export function App() {
     buildingInfo_interface | undefined
   >();
   const [projectName, setProjectName] = useState<string>("");
-  
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token === null) navigate("/");
+  }, [localStorage.getItem("token")]);
 
   return (
-    <TokenContextProvider>
-      {false ? (
+    <div>
+      {localStorage.getItem("token") === null ? (
         <div>{<LoginPage />}</div>
       ) : (
         <div className="App">
@@ -97,6 +102,6 @@ export function App() {
           </Routes>
         </div>
       )}
-    </TokenContextProvider>
+    </div>
   );
 }

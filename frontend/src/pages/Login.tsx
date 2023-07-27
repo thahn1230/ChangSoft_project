@@ -166,11 +166,10 @@ const LoginPage = (props:any) => {
   };
 
 
-  
-  useEffect(()=>{
-    if(tokenContext?.token !== null)
-      navigator("/home")
-  },[tokenContext?.token])
+  // useEffect(()=>{
+  //   if(tokenContext?.token !== null)
+  //     navigator("/home")
+  // },[tokenContext?.token])
 
   const login = async (id: string, password: string) => {
     try {
@@ -199,8 +198,11 @@ const LoginPage = (props:any) => {
 
       if (loginData.status) {
         //로그인성공
-        //userInfoContext?.setUser(loginData[0])
-        tokenContext?.setToken(loginData.token)
+        
+        //token을 context가 아니고 localstorage로 관리하게 바꾸기
+        //tokenContext?.setToken(loginData.token)
+        localStorage.setItem("token", loginData.token)
+
         navigator("/home")
         return true;
       } else {
