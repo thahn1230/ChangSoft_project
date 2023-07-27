@@ -23,16 +23,25 @@ const BuildingDetail = (props: any) => {
   >();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port +
-            "/building/" +
-            props.buildingInfo.id +
-            "/get_project_name"
-        );
-
-        const data = JSON.parse(response.data);
+    fetch(urlPrefix.IP_port +
+      "/building/" +
+      props.buildingInfo.id +
+      "/get_project_name", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(async (response) => {
+        const data = JSON.parse(response);
+        console.log(data)
         const importedImagePath = await import(
           "./../../resource/project_pictures/" +
             data[0].project_name +
@@ -40,15 +49,10 @@ const BuildingDetail = (props: any) => {
             data[0].building_name +
             "/ScreenShot.png"
         );
-
         setBuildingInfo(props.buildingInfo);
         setImgPath(importedImagePath.default);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, [props, imgPath]);
 
   const navigate = useNavigate();
