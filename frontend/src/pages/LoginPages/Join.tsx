@@ -182,7 +182,7 @@ const Join = (props: any) => {
     company: "",
     email_address: "",
     phone_number: "",
-    user_type: "",
+    user_type: "User",
   });
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
@@ -211,7 +211,6 @@ const Join = (props: any) => {
       return;
     }
     try {
-      const params = new URLSearchParams();
       const hashedPassword = await sha256(newUserInfo.password);
       setJoinValue(
         await {
@@ -233,7 +232,7 @@ const Join = (props: any) => {
       });
 
       const signupData: UserInfoI[] = await response.json();
-
+      console.log(signupData)
       if (signupData.length !== 0) {
         //회원가입 성공
         return true;
@@ -260,7 +259,7 @@ const Join = (props: any) => {
 
       //console.log(await response.json())
       //const signupData: UserInfoI[] = JSON.parse(await response.json());
-      const isIdValid = (await response.json()).result;
+      const isIdValid =(await response.json()).result;
 
       if (isIdValid) {
         //중복아님
