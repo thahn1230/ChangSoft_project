@@ -201,7 +201,7 @@ const LoginPage = (props:any) => {
         //로그인성공
         //userInfoContext?.setUser(loginData[0])
         tokenContext?.setToken(loginData.token)
-        //navigator("/home")
+        navigator("/home")
         return true;
       } else {
         alert("아이디와 비밀번호를 확인해주세요");
