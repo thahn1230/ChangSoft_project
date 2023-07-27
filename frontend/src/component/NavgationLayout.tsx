@@ -55,6 +55,8 @@ export const NavigationLayout = (props: any) => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState("");
+  const [name, setName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const tokenContext = useTokenContext();
 
   const handleClick = () => {
@@ -78,11 +80,10 @@ export const NavigationLayout = (props: any) => {
   // }, [tokenContext?.token]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + '/user/profile', {
+    fetch(urlPrefix.IP_port + "/user/profile", {
       method: "GET",
       headers: {
-        // Authorization: `Bearer ${tokenContext?.token}`,
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFkbWluIiwiY29tcGFueSI6Ilx1Y2MzZFx1YzE4Y1x1ZDUwNFx1ZDJiOFx1YzU0NFx1Yzc3NFx1YzU2NFx1YzU0NFx1Yzc3NCIsImVtYWlsX2FkZHJlc3MiOiJ0aGFobjEyMzBAY2hhbmctc29mdC5jb20iLCJ1c2VyX3R5cGUiOiJBZG1pbiIsImV4cCI6MTY5MDQyODQ5NX0.qIRiimpxc_2fAFIOBKXg_pQZQx9qlreve0I73kyaEDs`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     })
@@ -92,9 +93,12 @@ export const NavigationLayout = (props: any) => {
         }
         return response.json();
       })
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Error in user profile:", error));
-  }, [tokenContext]);
+      .then((data) => {
+        setName(data.name);
+        setEmailAddress(data.email_address)
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
 
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";
@@ -151,12 +155,10 @@ export const NavigationLayout = (props: any) => {
           <div className="user-container" style={getUserContainerStyle()}>
             <img alt="UserImg" src={tempIMG} width={100} />
             <h1>
-              {/* {userInfoContext !== null ? userInfoContext.userInfo?.name : null} */}
+              {name !== null ? name : null}
             </h1>
             <div className="user-email">
-              {/* {userInfoContext !== null
-              ? userInfoContext.userInfo?.email_address
-              : null} */}
+              {emailAddress !== null ? emailAddress : null}
             </div>
               <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
                 Sign Out
