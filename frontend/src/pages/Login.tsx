@@ -212,10 +212,20 @@ const LoginPage = (props:any) => {
   };
 
   const onSubmit = (ev: React.FormEvent<HTMLFormElement>) => {
-    console.info("onsubmit ");
     ev.preventDefault();
-    const { loginId, password } = inputValues;
-    login(loginId, password);
+    if(inputValues.loginId === "")
+    {
+      alert("아이디를 입력하세요")
+    }
+    else if(inputValues.password === "")
+    {
+      alert("비밀번호를 입력해주세요")
+    }
+    else{
+      const { loginId, password } = inputValues;
+      login(loginId, password);
+
+    }
   };
 
   const goToJira = () => {

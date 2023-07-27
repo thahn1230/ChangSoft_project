@@ -22,9 +22,6 @@ import { buildingInfo_interface } from "./interface/buildingInfo_interface";
 import SubBuildingTabLayout from "./component/subBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
-import { UserInfoI } from "./interface/userInfo_interface";
-import { UserContextProvider, useUserContext } from "./UserInfoContext";
-import { TokenContextProvider } from "./TokenContext";
 import Join from "./pages/LoginPages/Join";
 
 export function App() {
