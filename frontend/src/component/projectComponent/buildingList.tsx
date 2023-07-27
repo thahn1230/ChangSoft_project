@@ -112,23 +112,23 @@ const BuildingList = (props: any) => {
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/building/additional_sub_info"
-        );
-        const data = JSON.parse(response.data);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port + "/building/additional_sub_info"
+  //       );
+  //       const data = JSON.parse(response.data);
 
-        setBuildingList(data);
-        setInitialBuildingList(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  //       setBuildingList(data);
+  //       setInitialBuildingList(data);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const pageChange = (event: any) => {
     const targetEvent = event.targetEvent;

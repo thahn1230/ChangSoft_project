@@ -23,32 +23,61 @@ const ProjectDetail = (props: any) => {
   const [projectData, setProjectData] = useState<projectDetail_interface[]>();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (props.selectedProject) {
-          const response = await axios.get(
-            urlPrefix.IP_port +
-              "/project/" +
-              props.selectedProject.id +
-              "/project_detail"
-          );
-
-          const data = JSON.parse(response.data);
-          setProjectData(data);
+    if (props.selectedProject) {
+      fetch(
+        urlPrefix.IP_port +
+          "/project/" +
+          props.selectedProject.id +
+          "/project_detail",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
         }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((response) => {
+          const data = JSON.parse(response);
+          setProjectData(data);
+        })
+        .catch((error) => console.error("Error:", error));
+    }
   }, [props]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (props.selectedProject) {
+  //         const response = await axios.get(
+  //           urlPrefix.IP_port +
+  //             "/project/" +
+  //             props.selectedProject.id +
+  //             "/project_detail"
+  //         );
+
+  //         const data = JSON.parse(response.data);
+  //         setProjectData(data);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [props]);
 
   const headerClassName = "custom-header-cell";
 
   return (
     <div>
-      <Grid data={projectData} style={{width: "96.5%"}}>
+      <Grid data={projectData} style={{ width: "96.5%" }}>
         <GridColumn
           field="project_name"
           title="프로젝트명"
@@ -62,7 +91,7 @@ const ProjectDetail = (props: any) => {
         />
       </Grid>
 
-      <Grid data={projectData} style={{width: "96.5%"}}>
+      <Grid data={projectData} style={{ width: "96.5%" }}>
         <GridColumn
           field="building_area"
           title="건축면적(㎡)"
@@ -89,7 +118,7 @@ const ProjectDetail = (props: any) => {
         />
       </Grid>
 
-      <Grid data={projectData} style={{width: "96.5%"}}>
+      <Grid data={projectData} style={{ width: "96.5%" }}>
         <GridColumn title="프로젝트 기간" headerClassName={headerClassName}>
           <GridColumn
             field="construction_start"

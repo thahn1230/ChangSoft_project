@@ -55,6 +55,35 @@ const BuildingDetail = (props: any) => {
       .catch((error) => console.error("Error:", error));
   }, [props, imgPath]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         urlPrefix.IP_port +
+  //           "/building/" +
+  //           props.buildingInfo.id +
+  //           "/get_project_name"
+  //       );
+
+  //       const data = JSON.parse(response.data);
+  //       const importedImagePath = await import(
+  //         "./../../resource/project_pictures/" +
+  //           data[0].project_name +
+  //           "/" +
+  //           data[0].building_name +
+  //           "/ScreenShot.png"
+  //       );
+
+  //       setBuildingInfo(props.buildingInfo);
+  //       setImgPath(importedImagePath.default);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [props, imgPath]);
+
   const navigate = useNavigate();
   const onClick = () => {
     navigate("/sub_building_detail");
