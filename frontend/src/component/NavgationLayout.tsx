@@ -4,9 +4,10 @@ import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
 import "./../styles/NavigationLayout.scss";
 import ChangSoftLogo from "./../resource/changSoft_logo.png";
-import ChatgptLogo from "./../resource/chatgpt_logo.png";
+import tempIMG from "./../resource/temp.jpg";
 import { useUserContext } from "../UserInfoContext";
 import { useTokenContext } from "./../TokenContext";
+import urlPrefix from "../resource/URL_prefix.json";
 import exp from "constants";
 
 interface MenuItem {
@@ -76,6 +77,25 @@ export const NavigationLayout = (props: any) => {
     if (tokenContext?.token === null) navigate("/");
   }, [tokenContext?.token]);
 
+  useEffect(() => {
+    fetch(urlPrefix.IP_port + '/user/profile', {
+      method: "GET",
+      headers: {
+        // Authorization: `Bearer ${tokenContext?.token}`,
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFkbWluIiwiY29tcGFueSI6Ilx1Y2MzZFx1YzE4Y1x1ZDUwNFx1ZDJiOFx1YzU0NFx1Yzc3NFx1YzU2NFx1YzU0NFx1Yzc3NCIsImVtYWlsX2FkZHJlc3MiOiJ0aGFobjEyMzBAY2hhbmctc29mdC5jb20iLCJ1c2VyX3R5cGUiOiJBZG1pbiIsImV4cCI6MTY5MDQyODQ5NX0.qIRiimpxc_2fAFIOBKXg_pQZQx9qlreve0I73kyaEDs`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error in user profile:", error));
+  }, [tokenContext]);
+
   const renderSelectedText = () => {
     return "BuilderHub SmartDB System";
   };
@@ -83,14 +103,15 @@ export const NavigationLayout = (props: any) => {
   const signOutClicked = () => {
     tokenContext?.setToken(null);
   };
+
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "200px" }
-      : { height: "200px", expanded: `${expanded}` };
+      ? { height: "300px" }
+      : { height: "300px", expanded: `${expanded}` };
   };
 
   const getMargin = () => {
-    return expanded ? { marginTop: "-200px" } : { marginTop: "0px" };
+    return expanded ? { marginTop: "-300px" } : { marginTop: "0px" };
   };
 
   return (
@@ -127,7 +148,7 @@ export const NavigationLayout = (props: any) => {
           <div style={getMargin()}></div>
         ) : (
           <div className="user-container" style={getUserContainerStyle()}>
-            <img alt="UserImg" src={ChangSoftLogo} width={190} />
+            <img alt="UserImg" src={tempIMG} width={100} />
             <h1>
               {/* {userInfoContext !== null ? userInfoContext.userInfo?.name : null} */}
             </h1>
@@ -137,7 +158,10 @@ export const NavigationLayout = (props: any) => {
               : null} */}
             </div>
             <Link to="/" style={{ textDecoration: "none" }}>
-              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base">
+              <Button 
+              className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base"
+              onClick={signOutClicked}
+              >
                 Sign Out
               </Button>
             </Link>
