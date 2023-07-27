@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import axios from "axios";
-import {  Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
@@ -23,7 +23,7 @@ const LoginWrapper = styled.div`
     margin-top: 1rem;
     background-color: white;
     padding: 30px;
-    height: 400px;
+    height: 380px;
     border: 1px solid lightgray;
     border-radius: 4px;
 
@@ -34,6 +34,10 @@ const LoginWrapper = styled.div`
 
     .labelfield {
       font-weight: bold;
+
+      .label {
+        cursor: default;
+      }
     }
 
     .inputfield {
@@ -47,9 +51,10 @@ const LoginWrapper = styled.div`
     .loginBtn {
       width: 300px;
       height: 40px;
-      // background-color: #1e90ff;
+      background-color: #0747a6;
+      color: white;
       border: none;
-      margin-top: 3rem;
+      margin-top: 2.5rem;
       margin-bottom: 0.5rem;
     }
   }
@@ -107,9 +112,62 @@ const LoginWrapper = styled.div`
       text-decoration: underline;
     }
   }
+
+  .k-form > :first-child {
+    margin-top: 0;
+  }
+
+  .k-form .k-form-fieldset {
+    padding: 0;
+    border: 0;
+
+    display: flex;
+    flex-flow: column; /* 수정된 부분 */
+    justify-content: space-between;
+    gap: 1rem;
+    
+    .idField {
+      display: flex;
+      flex-flow: column;  
+      align-items: flex-start !important;  
+      .labelField {
+        align-self: flex-start;
+      }
+    }
+
+    .pwField {
+      display: flex;
+      flex-flow: column;      
+      align-items: flex-start !important;  
+      .labelField {
+        align-self: flex-start;
+      }
+    }
+
+
+  }
+
+  .fieldset {
+    display: block;
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+    padding-block-start: 0.35em;
+    padding-inline-start: 0.75em;
+    padding-inline-end: 0.75em;
+    padding-block-end: 0.625em;
+    min-inline-size: min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: rgb(192, 192, 192);
+    border-image: initial;
+  }
+
+  .fieldset {
+    padding: 0.35em 0.75em 0.625em;
+  }
 `;
 
-const LoginPage = (props:any) => {
+const LoginPage = (props: any) => {
   const link = urlPrefix.IP_port + "/login";
   const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({
@@ -161,7 +219,6 @@ const LoginPage = (props:any) => {
     return hashHex;
   };
 
-
   // useEffect(()=>{
   //   if(tokenContext?.token !== null)
   //     navigator("/home")
@@ -180,26 +237,28 @@ const LoginPage = (props:any) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ login_info: {id:id, password:hashedPassword} }),
+        body: JSON.stringify({
+          login_info: { id: id, password: hashedPassword },
+        }),
       });
 
       //const loginData:UserInfoI[] = JSON.parse(await response.json());
-      interface loginDataI{
-        token:string,
-        status:boolean
+      interface loginDataI {
+        token: string;
+        status: boolean;
       }
-      const loginData:loginDataI = (await response.json());
+      const loginData: loginDataI = await response.json();
       // console.log("loginData.id");
       //console.log(loginData.token);
 
       if (loginData.status) {
         //로그인성공
-        
+
         //token을 context가 아니고 localstorage로 관리하게 바꾸기
         //tokenContext?.setToken(loginData.token)
-        localStorage.setItem("token", loginData.token)
+        localStorage.setItem("token", loginData.token);
 
-        navigator("/home")
+        navigator("/home");
         return true;
       } else {
         alert("아이디와 비밀번호를 확인해주세요");
@@ -227,7 +286,7 @@ const LoginPage = (props:any) => {
   };
 
   const onJoin = () => {
-    navigator("/join")
+    navigator("/join");
   };
 
   return (
