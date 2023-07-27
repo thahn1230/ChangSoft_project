@@ -23,7 +23,7 @@ const LoginWrapper = styled.div`
     margin-top: 1rem;
     background-color: white;
     padding: 30px;
-    height: 400px;
+    height: 380px;
     border: 1px solid lightgray;
     border-radius: 4px;
 
@@ -34,6 +34,10 @@ const LoginWrapper = styled.div`
 
     .labelfield {
       font-weight: bold;
+
+      .label {
+        cursor: default;
+      }
     }
 
     .inputfield {
@@ -47,9 +51,10 @@ const LoginWrapper = styled.div`
     .loginBtn {
       width: 300px;
       height: 40px;
-      // background-color: #1e90ff;
+      background-color: #0747a6;
+      color: white;
       border: none;
-      margin-top: 3rem;
+      margin-top: 2.5rem;
       margin-bottom: 0.5rem;
     }
   }
@@ -106,6 +111,59 @@ const LoginWrapper = styled.div`
       cursor: pointer;
       text-decoration: underline;
     }
+  }
+
+  .k-form > :first-child {
+    margin-top: 0;
+  }
+
+  .k-form .k-form-fieldset {
+    padding: 0;
+    border: 0;
+
+    display: flex;
+    flex-flow: column; /* 수정된 부분 */
+    justify-content: space-between;
+    gap: 1rem;
+    
+    .idField {
+      display: flex;
+      flex-flow: column;  
+      align-items: flex-start !important;  
+      .labelField {
+        align-self: flex-start;
+      }
+    }
+
+    .pwField {
+      display: flex;
+      flex-flow: column;      
+      align-items: flex-start !important;  
+      .labelField {
+        align-self: flex-start;
+      }
+    }
+
+
+  }
+
+  .fieldset {
+    display: block;
+    margin-inline-start: 2px;
+    margin-inline-end: 2px;
+    padding-block-start: 0.35em;
+    padding-inline-start: 0.75em;
+    padding-inline-end: 0.75em;
+    padding-block-end: 0.625em;
+    min-inline-size: min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: rgb(192, 192, 192);
+    border-image: initial;
+  }
+
+  .fieldset {
+    padding: 0.35em 0.75em 0.625em;
   }
 `;
 
