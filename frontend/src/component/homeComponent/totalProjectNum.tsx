@@ -1,28 +1,30 @@
-import {
-  useState,
-  useEffect,
-} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import "./../../styles/totalProjectNum.scss"
-import urlPrefix from "./../../resource/URL_prefix.json"
+import "./../../styles/totalProjectNum.scss";
+import urlPrefix from "./../../resource/URL_prefix.json";
 
 const TotalProject = () => {
   const [projectNum, setProjectNum] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project/count"
-        );
-        const data = JSON.parse(response.data);
-        setProjectNum(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    fetch(urlPrefix.IP_port + "/dashboard/project/count", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const arrayData = JSON.parse(data);
+        setProjectNum(arrayData);
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   return (

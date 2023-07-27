@@ -30,47 +30,33 @@ const categoryContent = (e: any) => {
     // Math.floor(((e.max_val - e.min_val) / 8) * e.range_num).toString()
   );
 };
-const testData: projectsTotalArea[] = [
-  {
-    min_val: 1,
-    max_val: 2,
-    range_num: 3,
-    item_count: 4,
-  },
-  {
-    min_val: 1,
-    max_val: 2,
-    range_num: 3,
-    item_count: 4,
-  },
-  {
-    min_val: 1,
-    max_val: 2,
-    range_num: 3,
-    item_count: 4,
-  },
-];
 
 const TotalArea = () => {
   const [totalarea, setTotalarea] = useState<projectsTotalArea[]>([]);
   const [maxRng, setMaxRng] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project/total_area_histogram"
-        );
-        const data = JSON.parse(response.data);
+    fetch(urlPrefix.IP_port + "/dashboard/project/total_area_histogram", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const arrayData = JSON.parse(data)
+        setTotalarea(arrayData);
+        setMaxRng(arrayData[0].max_val);
 
-        setTotalarea(data);
-        setMaxRng(data[0].max_val);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
+      
   }, []);
 
   return (

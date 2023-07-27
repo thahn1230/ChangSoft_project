@@ -55,130 +55,231 @@ const AnalysisTab = (props: any) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-        );
-
-        const subBuildings = JSON.parse(response.data);
-        setSubBuildingInfo(subBuildings);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((rawData) => {
+        const data = JSON.parse(rawData);
+        setSubBuildingInfo(data);
+      })
+      .catch((error) => console.error("Error:", error));
   }, [props.buildingInfo]);
 
   useEffect(() => {
+    let concretePivotResponse: any;
+    let formworkPivotResponse: any;
+    let rebarResponse: any;
     const fetchData = async () => {
-      let concreteResponse;
-      let formworkResponse;
-      let rebarResponse;
-
-      let concretePivotResponse;
-      let formworkPivotResponse;
-
-      try {
-        if (selectedSubBuildingId === 0) {
-          concretePivotResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/concrete"
-          );
-          formworkPivotResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/formwork"
-          );
-          rebarResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table_all/" +
-              props.buildingInfo.id +
-              "/rebar"
-          );
-        } else {
-          concretePivotResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              selectedSubBuildingId +
-              "/concrete"
-          );
-          formworkPivotResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              selectedSubBuildingId +
-              "/formwork"
-          );
-          rebarResponse = await axios.get(
-            urlPrefix.IP_port +
-              "/sub_building/analysis_table/" +
-              selectedSubBuildingId +
-              "/rebar"
-          );
-        }
-
-        const concretePivotJson = JSON.parse(concretePivotResponse.data);
-        const formworkPivotJson = JSON.parse(formworkPivotResponse.data);
-        const rebarJson = JSON.parse(rebarResponse.data);
-
-        const concretePivotJsonGrid: gridData = Object.entries(
-          concretePivotJson
-        ).map(([key, value]) => {
-          const newObj: { [key: string]: any } = { "": key };
-          for (const prop in value as Record<string, any>) {
-            newObj[prop] = (value as Record<string, any>)[prop];
+      if (selectedSubBuildingId === 0) {
+        const concretePromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table_all/" +
+            props.buildingInfo.id +
+            "/concrete",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
           }
-          return newObj as { [key: string]: any } & { "": string };
-        });
-        const formworkPivotJsonGrid: gridData = Object.entries(
-          formworkPivotJson
-        ).map(([key, value]) => {
-          const newObj: { [key: string]: any } = { "": key };
-          for (const prop in value as Record<string, any>) {
-            newObj[prop] = (value as Record<string, any>)[prop];
-          }
-          return newObj as { [key: string]: any } & { "": string };
-        });
-
-        const rebarJsonPivotGrid: gridData = [];
-        for (const rebar of rebarJson) {
-          const componentType = rebar.component_type;
-          const rebarGrade = rebar.rebar_grade;
-          const rebarDiameter = rebar.rebar_diameter;
-          const totalWeight = rebar.total_weight;
-
-          const existingItem = rebarJsonPivotGrid.find(
-            (item) => item[""] === componentType
-          );
-          if (existingItem) {
-            if (!existingItem[rebarGrade]) {
-              existingItem[rebarGrade] = {};
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
             }
-            existingItem[rebarGrade][rebarDiameter.toString()] = totalWeight;
-          } else {
-            const newItem = {
-              "": componentType,
-              [rebarGrade]: {
-                [rebarDiameter.toString()]: totalWeight,
-              },
-            };
-            rebarJsonPivotGrid.push(newItem);
-          }
-        }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
 
-        setConcreteData(concretePivotJsonGrid);
-        setFormworkData(formworkPivotJsonGrid);
-        setRebarData(rebarJsonPivotGrid);
-      } catch (error) {
-        console.error(
-          "Error fetching data in sub_building_analysis_graph:",
-          error
-        );
+        const formworkPromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table_all/" +
+            props.buildingInfo.id +
+            "/formwork",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
+
+        const rebarPromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table_all/" +
+            props.buildingInfo.id +
+            "/rebar",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
+
+        [concretePivotResponse, formworkPivotResponse, rebarResponse] =
+          await Promise.all([concretePromise, formworkPromise, rebarPromise]);
+      } else {
+        const concretePromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table/" +
+            selectedSubBuildingId +
+            "/concrete",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
+
+        const formworkPromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table/" +
+            selectedSubBuildingId +
+            "/formwork",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
+
+        const rebarPromise = fetch(
+          urlPrefix.IP_port +
+            "/sub_building/analysis_table/" +
+            selectedSubBuildingId +
+            "/rebar",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((rawData) => {
+            return JSON.parse(rawData);
+          });
+
+        [concretePivotResponse, formworkPivotResponse, rebarResponse] =
+          await Promise.all([concretePromise, formworkPromise, rebarPromise]);
       }
+
+      if (
+        concretePivotResponse === undefined ||
+        formworkPivotResponse === undefined ||
+        rebarResponse === undefined
+      )
+        return;
+      const concretePivotJsonGrid: gridData = Object.entries(
+        concretePivotResponse
+      ).map(([key, value]) => {
+        const newObj: { [key: string]: any } = { "": key };
+        for (const prop in value as Record<string, any>) {
+          newObj[prop] = (value as Record<string, any>)[prop];
+        }
+        return newObj as { [key: string]: any } & { "": string };
+      });
+      const formworkPivotJsonGrid: gridData = Object.entries(
+        formworkPivotResponse
+      ).map(([key, value]) => {
+        const newObj: { [key: string]: any } = { "": key };
+        for (const prop in value as Record<string, any>) {
+          newObj[prop] = (value as Record<string, any>)[prop];
+        }
+        return newObj as { [key: string]: any } & { "": string };
+      });
+
+      const rebarJsonPivotGrid: gridData = [];
+      for (const rebar of rebarResponse) {
+        const componentType = rebar.component_type;
+        const rebarGrade = rebar.rebar_grade;
+        const rebarDiameter = rebar.rebar_diameter;
+        const totalWeight = rebar.total_weight;
+
+        const existingItem = rebarJsonPivotGrid.find(
+          (item) => item[""] === componentType
+        );
+        if (existingItem) {
+          if (!existingItem[rebarGrade]) {
+            existingItem[rebarGrade] = {};
+          }
+          existingItem[rebarGrade][rebarDiameter.toString()] = totalWeight;
+        } else {
+          const newItem = {
+            "": componentType,
+            [rebarGrade]: {
+              [rebarDiameter.toString()]: totalWeight,
+            },
+          };
+          rebarJsonPivotGrid.push(newItem);
+        }
+      }
+
+      setConcreteData(concretePivotJsonGrid);
+      setFormworkData(formworkPivotJsonGrid);
+      setRebarData(rebarJsonPivotGrid);
     };
 
     fetchData();
@@ -314,7 +415,15 @@ const AnalysisTab = (props: any) => {
         );
         break;
     }
-  }, [selectedType, concreteData, formworkData, rebarData, rebarDataNonSubKey,rebarColumns,panes]);
+  }, [
+    selectedType,
+    concreteData,
+    formworkData,
+    rebarData,
+    rebarDataNonSubKey,
+    rebarColumns,
+    panes,
+  ]);
 
   const onTypeChange = React.useCallback(
     (e: RadioButtonChangeEvent) => {
@@ -343,7 +452,7 @@ const AnalysisTab = (props: any) => {
           <GridColumn
             title="건물명 구분"
             cell={() => (
-              <div style={{ textAlign: "center", margin:"3px" }}>
+              <div style={{ textAlign: "center", margin: "3px" }}>
                 <SubBuildingList
                   buildingInfo={props.buildingInfo}
                   projectName={props.projectName}

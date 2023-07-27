@@ -28,7 +28,6 @@ const categoryContent = (e: any) => {
 
 const FloorCount = () => {
   const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
-  const tokenContext = useTokenContext();
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/dashboard/building/floor_count_histogram", {

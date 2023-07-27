@@ -21,10 +21,6 @@ const tileUrl = (e: TileUrlTemplateArgs) =>
 const attribution =
   '&copy; <a href="https://osm.org/copyright">OpenStreetMap contributors</a>';
 
-const reqPrefix = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-let address = "";
-// const reqPostfix = "&key=" + GoogleMap_API_KEY
-
 const geoShapes = [
   {
     type: "Polygon",
@@ -54,10 +50,8 @@ const markerStyle = {
 
 const DistributionMap = () => {
   const [markers, setMarkers] = useState<coordinate[]>([]);
-  const tokenContext = useTokenContext();
 
   useEffect(() => {
-    if (tokenContext?.token === undefined) return;
     // axios.interceptors.request.use((config: AxiosRequestConfig) =>
     //   addTokenToRequest(config, tokenContext?.token)
     // );
@@ -77,7 +71,8 @@ const DistributionMap = () => {
         }
         return response.json();
       })
-      .then((data) => setMarkers(data))
+      .then((data) => {
+        setMarkers(data)})
       .catch((error) => console.error("Error:", error));
   }, []);
 

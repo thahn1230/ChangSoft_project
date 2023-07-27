@@ -14,17 +14,6 @@ const InsightGraph = (props: any) => {
   const [returnDiv, setReturnDiv] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [props]);
-
-  useEffect(() => {
     let newRes: JSX.Element[] = [];
     if (props.graphInfo !== undefined) {
 

@@ -122,17 +122,68 @@ const InsightList = (props: any) => {
     });
 
   const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
-  const [analyzeNotice, setAnalyzeNotice] =
-    useState<string>("시나리오를 선택해주세요");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          urlPrefix.IP_port + "/dashboard/project"
-        );
-        const data = JSON.parse(response.data);
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get(
+    //       urlPrefix.IP_port + "/dashboard/project"
+    //     );
+    //     const data = JSON.parse(response.data);
 
+    //     setProjectList(
+    //       [
+    //         {
+    //           projectName: "All",
+    //           id: 0,
+    //           constructionCompany: "All",
+    //           checked: false,
+    //         },
+    //       ].concat(
+    //         data.map((item: any) => {
+    //           return {
+    //             projectName: item.project_name,
+    //             id: item.id,
+    //             constructionCompany: item.construction_company,
+    //             checked: false,
+    //           };
+    //         })
+    //       )
+    //     );
+
+    //     const uniqueConstructionCompanies = Array.from(
+    //       new Set(data.map((item: any) => item.construction_company))
+    //     );
+    //     setConstructionCompanyList(
+    //       [{ constructionCompany: "All", id: 0, checked: false }].concat(
+    //         uniqueConstructionCompanies.map((constructionCompany: any) => {
+    //           const item = data.find(
+    //             (item: any) => item.construction_company === constructionCompany
+    //           );
+    //           return { constructionCompany, id: item.id, checked: false };
+    //         })
+    //       )
+    //     );
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+
+    fetch(urlPrefix.IP_port + "/dashboard/project", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((rawData) => {
+        const data = JSON.parse(rawData);
         setProjectList(
           [
             {
@@ -166,12 +217,8 @@ const InsightList = (props: any) => {
             })
           )
         );
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   useEffect(() => {
@@ -284,16 +331,53 @@ const InsightList = (props: any) => {
       selectedInsightIndexInList + 1 === 6 &&
       selectedProjectList.length === 1
     ) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(
-            urlPrefix.IP_port +
-              "/project/" +
-              selectedProjectList[0].id +
-              "/building_detail"
-          );
-          const data = JSON.parse(response.data);
+      // const fetchData = async () => {
+      //   try {
+      //     const response = await axios.get(
+      //       urlPrefix.IP_port +
+      //         "/project/" +
+      //         selectedProjectList[0].id +
+      //         "/building_detail"
+      //     );
+      //     const data = JSON.parse(response.data);
 
+      //     setBuildingList(
+      //       [{ buildingName: "All", id: 0, checked: false }].concat(
+      //         data.map((item: any) => {
+      //           return {
+      //             buildingName: item.building_name,
+      //             id: item.id,
+      //             checked: false,
+      //           };
+      //         })
+      //       )
+      //     );
+      //   } catch (error) {
+      //     console.error(error);
+      //   }
+      // };
+
+      fetch(
+        urlPrefix.IP_port +
+          "/project/" +
+          selectedProjectList[0].id +
+          "/building_detail",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((rawData) => {
+          const data = JSON.parse(rawData);
           setBuildingList(
             [{ buildingName: "All", id: 0, checked: false }].concat(
               data.map((item: any) => {
@@ -305,12 +389,8 @@ const InsightList = (props: any) => {
               })
             )
           );
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      fetchData();
+        })
+        .catch((error) => console.error("Error:", error));
     }
   }, [selectedProjectList]);
   useEffect(() => {
@@ -440,53 +520,60 @@ const InsightList = (props: any) => {
     setSelectedInsightIndex(selectedInsightIndexInList);
 
     const fetchData = async () => {
-      try {
-        const params = new URLSearchParams();
-        let paramName;
-        let paramContent;
-        if (selectedInsightIndexInList + 1 === 4) {
-          const selectedCompanyName = selectedConstructionCompanyList.map(
-            (item) => item.constructionCompany
-          );
-
-          paramName = "data";
-          paramContent = JSON.stringify(selectedCompanyName);
-        } else if (selectedInsightIndexInList + 1 === 5) {
-          const selectedProjectId = selectedProjectList.map((item) => item.id);
-
-          paramName = "data";
-          paramContent = JSON.stringify(selectedProjectId);
-        } else if (selectedInsightIndexInList + 1 === 6) {
-          const selectedProjectId = [selectedProjectList[0].id];
-          const selectedBuildingId = selectedBuildingList.map(
-            (item) => item.id
-          );
-
-          paramName = "data";
-          paramContent = JSON.stringify(
-            selectedProjectId.concat(selectedBuildingId)
-          );
-        } else {
-          const selectedProjectId = selectedProjectList.map((item) => item.id);
-
-          paramName = "data";
-          paramContent = JSON.stringify(selectedProjectId);
-        }
-
-        params.append(paramName, paramContent);
-        console.log(paramContent)
-        const response = await axios.get(
-          `${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`,
-          { params }
+      const params = new URLSearchParams();
+      let paramName;
+      let paramContent;
+      if (selectedInsightIndexInList + 1 === 4) {
+        const selectedCompanyName = selectedConstructionCompanyList.map(
+          (item) => item.constructionCompany
         );
-        const data = JSON.parse(response.data);
 
-        props.setGraphInfo(data);
-      } catch (error) {
-        console.error(error);
+        paramName = "data";
+        paramContent = JSON.stringify(selectedCompanyName);
+      } else if (selectedInsightIndexInList + 1 === 5) {
+        const selectedProjectId = selectedProjectList.map((item) => item.id);
+
+        paramName = "data";
+        paramContent = JSON.stringify(selectedProjectId);
+      } else if (selectedInsightIndexInList + 1 === 6) {
+        const selectedProjectId = [selectedProjectList[0].id];
+        const selectedBuildingId = selectedBuildingList.map((item) => item.id);
+
+        paramName = "data";
+        paramContent = JSON.stringify(
+          selectedProjectId.concat(selectedBuildingId)
+        );
+      } else {
+        const selectedProjectId = selectedProjectList.map((item) => item.id);
+
+        paramName = "data";
+        paramContent = JSON.stringify(selectedProjectId);
       }
-    };
 
+      params.append(paramName, paramContent);
+
+      const url = new URL(`${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`);
+      url.search = new URLSearchParams(params).toString();
+      fetch(url, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((rawData) => {
+          const data = JSON.parse(rawData);
+
+          props.setGraphInfo(data);
+        })
+        .catch((error) => console.error("Error:", error));
+    };
     fetchData();
   };
 
@@ -549,7 +636,9 @@ const InsightList = (props: any) => {
       </div>
 
       <div className="second-line-container">
-        <label style={{ marginTop: "1.4%", textAlign: "left" }}>Company: </label>
+        <label style={{ marginTop: "1.4%", textAlign: "left" }}>
+          Company:{" "}
+        </label>
         <MultiSelectTree
           style={{ width: "24%", margin: "1%" }}
           data={constructionCompanyList}

@@ -9,9 +9,6 @@ import { Error } from "@progress/kendo-react-labels";
 //import { LOGIN } from 'src/queries/user.mutation';
 //import { setSessionStorage } from 'src/lib/utils/common';
 import urlPrefix from "../resource/URL_prefix.json";
-import {UserInfoI} from "./../interface/userInfo_interface"
-import { useUserContext } from "./../UserInfoContext";
-import { useTokenContext } from "../TokenContext";
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -120,7 +117,6 @@ const LoginPage = (props:any) => {
     password: "",
   });
   //const userInfoContext = useUserContext();
-  const tokenContext = useTokenContext();
 
   // useEffect(() => {
   //   const loginId = localStorage.getItem("loginId") ?? undefined;
