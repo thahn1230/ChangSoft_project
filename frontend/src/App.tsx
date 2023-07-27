@@ -22,7 +22,6 @@ import { buildingInfo_interface } from "./interface/buildingInfo_interface";
 import SubBuildingTabLayout from "./component/subBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
-import Join from "./pages/LoginPages/Join";
 
 export function App() {
   const [buildingInfo, setBuildingInfo] = useState<
@@ -37,8 +36,7 @@ export function App() {
     const token = localStorage.getItem("token");
     if (
       token === null &&
-      location.pathname !== "/" &&
-      location.pathname !== "/join"
+      location.pathname !== "/"
     )
       navigate("/");
   }, [location]);
@@ -49,7 +47,6 @@ export function App() {
         <Routes>
           {/* 로그인 페이지와 가입 페이지는 NavigationLayout 밖으로 이동 */}
           <Route path="/" element={<LoginPage />} />
-          <Route path="/join" element={<Join />} />
 
           {/* NavigationLayout 이하의 페이지들 */}
           <Route
