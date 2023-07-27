@@ -68,17 +68,31 @@ const FloorAnalysisTab = (props: any) => {
 
   useEffect(() => {
     let idx = 0;
-    axios
-      .get(
-        urlPrefix.IP_port +
-          "/sub_building/floor_analysis_table/" +
-          props.buildingInfo.id +
-          "/component_type"
-      )
+    fetch(
+      urlPrefix.IP_port +
+        "/sub_building/floor_analysis_table/" +
+        props.buildingInfo.id +
+        "/component_type",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        // setTotalfloor(arrayData);
         setComponentTypeList(
           [{ componentType: "All", id: idx++, checked: false }].concat(
-            JSON.parse(response.data).map((item: any) => {
+            JSON.parse(response).map((item: any) => {
               return {
                 componentType: item.component_type,
                 id: idx++,
@@ -88,8 +102,33 @@ const FloorAnalysisTab = (props: any) => {
           )
         );
       })
-      .catch(console.error);
+      .catch((error) => console.error("Error:", error));
   }, [props.buildingInfo]);
+
+  // useEffect(() => {
+  //   let idx = 0;
+  //   axios
+  //     .get(
+  //       urlPrefix.IP_port +
+  //         "/sub_building/floor_analysis_table/" +
+  //         props.buildingInfo.id +
+  //         "/component_type"
+  //     )
+  //     .then((response) => {
+  //       setComponentTypeList(
+  //         [{ componentType: "All", id: idx++, checked: false }].concat(
+  //           JSON.parse(response.data).map((item: any) => {
+  //             return {
+  //               componentType: item.component_type,
+  //               id: idx++,
+  //               checked: false,
+  //             };
+  //           })
+  //         )
+  //       );
+  //     })
+  //     .catch(console.error);
+  // }, [props.buildingInfo]);
 
   useEffect(() => {
     if (fetched) return;
@@ -106,104 +145,229 @@ const FloorAnalysisTab = (props: any) => {
   }, [componentTypeList]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const params = new URLSearchParams();
-      const paramName = "component_types";
-      const paramContent = JSON.stringify(
-        selectedComponentType.map((item) => item.componentType)
-      );
-      params.append(paramName, paramContent);
-
-      let concreteResponse;
-      let formworkResponse;
-      let rebarResponse;
-
-      try {
-        concreteResponse = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/floor_analysis_table/" +
-            props.buildingInfo.id +
-            "/concrete/filter",
-          { params }
-        );
-        formworkResponse = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/floor_analysis_table/" +
-            props.buildingInfo.id +
-            "/formwork/filter",
-          { params }
-        );
-        rebarResponse = await axios.get(
-          urlPrefix.IP_port +
-            "/sub_building/floor_analysis_table/" +
-            props.buildingInfo.id +
-            "/rebar/filter",
-          { params }
-        );
-
-        const concreteJson = JSON.parse(concreteResponse.data);
-        const formworkJson = JSON.parse(formworkResponse.data);
-        const rebarJson: RebarJson[] = JSON.parse(rebarResponse.data);
-
-        const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
-          ([key, value]) => {
-            const newObj: { [key: string]: any } = { "": key };
-            for (const prop in value as Record<string, any>) {
-              newObj[prop] = (value as Record<string, any>)[prop];
-            }
-            return newObj as { [key: string]: any } & { "": string };
-          }
-        );
-        const formworkJsonGrid: gridData = Object.entries(formworkJson).map(
-          ([key, value]) => {
-            const newObj: { [key: string]: any } = { "": key };
-            for (const prop in value as Record<string, any>) {
-              newObj[prop] = (value as Record<string, any>)[prop];
-            }
-            return newObj as { [key: string]: any } & { "": string };
-          }
-        );
-
-        const rebarJsonGrid: gridData = [];
-        for (const rebar of rebarJson) {
-          const floorName = rebar.floor_name;
-          const rebarGrade = rebar.rebar_grade;
-          const rebarDiameter = rebar.rebar_diameter;
-          const totalRebar = rebar.total_rebar;
-
-          const existingItem = rebarJsonGrid.find(
-            (item) => item[""] === floorName
-          );
-          if (existingItem) {
-            if (!existingItem[rebarGrade]) {
-              existingItem[rebarGrade] = {};
-            }
-            existingItem[rebarGrade][rebarDiameter.toString()] = totalRebar;
-          } else {
-            const newItem = {
-              "": floorName,
-              [rebarGrade]: {
-                [rebarDiameter.toString()]: totalRebar,
-              },
-            };
-            rebarJsonGrid.push(newItem);
-          }
-        }
-
-        setConcreteData(concreteJsonGrid);
-        setFormworkData(formworkJsonGrid);
-        setRebarData(rebarJsonGrid);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    const params = new URLSearchParams();
+    const paramName = "component_types";
+    const paramContent = JSON.stringify(
+      selectedComponentType.map((item) => item.componentType)
+    );
+    params.append(paramName, paramContent);
 
     if (selectedComponentType.length === 0) {
       setSelectedGridChart(<div>부재를 선택해주세요.</div>);
     } else {
-      fetchData();
+      const concreteUrl = new URL(
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/concrete/filter`
+      );
+      concreteUrl.search = new URLSearchParams(params).toString();
+      fetch(concreteUrl.toString(), {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((response) => {
+          const concreteJson = JSON.parse(response);
+          const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
+            ([key, value]) => {
+              const newObj: { [key: string]: any } = { "": key };
+              for (const prop in value as Record<string, any>) {
+                newObj[prop] = (value as Record<string, any>)[prop];
+              }
+              return newObj as { [key: string]: any } & { "": string };
+            }
+          );
+          setConcreteData(concreteJsonGrid);
+        })
+        .catch((error) => console.error("Error:", error));
+
+      const formworkUrl = new URL(
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/formwork/filter`
+      );
+      formworkUrl.search = new URLSearchParams(params).toString();
+      fetch(formworkUrl.toString(), {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((response) => {
+          const formworkJson = JSON.parse(response);
+          const formworkJsonGrid: gridData = Object.entries(formworkJson).map(
+            ([key, value]) => {
+              const newObj: { [key: string]: any } = { "": key };
+              for (const prop in value as Record<string, any>) {
+                newObj[prop] = (value as Record<string, any>)[prop];
+              }
+              return newObj as { [key: string]: any } & { "": string };
+            }
+          );
+          setFormworkData(formworkJsonGrid);
+        })
+        .catch((error) => console.error("Error:", error));
+
+      const rebarUrl = new URL(
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/rebar/filter`
+      );
+      rebarUrl.search = new URLSearchParams(params).toString();
+      fetch(rebarUrl.toString(), {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((response) => {
+          const rebarJson: RebarJson[] = JSON.parse(response);
+          const rebarJsonGrid: gridData = [];
+          for (const rebar of rebarJson) {
+            const floorName = rebar.floor_name;
+            const rebarGrade = rebar.rebar_grade;
+            const rebarDiameter = rebar.rebar_diameter;
+            const totalRebar = rebar.total_rebar;
+
+            const existingItem = rebarJsonGrid.find(
+              (item) => item[""] === floorName
+            );
+            if (existingItem) {
+              if (!existingItem[rebarGrade]) {
+                existingItem[rebarGrade] = {};
+              }
+              existingItem[rebarGrade][rebarDiameter.toString()] = totalRebar;
+            } else {
+              const newItem = {
+                "": floorName,
+                [rebarGrade]: {
+                  [rebarDiameter.toString()]: totalRebar,
+                },
+              };
+              rebarJsonGrid.push(newItem);
+            }
+          }
+          setRebarData(rebarJsonGrid);
+        })
+        .catch((error) => console.error("Error:", error));
     }
   }, [selectedComponentType]);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const params = new URLSearchParams();
+  //     const paramName = "component_types";
+  //     const paramContent = JSON.stringify(
+  //       selectedComponentType.map((item) => item.componentType)
+  //     );
+  //     params.append(paramName, paramContent);
+
+  //     let concreteResponse;
+  //     let formworkResponse;
+  //     let rebarResponse;
+
+  //     try {
+  //       concreteResponse = await axios.get(
+  //         urlPrefix.IP_port +
+  //           "/sub_building/floor_analysis_table/" +
+  //           props.buildingInfo.id +
+  //           "/concrete/filter",
+  //         { params }
+  //       );
+  //       formworkResponse = await axios.get(
+  //         urlPrefix.IP_port +
+  //           "/sub_building/floor_analysis_table/" +
+  //           props.buildingInfo.id +
+  //           "/formwork/filter",
+  //         { params }
+  //       );
+  //       rebarResponse = await axios.get(
+  //         urlPrefix.IP_port +
+  //           "/sub_building/floor_analysis_table/" +
+  //           props.buildingInfo.id +
+  //           "/rebar/filter",
+  //         { params }
+  //       );
+
+  //       const concreteJson = JSON.parse(concreteResponse.data);
+  //       const formworkJson = JSON.parse(formworkResponse.data);
+  //       const rebarJson: RebarJson[] = JSON.parse(rebarResponse.data);
+
+  //       const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
+  //         ([key, value]) => {
+  //           const newObj: { [key: string]: any } = { "": key };
+  //           for (const prop in value as Record<string, any>) {
+  //             newObj[prop] = (value as Record<string, any>)[prop];
+  //           }
+  //           return newObj as { [key: string]: any } & { "": string };
+  //         }
+  //       );
+  //       const formworkJsonGrid: gridData = Object.entries(formworkJson).map(
+  //         ([key, value]) => {
+  //           const newObj: { [key: string]: any } = { "": key };
+  //           for (const prop in value as Record<string, any>) {
+  //             newObj[prop] = (value as Record<string, any>)[prop];
+  //           }
+  //           return newObj as { [key: string]: any } & { "": string };
+  //         }
+  //       );
+
+  //       const rebarJsonGrid: gridData = [];
+  //       for (const rebar of rebarJson) {
+  //         const floorName = rebar.floor_name;
+  //         const rebarGrade = rebar.rebar_grade;
+  //         const rebarDiameter = rebar.rebar_diameter;
+  //         const totalRebar = rebar.total_rebar;
+
+  //         const existingItem = rebarJsonGrid.find(
+  //           (item) => item[""] === floorName
+  //         );
+  //         if (existingItem) {
+  //           if (!existingItem[rebarGrade]) {
+  //             existingItem[rebarGrade] = {};
+  //           }
+  //           existingItem[rebarGrade][rebarDiameter.toString()] = totalRebar;
+  //         } else {
+  //           const newItem = {
+  //             "": floorName,
+  //             [rebarGrade]: {
+  //               [rebarDiameter.toString()]: totalRebar,
+  //             },
+  //           };
+  //           rebarJsonGrid.push(newItem);
+  //         }
+  //       }
+
+  //       setConcreteData(concreteJsonGrid);
+  //       setFormworkData(formworkJsonGrid);
+  //       setRebarData(rebarJsonGrid);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+
+  //   if (selectedComponentType.length === 0) {
+  //     setSelectedGridChart(<div>부재를 선택해주세요.</div>);
+  //   } else {
+  //     fetchData();
+  //   }
+  // }, [selectedComponentType]);
 
   useEffect(() => {
     const temp: string[] = [];
