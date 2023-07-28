@@ -137,6 +137,19 @@ const JoinBodyWrapper = styled.div`
       }
     }
   }
+
+  .duplicateCheckBtn {
+    color: white;
+    background-color: #1e90ff;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+
+    &:hover {
+      cursor: pointer;
+      background-color: skyblue;
+    }
+  }
 `;
 
 //이거에 맞게 입력 form 추가해야함
@@ -232,7 +245,7 @@ const Join = (props: any) => {
       });
 
       const signupData: UserInfoI[] = await response.json();
-      console.log(signupData)
+      console.log(signupData);
       if (signupData.length !== 0) {
         //회원가입 성공
         return true;
@@ -259,7 +272,7 @@ const Join = (props: any) => {
 
       //console.log(await response.json())
       //const signupData: UserInfoI[] = JSON.parse(await response.json());
-      const isIdValid =(await response.json()).result;
+      const isIdValid = (await response.json()).result;
 
       if (isIdValid) {
         //중복아님
@@ -371,8 +384,9 @@ const Join = (props: any) => {
           placeholder="사용하실 아이디를 입력해주세요"
           onChange={onIdChange}
         ></Input>
-        <button onClick={checkIdDuplicate}>중복확인</button>
-        {!IsloginIdValid && <div>아이디가 중복되었습니다.</div>}
+        <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
+          중복확인
+        </button>
       </div>
       <div className="pwField">
         <div className="labelField">비밀번호</div>

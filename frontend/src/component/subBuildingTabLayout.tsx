@@ -12,11 +12,12 @@ import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysis
 import BuildingDetail from "./projectComponent/buildingDetail";
 import AnalysisTab from "./SubBuildingComponent/analysis/analysisTab";
 import FloorAnalysisTab from "./SubBuildingComponent/floorAnalysis/floorAnalysisTab";
+import QuantityDetailTab from "./SubBuildingComponent/quantityDetail/quantityDetailTab";
 import "./../styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
-  
+
   const renderComponent = () => {
     switch (selectedPage) {
       case "개요":
@@ -48,6 +49,13 @@ const SubBuildingTabLayout = (props: any) => {
             projectName={props.projectName}
           ></FloorAnalysisTab>
         );
+      case "물량정보상세":
+        return (
+          <QuantityDetailTab
+            buildingInfo={props.buildingInfo}
+            projectName={props.projectName}
+          ></QuantityDetailTab>
+        );
       default:
         return null;
     }
@@ -73,6 +81,10 @@ const SubBuildingTabLayout = (props: any) => {
         <MenuItem
           text="층별총집계표"
           cssClass={getMenuItemClassName("층별총집계표")}
+        />
+        <MenuItem
+          text="물량정보상세"
+          cssClass={getMenuItemClassName("물량정보상세")}
         />
       </Menu>
       {renderComponent()}
