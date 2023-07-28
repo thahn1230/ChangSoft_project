@@ -1,3 +1,5 @@
+from uvicorn import workers
+
 from fastapi import FastAPI
 from add_middleware import add_middleware
 from dashboard import router as dashboardRouter
@@ -8,6 +10,7 @@ from subBuildingDetail import router as subBuildingDetailRouter
 from insight import router as insightRouter
 from aiQuery import router as aiQueryRouter
 from userLogin import router as userLoginRouter
+from user import router as userRouter
 
 # FastAPI 모듈 설정
 app = FastAPI()
@@ -22,10 +25,11 @@ app.include_router(subBuildingDetailRouter)
 app.include_router(insightRouter)
 app.include_router(aiQueryRouter)
 app.include_router(userLoginRouter)
+app.include_router(userRouter)
 
 # root 읽기
 @app.get("/")
-def read_root():
+async def read_root():
     return {"Hello": "World"}    
 
 

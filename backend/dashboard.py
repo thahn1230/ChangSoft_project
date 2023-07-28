@@ -1,22 +1,35 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 import pandas as pd
 import json
+import os
 
 from sqlalchemy import text
 from dbAccess import create_db_connection
+from userLogin import oauth2_scheme, decode_jwt_token
 
 router = APIRouter()
 engine = create_db_connection()
+
+class TokenData(BaseModel):
+    user_id: str
+    company: str
+    email_address: str
+    
 
 ###################
 #    DASHBOARD    #
 ###################
 
+def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permission
+    return decode_jwt_token(token)
+    
+
 
 # table에 있는 데이터 전부 보내기
 @router.get("/dashboard/{table_name}")
-def get_project(table_name: str):
+async def get_project(table_name: str):
     valid_check_query = """
         SELECT TABLE_NAME
         FROM information_schema.tables
@@ -57,7 +70,7 @@ def get_project(table_name: str):
 
 # table들의 수 상수값으로 리턴
 @router.get("/dashboard/{table_name}/count")
-def get_total_project_num(table_name: str):
+async def get_total_project_num(table_name: str):
     query = text(f"SELECT COUNT(*) FROM structure3.{table_name}")
 
     with engine.connect() as connection:
@@ -69,7 +82,7 @@ def get_total_project_num(table_name: str):
 
 # 프로젝트 용도별 비율
 @router.get("/dashboard/project/usage_ratio")
-def get_project_usage_ratio():
+async def get_project_usage_ratio():
     query = """
         SELECT structure3.project.usage as field, COUNT(*) as count, 
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage
@@ -83,7 +96,8 @@ def get_project_usage_ratio():
 
 # 프로젝트 건설회사별 비율
 @router.get("/dashboard/project/construction_company_ratio")
-def get_project_construction_company_ratio():
+async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
+    print(token)
     query = """
         SELECT structure3.project.construction_company as field, COUNT(*) as count,
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
@@ -99,7 +113,7 @@ def get_project_construction_company_ratio():
 
 # 프로젝트 지역지구별 비율
 @router.get("/dashboard/project/location_ratio")
-def get_project_location_ratio():
+async def get_project_location_ratio():
     query = """
         SELECT structure3.project.location as field, COUNT(*) as count,
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage
@@ -115,7 +129,7 @@ def get_project_location_ratio():
 
 # construction_company당 면적
 @router.get("/dashboard/project/construction_company_total_area")
-def get_construction_company_total_area():
+async def get_construction_company_total_area():
     query = """
         SELECT construction_company, SUM(total_area) AS total_area_sum
         FROM structure3.project
@@ -131,7 +145,7 @@ def get_construction_company_total_area():
 
 # map 그릴때 필요한 데이터(좌표)들 보내기
 @router.get("/dashboard/project/map")
-def get_map_data():
+async def get_map_data():
     query = """
         SELECT sub_table.latitude, sub_table.longitude, SUM(count) AS sum 
         FROM 
@@ -156,7 +170,7 @@ def get_map_data():
 
 # project의 total_area 히스토그램
 @router.get("/dashboard/project/total_area_histogram")
-def get_total_area_histogram():
+async def get_total_area_histogram():
     query = """
         SELECT 
             subquery.min_val as min_val,
@@ -180,7 +194,7 @@ def get_total_area_histogram():
 
 # building의 floor_count 히스토그램
 @router.get("/dashboard/building/floor_count_histogram")
-def get_floor_count_histogram():
+async def get_floor_count_histogram():
     query = """
         SELECT 
             FLOOR((floor_count) / 10) AS range_num,

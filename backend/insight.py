@@ -973,7 +973,7 @@ def get_insight_6(project_building_ids_str):
     return figures_json
 
 @router.get("/insight/{example_id}")
-def get_insight(example_id: int, data: str):
+async def get_insight(example_id: int, data: str):
     if example_id == 1:
         result_json = get_insight_1(data)
     elif example_id == 2:

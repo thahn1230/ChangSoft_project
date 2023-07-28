@@ -1,20 +1,69 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
-
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from dbAccess import create_db_connection
 from sqlalchemy.orm import Session
 from sqlalchemy import text
+from functools import wraps
 
 import pandas as pd
+import jwt
+from datetime import datetime, timedelta
+from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
 engine = create_db_connection()
 connection = engine.connect()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+# token 생성
+def create_jwt_token(user_id: str) -> str:
+    query=f"""
+        SELECT * FROM
+        user_information
+        WHERE id = "{user_id}"
+    """
+    
+    user_df = pd.read_sql(query, engine)
+    
+    # JWT payload 설정
+    payload = {
+        "id": user_df["id"].iloc[0],
+        "company": user_df["company"].iloc[0],
+        "name": user_df["name"].iloc[0],
+        "email_address": user_df["email_address"].iloc[0],
+        "user_type": user_df["user_type"].iloc[0],
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    }
+
+    # JWT 생성 및 서명
+    token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
+    return {"token": token, "status": True}
+
+def decode_jwt_token(token: str) -> dict:
+    try:
+        # JWT 디코딩
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+async def read_users_me(token: str = Depends(oauth2_scheme)): 
+    # JWT 디코딩하여 사용자 정보를 얻어옴
+    user_info = decode_jwt_token(token)
+    
+    # 사용자를 식별하고 로그를 남길 수 있습니다.
+    return {"user_id": user_info["sub"], "token": token}
+
 # 로그인
 @router.post("/login")
-def login(params: dict):
-    print(params)
+async def login(params: dict):
+    
     user_id = params["login_info"]["id"]
     password = params["login_info"]["password"]
     
@@ -26,12 +75,15 @@ def login(params: dict):
     
     login_df = pd.read_sql(query, engine)
     
-    return JSONResponse(login_df.to_json(force_ascii=False, orient="records"))
+    if login_df.empty:
+        return {"token": "", "status": False}
+    else :
+        return create_jwt_token(user_id)
 
 # 회원가입
 @router.post("/sign_up")
-def sign_up(params: dict):
-    print (params)
+async def sign_up(params: dict):
+    
     user_id = params["join_info"]["id"]
     password = params["join_info"]["password"]
     name = params["join_info"]["name"]
@@ -61,7 +113,7 @@ def sign_up(params: dict):
 
 # ID 중복성 검사
 @router.post("/sign_up/check_id")
-def check_id_validity(params: dict):
+async def check_id_validity(params: dict):
     user_id = params["id_info"]["id"]
     
     query = f"""

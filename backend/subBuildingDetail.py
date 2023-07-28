@@ -14,7 +14,7 @@ engine = create_db_connection()
 
 # 빌딩 id의 맞는 sub building을 받기
 @router.get("/sub_building/{building_id}")
-def get_sub_building_data(building_id: int):
+async def get_sub_building_data(building_id: int):
     query = f"""
         SELECT * FROM sub_building
         WHERE sub_building.building_id = {building_id}
@@ -29,7 +29,7 @@ def get_sub_building_data(building_id: int):
 
 # 총괄분석표 전체 sub_building 1
 @router.get("/sub_building/total_analysis_table_all/1/{building_id}")
-def get_total_analysis_data1(building_id: int):
+async def get_total_analysis_data1(building_id: int):
     query = f"""
         SELECT *,
         total_floor_area_meter, total_floor_area_pyeong,
@@ -77,7 +77,7 @@ def get_total_analysis_data1(building_id: int):
 
 # 총괄분석표 전체 sub_building 2
 @router.get("/sub_building/total_analysis_table_all/2/{building_id}")
-def get_total_analysis_data2(building_id: int):
+async def get_total_analysis_data2(building_id: int):
     query = f"""
         SELECT c.component_type,
         SUM(concrete_volume) AS concrete_volume,
@@ -142,7 +142,7 @@ def get_total_analysis_data2(building_id: int):
 
 # 총괄분석표 한개의 sub_building 1
 @router.get("/sub_building/total_analysis_table/1/{sub_building_id}")
-def get_total_analysis_data3(sub_building_id: int):
+async def get_total_analysis_data3(sub_building_id: int):
     query = f"""
         SELECT *,
         (total_formwork / total_concrete) AS form_con_result,
@@ -171,7 +171,7 @@ def get_total_analysis_data3(sub_building_id: int):
 
 # 총괄분석표 한개의 sub_building 2
 @router.get("/sub_building/total_analysis_table/2/{sub_building_id}")
-def get_total_analysis_data4(sub_building_id: int):
+async def get_total_analysis_data4(sub_building_id: int):
     query = f"""
         SELECT c.component_type,
         SUM(concrete_volume) AS concrete_volume,
@@ -235,7 +235,7 @@ def get_total_analysis_data4(sub_building_id: int):
 ### 분석표 ###
 # 분석표 전체 sub_building
 @router.get("/sub_building/analysis_table_all/{building_id}/concrete")
-def get_pivot_analysis_concrete_data1(building_id: int):
+async def get_pivot_analysis_concrete_data1(building_id: int):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -260,7 +260,7 @@ def get_pivot_analysis_concrete_data1(building_id: int):
 
 # 분석표 전체 sub_building에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/formwork")
-def get_pivot_analysis_formwork_data1(building_id: int):
+async def get_pivot_analysis_formwork_data1(building_id: int):
     formwork_query = f"""
         SELECT component_type, formwork_type, 
         SUM(formwork.area) AS total_area FROM formwork
@@ -285,7 +285,7 @@ def get_pivot_analysis_formwork_data1(building_id: int):
 
 # 분석표 전체 sub_building에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/rebar")
-def get_analysis_rebar_data1(building_id: int):
+async def get_analysis_rebar_data1(building_id: int):
     rebar_query = f"""
         SELECT component_type, rebar_grade, 
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
@@ -306,7 +306,7 @@ def get_analysis_rebar_data1(building_id: int):
 
 # 분석표 sub_building 1개
 @router.get("/sub_building/analysis_table/{sub_building_id}/concrete")
-def get_pivot_analysis_concrete_data2(sub_building_id: int):
+async def get_pivot_analysis_concrete_data2(sub_building_id: int):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -331,7 +331,7 @@ def get_pivot_analysis_concrete_data2(sub_building_id: int):
 
 # 분석표 sub_building 1개에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/formwork")
-def get_pivot_analysis_formwork_data2(sub_building_id: int):
+async def get_pivot_analysis_formwork_data2(sub_building_id: int):
     formwork_query = f"""
         SELECT component_type, formwork_type, 
         SUM(formwork.area) AS total_area FROM formwork
@@ -356,7 +356,7 @@ def get_pivot_analysis_formwork_data2(sub_building_id: int):
 
 # 분석표 sub_building 1개에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/rebar")
-def get_analysis_rebar_data2(sub_building_id: int):
+async def get_analysis_rebar_data2(sub_building_id: int):
     rebar_query = f"""
         SELECT component_type, rebar_grade, 
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
@@ -376,7 +376,7 @@ def get_analysis_rebar_data2(sub_building_id: int):
 
 
 @router.get("/sub_building/analysis_table/{sub_building_id}/concrete/table")
-def draw_analysis_concrete2(sub_building_id: int):
+async def draw_analysis_concrete2(sub_building_id: int):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -412,7 +412,7 @@ def draw_analysis_concrete2(sub_building_id: int):
 # 부재별층잡계표
 # 빌딩 안에 어떠한 component_type이 있는지 알려주는 함수
 @router.get("/sub_building/floor_analysis_table/{building_id}/component_type")
-def get_floor_analysis_component_type_data(building_id: int):
+async def get_floor_analysis_component_type_data(building_id: int):
     query=f"""
         SELECT component_type FROM formwork
         JOIN component ON component.id = formwork.component_id
@@ -431,10 +431,10 @@ def get_floor_analysis_component_type_data(building_id: int):
 
 # 콘크리트
 @router.get("/sub_building/floor_analysis_table/{building_id}/concrete/filter")
-def get_floor_analysis_concrete_filtered(building_id: int, component_types: str):
+async def get_floor_analysis_concrete_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
-    if component_types is "":
+    if component_types == "":
         return []
     
     query = f"""
@@ -463,10 +463,10 @@ def get_floor_analysis_concrete_filtered(building_id: int, component_types: str)
     
 # 거푸집
 @router.get("/sub_building/floor_analysis_table/{building_id}/formwork/filter")
-def get_floor_analysis_formwork_filtered(building_id: int, component_types: str):
+async def get_floor_analysis_formwork_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
-    if component_types is "":
+    if component_types == "":
         return []
     
     query = f"""
@@ -496,7 +496,7 @@ def get_floor_analysis_formwork_filtered(building_id: int, component_types: str)
     
 # 철근
 @router.get("/sub_building/floor_analysis_table/{building_id}/rebar/filter")
-def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
+async def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
     
@@ -517,4 +517,55 @@ def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
 
     return JSONResponse(
         rebar_floor_analysis_data_df.to_json(force_ascii=False, orient="records")
+    )
+    
+    
+    
+# 부재별로 타입 보이기
+@router.get("/sub_building/quantity_detail/get_floor_list/{sub_building_id}")
+async def get_floor_list(sub_building_id: int):
+    query = f"""
+        SELECT floor_id, floor_name FROM floor
+        JOIN (SELECT floor_id FROM structure3.sub_building
+        JOIN component ON component.sub_building_id = sub_building.id
+        WHERE sub_building_id = {sub_building_id}
+        GROUP BY floor_id) as sub 
+        ON floor.id = sub.floor_id
+    """
+    
+    floor_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        floor_df.to_json(force_ascii=False, orient="records")
+    )
+    
+@router.get("/sub_building/quantuty_detail/get_component_type_list/{sub_building_id}/{floor_id}")
+async def get_component_type_list(sub_building_id: int, floor_id: int):
+    query = f"""
+        SELECT component_type FROM structure3.component
+        WHERE floor_id = {floor_id} AND sub_building_id = {sub_building_id}
+        GROUP BY component_type
+    """
+    
+    component_type_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        component_type_df.to_json(force_ascii=False, orient="records")
+    )
+
+@router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}")
+async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
+    #component_type = json.loads(component_type)
+    
+    query = f"""
+        SELECT * FROM structure3.component
+        WHERE floor_id = {floor_id} 
+        AND sub_building_id = {sub_building_id}
+        AND component_type = "{component_type}"
+    """
+    
+    table_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        table_df.to_json(force_ascii=False, orient="records")
     )
