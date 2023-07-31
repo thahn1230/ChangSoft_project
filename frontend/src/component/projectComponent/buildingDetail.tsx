@@ -48,7 +48,6 @@ const BuildingDetail = (props: any) => {
             data[0].building_name +
             "/ScreenShot.png"
         );
-        console.log("Asdasd")
         setBuildingInfo(props.buildingInfo);
         setImgPath(importedImagePath.default);
       })

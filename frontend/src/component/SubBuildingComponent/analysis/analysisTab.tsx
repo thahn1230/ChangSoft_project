@@ -13,7 +13,7 @@ import {
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
-import SubBuildingAnalysisTableSingleCol from "./subBuildingAnalysisTable_singleCol";
+import SingleColTable from "./subBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "./subBuildingAnalysisTable_subCol";
 import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
 import "./../../../styles/analysisTab.scss";
@@ -359,9 +359,9 @@ const AnalysisTab = (props: any) => {
           <div>
             <Splitter panes={panes} onChange={onPaneChange}>
               <div className="analysis-table-container">
-                <SubBuildingAnalysisTableSingleCol
+                <SingleColTable
                   data={concreteData}
-                ></SubBuildingAnalysisTableSingleCol>
+                ></SingleColTable>
               </div>
               <div className="analysis-chart-container">
                 <SubBuildingAnalysisGraph
@@ -379,9 +379,9 @@ const AnalysisTab = (props: any) => {
           <div>
             <Splitter panes={panes} onChange={onPaneChange}>
               <div className="analysis-table-container">
-                <SubBuildingAnalysisTableSingleCol
+                <SingleColTable
                   data={formworkData}
-                ></SubBuildingAnalysisTableSingleCol>
+                ></SingleColTable>
               </div>
               <div className="analysis-chart-container">
                 <SubBuildingAnalysisGraph

@@ -17,12 +17,13 @@ const SingleColTable = (props: any) => {
             >
               {props.data !== undefined &&
                 Object.keys(props.data[0]).map((item, index) => {
+                const newKey=  Object.keys(props.data[0])[index]; 
                   return (
                     <GridColumn
                       key={index}
-                      field={Object.keys(props.data[0])[index]}
-                      title={Object.keys(props.data[0])[index]}
-                      format="{0:n2}"
+                      field={newKey}
+                      title={newKey}
+                      format={newKey.includes("id") ? "" : "{0:n2}"}
                       headerClassName="custom-header-cell"
                       className={
                         Object.keys(props.data[0])[index] === ""

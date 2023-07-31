@@ -13,6 +13,7 @@ import { Button } from "@progress/kendo-react-buttons";
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 import urlPrefix from "./../../../resource/URL_prefix.json";
 import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
+import SingleColTable from "./SingleColTable"
 
 interface idNameI {
   id: number;
@@ -32,6 +33,8 @@ const QuantityDetailTab = (props: any) => {
 
   const [componentTypeList, setComponentTypeList] = useState<string[]>();
   const [selectedComponentType, setSelectedComponentType] = useState<string>();
+
+  const [gridData, setGridData] = useState<[]>([]);
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
@@ -176,12 +179,14 @@ const QuantityDetailTab = (props: any) => {
         })
         .then((rawData) => {
           const data = JSON.parse(rawData);
-          console.log(data)
-          setComponentTypeList(data.map((item: any) => item.component_type));
+          setGridData(data)
         })
         .catch((error) => console.error("Error:", error));
   };
+
+
   return (
+    <div>
     <div className="filters-button-container">
       <div className="first-line-container">
         <DropDownList
@@ -218,6 +223,10 @@ const QuantityDetailTab = (props: any) => {
           Let's go!!
         </Button>
       </div>
+    </div>
+    <div className="grid-container">
+          <SingleColTable data = {gridData}></SingleColTable>
+    </div>
     </div>
   );
 };
