@@ -555,7 +555,8 @@ async def get_component_type_list(sub_building_id: int, floor_id: int):
 
 @router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}")
 async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
-    #component_type = json.loads(component_type)
+    #zzzzzz
+    #  ycomponent_type = json.loads(component_type)
     
     query = f"""
         SELECT * FROM structure3.component
