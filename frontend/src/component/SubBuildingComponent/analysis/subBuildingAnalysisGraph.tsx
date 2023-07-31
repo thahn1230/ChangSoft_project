@@ -53,6 +53,7 @@ const SubBuildingAnalysisGraph = (props: any) => {
           {categories.map((item: any, index: number) => {
             return (
               <ChartSeriesItem
+                key={index}
                 type="bar"
                 stack={{group : ""}}
                 data={props.data.map((obj:any)=> obj[item])}

@@ -559,10 +559,11 @@ async def get_table_data(sub_building_id: int, floor_id: int, component_type: st
     #  ycomponent_type = json.loads(component_type)
     
     query = f"""
-        SELECT * FROM structure3.component
-        WHERE floor_id = {floor_id} 
+       SELECT * from (SELECT * FROM structure3.component
+        WHERE floor_id = {floor_id}
         AND sub_building_id = {sub_building_id}
-        AND component_type = "{component_type}"
+        AND component_type = "{component_type}") as component_sub
+		JOIN structure3.concrete ON component_sub.id = structure3.concrete.component_id
     """
     
     table_df = pd.read_sql(query, engine)

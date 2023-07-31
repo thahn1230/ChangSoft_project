@@ -19,7 +19,7 @@ const SubBuildingAnalysisTableSingleCol = (props: any) => {
                 Object.keys(props.data[0]).map((item, index) => {
                   return (
                     <GridColumn
-                      //key={key}
+                      key={index}
                       field={Object.keys(props.data[0])[index]}
                       title={Object.keys(props.data[0])[index]}
                       format="{0:n2}"

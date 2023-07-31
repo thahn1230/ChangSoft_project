@@ -1,4 +1,4 @@
-from uvicorn import workers
+# from uvicorn import workers
 
 from fastapi import FastAPI
 from add_middleware import add_middleware

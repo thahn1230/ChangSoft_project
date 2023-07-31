@@ -41,7 +41,6 @@ const BuildingDetail = (props: any) => {
       })
       .then(async (response) => {
         const data = JSON.parse(response);
-        console.log(data)
         const importedImagePath = await import(
           "./../../resource/project_pictures/" +
             data[0].project_name +
@@ -49,6 +48,7 @@ const BuildingDetail = (props: any) => {
             data[0].building_name +
             "/ScreenShot.png"
         );
+        console.log("Asdasd")
         setBuildingInfo(props.buildingInfo);
         setImgPath(importedImagePath.default);
       })
