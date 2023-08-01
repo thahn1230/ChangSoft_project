@@ -195,7 +195,7 @@ const TotalAnalysisTab = (props: any) => {
       </div>
 
       <div className="right-components">
-        <div className="button-container">
+        <div className="total-analysis-button-container">
           <RadioButton
             value="concrete"
             checked={selectedType === "concrete"}
