@@ -181,59 +181,31 @@ const QuantityFilter = (props: any) => {
     // setFloorList
     // setComponentTypeList 다해야됨
 
-    // fetch(urlPrefix.IP_port + "/dashboard/project", {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error("Network response was not ok");
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((rawData) => {
-    //     const data = JSON.parse(rawData);
-    //     setProjectList(
-    //       [
-    //         {
-    //           projectName: "All",
-    //           id: 0,
-    //           constructionCompany: "All",
-    //           checked: false,
-    //         },
-    //       ].concat(
-    //         data.map((item: any) => {
-    //           return {
-    //             projectName: item.project_name,
-    //             id: item.id,
-    //             constructionCompany: item.construction_company,
-    //             checked: false,
-    //           };
-    //         })
-    //       )
-    //     );
+    //3번 받아와야되나 아니면 3개 한번에?
+    fetch(urlPrefix.IP_port + "/sub_building/quantity_detail/get_quantity_list/" + props.buildingInfo.id , {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((rawData) => {
+        //console.log(rawData)
+        console.log(JSON.parse(rawData.subBuildingInfo).map((item:any)=>item.sub_building_name))
 
-    //     const uniqueConstructionCompanies = Array.from(
-    //       new Set(data.map((item: any) => item.construction_company))
-    //     );
-    //     setConstructionCompanyList(
-    //       [{ constructionCompany: "All", id: 0, checked: false }].concat(
-    //         uniqueConstructionCompanies.map((constructionCompany: any) => {
-    //           const item = data.find(
-    //             (item: any) => item.construction_company === constructionCompany
-    //           );
-    //           return { constructionCompany, id: item.id, checked: false };
-    //         })
-    //       )
-    //     );
-    //   })
-    //   .catch((error) => console.error("Error:", error));
+        //여기서 set
+      })
+      .catch((error) => console.error("Error:", error));
   }, []);
 
   useEffect(()=>{setFilteredFloorList(floorList)},[floorList])
+
   // const getGrid = () => {
   //   const url = new URL(
   //     `${urlPrefix.IP_port}/sub_building/quantity_detail/show_table/${selectedSubBuildingId}/${selectedFloorId}/${selectedComponentType}/${props.selectedType}`
