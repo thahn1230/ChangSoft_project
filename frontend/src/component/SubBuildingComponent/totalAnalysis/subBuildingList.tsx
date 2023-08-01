@@ -21,7 +21,6 @@ const SubBuildingList = (props: any) => {
     useState<buildingInfo_interface>();
 
   useEffect(() => {
-
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
       (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
     );
