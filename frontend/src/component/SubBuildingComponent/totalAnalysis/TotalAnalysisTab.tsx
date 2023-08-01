@@ -38,7 +38,7 @@ const TotalAnalysisTab = (props: any) => {
   const [subBuildingInfo, setSubBuildingInfo] = useState<
     subBuildingInfo_interface[]
   >([]);
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(0);
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(-1);
 
   const [analysisTable1, setAnalysisTable1] =
     useState<subBuildingTotalAnalysisTable1_interface[]>();
@@ -54,6 +54,11 @@ const TotalAnalysisTab = (props: any) => {
   //각각의 값&타입
   const [valueInfo, setValueInfo] =
     useState<subBuildingAnalysisValue_interface[]>();
+
+  useEffect(()=>{
+    if(selectedSubBuildingId ===-1)
+    setSelectedSubBuildingId(0)
+  },[])
 
   useEffect(() => {
     const fetchData = async () => {
