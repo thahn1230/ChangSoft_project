@@ -51,7 +51,6 @@ FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 
 npm install react
 npm install kendo-react-all
 npm install
-npm fund
 npm audit fix
 ```
 
