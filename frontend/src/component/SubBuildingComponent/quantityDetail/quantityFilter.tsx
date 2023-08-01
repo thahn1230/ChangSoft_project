@@ -17,9 +17,7 @@ import {
   filterBy,
   FilterDescriptor,
 } from "@progress/kendo-data-query";
-import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
 import SingleColTable from "./SingleColTable";
-import { BreadcrumbLink } from "@progress/kendo-react-layout";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -175,8 +173,67 @@ const QuantityFilter = (props: any) => {
       filters: [],
     });
 
-  const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
+  //const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
+  // 지금 buildinginfo를 가지고있으니까, buildingid가지고 그거의 subbuilding, floor, componenttype 처음에 다받아오기
+  useEffect(() => {
+    // setSubBuildingList
+    // setFloorList
+    // setComponentTypeList 다해야됨
+
+    // fetch(urlPrefix.IP_port + "/dashboard/project", {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((rawData) => {
+    //     const data = JSON.parse(rawData);
+    //     setProjectList(
+    //       [
+    //         {
+    //           projectName: "All",
+    //           id: 0,
+    //           constructionCompany: "All",
+    //           checked: false,
+    //         },
+    //       ].concat(
+    //         data.map((item: any) => {
+    //           return {
+    //             projectName: item.project_name,
+    //             id: item.id,
+    //             constructionCompany: item.construction_company,
+    //             checked: false,
+    //           };
+    //         })
+    //       )
+    //     );
+
+    //     const uniqueConstructionCompanies = Array.from(
+    //       new Set(data.map((item: any) => item.construction_company))
+    //     );
+    //     setConstructionCompanyList(
+    //       [{ constructionCompany: "All", id: 0, checked: false }].concat(
+    //         uniqueConstructionCompanies.map((constructionCompany: any) => {
+    //           const item = data.find(
+    //             (item: any) => item.construction_company === constructionCompany
+    //           );
+    //           return { constructionCompany, id: item.id, checked: false };
+    //         })
+    //       )
+    //     );
+    //   })
+    //   .catch((error) => console.error("Error:", error));
+  }, []);
+
+  useEffect(()=>{setFilteredFloorList(floorList)},[floorList])
   // const getGrid = () => {
   //   const url = new URL(
   //     `${urlPrefix.IP_port}/sub_building/quantity_detail/show_table/${selectedSubBuildingId}/${selectedFloorId}/${selectedComponentType}/${props.selectedType}`
