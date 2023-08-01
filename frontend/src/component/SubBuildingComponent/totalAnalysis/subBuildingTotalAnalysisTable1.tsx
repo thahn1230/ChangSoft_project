@@ -98,6 +98,8 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
   }, [analysisTable1]);
 
   useEffect(() => {
+    if(selectedSubBuildingId===-1)
+    return;
     props.setSelectedSubBuildingId(selectedSubBuildingId);
 
     if (selectedSubBuildingId === undefined) return;

@@ -101,34 +101,10 @@ const FloorAnalysisTab = (props: any) => {
             })
           )
         );
+
       })
       .catch((error) => console.error("Error:", error));
   }, [props.buildingInfo]);
-
-  // useEffect(() => {
-  //   let idx = 0;
-  //   axios
-  //     .get(
-  //       urlPrefix.IP_port +
-  //         "/sub_building/floor_analysis_table/" +
-  //         props.buildingInfo.id +
-  //         "/component_type"
-  //     )
-  //     .then((response) => {
-  //       setComponentTypeList(
-  //         [{ componentType: "All", id: idx++, checked: false }].concat(
-  //           JSON.parse(response.data).map((item: any) => {
-  //             return {
-  //               componentType: item.component_type,
-  //               id: idx++,
-  //               checked: false,
-  //             };
-  //           })
-  //         )
-  //       );
-  //     })
-  //     .catch(console.error);
-  // }, [props.buildingInfo]);
 
   useEffect(() => {
     if (fetched) return;
@@ -268,106 +244,6 @@ const FloorAnalysisTab = (props: any) => {
         .catch((error) => console.error("Error:", error));
     }
   }, [selectedComponentType]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const params = new URLSearchParams();
-  //     const paramName = "component_types";
-  //     const paramContent = JSON.stringify(
-  //       selectedComponentType.map((item) => item.componentType)
-  //     );
-  //     params.append(paramName, paramContent);
-
-  //     let concreteResponse;
-  //     let formworkResponse;
-  //     let rebarResponse;
-
-  //     try {
-  //       concreteResponse = await axios.get(
-  //         urlPrefix.IP_port +
-  //           "/sub_building/floor_analysis_table/" +
-  //           props.buildingInfo.id +
-  //           "/concrete/filter",
-  //         { params }
-  //       );
-  //       formworkResponse = await axios.get(
-  //         urlPrefix.IP_port +
-  //           "/sub_building/floor_analysis_table/" +
-  //           props.buildingInfo.id +
-  //           "/formwork/filter",
-  //         { params }
-  //       );
-  //       rebarResponse = await axios.get(
-  //         urlPrefix.IP_port +
-  //           "/sub_building/floor_analysis_table/" +
-  //           props.buildingInfo.id +
-  //           "/rebar/filter",
-  //         { params }
-  //       );
-
-  //       const concreteJson = JSON.parse(concreteResponse.data);
-  //       const formworkJson = JSON.parse(formworkResponse.data);
-  //       const rebarJson: RebarJson[] = JSON.parse(rebarResponse.data);
-
-  //       const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
-  //         ([key, value]) => {
-  //           const newObj: { [key: string]: any } = { "": key };
-  //           for (const prop in value as Record<string, any>) {
-  //             newObj[prop] = (value as Record<string, any>)[prop];
-  //           }
-  //           return newObj as { [key: string]: any } & { "": string };
-  //         }
-  //       );
-  //       const formworkJsonGrid: gridData = Object.entries(formworkJson).map(
-  //         ([key, value]) => {
-  //           const newObj: { [key: string]: any } = { "": key };
-  //           for (const prop in value as Record<string, any>) {
-  //             newObj[prop] = (value as Record<string, any>)[prop];
-  //           }
-  //           return newObj as { [key: string]: any } & { "": string };
-  //         }
-  //       );
-
-  //       const rebarJsonGrid: gridData = [];
-  //       for (const rebar of rebarJson) {
-  //         const floorName = rebar.floor_name;
-  //         const rebarGrade = rebar.rebar_grade;
-  //         const rebarDiameter = rebar.rebar_diameter;
-  //         const totalRebar = rebar.total_rebar;
-
-  //         const existingItem = rebarJsonGrid.find(
-  //           (item) => item[""] === floorName
-  //         );
-  //         if (existingItem) {
-  //           if (!existingItem[rebarGrade]) {
-  //             existingItem[rebarGrade] = {};
-  //           }
-  //           existingItem[rebarGrade][rebarDiameter.toString()] = totalRebar;
-  //         } else {
-  //           const newItem = {
-  //             "": floorName,
-  //             [rebarGrade]: {
-  //               [rebarDiameter.toString()]: totalRebar,
-  //             },
-  //           };
-  //           rebarJsonGrid.push(newItem);
-  //         }
-  //       }
-
-  //       setConcreteData(concreteJsonGrid);
-  //       setFormworkData(formworkJsonGrid);
-  //       setRebarData(rebarJsonGrid);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   if (selectedComponentType.length === 0) {
-  //     setSelectedGridChart(<div>부재를 선택해주세요.</div>);
-  //   } else {
-  //     fetchData();
-  //   }
-  // }, [selectedComponentType]);
 
   useEffect(() => {
     const temp: string[] = [];

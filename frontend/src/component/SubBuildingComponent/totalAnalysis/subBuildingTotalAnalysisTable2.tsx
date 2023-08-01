@@ -20,6 +20,8 @@ const TotalAnalysisGrid2 = (props: any) => {
     useState<subBuildingTotalAnalysisTable2_interface[]>();
 
   useEffect(() => {
+    if(props.selectedSubBuildingId===-1)
+    return;
     let url;
 
     if (props.selectedSubBuildingId === 0) {
