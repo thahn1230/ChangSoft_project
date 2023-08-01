@@ -12,6 +12,7 @@ import urlPrefix from "./../../resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
 import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/subBuildingList";
+import {GridPDFExport} from "@progress/kendo-react-pdf"
 
 import "./../../styles/GridDetail.scss";
 
@@ -21,6 +22,14 @@ const BuildingDetail = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<
     buildingInfo_interface | undefined
   >();
+
+  let gridPDFExport: GridPDFExport | null;
+
+  const exportPDF = () => {
+    if (gridPDFExport) {
+      gridPDFExport.save();
+    }
+  };
 
   useEffect(() => {
     fetch(urlPrefix.IP_port +

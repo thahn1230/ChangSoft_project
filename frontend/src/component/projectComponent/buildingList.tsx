@@ -10,6 +10,7 @@ import {
   getSelectedState,
   getSelectedStateFromKeyDown,
   GridFilterChangeEvent,
+  GridToolbar,
 } from "@progress/kendo-react-grid";
 import {
   filterBy,
@@ -21,7 +22,7 @@ import { MultiSelectPropsContext } from "@progress/kendo-react-dropdowns";
 import BuildingDetail from "./buildingDetail";
 import ProjectIntro from "../homeComponent/totalProjectNum";
 import urlPrefix from "../../resource/URL_prefix.json";
-
+import { GridPDFExport } from "@progress/kendo-react-pdf";
 import "./../../styles/GridDetail.scss";
 
 const DATA_ITEM_KEY = "id";
@@ -62,6 +63,14 @@ const BuildingList = (props: any) => {
   const [categories, setCategories] = React.useState([]);
   //const [attributeNames, setAttributeNames] = useState<string[]>([""]);
   const [projectFilter, setProjectFilter] = useState(initialFilter);
+
+  let gridPDFExport: GridPDFExport | null;
+
+  const exportPDF = () => {
+    if (gridPDFExport) {
+      gridPDFExport.save(buildingList);
+    }
+  };
 
   useEffect(() => {
     if (props.projectList) {
@@ -177,6 +186,15 @@ const BuildingList = (props: any) => {
         filter={projectFilter}
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
+        <GridToolbar>
+          <button
+            title="Export PDF"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+            onClick={exportPDF}
+          >
+            Export PDF
+          </button>
+        </GridToolbar>
         <GridColumn
           title="빌딩명"
           field="building_name"
@@ -203,6 +221,72 @@ const BuildingList = (props: any) => {
           className="custom-text-cell"
         />
       </Grid>
+      <GridPDFExport
+        paperSize="A4"
+        scale={0.5}
+        ref={(pdfExport) => (gridPDFExport = pdfExport)}
+        margin="1cm"
+      >
+      <Grid
+        style={{ height: "60vh", width: "97.5%" }}
+        data={buildingList.slice(page.skip, page.take + page.skip)}
+        skip={page.skip}
+        take={page.take}
+        total={buildingList.length}
+        dataItemKey={DATA_ITEM_KEY}
+        pageable={{
+          buttonCount: 10,
+          pageSizes: [10, 15, 20, "All"],
+          pageSizeValue: pageSizeValue,
+        }}
+        onPageChange={pageChange}
+        expandField="expanded"
+        detail={({ dataItem }) => (
+          <DetailComponent
+            dataItem={dataItem}
+            setBuildingInfo={props.setBuildingInfo}
+          />
+        )}
+        onExpandChange={expandChange}
+        filter={projectFilter}
+        onFilterChange={(e: GridFilterChangeEvent) => {}}
+      >
+        <GridToolbar>
+          <button
+            title="Export PDF"
+            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
+            onClick={exportPDF}
+          >
+            Export PDF
+          </button>
+        </GridToolbar>
+        <GridColumn
+          title="빌딩명"
+          field="building_name"
+          headerClassName={headerClassName}
+          className="custom-text-cell"
+        />
+        <GridColumn
+          title="빌딩별 전체 면적(㎡)"
+          field="total_area_square_meter"
+          headerClassName={headerClassName}
+          className="custom-number-cell"
+          format={"{0:n2}"}
+        />
+        <GridColumn
+          title="빌딩 전체 층수(층)"
+          field="total_stories"
+          headerClassName={headerClassName}
+          className="custom-number-cell"
+        />
+        <GridColumn
+          title="Sub Buildings"
+          field="sub_bldg_list"
+          headerClassName={headerClassName}
+          className="custom-text-cell"
+        />
+      </Grid>
+      </GridPDFExport>
     </div>
   );
 };

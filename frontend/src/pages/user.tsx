@@ -176,7 +176,7 @@ const sha256 = async (message: string) => {
   return hashHex;
 };
 
-const Join = (props: any) => {
+const User = (props: any) => {
   const userInfoContext = useUserContext();
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
@@ -201,6 +201,26 @@ const Join = (props: any) => {
   const [signupDone, setSignupDone] = useState<boolean>(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+
+  // useEffect(() => {
+  //   fetch(urlPrefix.IP_port + "/user/profile", {
+  //     method: "GET",
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Network response was not ok");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       console.log(data)
+  //     })
+  //     .catch((error) => console.error("Error:", error));
+  // }, []); backend랑 상의해서 user 정보들 받아오고 수정할 수 있도록 바꿔야 함.
 
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
@@ -382,7 +402,7 @@ const Join = (props: any) => {
 
   return (
     <JoinBodyWrapper>
-      <div className="idField">
+      {/* <div className="idField">
         <div className="labelField">아이디</div>
         <Input
           className="inputField"
@@ -402,7 +422,7 @@ const Join = (props: any) => {
           placeholder="영문+숫자 조합을 이용해주세요"
           onChange={onPwChange}
         ></Input>
-      </div>
+      </div> */}
       <div className="nameField">
         <div className="labelField">이름</div>
         <Input
@@ -452,11 +472,11 @@ const Join = (props: any) => {
           이전
         </button>
         <button className="joinBtn" onClick={onSubmit}>
-          가입하기
+          변경하기
         </button>
       </div>
     </JoinBodyWrapper>
   );
 };
 
-export default Join;
+export default User;
