@@ -96,8 +96,7 @@ async def get_project_usage_ratio():
 
 # 프로젝트 건설회사별 비율
 @router.get("/dashboard/project/construction_company_ratio")
-async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
-    print(token)
+async def get_project_construction_company_ratio():
     query = """
         SELECT structure3.project.construction_company as field, COUNT(*) as count,
         COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
