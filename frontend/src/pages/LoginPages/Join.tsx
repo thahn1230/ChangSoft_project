@@ -233,6 +233,12 @@ const Join = (props: any) => {
           user_type: "User",
         }
       );
+      const updatedJoinValue = {
+        ...joinValue,
+        password: hashedPassword,
+        company: "창소프트아이앤아이",
+        user_type: "User",
+      };
 
       //params는 어떻게씀
       const response = await fetch(`${urlPrefix.IP_port}/sign_up`, {
@@ -241,7 +247,7 @@ const Join = (props: any) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ join_info: joinValue }),
+        body: JSON.stringify({ join_info: updatedJoinValue }),
       });
 
       const signupData: UserInfoI[] = await response.json();

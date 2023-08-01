@@ -16,9 +16,6 @@ import {
   FilterDescriptor,
 } from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
-import { getter, setter } from "@progress/kendo-react-common";
-import { itemIndexStartsWith } from "@progress/kendo-react-dropdowns/dist/npm/common/utils";
-import { filter } from "@progress/kendo-data-query/dist/npm/transducers";
 
 import "./../../styles/insightList.scss";
 
@@ -124,51 +121,6 @@ const InsightList = (props: any) => {
   const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await axios.get(
-    //       urlPrefix.IP_port + "/dashboard/project"
-    //     );
-    //     const data = JSON.parse(response.data);
-
-    //     setProjectList(
-    //       [
-    //         {
-    //           projectName: "All",
-    //           id: 0,
-    //           constructionCompany: "All",
-    //           checked: false,
-    //         },
-    //       ].concat(
-    //         data.map((item: any) => {
-    //           return {
-    //             projectName: item.project_name,
-    //             id: item.id,
-    //             constructionCompany: item.construction_company,
-    //             checked: false,
-    //           };
-    //         })
-    //       )
-    //     );
-
-    //     const uniqueConstructionCompanies = Array.from(
-    //       new Set(data.map((item: any) => item.construction_company))
-    //     );
-    //     setConstructionCompanyList(
-    //       [{ constructionCompany: "All", id: 0, checked: false }].concat(
-    //         uniqueConstructionCompanies.map((constructionCompany: any) => {
-    //           const item = data.find(
-    //             (item: any) => item.construction_company === constructionCompany
-    //           );
-    //           return { constructionCompany, id: item.id, checked: false };
-    //         })
-    //       )
-    //     );
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-
     fetch(urlPrefix.IP_port + "/dashboard/project", {
       method: "GET",
       headers: {
@@ -331,32 +283,6 @@ const InsightList = (props: any) => {
       selectedInsightIndexInList + 1 === 6 &&
       selectedProjectList.length === 1
     ) {
-      // const fetchData = async () => {
-      //   try {
-      //     const response = await axios.get(
-      //       urlPrefix.IP_port +
-      //         "/project/" +
-      //         selectedProjectList[0].id +
-      //         "/building_detail"
-      //     );
-      //     const data = JSON.parse(response.data);
-
-      //     setBuildingList(
-      //       [{ buildingName: "All", id: 0, checked: false }].concat(
-      //         data.map((item: any) => {
-      //           return {
-      //             buildingName: item.building_name,
-      //             id: item.id,
-      //             checked: false,
-      //           };
-      //         })
-      //       )
-      //     );
-      //   } catch (error) {
-      //     console.error(error);
-      //   }
-      // };
-
       fetch(
         urlPrefix.IP_port +
           "/project/" +
