@@ -553,6 +553,9 @@ async def get_component_type_list(sub_building_id: int, floor_id: int):
         component_type_df.to_json(force_ascii=False, orient="records")
     )
 
+# 여기부터 7/31 김찬용이 수정
+
+#이거 없애야됨
 @router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}")
 async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
     #zzzzzz
@@ -564,6 +567,61 @@ async def get_table_data(sub_building_id: int, floor_id: int, component_type: st
         AND sub_building_id = {sub_building_id}
         AND component_type = "{component_type}") as component_sub
 		JOIN structure3.concrete ON component_sub.id = structure3.concrete.component_id
+    """
+    
+    table_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        table_df.to_json(force_ascii=False, orient="records")
+    )
+
+@router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}/concrete")
+async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
+    #zzzzzz
+    #  ycomponent_type = json.loads(component_type)
+    
+    query = f"""
+       SELECT * from (SELECT * FROM structure3.component
+        WHERE floor_id = {floor_id}
+        AND sub_building_id = {sub_building_id}
+        AND component_type = "{component_type}") as component_sub
+		JOIN structure3.concrete ON component_sub.id = structure3.concrete.component_id
+    """
+    
+    table_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        table_df.to_json(force_ascii=False, orient="records")
+    )
+@router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}/formwork")
+async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
+    #zzzzzz
+    #  ycomponent_type = json.loads(component_type)
+    
+    query = f"""
+       SELECT * from (SELECT * FROM structure3.component
+        WHERE floor_id = {floor_id}
+        AND sub_building_id = {sub_building_id}
+        AND component_type = "{component_type}") as component_sub
+		JOIN structure3.formwork ON component_sub.id = structure3.formwork.component_id
+    """
+    
+    table_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(
+        table_df.to_json(force_ascii=False, orient="records")
+    )
+@router.get("/sub_building/quantity_detail/show_table/{sub_building_id}/{floor_id}/{component_type}/rebar")
+async def get_table_data(sub_building_id: int, floor_id: int, component_type: str):
+    #zzzzzz
+    #  ycomponent_type = json.loads(component_type)
+    
+    query = f"""
+       SELECT * from (SELECT * FROM structure3.component
+        WHERE floor_id = {floor_id}
+        AND sub_building_id = {sub_building_id}
+        AND component_type = "{component_type}") as component_sub
+		JOIN structure3.rebar ON component_sub.id = structure3.rebar.component_id
     """
     
     table_df = pd.read_sql(query, engine)
