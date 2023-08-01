@@ -259,7 +259,6 @@ const InsightList = (props: any) => {
       setConstructionCompanyList(updatedConstructionCompanyList);
     } else setConstructionCompanyList(updatedConstructionCompanyList);
   }, [selectedConstructionCompanyList]);
-
   useEffect(() => {
     const updatedFilteredProjectList = filteredProjectList.map((item) => {
       const matchingItem = selectedProjectList.find(

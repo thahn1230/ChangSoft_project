@@ -176,13 +176,10 @@ const LoginPage = (props: any) => {
   });
   const [isJoinOpen, setIsJoinOpen] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const loginId = localStorage.getItem("loginId") ?? undefined;
-  //   setInputValues((inputValues:) => ({
-  //     ...inputValues,
-  //     loginId,
-  //   }));
-  // }, []);
+  useEffect(() => {
+   if(localStorage.getItem("token") !== null)
+    navigator("/home");
+  }, []);
 
   // useEffect(() => {
   //   if (loginResult.data?.login?.accessToken) {
@@ -225,11 +222,12 @@ const LoginPage = (props: any) => {
   // },[tokenContext?.token])
 
   const login = async (id: string, password: string) => {
+
     try {
-      const params = new URLSearchParams();
+      //const params = new URLSearchParams();
       const hashedPassword = await sha256(password);
 
-      params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
+      //params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
       const response = await fetch(`${urlPrefix.IP_port}/login`, {
         method: "POST",
