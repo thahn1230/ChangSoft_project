@@ -4,3 +4,9 @@
     color: blue !important;
     box-shadow: 0 0 1px blue !important;
 }
+
+.total-analysis-button-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-end !important;
+}
