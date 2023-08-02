@@ -7,6 +7,13 @@ This repository is for project in ChangSoftI&amp;I
 BackEnd 서버를 돌리려면 필요한 파일들(add_middleware.py, dbAccess.py, origins.py)을 다운 받은 후 main.py가 있는 디렉토리로 이동 후 다음 명령어를 입력합니다.(wsl 기반. 이때 wsl에서 서버를 연다면 wsl과 windows 간에 포트포워딩을 해야 할 수도 있습니다)
 ```powershell
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+```
+```powershell
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --ssl-keyfile key.pem --ssl-certfile cert.pem
+```
+```powershell
+openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 ```
 
 이때 명령어의 뜻은 다음과 같습니다.
