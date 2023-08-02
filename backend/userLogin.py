@@ -16,7 +16,7 @@ router = APIRouter()
 engine = create_db_connection()
 connection = engine.connect()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 # token 생성
 def create_jwt_token(user_id: str) -> str:
