@@ -17,7 +17,9 @@ const JoinBodyWrapper = styled.div`
   .idField,
   .pwField,
   .nameField,
-  .emailField {
+  .emailField,
+  .cpmpanyField,
+  .jobPositionField {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -57,7 +59,7 @@ const JoinBodyWrapper = styled.div`
 
       .phoneInputField {
         margin-top: 10px;
-        width: 250px;
+        width: 350px;
         height: 35px;
 
         &:focus {
@@ -200,6 +202,7 @@ const User = (props: any) => {
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
+  const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 
   // useEffect(() => {
@@ -235,33 +238,33 @@ const User = (props: any) => {
   };
 
   const backToLogin = () => {
-    props.onCloseJoin();
+    navigator("/home");
   };
 
   const signup = async (newUserInfo: JoinValueI) => {
-    if (isIdDuplicate === null) {
-      alert("아이디 중복확인을 해주세요.");
-      return;
-    }
+    // if (isIdDuplicate === null) {
+    //   alert("아이디 중복확인을 해주세요.");
+    //   return;
+    // }
     try {
-      const hashedPassword = await sha256(newUserInfo.password);
+      // const hashedPassword = await sha256(newUserInfo.password);
       setJoinValue(
         await {
           ...joinValue,
-          password: hashedPassword,
+          // password: hashedPassword,
           company: "창소프트아이앤아이",
           user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
-        password: hashedPassword,
+        // password: hashedPassword,
         company: "창소프트아이앤아이",
         user_type: "User",
       };
 
       //params는 어떻게씀
-      const response = await fetch(`${urlPrefix.IP_port}/sign_up`, {
+      const response = await fetch(`${urlPrefix.IP_port}/user/change_info`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -285,36 +288,36 @@ const User = (props: any) => {
     }
   };
 
-  const checkIdDuplicate = async () => {
-    try {
-      const response = await fetch(`${urlPrefix.IP_port}/sign_up/check_id`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id_info: { id: joinValue.id } }),
-      });
+  // const checkIdDuplicate = async () => {
+  //   try {
+  //     const response = await fetch(`${urlPrefix.IP_port}/sign_up/check_id`, {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ id_info: { id: joinValue.id } }),
+  //     });
 
-      //console.log(await response.json())
-      //const signupData: UserInfoI[] = JSON.parse(await response.json());
-      const isIdValid = (await response.json()).result;
+  //     //console.log(await response.json())
+  //     //const signupData: UserInfoI[] = JSON.parse(await response.json());
+  //     const isIdValid = (await response.json()).result;
 
-      if (isIdValid) {
-        //중복아님
-        alert("사용 가능한 아이디입니다.");
-        setIsIdDuplicate(false);
-      } else {
-        //중복임
-        alert("중복된 아이디입니다. 다른 아이디를 입력해주세요.");
-        setIsIdDuplicate(true);
-      }
-      return;
-    } catch (error) {
-      console.error("Error occurred during login:", error);
-      return;
-    }
-  };
+  //     if (isIdValid) {
+  //       //중복아님
+  //       alert("사용 가능한 아이디입니다.");
+  //       setIsIdDuplicate(false);
+  //     } else {
+  //       //중복임
+  //       alert("중복된 아이디입니다. 다른 아이디를 입력해주세요.");
+  //       setIsIdDuplicate(true);
+  //     }
+  //     return;
+  //   } catch (error) {
+  //     console.error("Error occurred during login:", error);
+  //     return;
+  //   }
+  // };
 
   // 이거구현해야됨
   const emailDuplicate = async (inputEmail: string) => {};
@@ -352,10 +355,19 @@ const User = (props: any) => {
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
+    setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
   const onPhoneConfirm = () => {
     setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
+  };
+
+  const onCompanyChange = (e: any) => {
+    setJoinValue({ ...joinValue, company: e.value });
+  };
+
+  const onJobPositionChange = (e: any) => {
+    setJoinValue({ ...joinValue, job_position: e.value });
   };
 
   const onPrev = () => {
@@ -363,24 +375,24 @@ const User = (props: any) => {
   };
 
   const onSubmit = async () => {
-    if (!joinValue.id || !joinValue.password) {
-      alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
-      return;
-    }
+    // if (!joinValue.id || !joinValue.password) {
+    //   alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
+    //   return;
+    // }
     if (!joinValue.name) {
       alert("이름을 입력하지 않았습니다.");
       return;
     }
-    if (!emailVal) {
+    if (!joinValue.email_address) {
       alert("이메일을 입력하지 않았습니다.");
       return;
     }
-    if (!phoneVal) {
+    if (!joinValue.phone_number) {
       alert("휴대폰 번호를 입력하지 않았습니다.");
       return;
     }
 
-    if (phoneVal && emailVal) {
+    if (joinValue.email_address && joinValue.phone_number) {
       let signUpResult = await signup(joinValue);
 
       if (signUpResult) {
@@ -400,9 +412,56 @@ const User = (props: any) => {
     }
   };
 
+  useEffect(() => {
+    fetch(urlPrefix.IP_port + "/user/profile", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // user 정보를 받아와서 전부 저장해놔야 함(pw 빼고)
+        const userProfile: JoinValueI = {
+          company: data.company,
+          email_address: data.email_address,
+          id: data.id,
+          job_position: data.job_position,
+          name: data.name,
+          phone_number: data.phone_number,
+          user_type: data.user_type,
+          password: "",
+        };
+        setJoinValue(userProfile);
+      })
+      .catch((error) => console.error("Error:", error));
+  }, []);
+
   return (
-    <JoinBodyWrapper>
-      {/* <div className="idField">
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100vh",
+        backgroundColor: "whitesmoke",
+        flexFlow: "column",
+        WebkitBoxPack: "center",
+        justifyContent: "center",
+        WebkitBoxAlign: "center",
+        alignItems: "center",
+      }}
+    >
+      <div style={{ width: "350px", fontWeight: "bold", marginTop: "1rem", marginBottom: "1rem" }}>
+        내 정보
+      </div>
+      <JoinBodyWrapper>
+        {/* <div className="idField">
         <div className="labelField">아이디</div>
         <Input
           className="inputField"
@@ -423,59 +482,82 @@ const User = (props: any) => {
           onChange={onPwChange}
         ></Input>
       </div> */}
-      <div className="nameField">
-        <div className="labelField">이름</div>
-        <Input
-          className="inputField"
-          type="text"
-          placeholder="이름(실명)을 입력해주세요"
-          onChange={onNameChange}
-        ></Input>
-      </div>
-      <div className="emailField">
-        <div className="labelField">이메일</div>
-        <Input
-          className="inputField"
-          type="text"
-          placeholder="이메일을 입력해주세요"
-          onChange={onEmailChange}
-        ></Input>
-        {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
-      </div>
-      <div className="phoneField">
-        <div className="labelField">휴대전화 번호</div>
-        <div className="phoneConfirm">
+        <div className="nameField">
+          <div className="labelField">이름</div>
           <Input
-            className="phoneInputField"
+            className="inputField"
             type="text"
-            placeholder="예) 010-1111-1111, 01012341234"
-            onChange={onPhoneChange}
+            value={joinValue.name}
+            onChange={onNameChange}
           ></Input>
-          {/* <button className='confirmBtn' onClick={onPhoneConfirm}>
-                인증
-              </button> */}
         </div>
-      </div>
-      {/* <div className='checkField'>
-            <div className='checkContainer'>
-              <Checkbox
-                checked={checked}
-                color='primary'
-                onChange={handleChange}
-                inputProps={{ 'aria-label': 'primary checkbox' }}
-              />
-              <span>이용약관 및 개인정보 처리방침에 동의합니다. (필수)</span>
-            </div>
-          </div> */}
-      <div className="btns">
-        <button className="backBtn" onClick={backToLogin}>
-          이전
-        </button>
-        <button className="joinBtn" onClick={onSubmit}>
-          변경하기
-        </button>
-      </div>
-    </JoinBodyWrapper>
+        <div className="emailField">
+          <div className="labelField">이메일</div>
+          <Input
+            className="inputField"
+            type="text"
+            value={joinValue.email_address}
+            onChange={onEmailChange}
+          ></Input>
+          {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
+        </div>
+        <div className="phoneField">
+          <div className="labelField">휴대전화 번호</div>
+          <div className="phoneConfirm">
+            {joinValue.phone_number ? (
+              <Input
+                className="phoneInputField"
+                type="text"
+                value={joinValue.phone_number}
+                onChange={onPhoneChange}
+              ></Input>
+            ) : (
+              <Input
+                className="phoneInputField"
+                type="text"
+                placeholder="예) 010-1111-1111, 01012341234"
+                onChange={onPhoneChange}
+              ></Input>
+            )}
+          </div>
+        </div>
+        <div className="cpmpanyField">
+          <div className="labelField">회사</div>
+          <Input
+            className="inputField"
+            type="text"
+            value={joinValue.company}
+            onChange={onCompanyChange}
+          ></Input>
+        </div>
+        <div className="jobPositionField">
+          <div className="labelField">직위</div>
+          {joinValue.job_position ? (
+            <Input
+              className="inputField"
+              type="text"
+              value={joinValue.job_position}
+              onChange={onJobPositionChange}
+            ></Input>
+          ) : (
+            <Input
+              className="inputField"
+              type="text"
+              placeholder="예) 대리, 사원"
+              onChange={onJobPositionChange}
+            ></Input>
+          )}
+        </div>
+        <div className="btns">
+          <button className="backBtn" onClick={backToLogin}>
+            취소
+          </button>
+          <button className="joinBtn" onClick={onSubmit}>
+            변경하기
+          </button>
+        </div>
+      </JoinBodyWrapper>
+    </div>
   );
 };
 

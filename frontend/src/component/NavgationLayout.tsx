@@ -95,7 +95,7 @@ export const NavigationLayout = (props: any) => {
       })
       .then((data) => {
         setName(data.name);
-        setEmailAddress(data.email_address)
+        setEmailAddress(data.email_address);
       })
       .catch((error) => console.error("Error:", error));
   }, []);
