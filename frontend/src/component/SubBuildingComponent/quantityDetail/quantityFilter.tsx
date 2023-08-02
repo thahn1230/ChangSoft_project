@@ -675,22 +675,40 @@ const QuantityFilter = (props: any) => {
         return response.json();
       })
       .then((response) => {
-        const data = JSON.parse(response).map(
-          ({ id, building_id, ...rest }: any) => rest
+        let data = JSON.parse(response).map(
+          ({ id, building_id, component_id,sub_building_id, ...rest }: any) => rest
         );
         switch (props.selectedType) {
           case "concrete":
-
+            data = data.map(
+              ({
+                sub_building_type,
+                sub_building_category,
+                sub_building_name,
+                total_area_above,
+                total_area_below,
+                object_id,
+                floor_id,
+                component_type,
+                section_name,
+                construction_zone,
+                category,
+                summation_type,
+                blinding,
+                calculation_formula,
+                material_name,
+                coarse_aggregate,
+                concrete_strength,
+                slump,
+                aggregate_strength_concrete_strength_slump,
+                volume,
+              }: any) => ({ 건물유형: sub_building_type, })
+            );
 
             break;
           case "formwork":
-
-
             break;
           case "rebar":
-
-
-          
             break;
         }
         props.setGridData();
