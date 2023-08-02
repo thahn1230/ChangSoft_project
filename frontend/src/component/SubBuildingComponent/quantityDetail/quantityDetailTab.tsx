@@ -10,6 +10,8 @@ const QuantityDetailTab = (props: any) => {
   const [gridData, setGridData] = useState<[]>([]);
   const [selectedType, setSelectedType] = useState("concrete");
 
+  
+
   const onTypeChange = useCallback(
     (e: RadioButtonChangeEvent) => {
       setSelectedType(e.value);
