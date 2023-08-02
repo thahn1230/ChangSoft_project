@@ -186,7 +186,7 @@ const BuildingList = (props: any) => {
         filter={projectFilter}
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
-        <GridToolbar>
+        {/* <GridToolbar>
           <button
             title="Export PDF"
             className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
@@ -194,7 +194,7 @@ const BuildingList = (props: any) => {
           >
             Export PDF
           </button>
-        </GridToolbar>
+        </GridToolbar> */}
         <GridColumn
           title="빌딩명"
           field="building_name"
@@ -221,7 +221,7 @@ const BuildingList = (props: any) => {
           className="custom-text-cell"
         />
       </Grid>
-      <GridPDFExport
+      {/* <GridPDFExport
         paperSize="A4"
         scale={0.5}
         ref={(pdfExport) => (gridPDFExport = pdfExport)}
@@ -286,7 +286,7 @@ const BuildingList = (props: any) => {
           className="custom-text-cell"
         />
       </Grid>
-      </GridPDFExport>
+      </GridPDFExport> */}
     </div>
   );
 };
