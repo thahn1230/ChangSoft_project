@@ -49,8 +49,19 @@ main.py 안에 있는 app 모듈을 실행한다.
    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=????
    ```
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
+5. 확인
+```
+netsh interface portproxy show all
 
-5. URL_prefix.json 에서
+ipv4 수신 대기:             ipv4에 연결:
+
+주소            포트        주소            포트
+--------------- ----------  --------------- ----------
+0.0.0.0         8000        172.19.166.203  8000
+```
+
+
+<URL_prefix.json 에서>
 ```"IP_port": "https://localhost:8000"```
  -> ssl인증서 사용시는 https로 접근해야함
    
