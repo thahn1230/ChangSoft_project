@@ -1,16 +1,15 @@
-import react, { useEffect, useState,useCallback } from "react";
+import react, { useEffect, useState, useCallback } from "react";
 import {
   RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
 import SingleColTable from "./SingleColTable";
 import QuantityFilter from "./quantityFilter";
+import "./../../../styles/analysisTab.scss";
 
 const QuantityDetailTab = (props: any) => {
   const [gridData, setGridData] = useState<[]>([]);
   const [selectedType, setSelectedType] = useState("concrete");
-
-  
 
   const onTypeChange = useCallback(
     (e: RadioButtonChangeEvent) => {
@@ -24,7 +23,7 @@ const QuantityDetailTab = (props: any) => {
       <QuantityFilter
         setGridData={setGridData}
         buildingInfo={props.buildingInfo}
-        selectedType = {selectedType}
+        selectedType={selectedType}
       ></QuantityFilter>
 
       <div className="radio-button-container">
@@ -54,8 +53,9 @@ const QuantityDetailTab = (props: any) => {
         />
       </div>
 
-      
-      <SingleColTable data={gridData}></SingleColTable>
+      <div className="info-table-container" style={{ maxWidth: "90vw" }}>
+        <SingleColTable data={gridData}></SingleColTable>
+      </div>
     </div>
   );
 };
