@@ -12,6 +12,9 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```powershell
 python -m uvicorn main:app --host 0.0.0.0 --port 8000 --ssl-keyfile key.pem --ssl-certfile cert.pem
 ```
+```powershell
+openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+```
 
 이때 명령어의 뜻은 다음과 같습니다.
 main.py 안에 있는 app 모듈을 실행한다.
