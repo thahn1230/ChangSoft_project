@@ -222,7 +222,6 @@ const LoginPage = (props: any) => {
   // },[tokenContext?.token])
 
   const login = async (id: string, password: string) => {
-
     try {
       //const params = new URLSearchParams();
       const hashedPassword = await sha256(password);
