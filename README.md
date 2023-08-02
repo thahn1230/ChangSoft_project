@@ -48,6 +48,10 @@ main.py 안에 있는 app 모듈을 실행한다.
    ```
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
 
+5. URL_prefix.json
+"IP_port": "https://localhost:8000" -> ssl인증서 사용시는 https로 접근해야함
+   
+
 ---
 
 FrontEnd에서의 이미지 파일은 아직 DB에 없기 때문에 local에서 가져오는 식으로 진행하고 있습니다.
