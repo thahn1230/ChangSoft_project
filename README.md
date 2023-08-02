@@ -7,6 +7,15 @@ This repository is for project in ChangSoftI&amp;I
 BackEnd 서버를 돌리려면 필요한 파일들(add_middleware.py, dbAccess.py, origins.py)을 다운 받은 후 main.py가 있는 디렉토리로 이동 후 다음 명령어를 입력합니다.(wsl 기반. 이때 wsl에서 서버를 연다면 wsl과 windows 간에 포트포워딩을 해야 할 수도 있습니다)
 ```powershell
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+```
+```powershell
+python -m uvicorn main:app --host 0.0.0.0 --port 8000 --ssl-keyfile key.pem --ssl-certfile cert.pem
+```
+
+ssl 인증 생성 명령 linux에서
+```powershell
+openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 ```
 
 이때 명령어의 뜻은 다음과 같습니다.
@@ -21,7 +30,7 @@ main.py 안에 있는 app 모듈을 실행한다.
 
 - 이때 각자 컴퓨터에서 할당 받은 ip주소를 가지고 다른 컴퓨터에서 접속을 시도하려면 localhost에서의 방화벽을 해제시켜야 합니다
 
-<포트포워딩 하는법>
+<WSL2 사용시 포트포워딩 하는법>
 
 1. 윈도우 또는 WSL 재부팅시
    ```powershell
@@ -40,6 +49,22 @@ main.py 안에 있는 app 모듈을 실행한다.
    netsh interface portproxy add v4tov4 listenport=8000 listenaddress=0.0.0.0 connectport=8000 connectaddress=????
    ```
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
+5. 확인
+   ```
+   netsh interface portproxy show all
+   
+   ipv4 수신 대기:             ipv4에 연결:
+   
+   주소            포트        주소            포트
+   --------------- ----------  --------------- ----------
+   0.0.0.0         8000        172.19.166.203  8000
+   ```
+
+
+<URL_prefix.json 에서>
+```"IP_port": "https://localhost:8000"```
+ -> ssl인증서 사용시는 https로 접근해야함
+   
 
 ---
 
@@ -55,3 +80,6 @@ npm audit fix
 ```
 
 만약 ```npm audit fix``` 명령어를 실행하였을때 작동이 안된다면 ```npm --force audit fix```를 실행해주시면 됩니다.
+
+react server 시작시
+```PORT=3000 yarn start```

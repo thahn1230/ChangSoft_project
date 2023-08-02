@@ -32,7 +32,6 @@ export function App() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location);
     const token = localStorage.getItem("token");
     if (
       token === null &&
