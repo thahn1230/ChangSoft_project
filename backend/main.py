@@ -1,6 +1,5 @@
-# from uvicorn import workers
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from add_middleware import add_middleware
 from dashboard import router as dashboardRouter
 from project import router as projectRouter
@@ -29,7 +28,11 @@ app.include_router(userRouter)
 
 # root 읽기
 @app.get("/")
-async def read_root():
-    return {"Hello": "World"}    
+async def read_root(request: Request):
+    if request is None:
+        return {"message": "Request is None"}
+
+    domain = request.headers.get("host")
+    return {"message": f"Hello from {domain}"}
 
 
