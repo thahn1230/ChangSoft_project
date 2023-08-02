@@ -676,7 +676,8 @@ const QuantityFilter = (props: any) => {
       })
       .then((response) => {
         let data = JSON.parse(response).map(
-          ({ id, building_id, component_id,sub_building_id, ...rest }: any) => rest
+          ({ id, building_id, component_id, sub_building_id, ...rest }: any) =>
+            rest
         );
         switch (props.selectedType) {
           case "concrete":
@@ -688,7 +689,6 @@ const QuantityFilter = (props: any) => {
                 total_area_above,
                 total_area_below,
                 object_id,
-                floor_id,
                 component_type,
                 section_name,
                 construction_zone,
@@ -702,7 +702,29 @@ const QuantityFilter = (props: any) => {
                 slump,
                 aggregate_strength_concrete_strength_slump,
                 volume,
-              }: any) => ({ 건물유형: sub_building_type, })
+                floor_name,
+              }: any) => ({
+                층이름: floor_name,
+                층건물유형: sub_building_type,
+                건물분류: sub_building_category,
+                건물명: sub_building_name,
+                "총면적(지상)": total_area_above,
+                "총면적(지하)": total_area_below,
+                객체ID: object_id,
+                "구성물 유형": component_type,
+                구역명: section_name,
+                시공존: construction_zone,
+                카테고리: category,
+                "합산 유형": summation_type,
+                블라인딩: blinding,
+                계산식: calculation_formula,
+                재료명: material_name,
+                "굵은 골재": coarse_aggregate,
+                "콘크리트 강도": concrete_strength,
+                슬럼프: slump,
+                "골재-강도-슬럼프": aggregate_strength_concrete_strength_slump,
+                체적: volume,
+              })
             );
 
             break;
@@ -711,7 +733,7 @@ const QuantityFilter = (props: any) => {
           case "rebar":
             break;
         }
-        props.setGridData();
+        props.setGridData(data);
       })
       .catch((error) => console.error("Error:", error));
   };

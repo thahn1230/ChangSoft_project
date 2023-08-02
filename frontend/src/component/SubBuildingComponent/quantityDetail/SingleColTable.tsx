@@ -23,7 +23,7 @@ const SingleColTable = (props: any) => {
                       key={index}
                       field={newKey}
                       title={newKey}
-                      format={newKey.includes("id") ? "" : "{0:n2}"}
+                      format={newKey.includes("ID")||newKey.includes("id") ? "" : "{0:n2}"}
                       headerClassName="custom-header-cell"
                       className={
                         Object.keys(props.data[0])[index] === ""
