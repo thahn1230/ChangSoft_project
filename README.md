@@ -12,6 +12,8 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```powershell
 python -m uvicorn main:app --host 0.0.0.0 --port 8000 --ssl-keyfile key.pem --ssl-certfile cert.pem
 ```
+
+ssl 인증 생성 명령 linux에서
 ```powershell
 openssl req -x509 -nodes -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 ```
