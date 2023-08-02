@@ -48,8 +48,9 @@ main.py 안에 있는 app 모듈을 실행한다.
    ```
    -> ????부분은 WSL 안에서 ifconfig으로 나온 ipv4주소를 입력
 
-5. URL_prefix.json
-"IP_port": "https://localhost:8000" -> ssl인증서 사용시는 https로 접근해야함
+5. URL_prefix.json 에서
+```"IP_port": "https://localhost:8000"```
+ -> ssl인증서 사용시는 https로 접근해야함
    
 
 ---
