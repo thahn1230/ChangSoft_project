@@ -729,6 +729,42 @@ const QuantityFilter = (props: any) => {
 
             break;
           case "formwork":
+            data = data.map(
+              ({
+                sub_building_type,
+                sub_building_category,
+                sub_building_name,
+                total_area_above,
+                total_area_below,
+                object_id,
+                floor_id,
+                component_type,
+                section_name,
+                construction_zone,
+                category,
+                calculation_formula,
+                formwork_position,
+                formwork_type,
+                area,
+              }: any) => ({
+                빌딩유형: sub_building_type,
+                빌딩분류: sub_building_category,
+                빌딩명: sub_building_name,
+                지상총면적: total_area_above,
+                지하총면적: total_area_below,
+                객체ID: object_id,
+                층ID: floor_id,
+                구성요소유형: component_type,
+                섹션명: section_name,
+                시공존: construction_zone,
+                분류: category,
+                계산식: calculation_formula,
+                형틀위치: formwork_position,
+                형틀유형: formwork_type,
+                면적: area,
+              })
+            );            
+            //"빌딩명","분류","구성","건물유형","건물분류","건물명","층유형","층분류","층번호","층이름","시공존","부재","부재명","분류명","값","객체ID","할증","값(할증)","BOQ코드","BOQ명칭","BOQ규격","BOQ단위","산출식","형틀위치","형틀유형","면적"
             break;
           case "rebar":
             break;
