@@ -27,4 +27,34 @@ def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permis
 
 @router.get("/user/profile")
 def get_user_info(token: TokenData = Depends(verify_user)): 
-    return {"name" : token["name"], "email_address" : token["email_address"]}
+    query = f"""
+    SELECT id, name, job_position, company, 
+    email_address, phone_number, user_type 
+    FROM user_information
+    WHERE id = "{token["id"]}"
+    """
+    
+    user_df = pd.read_sql(query, engine)
+    
+    id = user_df["id"].iloc[0]
+    name = user_df["name"].iloc[0]
+    job_position = user_df["job_position"].iloc[0]
+    company = user_df["company"].iloc[0]
+    email_address = user_df["email_address"].iloc[0]
+    phone_number = user_df["phone_number"].iloc[0]
+    user_type = user_df["user_type"].iloc[0]
+    
+    return {"id" : id,
+            "name" : name,
+            "job_position" : job_position,
+            "company" : company,
+            "email_address" : email_address,
+            "phone_number" : phone_number,
+            "user_type" : user_type,
+            }
+    
+    
+@router.post("/user/change_info")
+async def change_user_info(params: dict, token: TokenData = Depends(verify_user)):
+    print(params)
+    return True

@@ -110,6 +110,9 @@ interface ComponentTypeI {
 }
 //buildinginfo랑 setgriddata를 props로
 const QuantityFilter = (props: any) => {
+  const [originalSubBuildingList, setOriginalSubBuildingList] = useState<
+    SubBuildingI[]
+  >([]);
   const [subBuildingList, setSubBuildingList] = useState<SubBuildingI[]>([]);
   const [selectedSubBuildingList, setSelectedSubBuildingList] = useState<
     SubBuildingI[]
@@ -136,7 +139,12 @@ const QuantityFilter = (props: any) => {
   const [selectedComponentTypeList, setSelectedComponentTypeList] = useState<
     ComponentTypeI[]
   >([]);
-  const [componentTypeFilter, setComponentTypeFilter] =
+  const [componentTypeFloorFilter, setComponentTypeFloorFilter] =
+    useState<CompositeFilterDescriptor>({
+      logic: "or",
+      filters: [],
+    });
+  const [componentTypeSubBuildingFilter, setComponentTypeSubBuildingFilter] =
     useState<CompositeFilterDescriptor>({
       logic: "or",
       filters: [],
@@ -270,6 +278,13 @@ const QuantityFilter = (props: any) => {
             }, [])
         );
 
+        setOriginalSubBuildingList(
+          JSON.parse(rawData.subBuildingInfo).map((item: any) => ({
+            subBuilding: item.sub_building_name,
+            id: item.id,
+            checked: false,
+          }))
+        );
         setOriginalFloorList(
           JSON.parse(rawData.floorInfo).map((item: any) => ({
             floorName: item.floor_name,
@@ -345,29 +360,29 @@ const QuantityFilter = (props: any) => {
           checked: false,
         },
       ].concat(
-        filterBy(originalComponentTypeList, componentTypeFilter).reduce(
-          (uniqueItems: any[], item: any) => {
-            const existingItem = uniqueItems.find(
-              (uniqueItem) => uniqueItem.componentType === item.componentType
-            );
+        filterBy(
+          filterBy(originalComponentTypeList, componentTypeFloorFilter),
+          componentTypeSubBuildingFilter
+        ).reduce((uniqueItems: any[], item: any) => {
+          const existingItem = uniqueItems.find(
+            (uniqueItem) => uniqueItem.componentType === item.componentType
+          );
 
-            if (!existingItem) {
-              uniqueItems.push({
-                id: item.id,
-                floorId: item.floorId,
-                subBuildingId: item.subBuildingId,
-                componentType: item.componentType,
-                checked: false,
-              });
-            }
+          if (!existingItem) {
+            uniqueItems.push({
+              id: item.id,
+              floorId: item.floorId,
+              subBuildingId: item.subBuildingId,
+              componentType: item.componentType,
+              checked: false,
+            });
+          }
 
-            return uniqueItems;
-          },
-          []
-        )
+          return uniqueItems;
+        }, [])
       )
     );
-  }, [componentTypeFilter]);
+  }, [componentTypeFloorFilter, componentTypeSubBuildingFilter]);
 
   //useEffect(()=>{console.log(filteredFloorList)},[filteredFloorList])
 
@@ -409,26 +424,40 @@ const QuantityFilter = (props: any) => {
   }, [selectedSubBuildingList]);
   useEffect(() => {
     //subbuilding이 선택되면 그에맞게 floor를 설정해주고
-    setComponentTypeFilter({
+    setComponentTypeFloorFilter({
       logic: "or",
       filters: [],
     });
-
+    setComponentTypeSubBuildingFilter({
+      logic: "or",
+      filters: [],
+    });
     //all없어도되는거아닌가
-    let newComponentTypeFilter: CompositeFilterDescriptor = {
+    let newComponentTypeFloorFilter: CompositeFilterDescriptor = {
+      logic: "or",
+      filters: [{ field: "floorId", operator: "eq", value: 0 }],
+    };
+    let newComponentTypeSubBuildingFilter: CompositeFilterDescriptor = {
       logic: "or",
       filters: [{ field: "floorId", operator: "eq", value: 0 }],
     };
 
     for (let item of selectedFloorList) {
-      newComponentTypeFilter.filters.push({
+      newComponentTypeFloorFilter.filters.push({
         field: "floorId",
         operator: "eq",
         value: item.id,
       });
     }
-    setComponentTypeFilter(newComponentTypeFilter);
-
+    for (let item of selectedSubBuildingList) {
+      newComponentTypeSubBuildingFilter.filters.push({
+        field: "subBuildingId",
+        operator: "eq",
+        value: item.id,
+      });
+    }
+    setComponentTypeFloorFilter(newComponentTypeFloorFilter);
+    setComponentTypeSubBuildingFilter(newComponentTypeSubBuildingFilter);
 
     // console.log("filteredFloorList")
     // console.log(filteredFloorList)
@@ -536,7 +565,6 @@ const QuantityFilter = (props: any) => {
     }
   };
   const onNewComponentTypeSelection = (event: MultiSelectTreeChangeEvent) => {
-    
     if (event.items[0] === undefined) {
       setSelectedComponentTypeList(
         getMultiSelectTreeValue(componentTypeList, {
@@ -564,16 +592,128 @@ const QuantityFilter = (props: any) => {
           ...event,
           value: selectedComponentTypeList,
         }).map((item) => {
-          return ({ ...item, checked: true })})
+          return { ...item, checked: true };
+        })
       );
     }
   };
 
-  const getGridData = () => {
-    console.log(selectedSubBuildingList)
-    console.log(selectedFloorList)
-    console.log(selectedComponentTypeList)
-    
+  const getGridData = async () => {
+    let subBuildingInfo: SubBuildingI[] = [];
+    let floorInfo: FloorI[] = [];
+    let componentTypeInfo: ComponentTypeI[] = [];
+
+    selectedSubBuildingList.map((item: SubBuildingI) => {
+      originalSubBuildingList.map((originalItem: SubBuildingI) => {
+        if (originalItem.subBuilding === item.subBuilding)
+          subBuildingInfo.push(originalItem);
+      });
+    });
+    const selectedSubBuildingIds = subBuildingInfo.map((item) => item.id);
+
+    selectedFloorList.map((item: FloorI) => {
+      originalFloorList.map((originalItem: FloorI) => {
+        if (
+          originalItem.floorName === item.floorName &&
+          selectedSubBuildingIds.includes(originalItem.subBuildingId)
+        )
+          floorInfo.push(originalItem);
+      });
+    });
+    const selectedFloorIds = floorInfo.map((item) => item.id);
+
+    selectedComponentTypeList.map((item: ComponentTypeI) => {
+      originalComponentTypeList.map((originalItem: ComponentTypeI) => {
+        if (
+          originalItem.componentType === item.componentType &&
+          selectedSubBuildingIds.includes(originalItem.subBuildingId) &&
+          selectedFloorIds.includes(originalItem.floorId)
+        )
+          componentTypeInfo.push(originalItem);
+      });
+    });
+
+    const subBuildingInfo_noId = subBuildingInfo.map(
+      ({ checked, ...rest }) => rest
+    );
+    const floorInfo_noId = floorInfo.map(({ checked, ...rest }) => rest);
+    const componentTypeInfo_noId = componentTypeInfo.map(
+      ({ id, checked, ...rest }) => rest
+    );
+    const info = {
+      subBuildingList: subBuildingInfo_noId,
+      floorList: floorInfo_noId,
+      componentTypeList: componentTypeInfo_noId,
+      type: props.selectedType,
+      buildingId: props.buildingInfo.id,
+    };
+
+    const response = await fetch(
+      urlPrefix.IP_port + "/sub_building/component_info",
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ info }),
+      }
+    );
+
+    fetch(urlPrefix.IP_port + "/sub_building/component_info", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ info }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((response) => {
+        let data = JSON.parse(response).map(
+          ({ id, building_id, component_id,sub_building_id, ...rest }: any) => rest
+        );
+        switch (props.selectedType) {
+          case "concrete":
+            data = data.map(
+              ({
+                sub_building_type,
+                sub_building_category,
+                sub_building_name,
+                total_area_above,
+                total_area_below,
+                object_id,
+                floor_id,
+                component_type,
+                section_name,
+                construction_zone,
+                category,
+                summation_type,
+                blinding,
+                calculation_formula,
+                material_name,
+                coarse_aggregate,
+                concrete_strength,
+                slump,
+                aggregate_strength_concrete_strength_slump,
+                volume,
+              }: any) => ({ 건물유형: sub_building_type, })
+            );
+
+            break;
+          case "formwork":
+            break;
+          case "rebar":
+            break;
+        }
+        props.setGridData();
+      })
+      .catch((error) => console.error("Error:", error));
   };
 
   return (

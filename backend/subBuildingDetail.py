@@ -539,12 +539,15 @@ async def get_quantity_list(building_id: int):
     """
     
     component_query = f"""
-        SELECT floor_id, sub_building_id, component_type FROM component as c
+        SELECT @index := @index + 1 AS id, sub.*
+        FROM
+        (SELECT floor_id, sub_building_id, component_type FROM component as c
         JOIN sub_building as s ON s.id = c.sub_building_id
         JOIN floor as f ON f.id = c.floor_id
         JOIN building as b ON b.id = f.building_id
-        WHERE b.id = 1
-        GROUP BY floor_id, sub_building_id, component_type
+        WHERE b.id = {building_id}
+        GROUP BY floor_id, sub_building_id, component_type) as sub,
+        (SELECT @index := 0) AS idx
 
     """
     
@@ -560,3 +563,33 @@ async def get_quantity_list(building_id: int):
         "componentInfo": component_df.to_json(force_ascii=False, orient="records"),
         } 
     )
+    
+# 피봇 그리드
+@router.post("/sub_building/component_info")
+async def get_component_info(params: dict):
+    sub_building_list = params["info"]["subBuildingList"]
+    floor_list = params["info"]["floorList"]
+    component_list = params["info"]["componentTypeList"]
+    conformreb = params["info"]["type"]
+    
+    sub_building_ids = str([item["id"] for item in sub_building_list])
+    sub_building_ids = "("+  sub_building_ids[1:len(sub_building_ids) - 1] +")"
+    
+    floor_ids = str([item["id"] for item in floor_list])
+    floor_ids = "("+  floor_ids[1:len(floor_ids) - 1] +")"
+    
+    component_names = str([item["componentType"] for item in component_list])
+    component_names = "("+  component_names[1:len(component_names) - 1] +")"
+    
+    query = f"""
+        SELECT * FROM sub_building as s
+        JOIN component ON component.sub_building_id = s.id
+        JOIN {conformreb} ON {conformreb}.component_id = component.id
+        WHERE component.sub_building_id IN {sub_building_ids}
+        AND component.floor_id IN {floor_ids}
+        AND component.component_type IN {component_names}
+    """
+    
+    data_df = pd.read_sql(query, engine)
+    
+    return JSONResponse(data_df.to_json(force_ascii=False, orient="records"))
