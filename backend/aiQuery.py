@@ -26,7 +26,8 @@ from enum import Enum
 from sqlalchemy import text
 from dbAccess import create_db_connection
 
-from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey, plotly_data_example
+from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey
+from insight import get_insight_1, get_insight_2, get_insight_3, get_insight_4, get_insight_5, get_insight_6
 
 class Role(Enum):
     System = "system"
@@ -47,7 +48,7 @@ router = APIRouter()
 engine = create_db_connection()
 connection = engine.connect()
 
-font_location = "Others/malgun" # For Windows
+font_location = "C:\\GitRepos\\BuilderHubDB\\backend\\others\\NanumGothicLight.ttf"   # For Windows , 맑은 고딕
 font_name = fm.FontProperties(fname=font_location).get_name()
 plt.rc('font', family=font_name)
 
@@ -55,13 +56,44 @@ pymysql.install_as_MySQLdb()
 
 openai.api_key = APIkey
 
-stackedMessage = []
+final_answer:str = ""
+stackedMessage = [Message(Role.System, """ Imports : {imports},
+    code_condition : {code_condition},
+    db_schema : {db_schema},
+    db_explanation: {db_explanation},
+    db_query_example : {db_query_example}
+    dictionary : {pron_dict}
+    """)]
 
 class Query(BaseModel):
     query: str
 
 @router.post("/query")
 async def execute_query(query: Query): 
+
+    #explanation = generate_explanation_byplot(plotly_data_example)
+    mode = query.query[0:9]
+    if(mode == "Insight 1"):
+        plot_data = get_insight_1("[2, 3, 4, 5]")
+        return generate_explanation_byplot(plot_data)
+    elif(mode == "Insight 2"):
+        plot_data = get_insight_2("[2, 3, 4, 5]")
+        return generate_explanation_byplot(plot_data)
+    elif(mode == "Insight 3"):
+        plot_data = get_insight_3("[2, 3, 4, 5]")
+        return generate_explanation_byplot(plot_data)
+    elif(mode == "Insight 4"):
+        plot_data = get_insight_4("[\"우미건설\", \"계룡건설\", \"동부건설\",\"신세계건설\"]")
+        return generate_explanation_byplot(plot_data)
+    elif(mode == "Insight 5"):
+        plot_data = get_insight_5("[5]")
+        return generate_explanation_byplot(plot_data)
+    elif(mode == "Insight 6"):
+        plot_data = get_insight_6("[5, 14]")
+        return generate_explanation_byplot(plot_data)
+        
+
+    stackedMessage.append(Message(Role.User, query.query))
     pron_dict = prepare_pronoun_dictionary(query.query)
     code, error = process_prompt(query.query, pron_dict)
     #response = send_prompt(prompt)
@@ -83,12 +115,15 @@ async def execute_query(query: Query):
         
         code = correct_code(code, pron_dict, error)
         retry_count += 1
-    
-    print("answer: ", answer)
-    if("{" in answer):
-        return answer
-    return prepare_answer(query.query, answer, error)
 
+    if("{" in answer):
+        prepared_answer = answer
+    else: prepared_answer = prepare_answer(query.query, answer, error)
+
+    # stackedMessage.append(Message(Role.Assistant, ""))
+    print("stackedMessage: ", stackedMessage)
+
+    return prepared_answer
     # 4. Return debug info and graph
     #return {"debugInfo": response, "exception":exception, "graph": fig_url, "graphExp": explanation}
 
@@ -102,9 +137,11 @@ def prepare_answer(query, answer, error):
     """  
     system_prompt = f""" 
     """
+    assistant_prompt = f""" 
+    """
 
-    message = system_prompt + "\n\n" + prompt # gpt-3.5 한정
-    final_answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    # message = system_prompt + "\n\n" + prompt # gpt-3.5 한정
+    final_answer = ask_gpt(stackedMessage)
     
     return final_answer
 
@@ -122,18 +159,15 @@ def correct_code(code, pron_dict, error):
     db_explanation: {db_explanation},
     db_query_example : {db_query_example}
     dictionary : {pron_dict},
-    plotyly_data_example: {plotly_data_example}
     """
-
-    correct_code = ask_gpt(system_prompt + "\n\n" + prompt)
+    correct_code = ask_gpt(stackedMessage)
     
     prompt =f"""You will be provided with a text string delimited by triple quotes.
     Extract only the Python code part from the string, and if there is a syntax error, correct it. When you answer, Never add additional words like 'Here it is' or 'I have modified ~', etc. Only the code. Don't wrap it with any quotes either.
 
         ```{correct_code}```
     """  
-    system_prompt = ""
-    correct_code = ask_gpt(system_prompt + "\n\n" + prompt)
+    correct_code = ask_gpt(stackedMessage)
 
     return correct_code
 
@@ -144,7 +178,7 @@ def send_prompt(prompt: str) -> str:
     messages=[
         {"role": "system", "content": "You are a helpful python data scientist."},
         {"role": "user", "content": prompt},
-        {"role": "assistant", "content": stackedMessage},
+        {"role": "assistant", "content": final_answer},
     ]
     )
 
@@ -183,8 +217,7 @@ def process_prompt(question: str, pron_dict : str) -> str:
         db_explanation: {db_explanation},
         dictionary : {pron_dict},
     """
-
-    answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    answer = ask_gpt(stackedMessage)
     answer = json.loads(answer)
     if str.lower(answer['answer']).strip() == 'no':
         return "", answer['reason']
@@ -208,14 +241,14 @@ def process_prompt(question: str, pron_dict : str) -> str:
         db_query_example : {db_query_example},        
         dictionary : {pron_dict},
         """
-    answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    answer = ask_gpt(stackedMessage)
 
     prompt =f"""다음 스트링에서 python code 부분만 추출한다음, 문법적인 오류가 있다면 수정해서 줘. '여기 있습니다' 또는 '~를 수정했습니다' 같은 추가적인 말은 절대 붙이지마. 오직 코드만. '''등으로 감싸지도 마.
 
         ```{answer}```
     """  
-    system_prompt = ""
-    code = ask_gpt(system_prompt + "\n\n" + prompt)
+    system_prompt = ""    
+    code = ask_gpt(stackedMessage)
         
     
     return code, ""
@@ -237,7 +270,7 @@ def prepare_pronoun_dictionary(question: str):
     
     system_prompt = f"""
     """
-    answer = ask_gpt(system_prompt + "\n\n" + prompt)
+    answer = ask_gpt(stackedMessage)
     pro_dict = json.loads(answer)
 
     return pro_dict
@@ -312,3 +345,29 @@ def execute_python(string_python: str) -> Any:
     else:
         answer = local_vars.get('answer')
         return answer, ""
+
+# return {"plot" : plot_data, "explanation" : explanation}
+def generate_explanation_byplot(plot_data: str):
+    answer = []
+    prompt = """give me the 3 line paragraph that explains the data of this plot graph in korean. Especially what the data implies. That is, consider various aspects such as efficiency to compare those. You have to explain it to the manager of the construction company."""
+    
+    plot_data_json = json.loads(plot_data)
+    #print(plot_data_json[1])
+    for i in range (0,len(plot_data_json)):
+        response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-16k-0613",
+        messages=[{
+            "role" : "system",
+            "content" : prompt
+        },
+        {
+            "role" : "user",
+            "content" : plot_data
+        }],
+        temperature=0.2
+        )
+        explanation = response['choices'][0]['message']['content']
+
+        answer.append({"plot" : plot_data, "explanation" : explanation})
+    # print(answer)
+    return answer

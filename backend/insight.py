@@ -28,7 +28,7 @@ from plotly.subplots import make_subplots
 router = APIRouter()
 engine = create_db_connection()
 
-font_location = "./Others/malgun"  # For Windows , 맑은 고딕
+font_location = "C:\\GitRepos\\BuilderHubDB\\backend\\others\\NanumGothicLight.ttf"   # For Windows , 맑은 고딕
 font_name = fm.FontProperties(fname=font_location).get_name()
 plt.rc("font", family=font_name)
 
