@@ -74,16 +74,16 @@ async def execute_query(query: Query):
     #explanation = generate_explanation_byplot(plotly_data_example)
     mode = query.query[0:9]
     if(mode == "Insight 1"):
-        plot_data = get_insight_1("[2, 3, 4, 5]")
+        plot_data = get_insight_1("[5, 6, 7]")
         return generate_explanation_byplot(plot_data)
     elif(mode == "Insight 2"):
-        plot_data = get_insight_2("[2, 3, 4, 5]")
+        plot_data = get_insight_2("[5, 6, 7]")
         return generate_explanation_byplot(plot_data)
     elif(mode == "Insight 3"):
-        plot_data = get_insight_3("[2, 3, 4, 5]")
+        plot_data = get_insight_3("[5, 6, 7]")
         return generate_explanation_byplot(plot_data)
     elif(mode == "Insight 4"):
-        plot_data = get_insight_4("[\"우미건설\", \"계룡건설\", \"동부건설\",\"신세계건설\"]")
+        plot_data = get_insight_4("[\"우미건설\", \"동부건설\",\"신세계건설\"]")
         return generate_explanation_byplot(plot_data)
     elif(mode == "Insight 5"):
         plot_data = get_insight_5("[5]")

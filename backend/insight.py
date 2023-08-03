@@ -304,7 +304,7 @@ def get_insight_1(project_ids_str: str):
         yaxis_title="빈도(빌딩수)",
         bargap=0.1,  # gap between bars of adjacent location coordinates
         autosize=False,
-        width=1200,
+        width=1000,
         height=720,
     )
 
@@ -350,7 +350,7 @@ def get_insight_1(project_ids_str: str):
         xaxis=dict(title="프로젝트명"),
         yaxis=dict(title="콘크리트 볼륨(㎥)당 철근량(ton)의 평균값"),
         autosize=False,
-        width=1200,
+        width=1000,
         height=720,
         margin=go.layout.Margin(
             l=50,
