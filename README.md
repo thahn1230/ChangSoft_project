@@ -30,6 +30,12 @@ main.py 안에 있는 app 모듈을 실행한다.
 
 - 이때 각자 컴퓨터에서 할당 받은 ip주소를 가지고 다른 컴퓨터에서 접속을 시도하려면 localhost에서의 방화벽을 해제시켜야 합니다
 
+### gunicorn을 사용하여 멀티 프로세싱을 활용하는 방법
+gunicorn을 통해서 uvicorn을 띄운다. 단 linux에서만 가능함 
+```
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000
+```
+
 <WSL2 사용시 포트포워딩 하는법>
 
 1. 윈도우 또는 WSL 재부팅시
