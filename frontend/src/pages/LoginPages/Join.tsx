@@ -9,12 +9,56 @@ import { useUserContext } from "./../../UserInfoContext";
 
 const JoinBodyWrapper = styled.div`
   width: 400px;
-  height: 600px;
+  height: 700px;
+  max-height: 80vh;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 4px;
 
-  .idField,
+  .idField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .labelField {
+      width: 350px;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .input-btn-field {
+      display: flex;
+
+      .inputField {
+        margin-top: 10px;
+        margin-right: 25px;
+        width: 250px;
+        height: 35px;
+
+        &:focus {
+          border: 3px solid rgba(0, 0, 255, 0.1);
+        }
+      }
+
+      .duplicateCheckBtn {
+        width: 75px;
+        height: 35px;
+        margin-top: 10px;
+        justify-content: center;
+        color: white;
+        background-color: #1e90ff;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+
+        &:hover {
+          cursor: pointer;
+          background-color: skyblue;
+        }
+      }
+    }
+  }
+
   .pwField,
   .nameField,
   .emailField {
@@ -57,7 +101,7 @@ const JoinBodyWrapper = styled.div`
 
       .phoneInputField {
         margin-top: 10px;
-        width: 250px;
+        width: 350px;
         height: 35px;
 
         &:focus {
@@ -137,19 +181,6 @@ const JoinBodyWrapper = styled.div`
       }
     }
   }
-
-  .duplicateCheckBtn {
-    color: white;
-    background-color: #1e90ff;
-    border: none;
-    border-radius: 4px;
-    outline: none;
-
-    &:hover {
-      cursor: pointer;
-      background-color: skyblue;
-    }
-  }
 `;
 
 //이거에 맞게 입력 form 추가해야함
@@ -209,6 +240,7 @@ const Join = (props: any) => {
 
     if (isInt && numLength) {
       setPhoneVal(true);
+      setJoinValue({ ...joinValue, email_address: data.value });
     } else {
       setPhoneVal(false);
     }
@@ -229,14 +261,12 @@ const Join = (props: any) => {
         await {
           ...joinValue,
           password: hashedPassword,
-          company: "창소프트아이앤아이",
           user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
         password: hashedPassword,
-        company: "창소프트아이앤아이",
         user_type: "User",
       };
 
@@ -307,8 +337,16 @@ const Join = (props: any) => {
     setJoinValue({ ...joinValue, password: e.value });
   };
 
+  const onCompanyChange = (e: any) => {
+    setJoinValue({ ...joinValue, company: e.value });
+  };
+
   const onNameChange = (e: any) => {
     setJoinValue({ ...joinValue, name: e.value });
+  };
+
+  const onJobPositionChange = (e: any) => {
+    setJoinValue({ ...joinValue, job_position: e.value });
   };
 
   const emailCheck = (email: any) => {
@@ -326,17 +364,18 @@ const Join = (props: any) => {
 
     if (!isValidEmail) return;
 
-    emailDuplicate(e.value);
+    // emailDuplicate(e.value);
   };
 
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
+    setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
-  const onPhoneConfirm = () => {
-    setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
-  };
+  // const onPhoneConfirm = () => {
+  //   setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
+  // };
 
   const onPrev = () => {
     history("/");
@@ -355,12 +394,8 @@ const Join = (props: any) => {
       alert("이메일을 입력하지 않았습니다.");
       return;
     }
-    if (!phoneVal) {
-      alert("휴대폰 번호를 입력하지 않았습니다.");
-      return;
-    }
 
-    if (phoneVal && emailVal) {
+    if (emailVal) {
       let signUpResult = await signup(joinValue);
 
       if (signUpResult) {
@@ -370,7 +405,11 @@ const Join = (props: any) => {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
       }
     } else {
-      if (!phoneVal) {
+      if (
+        joinValue.phone_number?.length &&
+        joinValue.phone_number?.length > 0 &&
+        !phoneVal
+      ) {
         alert("전화번호 형식이 올바르지 않습니다.");
       } else if (!emailVal) {
         alert("이메일 형식이 올바르지 않습니다.");
@@ -384,18 +423,20 @@ const Join = (props: any) => {
     <JoinBodyWrapper>
       <div className="idField">
         <div className="labelField">아이디</div>
-        <Input
-          className="inputField"
-          type="text"
-          placeholder="사용하실 아이디를 입력해주세요"
-          onChange={onIdChange}
-        ></Input>
-        <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
-          중복확인
-        </button>
+        <div className="input-btn-field">
+          <Input
+            className="inputField"
+            type="text"
+            placeholder="사용하실 아이디를 입력해주세요"
+            onChange={onIdChange}
+          ></Input>
+          <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
+            중복확인
+          </button>
+        </div>
       </div>
       <div className="pwField">
-        <div className="labelField">비밀번호</div>
+        <div className="labelField">비밀번호 (32글자 이내로 작성해주세요)</div>
         <Input
           className="inputField"
           type="password"
@@ -422,13 +463,31 @@ const Join = (props: any) => {
         ></Input>
         {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
       </div>
+      <div className="emailField">
+        <div className="labelField">회사</div>
+        <Input
+          className="inputField"
+          type="text"
+          placeholder="회사를 입력해주세요"
+          onChange={onCompanyChange}
+        ></Input>
+      </div>
+      <div className="emailField">
+        <div className="labelField">직위</div>
+        <Input
+          className="inputField"
+          type="text"
+          placeholder="직위를 입력해주세요(선택사항입니다)"
+          onChange={onJobPositionChange}
+        ></Input>
+      </div>
       <div className="phoneField">
         <div className="labelField">휴대전화 번호</div>
         <div className="phoneConfirm">
           <Input
             className="phoneInputField"
             type="text"
-            placeholder="예) 010-1111-1111, 01012341234"
+            placeholder="예) 010-1111-1111, 01012341234(선택사항입니다)"
             onChange={onPhoneChange}
           ></Input>
           {/* <button className='confirmBtn' onClick={onPhoneConfirm}>

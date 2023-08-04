@@ -1,8 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 
 from dbAccess import create_db_connection
+from user import verify_user, TokenData
 
 router = APIRouter()
 engine = create_db_connection()
@@ -10,7 +11,7 @@ engine = create_db_connection()
 # 프로젝트 내부에 있는 attribute 값들을 .json파일로 보내기
 # 여러개의 .json을 보낼때는 "," 로 연결해주면 됨. ex) id,total_area, ...
 @router.get("/project/{project_attribute}")
-async def get_project_attribute(project_attribute: str):
+async def get_project_attribute(project_attribute: str, token: TokenData = Depends(verify_user)):
     valid_check_query = """
         SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS

@@ -582,9 +582,10 @@ async def get_component_info(params: dict):
     component_names = "("+  component_names[1:len(component_names) - 1] +")"
     
     query = f"""
-        SELECT * FROM sub_building as s
+        SELECT s.*, component.*, {conformreb}.*, floor_name FROM sub_building as s
         JOIN component ON component.sub_building_id = s.id
         JOIN {conformreb} ON {conformreb}.component_id = component.id
+        JOIN floor ON floor.id = component.floor_id
         WHERE component.sub_building_id IN {sub_building_ids}
         AND component.floor_id IN {floor_ids}
         AND component.component_type IN {component_names}

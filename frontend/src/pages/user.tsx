@@ -127,6 +127,20 @@ const JoinBodyWrapper = styled.div`
     }
 
     .joinBtn {
+      margin-right: 1rem;
+      color: white;
+      background-color: #1e90ff;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: skyblue;
+      }
+    }
+
+    .changePwBtn {
       color: white;
       background-color: #1e90ff;
       border: none;
@@ -152,6 +166,75 @@ const JoinBodyWrapper = styled.div`
       background-color: skyblue;
     }
   }
+`;
+const ChangePwBodyWrapper = styled.div`
+  width: 400px;
+  height: 550px;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+
+  .current-password-field,
+  .new-password-field,
+  .confirm-password-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .labelField {
+      width: 350px;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .inputField {
+      margin-top: 1rem !important;
+      width: 350px;
+      height: 35px;
+
+      &:focus {
+        border: 3px solid rgba(0, 0, 255, 0.1);
+      }
+    }
+  }
+
+  .btns {
+    display: flex;
+    margin-top: 3rem;
+    justify-content: center;
+
+    .backBtn,
+    .changePwBtn {
+      mnax-width: 100px;
+      height: 30px;
+    }
+
+    .backBtn {
+      margin-right: 1rem;
+      color: white;
+      background-color: darkgray;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: gray;
+      }
+    }
+
+    .changePwBtn {
+      color: white;
+      background-color: #1e90ff;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: skyblue;
+      }
+    }
 `;
 
 //이거에 맞게 입력 form 추가해야함
@@ -189,6 +272,10 @@ const User = (props: any) => {
   const [IsloginIdValid, setIsloginIdValid] = useState(true);
   const [IsEmailValid, setEmailValid] = useState(true);
 
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
   const [joinValue, setJoinValue] = useState<JoinValueI>({
     id: "",
     password: "",
@@ -202,28 +289,9 @@ const User = (props: any) => {
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   fetch(urlPrefix.IP_port + "/user/profile", {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log(data)
-  //     })
-  //     .catch((error) => console.error("Error:", error));
-  // }, []); backend랑 상의해서 user 정보들 받아오고 수정할 수 있도록 바꿔야 함.
 
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
@@ -251,16 +319,10 @@ const User = (props: any) => {
       setJoinValue(
         await {
           ...joinValue,
-          // password: hashedPassword,
-          company: "창소프트아이앤아이",
-          user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
-        // password: hashedPassword,
-        company: "창소프트아이앤아이",
-        user_type: "User",
       };
 
       //params는 어떻게씀
@@ -269,14 +331,15 @@ const User = (props: any) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ join_info: updatedJoinValue }),
       });
 
-      const signupData: UserInfoI[] = await response.json();
-      console.log(signupData);
-      if (signupData.length !== 0) {
+      const signupData: boolean = await response.json();
+      if (signupData) {
         //회원가입 성공
+        window.location.reload();
         return true;
       } else {
         //회원가입 실패
@@ -288,47 +351,43 @@ const User = (props: any) => {
     }
   };
 
-  // const checkIdDuplicate = async () => {
-  //   try {
-  //     const response = await fetch(`${urlPrefix.IP_port}/sign_up/check_id`, {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ id_info: { id: joinValue.id } }),
-  //     });
+  const changePw = async (newPassword: string, currentPassword: string) => {
+    try {
+      const hashedPassword = await sha256(currentPassword);
+      const hashedNewPassword = await sha256(newPassword);
 
-  //     //console.log(await response.json())
-  //     //const signupData: UserInfoI[] = JSON.parse(await response.json());
-  //     const isIdValid = (await response.json()).result;
+      const updatedPwValue = {
+        current_pw: hashedPassword,
+        changed_pw: hashedNewPassword,
+      };
 
-  //     if (isIdValid) {
-  //       //중복아님
-  //       alert("사용 가능한 아이디입니다.");
-  //       setIsIdDuplicate(false);
-  //     } else {
-  //       //중복임
-  //       alert("중복된 아이디입니다. 다른 아이디를 입력해주세요.");
-  //       setIsIdDuplicate(true);
-  //     }
-  //     return;
-  //   } catch (error) {
-  //     console.error("Error occurred during login:", error);
-  //     return;
-  //   }
-  // };
+      //params는 어떻게씀
+      const response = await fetch(`${urlPrefix.IP_port}/user/change_pw`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ pw_info: updatedPwValue }),
+      });
 
-  // 이거구현해야됨
+      const changePwData: boolean = await response.json();
+      console.log(changePwData);
+      if (changePwData) {
+        //비밀번호 변경 성공
+        return true;
+      } else {
+        //비밀번호 변경 실패
+        return false;
+      }
+    } catch (error) {
+      console.error("Error occurred during change pw:", error);
+      return false;
+    }
+  };
+
   const emailDuplicate = async (inputEmail: string) => {};
-
-  const onIdChange = (e: any) => {
-    setJoinValue({ ...joinValue, id: e.value });
-  };
-
-  const onPwChange = (e: any) => {
-    setJoinValue({ ...joinValue, password: e.value });
-  };
 
   const onNameChange = (e: any) => {
     setJoinValue({ ...joinValue, name: e.value });
@@ -374,6 +433,53 @@ const User = (props: any) => {
     history("/");
   };
 
+  const handlePasswordChange = async () => {
+    // Validate if the new password and confirm new password match
+
+    if (newPassword.length > 32) {
+      alert("password는 32글자 이내로 작성해주세요")
+    }
+    if (newPassword === confirmNewPassword) {
+      let changePwResult = await changePw(newPassword, currentPassword);
+
+      if (changePwResult) {
+        alert("변경 완료되었습니다.");
+        backToHome();
+      } else {
+        alert("잘못 된 값이 입력되었습니다. 확인하시기 바랍니다.");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+        return;
+      }
+    } else {
+      alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+      return;
+    }
+
+    // Close the modal
+    setModalOpen(false);
+
+    // Clear the password fields
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+  };
+
+  const closeModal = () => {
+    // Close the modal without changing the password
+    setModalOpen(false);
+
+    // Clear the password fields
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+  };
+
   const onSubmit = async () => {
     // if (!joinValue.id || !joinValue.password) {
     //   alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
@@ -407,8 +513,14 @@ const User = (props: any) => {
       if (signUpResult) {
         alert("변경 완료되었습니다.");
         backToHome();
+      } else {
+        alert("오류가 발생되었습니다.");
       }
     }
+  };
+
+  const onChangePW = async () => {
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -443,119 +555,174 @@ const User = (props: any) => {
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        width: "100%",
-        height: "100vh",
-        backgroundColor: "whitesmoke",
-        flexFlow: "column",
-        WebkitBoxPack: "center",
-        justifyContent: "center",
-        WebkitBoxAlign: "center",
-        alignItems: "center",
-      }}
-    >
-      <div style={{ width: "350px", fontWeight: "bold", marginTop: "1rem", marginBottom: "1rem" }}>
-        내 정보
-      </div>
-      <JoinBodyWrapper>
-        {/* <div className="idField">
-        <div className="labelField">아이디</div>
-        <Input
-          className="inputField"
-          type="text"
-          placeholder="사용하실 아이디를 입력해주세요"
-          onChange={onIdChange}
-        ></Input>
-        <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
-          중복확인
-        </button>
-      </div>
-      <div className="pwField">
-        <div className="labelField">비밀번호</div>
-        <Input
-          className="inputField"
-          type="password"
-          placeholder="영문+숫자 조합을 이용해주세요"
-          onChange={onPwChange}
-        ></Input>
-      </div> */}
-        <div className="nameField">
-          <div className="labelField">이름</div>
-          <Input
-            className="inputField"
-            type="text"
-            value={joinValue.name}
-            onChange={onNameChange}
-          ></Input>
-        </div>
-        <div className="emailField">
-          <div className="labelField">이메일</div>
-          <Input
-            className="inputField"
-            type="text"
-            value={joinValue.email_address}
-            onChange={onEmailChange}
-          ></Input>
-          {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
-        </div>
-        <div className="phoneField">
-          <div className="labelField">휴대전화 번호</div>
-          <div className="phoneConfirm">
-            {joinValue.phone_number ? (
-              <Input
-                className="phoneInputField"
-                type="text"
-                value={joinValue.phone_number}
-                onChange={onPhoneChange}
-              ></Input>
-            ) : (
-              <Input
-                className="phoneInputField"
-                type="text"
-                placeholder="예) 010-1111-1111, 01012341234"
-                onChange={onPhoneChange}
-              ></Input>
-            )}
+    <div>
+      {!isModalOpen ? (
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "90vh",
+            backgroundColor: "whitesmoke",
+            flexFlow: "column",
+            WebkitBoxPack: "center",
+            justifyContent: "center",
+            WebkitBoxAlign: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "350px",
+              fontWeight: "bold",
+              marginTop: "1rem",
+              marginBottom: "1rem",
+            }}
+          >
+            내 정보
           </div>
+          <JoinBodyWrapper>
+            <div className="nameField">
+              <div className="labelField">이름</div>
+              <Input
+                className="inputField"
+                type="text"
+                value={joinValue.name}
+                onChange={onNameChange}
+              ></Input>
+            </div>
+            <div className="emailField">
+              <div className="labelField">이메일</div>
+              <Input
+                className="inputField"
+                type="text"
+                value={joinValue.email_address}
+                onChange={onEmailChange}
+              ></Input>
+              {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
+            </div>
+            <div className="phoneField">
+              <div className="labelField">휴대전화 번호</div>
+              <div className="phoneConfirm">
+                {joinValue.phone_number ? (
+                  <Input
+                    className="phoneInputField"
+                    type="text"
+                    value={joinValue.phone_number}
+                    onChange={onPhoneChange}
+                  ></Input>
+                ) : (
+                  <Input
+                    className="phoneInputField"
+                    type="text"
+                    placeholder="예) 010-1111-1111, 01012341234"
+                    onChange={onPhoneChange}
+                  ></Input>
+                )}
+              </div>
+            </div>
+            <div className="cpmpanyField">
+              <div className="labelField">회사</div>
+              <Input
+                className="inputField"
+                type="text"
+                value={joinValue.company}
+                onChange={onCompanyChange}
+              ></Input>
+            </div>
+            <div className="jobPositionField">
+              <div className="labelField">직위</div>
+              {joinValue.job_position ? (
+                <Input
+                  className="inputField"
+                  type="text"
+                  value={joinValue.job_position}
+                  onChange={onJobPositionChange}
+                ></Input>
+              ) : (
+                <Input
+                  className="inputField"
+                  type="text"
+                  placeholder="예) 대리, 사원"
+                  onChange={onJobPositionChange}
+                ></Input>
+              )}
+            </div>
+            <div className="btns">
+              <button className="backBtn" onClick={backToHome}>
+                취소
+              </button>
+              <button className="joinBtn" onClick={onSubmit}>
+                변경하기
+              </button>
+              <>
+                <button className="changePwBtn" onClick={onChangePW}>
+                  비밀번호 변경하기
+                </button>
+              </>
+            </div>
+          </JoinBodyWrapper>
         </div>
-        <div className="cpmpanyField">
-          <div className="labelField">회사</div>
-          <Input
-            className="inputField"
-            type="text"
-            value={joinValue.company}
-            onChange={onCompanyChange}
-          ></Input>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            height: "90vh",
+            backgroundColor: "whitesmoke",
+            flexFlow: "column",
+            WebkitBoxPack: "center",
+            justifyContent: "center",
+            WebkitBoxAlign: "center",
+            alignItems: "center",
+          }}
+        >
+          <ChangePwBodyWrapper>
+            <div className="modal">
+              <div className="modal-content">
+                <h2>비밀번호 변경</h2>
+                <div className="current-password-field">
+                  <div className="labelField">현재 비밀번호</div>
+                  <Input
+                    className="inputField"
+                    placeholder="현재 비밀번호를 입력해주세요."
+                    type="password"
+                    onChange={(e) => setCurrentPassword(e.value)}
+                  />
+                </div>
+                <div className="new-password-field">
+                  <div className="labelField">새로운 비밀번호</div>
+                  <Input
+                    className="inputField"
+                    type="password"
+                    placeholder="32글자 이내로 작성해주세요."
+                    onChange={(e) => setNewPassword(e.value)}
+                  />
+                </div>
+                <div className="confirm-password-field">
+                  <div className="labelField">새로운 비밀번호 확인</div>
+                  <Input
+                    className="inputField"
+                    type="password"
+                    placeholder="새로운 비밀번호를 다시 입력해주세요."
+                    onChange={(e) => setConfirmNewPassword(e.value)}
+                  />
+                </div>
+                <div className="btns">
+                  <button className="backBtn" onClick={closeModal}>
+                    취소
+                  </button>
+                  <button
+                    className="changePwBtn"
+                    onClick={handlePasswordChange}
+                  >
+                    비밀번호 변경
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ChangePwBodyWrapper>
         </div>
-        <div className="jobPositionField">
-          <div className="labelField">직위</div>
-          {joinValue.job_position ? (
-            <Input
-              className="inputField"
-              type="text"
-              value={joinValue.job_position}
-              onChange={onJobPositionChange}
-            ></Input>
-          ) : (
-            <Input
-              className="inputField"
-              type="text"
-              placeholder="예) 대리, 사원"
-              onChange={onJobPositionChange}
-            ></Input>
-          )}
-        </div>
-        <div className="btns">
-          <button className="backBtn" onClick={backToHome}>
-            취소
-          </button>
-          <button className="joinBtn" onClick={onSubmit}>
-            변경하기
-          </button>
-        </div>
-      </JoinBodyWrapper>
+      )}
     </div>
   );
 };

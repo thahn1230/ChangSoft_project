@@ -55,8 +55,12 @@ export const NavigationLayout = (props: any) => {
   const location = useLocation();
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState("");
+
+  const [userInfo, setUserInfo] = useState<{name:string, email:string}>({name:"login please~", email:""});
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
+
+
   const tokenContext = useTokenContext();
 
   const handleClick = () => {
@@ -75,10 +79,6 @@ export const NavigationLayout = (props: any) => {
     }
   }, [location.pathname]);
 
-  // useEffect(() => {
-  //   if (tokenContext?.token === null) navigate("/");
-  // }, [tokenContext?.token]);
-
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/user/profile", {
       method: "GET",
@@ -94,6 +94,7 @@ export const NavigationLayout = (props: any) => {
         return response.json();
       })
       .then((data) => {
+        //setUserInfo({name :data.name, email: data.email_address})
         setName(data.name);
         setEmailAddress(data.email_address);
       })
