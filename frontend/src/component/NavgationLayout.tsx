@@ -153,7 +153,7 @@ export const NavigationLayout = (props: any) => {
           <div style={getMargin()}></div>
         ) : (
           <div className="user-container" style={getUserContainerStyle()}>
-            <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} />
+            {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
             <h1>
               {name !== null ? name : null}
             </h1>
