@@ -112,8 +112,8 @@ export const NavigationLayout = (props: any) => {
 
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "230px", marginTop:"-262px", zIndex:"100"}
-      : { height: "230px", expanded: `${expanded}`};
+      ? { height: "230px", marginTop:"-262px", zIndex:"100000"}
+      : { height: "0px", expanded: `${expanded}`};
   };
 
   return (
@@ -167,12 +167,12 @@ export const NavigationLayout = (props: any) => {
           </DrawerContent>
         </Drawer>
 
-        {!expanded ? (
+        {/* {!expanded ? (
           <div></div>
         ) : (
           <div className="user-container" style={getUserContainerStyle()}>
             {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
-            <h1>
+            {/* <h1>
               {name !== null ? name : null}
             </h1>
             <div className="user-email" style={{marginTop: "1%", marginBottom: "3%"}}>
@@ -182,7 +182,7 @@ export const NavigationLayout = (props: any) => {
                 Sign Out
               </Button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
