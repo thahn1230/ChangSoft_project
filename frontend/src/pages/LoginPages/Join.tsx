@@ -260,14 +260,12 @@ const Join = (props: any) => {
         await {
           ...joinValue,
           password: hashedPassword,
-          company: "창소프트아이앤아이",
           user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
         password: hashedPassword,
-        company: "창소프트아이앤아이",
         user_type: "User",
       };
 
