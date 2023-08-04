@@ -5,6 +5,7 @@ aiQueryInfo.py
 user.py
 userLogin.py
 userLoginInfo.py
+access.log
 
 Others/
 __pycache__/
