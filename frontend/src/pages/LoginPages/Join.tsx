@@ -9,7 +9,7 @@ import { useUserContext } from "./../../UserInfoContext";
 
 const JoinBodyWrapper = styled.div`
   width: 400px;
-  height: 600px;
+  height: 700px;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 4px;
@@ -240,6 +240,7 @@ const Join = (props: any) => {
 
     if (isInt && numLength) {
       setPhoneVal(true);
+      setJoinValue({ ...joinValue, email_address: data.value })
     } else {
       setPhoneVal(false);
     }
@@ -336,9 +337,17 @@ const Join = (props: any) => {
     setJoinValue({ ...joinValue, password: e.value });
   };
 
+  const onCompanyChange = (e: any) => {
+    setJoinValue({ ...joinValue, company: e.value });
+  };
+
   const onNameChange = (e: any) => {
     setJoinValue({ ...joinValue, name: e.value });
   };
+
+  const onJobPositionChange = (e: any) => {
+    setJoinValue({ ...joinValue, job_position: e.value });
+  }
 
   const emailCheck = (email: any) => {
     var regex =
@@ -361,7 +370,6 @@ const Join = (props: any) => {
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
-    setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
   const onPhoneConfirm = () => {
@@ -385,12 +393,8 @@ const Join = (props: any) => {
       alert("이메일을 입력하지 않았습니다.");
       return;
     }
-    if (!phoneVal) {
-      alert("휴대폰 번호를 입력하지 않았습니다.");
-      return;
-    }
 
-    if (phoneVal && emailVal) {
+    if (emailVal) {
       let signUpResult = await signup(joinValue);
 
       if (signUpResult) {
@@ -400,7 +404,7 @@ const Join = (props: any) => {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
       }
     } else {
-      if (!phoneVal) {
+      if (joinValue.phone_number?.length && joinValue.phone_number?.length > 0 && !phoneVal) {
         alert("전화번호 형식이 올바르지 않습니다.");
       } else if (!emailVal) {
         alert("이메일 형식이 올바르지 않습니다.");
@@ -454,13 +458,31 @@ const Join = (props: any) => {
         ></Input>
         {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
       </div>
+      <div className="emailField">
+        <div className="labelField">회사</div>
+        <Input
+          className="inputField"
+          type="text"
+          placeholder="회사를 입력해주세요"
+          onChange={onCompanyChange}
+        ></Input>
+      </div>
+      <div className="emailField">
+        <div className="labelField">직위</div>
+        <Input
+          className="inputField"
+          type="text"
+          placeholder="직위를 입력해주세요(선택사항입니다)"
+          onChange={onJobPositionChange}
+        ></Input>
+      </div>
       <div className="phoneField">
         <div className="labelField">휴대전화 번호</div>
         <div className="phoneConfirm">
           <Input
             className="phoneInputField"
             type="text"
-            placeholder="예) 010-1111-1111, 01012341234"
+            placeholder="예) 010-1111-1111, 01012341234(선택사항입니다)"
             onChange={onPhoneChange}
           ></Input>
           {/* <button className='confirmBtn' onClick={onPhoneConfirm}>
