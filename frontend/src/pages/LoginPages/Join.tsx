@@ -14,7 +14,51 @@ const JoinBodyWrapper = styled.div`
   border: 1px solid lightgray;
   border-radius: 4px;
 
-  .idField,
+  .idField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .labelField {
+      width: 350px;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+
+    .input-btn-field {
+      
+      display: flex;
+
+      .inputField {
+        margin-top: 10px;
+        margin-right: 25px;
+        width: 250px;
+        height: 35px;
+
+        &:focus {
+          border: 3px solid rgba(0, 0, 255, 0.1);
+        }
+      }
+
+      .duplicateCheckBtn {
+        width: 75px;
+        height: 35px;
+        margin-top: 10px;
+        justify-content: center;
+        color: white;
+        background-color: #1e90ff;
+        border: none;
+        border-radius: 4px;
+        outline: none;
+
+        &:hover {
+          cursor: pointer;
+          background-color: skyblue;
+        }
+      }
+    }
+  }
+
   .pwField,
   .nameField,
   .emailField {
@@ -135,19 +179,6 @@ const JoinBodyWrapper = styled.div`
         cursor: pointer;
         background-color: skyblue;
       }
-    }
-  }
-
-  .duplicateCheckBtn {
-    color: white;
-    background-color: #1e90ff;
-    border: none;
-    border-radius: 4px;
-    outline: none;
-
-    &:hover {
-      cursor: pointer;
-      background-color: skyblue;
     }
   }
 `;
@@ -384,18 +415,20 @@ const Join = (props: any) => {
     <JoinBodyWrapper>
       <div className="idField">
         <div className="labelField">아이디</div>
-        <Input
-          className="inputField"
-          type="text"
-          placeholder="사용하실 아이디를 입력해주세요"
-          onChange={onIdChange}
-        ></Input>
-        <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
-          중복확인
-        </button>
+        <div className="input-btn-field">
+          <Input
+            className="inputField"
+            type="text"
+            placeholder="사용하실 아이디를 입력해주세요"
+            onChange={onIdChange}
+          ></Input>
+          <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
+            중복확인
+          </button>
+        </div>
       </div>
       <div className="pwField">
-        <div className="labelField">비밀번호</div>
+        <div className="labelField">비밀번호 (32글자 이내로 작성해주세요)</div>
         <Input
           className="inputField"
           type="password"

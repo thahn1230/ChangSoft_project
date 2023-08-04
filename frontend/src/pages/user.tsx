@@ -372,9 +372,9 @@ const User = (props: any) => {
         body: JSON.stringify({ pw_info: updatedPwValue }),
       });
 
-      const changPwData: boolean = await response.json();
-      console.log(changPwData);
-      if (changPwData) {
+      const changePwData: boolean = await response.json();
+      console.log(changePwData);
+      if (changePwData) {
         //비밀번호 변경 성공
         return true;
       } else {
@@ -388,14 +388,6 @@ const User = (props: any) => {
   };
 
   const emailDuplicate = async (inputEmail: string) => {};
-
-  const onIdChange = (e: any) => {
-    setJoinValue({ ...joinValue, id: e.value });
-  };
-
-  const onPwChange = (e: any) => {
-    setJoinValue({ ...joinValue, password: e.value });
-  };
 
   const onNameChange = (e: any) => {
     setJoinValue({ ...joinValue, name: e.value });
@@ -444,10 +436,13 @@ const User = (props: any) => {
   const handlePasswordChange = async () => {
     // Validate if the new password and confirm new password match
 
+    if (newPassword.length > 32) {
+      alert("password는 32글자 이내로 작성해주세요")
+    }
     if (newPassword === confirmNewPassword) {
-      let changPwResult = await changePw(newPassword, currentPassword);
+      let changePwResult = await changePw(newPassword, currentPassword);
 
-      if (changPwResult) {
+      if (changePwResult) {
         alert("변경 완료되었습니다.");
         backToHome();
       } else {
@@ -681,6 +676,7 @@ const User = (props: any) => {
                   <div className="labelField">현재 비밀번호</div>
                   <Input
                     className="inputField"
+                    placeholder="예) 현재 비밀번호를 입력해주세요."
                     type="password"
                     onChange={(e) => setCurrentPassword(e.value)}
                   />
@@ -690,6 +686,7 @@ const User = (props: any) => {
                   <Input
                     className="inputField"
                     type="password"
+                    placeholder="예) 32글자 이내로 작성해주세요."
                     onChange={(e) => setNewPassword(e.value)}
                   />
                 </div>
@@ -698,6 +695,7 @@ const User = (props: any) => {
                   <Input
                     className="inputField"
                     type="password"
+                    placeholder="예) 새로운 비밀번호를 다시 입력해주세요."
                     onChange={(e) => setConfirmNewPassword(e.value)}
                   />
                 </div>
