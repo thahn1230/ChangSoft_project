@@ -127,6 +127,20 @@ const JoinBodyWrapper = styled.div`
     }
 
     .joinBtn {
+      margin-right: 1rem;
+      color: white;
+      background-color: #1e90ff;
+      border: none;
+      border-radius: 4px;
+      outline: none;
+
+      &:hover {
+        cursor: pointer;
+        background-color: skyblue;
+      }
+    }
+
+    .changePwBtn {
       color: white;
       background-color: #1e90ff;
       border: none;
@@ -189,6 +203,10 @@ const User = (props: any) => {
   const [IsloginIdValid, setIsloginIdValid] = useState(true);
   const [IsEmailValid, setEmailValid] = useState(true);
 
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
   const [joinValue, setJoinValue] = useState<JoinValueI>({
     id: "",
     password: "",
@@ -202,28 +220,9 @@ const User = (props: any) => {
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
-
-  // useEffect(() => {
-  //   fetch(urlPrefix.IP_port + "/user/profile", {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => {
-  //       if (!response.ok) {
-  //         throw new Error("Network response was not ok");
-  //       }
-  //       return response.json();
-  //     })
-  //     .then((data) => {
-  //       console.log(data)
-  //     })
-  //     .catch((error) => console.error("Error:", error));
-  // }, []); backend랑 상의해서 user 정보들 받아오고 수정할 수 있도록 바꿔야 함.
 
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
@@ -252,15 +251,15 @@ const User = (props: any) => {
         await {
           ...joinValue,
           // password: hashedPassword,
-          company: "창소프트아이앤아이",
-          user_type: "User",
+          // company: "창소프트아이앤아이",
+          // user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
         // password: hashedPassword,
-        company: "창소프트아이앤아이",
-        user_type: "User",
+        // company: "창소프트아이앤아이",
+        // user_type: "User",
       };
 
       //params는 어떻게씀
@@ -269,6 +268,7 @@ const User = (props: any) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({ join_info: updatedJoinValue }),
       });
@@ -288,38 +288,6 @@ const User = (props: any) => {
     }
   };
 
-  // const checkIdDuplicate = async () => {
-  //   try {
-  //     const response = await fetch(`${urlPrefix.IP_port}/sign_up/check_id`, {
-  //       method: "POST",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ id_info: { id: joinValue.id } }),
-  //     });
-
-  //     //console.log(await response.json())
-  //     //const signupData: UserInfoI[] = JSON.parse(await response.json());
-  //     const isIdValid = (await response.json()).result;
-
-  //     if (isIdValid) {
-  //       //중복아님
-  //       alert("사용 가능한 아이디입니다.");
-  //       setIsIdDuplicate(false);
-  //     } else {
-  //       //중복임
-  //       alert("중복된 아이디입니다. 다른 아이디를 입력해주세요.");
-  //       setIsIdDuplicate(true);
-  //     }
-  //     return;
-  //   } catch (error) {
-  //     console.error("Error occurred during login:", error);
-  //     return;
-  //   }
-  // };
-
-  // 이거구현해야됨
   const emailDuplicate = async (inputEmail: string) => {};
 
   const onIdChange = (e: any) => {
@@ -374,6 +342,37 @@ const User = (props: any) => {
     history("/");
   };
 
+  const handlePasswordChange = () => {
+    // Validate if the new password and confirm new password match
+    if (newPassword !== confirmNewPassword) {
+      alert('새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    // Perform the password change logic here
+    // You can send an API request to your server to update the password
+    // For this example, let's just update the joinValue.password
+    setJoinValue({ ...joinValue, password: newPassword });
+
+    // Close the modal
+    setModalOpen(false);
+
+    // Clear the password fields
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+  };
+
+  const closeModal = () => {
+    // Close the modal without changing the password
+    setModalOpen(false);
+
+    // Clear the password fields
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmNewPassword('');
+  };
+
   const onSubmit = async () => {
     // if (!joinValue.id || !joinValue.password) {
     //   alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
@@ -407,8 +406,14 @@ const User = (props: any) => {
       if (signUpResult) {
         alert("변경 완료되었습니다.");
         backToHome();
+      } else {
+        alert("오류가 발생되었습니다.");
       }
     }
+  };
+
+  const onChangePW = async () => {
+    setModalOpen(true);
   };
 
   useEffect(() => {
@@ -456,7 +461,14 @@ const User = (props: any) => {
         alignItems: "center",
       }}
     >
-      <div style={{ width: "350px", fontWeight: "bold", marginTop: "1rem", marginBottom: "1rem" }}>
+      <div
+        style={{
+          width: "350px",
+          fontWeight: "bold",
+          marginTop: "1rem",
+          marginBottom: "1rem",
+        }}
+      >
         내 정보
       </div>
       <JoinBodyWrapper>
@@ -554,6 +566,47 @@ const User = (props: any) => {
           <button className="joinBtn" onClick={onSubmit}>
             변경하기
           </button>
+          <>
+            <button className="changePwBtn" onClick={onChangePW}>
+              비밀번호 변경하기
+            </button>
+
+            {/* Password change modal */}
+            {isModalOpen && (
+              <div className="modal">
+                <div className="modal-content">
+                  <h2>비밀번호 변경</h2>
+                  <div>
+                    <label>현재 비밀번호:</label>
+                    <input
+                      type="password"
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label>새로운 비밀번호:</label>
+                    <input
+                      type="password"
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <label>새로운 비밀번호 확인:</label>
+                    <input
+                      type="password"
+                      onChange={(e) => setConfirmNewPassword(e.target.value)}
+                    />
+                  </div>
+                  <div className="modal-buttons">
+                    <button onClick={handlePasswordChange}>
+                      비밀번호 변경
+                    </button>
+                    <button onClick={closeModal}>취소</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
         </div>
       </JoinBodyWrapper>
     </div>
