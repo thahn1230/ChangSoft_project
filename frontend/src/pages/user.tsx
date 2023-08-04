@@ -447,9 +447,17 @@ const User = (props: any) => {
         backToHome();
       } else {
         alert("잘못 된 값이 입력되었습니다. 확인하시기 바랍니다.");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+        return;
       }
     } else {
       alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
       return;
     }
 

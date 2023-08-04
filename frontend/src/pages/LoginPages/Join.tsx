@@ -10,6 +10,7 @@ import { useUserContext } from "./../../UserInfoContext";
 const JoinBodyWrapper = styled.div`
   width: 400px;
   height: 700px;
+  max-height: 95vh;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 4px;
