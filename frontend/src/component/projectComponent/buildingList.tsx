@@ -23,6 +23,7 @@ import BuildingDetail from "./buildingDetail";
 import ProjectIntro from "../homeComponent/totalProjectNum";
 import urlPrefix from "../../resource/URL_prefix.json";
 import { GridPDFExport } from "@progress/kendo-react-pdf";
+import { ExcelExport } from '@progress/kendo-react-excel-export';
 import "./../../styles/GridDetail.scss";
 
 const DATA_ITEM_KEY = "id";
@@ -65,12 +66,31 @@ const BuildingList = (props: any) => {
   const [projectFilter, setProjectFilter] = useState(initialFilter);
 
   let gridPDFExport: GridPDFExport | null;
+  let gridExcelExport: ExcelExport | null;
 
-  const exportPDF = () => {
-    if (gridPDFExport) {
-      gridPDFExport.save(buildingList);
-    }
-  };
+  // const exportPDF = () => {
+  //   if (gridPDFExport) {
+  //     const exportOptions = {
+  //       fileName: "building_list.pdf",
+  //       paperSize: "auto",
+  //       scale: 0.5,
+  //       margin: "1cm",
+  //     };
+  //     gridPDFExport.save(buildingList, exportOptions);
+  //   }
+  // };
+  
+
+  // const exportExcel = () => {
+  //   if (gridExcelExport) {
+  //     gridExcelExport.save(buildingList, {
+  //       fileName: "building_list.xlsx",
+  //       filterable: true,
+  //       allPages: true,
+  //     });
+  //   }
+  // };
+
 
   useEffect(() => {
     if (props.projectList) {
