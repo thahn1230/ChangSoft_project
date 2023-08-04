@@ -325,10 +325,12 @@ const User = (props: any) => {
     joinValue.user_type
   );
 
+  const [fetched, setFetched] = useState<boolean>(false);
+
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 
-  const telValidator = (data: any) => {
+  const telValidator = async (data: any) => {
     const num = data.split("-").join("");
     const isInt = Number.isInteger(Number(num));
     const numLength = num.slice(0).length === 11 ? true : false;
@@ -339,15 +341,13 @@ const User = (props: any) => {
           data.slice(0, 3) + "-" + data.slice(3, 7) + "-" + data.slice(7, 11);
 
         setPhoneNum(formattedPhoneNum);
-        setJoinValue({ ...joinValue, phone_number: formattedPhoneNum });
+        setJoinValue(await { ...joinValue, phone_number: formattedPhoneNum });
       }
       setIsPhoneValid(true);
     } else {
       setIsPhoneValid(false);
     }
   };
-
-  useEffect(()=>{console.log(phoneNum)}, [phoneNum])
 
   const backToHome = () => {
     navigator("/home");
@@ -412,7 +412,6 @@ const User = (props: any) => {
       });
 
       const changePwData: boolean = await response.json();
-      console.log(changePwData);
       if (changePwData) {
         //비밀번호 변경 성공
         return true;
@@ -578,10 +577,9 @@ const User = (props: any) => {
 
   useEffect(() => {
     //user type을 바로 바로 수정해주려면 useEffect를 사용해야 할 것 같음
-    //if (joinValue.phone_number !== null) setPhoneNum(joinValue.phone_number);
     if (joinValue.email_address !== null) setEmailValue(joinValue.email_address);
+    if (joinValue.phone_number !== null) setPhoneNum(joinValue.phone_number);
     setSelectedUserType(joinValue.user_type);
-
   }, [joinValue]);
 
   return (
