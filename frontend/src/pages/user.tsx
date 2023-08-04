@@ -296,11 +296,11 @@ const User = (props: any) => {
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
-  const [phoneVal, setPhoneVal] = useState(false);
-  const [emailVal, setEmailVal] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
 
-  const [IsloginIdValid, setIsloginIdValid] = useState(true);
-  const [IsEmailValid, setEmailValid] = useState(true);
+  const [emailValue, setEmailValue] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -318,11 +318,12 @@ const User = (props: any) => {
   });
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
-  const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
   const userTypes = ["Admin", "User", "Others"];
-  const [selectedUserType, setSelectedUserType] = useState<string>(joinValue.user_type);
+  const [selectedUserType, setSelectedUserType] = useState<string>(
+    joinValue.user_type
+  );
 
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
@@ -333,11 +334,20 @@ const User = (props: any) => {
     const numLength = num.slice(0).length === 11 ? true : false;
 
     if (isInt && numLength) {
-      setPhoneVal(true);
+      if (data.length === 11) {
+        const formattedPhoneNum =
+          data.slice(0, 3) + "-" + data.slice(3, 7) + "-" + data.slice(7, 11);
+
+        setPhoneNum(formattedPhoneNum);
+        setJoinValue({ ...joinValue, phone_number: formattedPhoneNum });
+      }
+      setIsPhoneValid(true);
     } else {
-      setPhoneVal(false);
+      setIsPhoneValid(false);
     }
   };
+
+  useEffect(()=>{console.log(phoneNum)}, [phoneNum])
 
   const backToHome = () => {
     navigator("/home");
@@ -427,16 +437,13 @@ const User = (props: any) => {
       /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     let isValidEmail =
       email !== "" && email !== "undefined" && regex.test(email);
-    setEmailVal(isValidEmail);
+    setIsEmailValid(isValidEmail);
     return isValidEmail;
   };
 
   const onEmailChange = (e: any) => {
-    let isValidEmail = emailCheck(e.value);
+    emailCheck(e.value);
     setJoinValue({ ...joinValue, email_address: e.value });
-
-    if (!isValidEmail) return;
-
     emailDuplicate(e.value);
   };
 
@@ -519,34 +526,19 @@ const User = (props: any) => {
       alert("이름을 입력하지 않았습니다.");
       return;
     }
-    if (!joinValue.email_address) {
+    if (emailValue === "") {
       alert("이메일을 입력하지 않았습니다.");
       return;
+    } else if (!isEmailValid) {
+      alert("이메일 형식이 올바르지 않습니다.");
+      return;
     }
-    if (!joinValue.company) {
-      alert("회사를 입력하지 않았습니다.");
+    if (!isPhoneValid) {
+      alert("전화번호 형식이 올바르지 않습니다.");
       return;
     }
 
-    if (joinValue.email_address && joinValue.phone_number) {
-      let signUpResult = await signup(joinValue);
-
-      if (signUpResult) {
-        alert("변경 완료되었습니다.");
-        backToHome();
-      } else {
-        alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
-      }
-    } else {
-      let signUpResult = await signup(joinValue);
-
-      if (signUpResult) {
-        alert("변경 완료되었습니다.");
-        backToHome();
-      } else {
-        alert("오류가 발생되었습니다.");
-      }
-    }
+    setSignupDone(await signup(joinValue));
   };
 
   const onChangePW = async () => {
@@ -584,11 +576,13 @@ const User = (props: any) => {
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  useEffect(()=>{
-
+  useEffect(() => {
     //user type을 바로 바로 수정해주려면 useEffect를 사용해야 할 것 같음
-    setSelectedUserType(joinValue.user_type)
-  },[joinValue])
+    //if (joinValue.phone_number !== null) setPhoneNum(joinValue.phone_number);
+    if (joinValue.email_address !== null) setEmailValue(joinValue.email_address);
+    setSelectedUserType(joinValue.user_type);
+
+  }, [joinValue]);
 
   return (
     <div>
@@ -634,26 +628,18 @@ const User = (props: any) => {
                 value={joinValue.email_address}
                 onChange={onEmailChange}
               ></Input>
-              {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
             </div>
             <div className="phoneField">
               <div className="labelField">휴대전화 번호</div>
               <div className="phoneConfirm">
-                {joinValue.phone_number ? (
+               
                   <Input
                     className="phoneInputField"
                     type="text"
-                    value={joinValue.phone_number}
+                    value={phoneNum}
                     onChange={onPhoneChange}
-                  ></Input>
-                ) : (
-                  <Input
-                    className="phoneInputField"
-                    type="text"
                     placeholder="예) 010-1111-1111, 01012341234 (선택사항입니다)"
-                    onChange={onPhoneChange}
                   ></Input>
-                )}
               </div>
             </div>
             <div className="cpmpanyField">

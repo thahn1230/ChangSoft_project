@@ -408,10 +408,6 @@ const Join = (props: any) => {
       alert("이름을 입력하지 않았습니다.");
       return;
     }
-    // if (!emailVal) {
-    //   alert("이메일을 입력하지 않았습니다.");
-    //   return;
-    // }
     if (emailValue === "") {
       alert("이메일을 입력하지 않았습니다.");
       return;
