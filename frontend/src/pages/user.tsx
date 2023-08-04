@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { UserInfoI } from "./../interface/userInfo_interface";
 import urlPrefix from "./../resource/URL_prefix.json";
 import { useUserContext } from "./../UserInfoContext";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
   width: 400px;
@@ -25,6 +26,8 @@ const JoinBodyWrapper = styled.div`
     align-items: center;
 
     .labelField {
+      justify-content: flex-start;
+      display: flex !important;
       width: 350px;
       font-weight: bold;
       margin-top: 1rem;
@@ -47,6 +50,8 @@ const JoinBodyWrapper = styled.div`
     align-items: center;
 
     .labelField {
+      justify-content: flex-start;
+      display: flex !important;
       width: 350px;
       font-weight: bold;
       margin-top: 1rem;
@@ -97,6 +102,29 @@ const JoinBodyWrapper = styled.div`
 
       span {
         font-size: 0.8rem;
+      }
+    }
+  }
+
+  .drop-down-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .labelField {
+      justify-content: flex-start;
+      display: flex !important;
+      width: 350px;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .user-type-list {
+      margin-top: 10px;
+      width: 350px;
+      height: 35px;
+
+      &:focus {
+        border: 3px solid rgba(0, 0, 255, 0.1);
       }
     }
   }
@@ -182,6 +210,8 @@ const ChangePwBodyWrapper = styled.div`
     align-items: center;
 
     .labelField {
+      justify-content: flex-start;
+      display: flex !important;
       width: 350px;
       font-weight: bold;
       margin-top: 1rem;
@@ -284,12 +314,16 @@ const User = (props: any) => {
     company: "",
     email_address: "",
     phone_number: "",
-    user_type: "User",
+    user_type: "",
   });
 
   const [signupDone, setSignupDone] = useState<boolean>(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+
+  const userTypes = ["Admin", "User", "Ohters"];
+  const [selectedUserType, setSelectedUserType] = useState<string>(joinValue.user_type);
+
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 
@@ -310,12 +344,7 @@ const User = (props: any) => {
   };
 
   const signup = async (newUserInfo: JoinValueI) => {
-    // if (isIdDuplicate === null) {
-    //   alert("아이디 중복확인을 해주세요.");
-    //   return;
-    // }
     try {
-      // const hashedPassword = await sha256(newUserInfo.password);
       setJoinValue(
         await {
           ...joinValue,
@@ -433,11 +462,16 @@ const User = (props: any) => {
     history("/");
   };
 
+  const onSelectedUserType = (e: any) => {
+    setSelectedUserType(e.target.value);
+    setJoinValue({ ...joinValue, user_type: e.target.value });
+  };
+
   const handlePasswordChange = async () => {
     // Validate if the new password and confirm new password match
 
     if (newPassword.length > 32) {
-      alert("password는 32글자 이내로 작성해주세요")
+      alert("password는 32글자 이내로 작성해주세요");
     }
     if (newPassword === confirmNewPassword) {
       let changePwResult = await changePw(newPassword, currentPassword);
@@ -455,9 +489,9 @@ const User = (props: any) => {
     } else {
       alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
 
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmNewPassword("");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
       return;
     }
 
@@ -481,10 +515,6 @@ const User = (props: any) => {
   };
 
   const onSubmit = async () => {
-    // if (!joinValue.id || !joinValue.password) {
-    //   alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
-    //   return;
-    // }
     if (!joinValue.name) {
       alert("이름을 입력하지 않았습니다.");
       return;
@@ -554,6 +584,12 @@ const User = (props: any) => {
       .catch((error) => console.error("Error:", error));
   }, []);
 
+  useEffect(()=>{
+
+    //user type을 바로 바로 수정해주려면 useEffect를 사용해야 할 것 같음
+    setSelectedUserType(joinValue.user_type)
+  },[joinValue])
+
   return (
     <div>
       {!isModalOpen ? (
@@ -614,7 +650,7 @@ const User = (props: any) => {
                   <Input
                     className="phoneInputField"
                     type="text"
-                    placeholder="예) 010-1111-1111, 01012341234"
+                    placeholder="예) 010-1111-1111, 01012341234 (선택사항입니다)"
                     onChange={onPhoneChange}
                   ></Input>
                 )}
@@ -642,10 +678,20 @@ const User = (props: any) => {
                 <Input
                   className="inputField"
                   type="text"
-                  placeholder="예) 대리, 사원"
+                  placeholder="예) 대리, 사원 (선택사항입니다)"
                   onChange={onJobPositionChange}
                 ></Input>
               )}
+              <div className="drop-down-field">
+                <div className="labelField">User Type</div>
+                <DropDownList
+                  className="user-type-list"
+                  data={userTypes}
+                  defaultValue={joinValue.user_type}
+                  value={selectedUserType}
+                  onChange={onSelectedUserType}
+                />
+              </div>
             </div>
             <div className="btns">
               <button className="backBtn" onClick={backToHome}>

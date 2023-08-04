@@ -231,17 +231,20 @@ const Join = (props: any) => {
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(true);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
 
-
-
-
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
     const isInt = Number.isInteger(Number(num));
     const numLength = num.slice(0).length === 11 ? true : false;
 
     if (isInt && numLength) {
+      if (data.length === 11) {
+        const formattedPhoneNum =
+          data.slice(0, 3) + "-" + data.slice(3, 7) + "-" + data.slice(7, 11);
+
+        setPhoneNum(formattedPhoneNum);
+        setJoinValue({ ...joinValue, phone_number: formattedPhoneNum });
+      }
       setIsPhoneValid(true);
-      setJoinValue({ ...joinValue, email_address: data.value });
     } else {
       setIsPhoneValid(false);
     }
@@ -350,7 +353,7 @@ const Join = (props: any) => {
       /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     let isValidEmail =
       email !== "" && email !== "undefined" && regex.test(email);
-      setIsEmailValid(isValidEmail);
+    setIsEmailValid(isValidEmail);
     return isValidEmail;
   };
 
@@ -399,15 +402,11 @@ const Join = (props: any) => {
       return;
     }
 
-    
     setSignupDone(await signup(joinValue));
-
-   
   };
 
-  useEffect(()=>{
-    if(signupDone===null)
-    return;
+  useEffect(() => {
+    if (signupDone === null) return;
 
     if (signupDone) {
       alert("가입 완료되었습니다.");
@@ -415,7 +414,7 @@ const Join = (props: any) => {
     } else {
       alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
     }
-  },[signupDone])
+  }, [signupDone]);
   return (
     <JoinBodyWrapper>
       <div className="idField">
