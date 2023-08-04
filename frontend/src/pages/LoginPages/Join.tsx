@@ -10,7 +10,7 @@ import { DropDownList } from "@progress/kendo-react-dropdowns";
 const JoinBodyWrapper = styled.div`
   width: 400px;
   height: 700px;
-  max-height: 80vh;
+  max-height: 85vh;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 4px;
@@ -168,7 +168,8 @@ const JoinBodyWrapper = styled.div`
   
   .btns {
     display: flex;
-    margin-top: 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     justify-content: center;
 
     .backBtn,
