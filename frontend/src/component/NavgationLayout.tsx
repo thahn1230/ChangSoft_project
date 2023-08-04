@@ -111,12 +111,12 @@ export const NavigationLayout = (props: any) => {
 
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "300px" }
-      : { height: "300px", expanded: `${expanded}` };
+      ? { height: "230px" }
+      : { height: "230px", expanded: `${expanded}` };
   };
 
   const getMargin = () => {
-    return expanded ? { marginTop: "-300px" } : { marginTop: "0px" };
+    return expanded ? { marginTop: "-230px" } : { marginTop: "0px" };
   };
 
   return (

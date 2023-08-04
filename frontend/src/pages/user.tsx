@@ -237,7 +237,7 @@ const User = (props: any) => {
     }
   };
 
-  const backToLogin = () => {
+  const backToHome = () => {
     navigator("/home");
   };
 
@@ -387,8 +387,8 @@ const User = (props: any) => {
       alert("이메일을 입력하지 않았습니다.");
       return;
     }
-    if (!joinValue.phone_number) {
-      alert("휴대폰 번호를 입력하지 않았습니다.");
+    if (!joinValue.company) {
+      alert("회사를 입력하지 않았습니다.");
       return;
     }
 
@@ -396,18 +396,17 @@ const User = (props: any) => {
       let signUpResult = await signup(joinValue);
 
       if (signUpResult) {
-        alert("가입 완료되었습니다.");
-        backToLogin();
+        alert("변경 완료되었습니다.");
+        backToHome();
       } else {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
       }
     } else {
-      if (!phoneVal) {
-        alert("전화번호 형식이 올바르지 않습니다.");
-      } else if (!emailVal) {
-        alert("이메일 형식이 올바르지 않습니다.");
-      } else {
-        alert("오류");
+      let signUpResult = await signup(joinValue);
+
+      if (signUpResult) {
+        alert("변경 완료되었습니다.");
+        backToHome();
       }
     }
   };
@@ -549,7 +548,7 @@ const User = (props: any) => {
           )}
         </div>
         <div className="btns">
-          <button className="backBtn" onClick={backToLogin}>
+          <button className="backBtn" onClick={backToHome}>
             취소
           </button>
           <button className="joinBtn" onClick={onSubmit}>

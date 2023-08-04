@@ -87,5 +87,7 @@ npm audit fix
 
 만약 ```npm audit fix``` 명령어를 실행하였을때 작동이 안된다면 ```npm --force audit fix```를 실행해주시면 됩니다.
 
+frontend 파일들을 빌드할 때 EACCES 문제가 뜬다면 ```sudo npm start```를 통해서 실행해주시면 됩니다.
+
 react server 시작시
 ```PORT=3000 yarn start```
