@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserInfoI } from "./../../interface/userInfo_interface";
 import urlPrefix from "./../../resource/URL_prefix.json";
-import { useUserContext } from "./../../UserInfoContext";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
   width: 400px;
@@ -143,9 +143,32 @@ const JoinBodyWrapper = styled.div`
     }
   }
 
+  .drop-down-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .labelField {
+      justify-content: flex-start;
+      display: flex !important;
+      width: 350px;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .user-type-list {
+      margin-top: 10px;
+      width: 350px;
+      height: 35px;
+
+      &:focus {
+        border: 3px solid rgba(0, 0, 255, 0.1);
+      }
+    }
+  }
+  
   .btns {
     display: flex;
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     justify-content: center;
 
     .backBtn,
@@ -224,12 +247,15 @@ const Join = (props: any) => {
     company: "",
     email_address: "",
     phone_number: "",
-    user_type: "User",
+    user_type: "",
   });
 
   const [signupDone, setSignupDone] = useState<boolean | null>(null);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(true);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+
+  const userTypes = ["Admin", "User", "Others"];
+  const [selectedUserType, setSelectedUserType] = useState<string>("User");
 
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
@@ -405,6 +431,11 @@ const Join = (props: any) => {
     setSignupDone(await signup(joinValue));
   };
 
+  const onSelectedUserType=(e:any)=>{
+    setSelectedUserType(e.target.value);
+  }
+
+  useEffect(()=>{setJoinValue({...joinValue, user_type:selectedUserType})},[selectedUserType])
   useEffect(() => {
     if (signupDone === null) return;
 
@@ -492,6 +523,16 @@ const Join = (props: any) => {
               </button> */}
         </div>
       </div>
+      <div className="drop-down-field">
+                <div className="labelField">User Type</div>
+                <DropDownList
+                  className="user-type-list"
+                  data={userTypes}
+                  defaultValue={joinValue.user_type}
+                  value={selectedUserType}
+                  onChange={onSelectedUserType}
+                />
+              </div>
       {/* <div className='checkField'>
             <div className='checkContainer'>
               <Checkbox
