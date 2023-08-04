@@ -204,7 +204,7 @@ const ChangePwBodyWrapper = styled.div`
     justify-content: center;
 
     .backBtn,
-    .joinBtn {
+    .changePwBtn {
       mnax-width: 100px;
       height: 30px;
     }
@@ -446,7 +446,7 @@ const User = (props: any) => {
         alert("변경 완료되었습니다.");
         backToHome();
       } else {
-        alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
+        alert("잘못 된 값이 입력되었습니다. 확인하시기 바랍니다.");
       }
     } else {
       alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
@@ -676,7 +676,7 @@ const User = (props: any) => {
                   <div className="labelField">현재 비밀번호</div>
                   <Input
                     className="inputField"
-                    placeholder="예) 현재 비밀번호를 입력해주세요."
+                    placeholder="현재 비밀번호를 입력해주세요."
                     type="password"
                     onChange={(e) => setCurrentPassword(e.value)}
                   />
@@ -686,7 +686,7 @@ const User = (props: any) => {
                   <Input
                     className="inputField"
                     type="password"
-                    placeholder="예) 32글자 이내로 작성해주세요."
+                    placeholder="32글자 이내로 작성해주세요."
                     onChange={(e) => setNewPassword(e.value)}
                   />
                 </div>
@@ -695,7 +695,7 @@ const User = (props: any) => {
                   <Input
                     className="inputField"
                     type="password"
-                    placeholder="예) 새로운 비밀번호를 다시 입력해주세요."
+                    placeholder="새로운 비밀번호를 다시 입력해주세요."
                     onChange={(e) => setConfirmNewPassword(e.value)}
                   />
                 </div>
