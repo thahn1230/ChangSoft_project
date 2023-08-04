@@ -321,7 +321,7 @@ const User = (props: any) => {
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const userTypes = ["Admin", "User", "Ohters"];
+  const userTypes = ["Admin", "User", "Others"];
   const [selectedUserType, setSelectedUserType] = useState<string>(joinValue.user_type);
 
   const navigator = useNavigate();
