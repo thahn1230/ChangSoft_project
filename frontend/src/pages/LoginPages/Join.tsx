@@ -233,6 +233,7 @@ const sha256 = async (message: string) => {
 const Join = (props: any) => {
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
+
   const [phoneNum, setPhoneNum] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(false);
 
@@ -250,14 +251,21 @@ const Join = (props: any) => {
     user_type: "",
   });
 
-  const [signupDone, setSignupDone] = useState<boolean | null>(null);
+  const [idValue, setIdValue] = useState("");
+  const [isIdValid, setIsIdValid] = useState(false);
   const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(true);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+
+  const [pwValue, setPwValue] =useState("");
+  const [isPwValid, setIsPwValid] =useState(false);
+
 
   const userTypes = ["Admin", "User", "Others"];
   const [selectedUserType, setSelectedUserType] = useState<string>("User");
 
-  const telValidator = (data: any) => {
+  const [signupDone, setSignupDone] = useState<boolean | null>(null);
+
+  const telValidator = async (data: any) => {
     const num = data.split("-").join("");
     const isInt = Number.isInteger(Number(num));
     const numLength = num.slice(0).length === 11 ? true : false;
@@ -268,7 +276,7 @@ const Join = (props: any) => {
           data.slice(0, 3) + "-" + data.slice(3, 7) + "-" + data.slice(7, 11);
 
         setPhoneNum(formattedPhoneNum);
-        setJoinValue({ ...joinValue, phone_number: formattedPhoneNum });
+        setJoinValue( await { ...joinValue, phone_number: formattedPhoneNum });
       }
       setIsPhoneValid(true);
     } else {
@@ -354,11 +362,35 @@ const Join = (props: any) => {
     }
   };
 
+  const idValidator = (data :any)=>{
+    const idRegex: RegExp = /^[a-zA-Z][a-zA-Z0-9]*\d[a-zA-Z0-9]*$/;
+
+    // Convert data to a string (in case it's not already)
+    const dataStr = String(data);
+  
+    // Test if the ID matches the regex pattern
+    console.log(idRegex.test(dataStr))
+    setIsIdValid(idRegex.test(dataStr));
+    
+  }
   const onIdChange = (e: any) => {
+    setIdValue(e.value)
+    idValidator(e.value)
     setJoinValue({ ...joinValue, id: e.value });
   };
 
+  const pwValidator=(data:any)=>
+  {
+    const pwRegex: RegExp =/^[a-zA-Z][a-zA-Z0-9!@#$%^&*]*\d[a-zA-Z0-9!@#$%^&*]*$/;
+    const dataStr = String(data);
+  
+    console.log(pwRegex.test(dataStr))
+    setIsPwValid(pwRegex.test(dataStr));
+  }
+
   const onPwChange = (e: any) => {
+    setPwValue(e.value)
+    pwValidator(e.value)
     setJoinValue({ ...joinValue, password: e.value });
   };
 
@@ -398,6 +430,17 @@ const Join = (props: any) => {
   const onSubmit = async () => {
     if (!joinValue.id || !joinValue.password) {
       alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
+      return;
+    }
+
+    if(!isIdValid)
+    {
+      alert("아이디 형식이 올바르지 않습니다.");
+      return;
+    }
+    if(!isPwValid)
+    {
+      alert("비밀번호 형식이 올바르지 않습니다.");
       return;
     }
     if (isIdDuplicate) {
@@ -452,6 +495,7 @@ const Join = (props: any) => {
             type="text"
             placeholder="사용하실 아이디를 입력해주세요"
             onChange={onIdChange}
+            value={idValue}
           ></Input>
           <button onClick={checkIdDuplicate} className="duplicateCheckBtn">
             중복확인
@@ -465,6 +509,7 @@ const Join = (props: any) => {
           type="password"
           placeholder="영문+숫자 조합을 이용해주세요"
           onChange={onPwChange}
+          value={pwValue}
         ></Input>
       </div>
       <div className="nameField">
