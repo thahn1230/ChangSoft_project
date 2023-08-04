@@ -5,7 +5,6 @@ import {
   CompositeFilterDescriptor,
 } from "@progress/kendo-data-query";
 import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
-
 import "./../../../styles/subBuildingAnalysisTable.scss";
 
 const SingleColTable = (props: any) => {
