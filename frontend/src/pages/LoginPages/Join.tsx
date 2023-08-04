@@ -101,7 +101,7 @@ const JoinBodyWrapper = styled.div`
 
       .phoneInputField {
         margin-top: 10px;
-        width: 250px;
+        width: 350px;
         height: 35px;
 
         &:focus {
