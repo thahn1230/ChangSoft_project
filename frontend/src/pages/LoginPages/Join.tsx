@@ -365,12 +365,13 @@ const Join = (props: any) => {
 
     if (!isValidEmail) return;
 
-    emailDuplicate(e.value);
+    // emailDuplicate(e.value);
   };
 
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
+    setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
   };
 
   const onPhoneConfirm = () => {
