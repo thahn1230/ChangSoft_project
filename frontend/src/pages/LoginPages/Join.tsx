@@ -371,12 +371,12 @@ const Join = (props: any) => {
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
-    setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
+    setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
-  const onPhoneConfirm = () => {
-    setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
-  };
+  // const onPhoneConfirm = () => {
+  //   setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
+  // };
 
   const onPrev = () => {
     history("/");
