@@ -342,10 +342,12 @@ const User = (props: any) => {
         body: JSON.stringify({ join_info: updatedJoinValue }),
       });
 
-      const signupData: UserInfoI[] = await response.json();
+      const signupData:boolean = await response.json();
+      console.log("result of change information")
       console.log(signupData);
-      if (signupData.length !== 0) {
+      if (signupData) {
         //회원가입 성공
+        window.location.reload();
         return true;
       } else {
         //회원가입 실패
@@ -353,6 +355,43 @@ const User = (props: any) => {
       }
     } catch (error) {
       console.error("Error occurred during signup:", error);
+      return false;
+    }
+  };
+
+  const changePw = async (newPassword: string, currentPassword: string) => {
+
+    try {
+      const hashedPassword = await sha256(currentPassword);
+      const hashedNewPassword = await sha256(newPassword);
+
+      const updatedPwValue = {
+        current_pw: hashedPassword,
+        changed_pw: hashedNewPassword,
+      };
+
+      //params는 어떻게씀
+      const response = await fetch(`${urlPrefix.IP_port}/user/change_pw`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ pw_info: updatedPwValue }),
+      });
+
+      const changPwData:boolean = await response.json();
+      console.log(changPwData);
+      if (changPwData) {
+        //비밀번호 변경 성공
+        return true;
+      } else {
+        //비밀번호 변경 실패
+        return false;
+      }
+    } catch (error) {
+      console.error("Error occurred during change pw:", error);
       return false;
     }
   };
@@ -411,17 +450,22 @@ const User = (props: any) => {
     history("/");
   };
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     // Validate if the new password and confirm new password match
-    if (newPassword !== confirmNewPassword) {
+
+    if (newPassword === confirmNewPassword) {
+      let changPwResult = await changePw(newPassword, currentPassword);
+
+      if (changPwResult) {
+        alert("변경 완료되었습니다.");
+        backToHome();
+      } else {
+        alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
+      }
+    } else {
       alert("새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
       return;
     }
-
-    // Perform the password change logic here
-    // You can send an API request to your server to update the password
-    // For this example, let's just update the joinValue.password
-    setJoinValue({ ...joinValue, password: newPassword });
 
     // Close the modal
     setModalOpen(false);
