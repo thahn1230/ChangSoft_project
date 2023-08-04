@@ -363,6 +363,7 @@ const Join = (props: any) => {
   const onPhoneChange = (e: any) => {
     setPhoneNum(e.value);
     telValidator(e.value);
+    setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
   const onPhoneConfirm = () => {

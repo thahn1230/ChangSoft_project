@@ -553,7 +553,7 @@ const User = (props: any) => {
           style={{
             display: "flex",
             width: "100%",
-            height: "100vh",
+            height: "100%",
             backgroundColor: "whitesmoke",
             flexFlow: "column",
             WebkitBoxPack: "center",
