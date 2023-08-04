@@ -13,14 +13,19 @@ from sqlalchemy import text
 
 import pandas as pd
 import jwt
+from pydantic import BaseModel
 from datetime import datetime, timedelta
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 from userLogin import oauth2_scheme, decode_jwt_token
-from dashboard import TokenData
 
 router = APIRouter()
 engine = create_db_connection()
 connection = engine.connect()
+
+class TokenData(BaseModel):
+    user_id: str
+    company: str
+    email_address: str
 
 def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permission
     return decode_jwt_token(token)
@@ -56,5 +61,46 @@ def get_user_info(token: TokenData = Depends(verify_user)):
     
 @router.post("/user/change_info")
 async def change_user_info(params: dict, token: TokenData = Depends(verify_user)):
+    
+    user_id = token["id"]
+    name = params["join_info"]["name"]
+    job_position = params["join_info"]["job_position"]
+    company = params["join_info"]["company"]
+    email_address = params["join_info"]["email_address"]
+    phone_number = params["join_info"]["phone_number"]
+    try :
+        with Session(engine) as session:
+            session.execute(
+                text(
+                    """
+                    UPDATE `user_information` SET `name` = :name, 
+                    `job_position` = :job_position, `company` = :company,
+                    `email_address` = :email_address, 
+                    `phone_number` = :phone_number
+                    WHERE (`id` = :user_id)
+                """
+                ),
+                {
+                    "user_id": user_id,
+                    "name": name, 
+                    "job_position": job_position, 
+                    "company": company, 
+                    "email_address": email_address, 
+                    "phone_number": phone_number, 
+                }
+            )
+        
+            session.commit()
+    except Exception as e:
+        print("An error occurred: ", e)
+        session.rollback()
+        return False
+    
+    return True
+
+@router.post("/user/change_pw")
+async def change_password(params: dict, token: TokenData = Depends(verify_user)):
     print(params)
+    current_pw = ""
+    changed_pw = ""
     return True

@@ -2,4 +2,4 @@
 SECRET_KEY = "your_secret_key"
 
 # JWT 만료 시간 (예: 1시간)
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+ACCESS_TOKEN_EXPIRE_MINUTES = 540

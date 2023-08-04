@@ -2,6 +2,8 @@ add_middleware.py
 dbAccess.py
 origins.py
 aiQueryInfo.py
+user.py
+userLogin.py
 
 Others/
 __pycache__/
