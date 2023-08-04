@@ -737,7 +737,6 @@ const QuantityFilter = (props: any) => {
                 total_area_above,
                 total_area_below,
                 object_id,
-                floor_id,
                 component_type,
                 section_name,
                 construction_zone,
@@ -746,14 +745,15 @@ const QuantityFilter = (props: any) => {
                 formwork_position,
                 formwork_type,
                 area,
+                floor_name,
               }: any) => ({
+                층이름: floor_name,
                 빌딩유형: sub_building_type,
                 빌딩분류: sub_building_category,
                 빌딩명: sub_building_name,
                 지상총면적: total_area_above,
                 지하총면적: total_area_below,
                 객체ID: object_id,
-                층ID: floor_id,
                 구성요소유형: component_type,
                 섹션명: section_name,
                 시공존: construction_zone,
@@ -763,10 +763,68 @@ const QuantityFilter = (props: any) => {
                 형틀유형: formwork_type,
                 면적: area,
               })
-            );            
-            //"빌딩명","분류","구성","건물유형","건물분류","건물명","층유형","층분류","층번호","층이름","시공존","부재","부재명","분류명","값","객체ID","할증","값(할증)","BOQ코드","BOQ명칭","BOQ규격","BOQ단위","산출식","형틀위치","형틀유형","면적"
+            );
             break;
           case "rebar":
+            data = data.map(
+              ({
+                sub_building_type,
+                sub_building_category,
+                sub_building_name,
+                total_area_above,
+                total_area_below,
+                object_id,
+                component_type,
+                section_name,
+                construction_zone,
+                category,
+                component_id,
+                calculation_formula,
+                rebar_type,
+                rebar_grade,
+                rebar_diameter,
+                rebar_shape_count,
+                rebar_shape_length,
+                rebar_unit_weight,
+                rebar_id,
+                rebar_count,
+                rebar_weight,
+              }: any) => ({
+                빌딩명: sub_building_type,
+                분류: sub_building_category,
+                구성: sub_building_name,
+                건물유형: total_area_above,
+                건물분류: total_area_below,
+                건물명: object_id,
+                층유형: component_type,
+                층분류: section_name,
+                층번호: construction_zone,
+                층이름: category,
+                시공존: component_id,
+                부재: calculation_formula,
+                부재명: rebar_type,
+                분류명: rebar_grade,
+                값: rebar_diameter,
+                객체ID: rebar_shape_count,
+                할증: rebar_shape_length,
+                "값(할증)": rebar_unit_weight,
+                BOQ코드: rebar_id,
+                BOQ명칭: rebar_count,
+                BOQ규격: rebar_weight,
+                BOQ단위: rebar_id,
+                산출식: rebar_count,
+                철근타입: rebar_id,
+                철근강종: rebar_count,
+                철근직경: rebar_id,
+                철근형상개수: rebar_count,
+                철근형상길이: rebar_id,
+                철근단위중량: rebar_count,
+                철근ID: rebar_id,
+                개수: rebar_count,
+                중량: rebar_weight,
+              })
+            );
+
             break;
         }
         props.setGridData(data);

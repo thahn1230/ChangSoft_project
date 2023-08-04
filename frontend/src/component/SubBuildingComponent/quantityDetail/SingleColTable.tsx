@@ -1,19 +1,40 @@
-import React, { useEffect } from "react";
-import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
+import React, { useEffect,useState} from "react";
+import { Grid, GridColumn, GridEvent ,GridFilterChangeEvent,GridSortChangeEvent} from "@progress/kendo-react-grid";
+import {
+  filterBy,
+  CompositeFilterDescriptor,
+} from "@progress/kendo-data-query";
+import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
 
 import "./../../../styles/subBuildingAnalysisTable.scss";
 
 const SingleColTable = (props: any) => {
+  const [filter, setFilter] = useState<CompositeFilterDescriptor>({
+    logic: "and",
+    filters: [],
+  });
+  const [sort, setSort] = useState<SortDescriptor[]>([]);
+
   return (
     <div>
       {props.data.length > 0 ? (
         <div className="analysis-table-container">
           <div>
             <Grid
-              data={props.data}
+              data={orderBy(filterBy(props.data, filter), sort)}
               style={{ width: "100%", height: "60vh" }}
               scrollable="scrollable"
               fixedScroll={true}
+
+              filterable={true}
+              filter={filter}
+              onFilterChange={(e: GridFilterChangeEvent) => setFilter(e.filter)}
+
+              sortable={true}
+      sort={sort}
+      onSortChange={(e: GridSortChangeEvent) => {
+        setSort(e.sort);
+      }}
             >
               {props.data !== undefined &&
                 Object.keys(props.data[0]).map((item, index) => {
