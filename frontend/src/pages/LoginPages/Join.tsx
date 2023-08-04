@@ -208,15 +208,13 @@ const sha256 = async (message: string) => {
 };
 
 const Join = (props: any) => {
-  const userInfoContext = useUserContext();
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");
-  const [phoneVal, setPhoneVal] = useState(false);
-  const [emailVal, setEmailVal] = useState(false);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
 
-  const [IsloginIdValid, setIsloginIdValid] = useState(true);
-  const [IsEmailValid, setEmailValid] = useState(true);
+  const [emailValue, setEmailValue] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(false);
 
   const [joinValue, setJoinValue] = useState<JoinValueI>({
     id: "",
@@ -229,9 +227,12 @@ const Join = (props: any) => {
     user_type: "User",
   });
 
-  const [signupDone, setSignupDone] = useState<boolean>(false);
-  const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(null);
+  const [signupDone, setSignupDone] = useState<boolean | null>(null);
+  const [isIdDuplicate, setIsIdDuplicate] = useState<boolean | null>(true);
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
+
+
+
 
   const telValidator = (data: any) => {
     const num = data.split("-").join("");
@@ -239,10 +240,10 @@ const Join = (props: any) => {
     const numLength = num.slice(0).length === 11 ? true : false;
 
     if (isInt && numLength) {
-      setPhoneVal(true);
+      setIsPhoneValid(true);
       setJoinValue({ ...joinValue, email_address: data.value });
     } else {
-      setPhoneVal(false);
+      setIsPhoneValid(false);
     }
   };
 
@@ -251,10 +252,8 @@ const Join = (props: any) => {
   };
 
   const signup = async (newUserInfo: JoinValueI) => {
-    if (isIdDuplicate === null) {
-      alert("아이디 중복확인을 해주세요.");
-      return;
-    }
+    //여기서는 무조건 valid joinValue가 들어왔다고 가정
+
     try {
       const hashedPassword = await sha256(newUserInfo.password);
       setJoinValue(
@@ -326,9 +325,6 @@ const Join = (props: any) => {
     }
   };
 
-  // 이거구현해야됨
-  const emailDuplicate = async (inputEmail: string) => {};
-
   const onIdChange = (e: any) => {
     setJoinValue({ ...joinValue, id: e.value });
   };
@@ -354,17 +350,14 @@ const Join = (props: any) => {
       /([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     let isValidEmail =
       email !== "" && email !== "undefined" && regex.test(email);
-    setEmailVal(isValidEmail);
+      setIsEmailValid(isValidEmail);
     return isValidEmail;
   };
 
   const onEmailChange = (e: any) => {
-    let isValidEmail = emailCheck(e.value);
+    setEmailValue(e.value);
+    emailCheck(e.value);
     setJoinValue({ ...joinValue, email_address: e.value });
-
-    if (!isValidEmail) return;
-
-    // emailDuplicate(e.value);
   };
 
   const onPhoneChange = (e: any) => {
@@ -373,52 +366,56 @@ const Join = (props: any) => {
     setJoinValue({ ...joinValue, phone_number: e.value });
   };
 
-  // const onPhoneConfirm = () => {
-  //   setJoinValue({ ...joinValue, phone_number: "modify it to inputphoneNum" });
-  // };
-
-  const onPrev = () => {
-    history("/");
-  };
-
   const onSubmit = async () => {
     if (!joinValue.id || !joinValue.password) {
       alert("아이디 또는 비밀번호가 입력되지 않았습니다.");
+      return;
+    }
+    if (isIdDuplicate) {
+      alert("아이디 중복확인을 해주세요.");
       return;
     }
     if (!joinValue.name) {
       alert("이름을 입력하지 않았습니다.");
       return;
     }
-    if (!emailVal) {
+    // if (!emailVal) {
+    //   alert("이메일을 입력하지 않았습니다.");
+    //   return;
+    // }
+    if (emailValue === "") {
       alert("이메일을 입력하지 않았습니다.");
+      return;
+    } else if (!isEmailValid) {
+      alert("이메일 형식이 올바르지 않습니다.");
       return;
     }
 
-    if (emailVal) {
-      let signUpResult = await signup(joinValue);
-
-      if (signUpResult) {
-        alert("가입 완료되었습니다.");
-        backToLogin();
-      } else {
-        alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
-      }
-    } else {
-      if (
-        joinValue.phone_number?.length &&
-        joinValue.phone_number?.length > 0 &&
-        !phoneVal
-      ) {
-        alert("전화번호 형식이 올바르지 않습니다.");
-      } else if (!emailVal) {
-        alert("이메일 형식이 올바르지 않습니다.");
-      } else {
-        alert("오류");
-      }
+    if (phoneNum === "") {
+      alert("전화번호를 입력해주세요.");
+      return;
+    } else if (!isPhoneValid) {
+      alert("전화번호 형식이 올바르지 않습니다.");
+      return;
     }
+
+    
+    setSignupDone(await signup(joinValue));
+
+   
   };
 
+  useEffect(()=>{
+    if(signupDone===null)
+    return;
+
+    if (signupDone) {
+      alert("가입 완료되었습니다.");
+      backToLogin();
+    } else {
+      alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
+    }
+  },[signupDone])
   return (
     <JoinBodyWrapper>
       <div className="idField">
@@ -460,8 +457,8 @@ const Join = (props: any) => {
           type="text"
           placeholder="이메일을 입력해주세요"
           onChange={onEmailChange}
+          value={emailValue}
         ></Input>
-        {!IsEmailValid && <div>이메일이 중복되었습니다.</div>}
       </div>
       <div className="emailField">
         <div className="labelField">회사</div>
@@ -489,6 +486,7 @@ const Join = (props: any) => {
             type="text"
             placeholder="예) 010-1111-1111, 01012341234(선택사항입니다)"
             onChange={onPhoneChange}
+            value={phoneNum}
           ></Input>
           {/* <button className='confirmBtn' onClick={onPhoneConfirm}>
                 인증
