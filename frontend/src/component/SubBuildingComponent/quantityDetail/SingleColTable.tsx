@@ -13,7 +13,9 @@ const SingleColTable = (props: any) => {
     logic: "and",
     filters: [],
   });
-  const [sort, setSort] = useState<SortDescriptor[]>([]);
+  const [sort, setSort] = useState<SortDescriptor[]>([{
+    field: "층이름", dir: "desc"
+  }]);
 
   return (
     <div>
