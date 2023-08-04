@@ -10,7 +10,7 @@ import { useUserContext } from "./../../UserInfoContext";
 const JoinBodyWrapper = styled.div`
   width: 400px;
   height: 700px;
-  max-height: 95vh;
+  max-height: 80vh;
   background-color: white;
   border: 1px solid lightgray;
   border-radius: 4px;
@@ -27,7 +27,6 @@ const JoinBodyWrapper = styled.div`
     }
 
     .input-btn-field {
-      
       display: flex;
 
       .inputField {
@@ -241,7 +240,7 @@ const Join = (props: any) => {
 
     if (isInt && numLength) {
       setPhoneVal(true);
-      setJoinValue({ ...joinValue, email_address: data.value })
+      setJoinValue({ ...joinValue, email_address: data.value });
     } else {
       setPhoneVal(false);
     }
@@ -348,7 +347,7 @@ const Join = (props: any) => {
 
   const onJobPositionChange = (e: any) => {
     setJoinValue({ ...joinValue, job_position: e.value });
-  }
+  };
 
   const emailCheck = (email: any) => {
     var regex =
@@ -405,7 +404,11 @@ const Join = (props: any) => {
         alert("잘못 된 값이 입력되었습니다. 확인 하시기 바랍니다.");
       }
     } else {
-      if (joinValue.phone_number?.length && joinValue.phone_number?.length > 0 && !phoneVal) {
+      if (
+        joinValue.phone_number?.length &&
+        joinValue.phone_number?.length > 0 &&
+        !phoneVal
+      ) {
         alert("전화번호 형식이 올바르지 않습니다.");
       } else if (!emailVal) {
         alert("이메일 형식이 올바르지 않습니다.");
