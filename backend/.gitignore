@@ -4,6 +4,7 @@ origins.py
 aiQueryInfo.py
 user.py
 userLogin.py
+userLoginInfo.py
 
 Others/
 __pycache__/
