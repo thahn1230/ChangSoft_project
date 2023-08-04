@@ -319,16 +319,10 @@ const User = (props: any) => {
       setJoinValue(
         await {
           ...joinValue,
-          // password: hashedPassword,
-          // company: "창소프트아이앤아이",
-          // user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
-        // password: hashedPassword,
-        // company: "창소프트아이앤아이",
-        // user_type: "User",
       };
 
       //params는 어떻게씀
@@ -342,9 +336,7 @@ const User = (props: any) => {
         body: JSON.stringify({ join_info: updatedJoinValue }),
       });
 
-      const signupData:boolean = await response.json();
-      console.log("result of change information")
-      console.log(signupData);
+      const signupData: boolean = await response.json();
       if (signupData) {
         //회원가입 성공
         window.location.reload();
@@ -360,7 +352,6 @@ const User = (props: any) => {
   };
 
   const changePw = async (newPassword: string, currentPassword: string) => {
-
     try {
       const hashedPassword = await sha256(currentPassword);
       const hashedNewPassword = await sha256(newPassword);
@@ -381,7 +372,7 @@ const User = (props: any) => {
         body: JSON.stringify({ pw_info: updatedPwValue }),
       });
 
-      const changPwData:boolean = await response.json();
+      const changPwData: boolean = await response.json();
       console.log(changPwData);
       if (changPwData) {
         //비밀번호 변경 성공
