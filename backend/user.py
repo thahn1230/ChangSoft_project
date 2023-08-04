@@ -67,6 +67,7 @@ async def change_user_info(params: dict, token: TokenData = Depends(verify_user)
     company = params["join_info"]["company"]
     email_address = params["join_info"]["email_address"]
     phone_number = params["join_info"]["phone_number"]
+    user_type = params["join_info"]["user_type"]
     try :
         with Session(engine) as session:
             session.execute(
@@ -75,7 +76,8 @@ async def change_user_info(params: dict, token: TokenData = Depends(verify_user)
                     UPDATE `user_information` SET `name` = :name, 
                     `job_position` = :job_position, `company` = :company,
                     `email_address` = :email_address, 
-                    `phone_number` = :phone_number
+                    `phone_number` = :phone_number,
+                    `user_type` = :user_type
                     WHERE (`id` = :user_id)
                 """
                 ),
@@ -86,6 +88,7 @@ async def change_user_info(params: dict, token: TokenData = Depends(verify_user)
                     "company": company, 
                     "email_address": email_address, 
                     "phone_number": phone_number, 
+                    "user_type": user_type,
                 }
             )
 
