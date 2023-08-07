@@ -36,6 +36,20 @@ gunicorn을 통해서 uvicorn을 띄운다. 단 linux에서만 가능함
 gunicorn --bind 0.0.0.0:8000 main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --access-logfile access.log
 ```
 
+<gunicorn config적용>
+gunicorn.conf.py 파일 생성
+```
+workers = 4
+worker_class = 'uvicorn.workers.UvicornWorker'
+bind = '0.0.0.0:8000'
+accesslog = 'access.log'
+errorlog = 'error.log'
+access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s" %(D)s'
+```
+```
+gunicorn -c gunicorn.conf.py main:app
+```
+
 <WSL2 사용시 포트포워딩 하는법>
 
 1. 윈도우 또는 WSL 재부팅시
