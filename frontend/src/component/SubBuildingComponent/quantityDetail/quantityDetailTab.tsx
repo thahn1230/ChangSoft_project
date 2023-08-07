@@ -61,7 +61,7 @@ const QuantityDetailTab = (props: any) => {
       <div className="info-table-container" style={{ maxWidth: "90vw" }}>
         <SingleColTable data={gridData}></SingleColTable>
       </div>
-      <PivotTable data={gridData}></PivotTable>
+      {/* <PivotTable data={gridData}></PivotTable> */}
     </div>
   );
 };
