@@ -10,6 +10,7 @@ import "./../../../styles/analysisTab.scss";
 
 const QuantityDetailTab = (props: any) => {
   const [gridData, setGridData] = useState<[]>([]);
+  const [isLoading, setIsLoading]=  useState<boolean>(false);
 
   return (
     <div>
@@ -18,6 +19,8 @@ const QuantityDetailTab = (props: any) => {
           <QuantityFilter
             setGridData={setGridData}
             buildingInfo={props.buildingInfo}
+            // isLoading={isLoading}
+            setIsLoading={setIsLoading}
             // selectedType={selectedType}
           ></QuantityFilter>
         </div>
@@ -25,7 +28,7 @@ const QuantityDetailTab = (props: any) => {
       </div>
 
       <div className="info-table-container" style={{ maxWidth: "90vw" }}>
-        <SingleColTable data={gridData}></SingleColTable>
+        <SingleColTable data={gridData} isLoading={isLoading}></SingleColTable>
       </div>
       {/* <PivotTable data={gridData}></PivotTable> */}
     </div>

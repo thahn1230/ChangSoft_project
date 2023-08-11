@@ -619,6 +619,7 @@ const QuantityFilter = (props: any) => {
   };
 
   const getGridData = async () => {
+    props.setIsLoading(true);
     let subBuildingInfo: SubBuildingI[] = [];
     let floorInfo: FloorI[] = [];
     let componentTypeInfo: ComponentTypeI[] = [];
@@ -808,6 +809,7 @@ const QuantityFilter = (props: any) => {
             break;
         }
         props.setGridData(data);
+        props.setIsLoading(false);
       })
       .catch((error) => console.error("Error:", error));
   };
