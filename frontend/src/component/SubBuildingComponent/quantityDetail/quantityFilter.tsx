@@ -816,16 +816,17 @@ const QuantityFilter = (props: any) => {
 
   return (
     <div className="filters-button-container">
+    <label className="list-label">구분: </label>
         <DropDownList
-        style={{ width: "13%", margin: "1%" }}
+        style={{ width: "13%" }}
         data={["콘크리트", "거푸집", "철근"]}
         value={selectedTypeOnList}
         onChange={onSelectedTypeChange}
       />
 
-
+<label className="list-label">건물명: </label>
       <MultiSelectTree
-        style={{ width: "24%", margin: "1%" }}
+        style={{ width: "20%"}}
         data={subBuildingList}
         value={selectedSubBuildingList}
         onChange={onNewSubBuildingSelection}
@@ -836,8 +837,9 @@ const QuantityFilter = (props: any) => {
         expandField={expandField}
       />
 
+<label className="list-label">층: </label>
       <MultiSelectTree
-        style={{ width: "29%", margin: "1%" }}
+        style={{ width: "24%" }}
         data={filteredFloorList}
         value={selectedFloorList}
         onChange={onNewFloorSelection}
@@ -859,8 +861,9 @@ const QuantityFilter = (props: any) => {
         // }
       />
 
+<label className="list-label">부재: </label>
       <MultiSelectTree
-        style={{ width: "19%", margin: "1%" }}
+        style={{ width: "15%"}}
         data={filteredComponentTypeList}
         value={selectedComponentTypeList}
         onChange={onNewComponentTypeSelection}
@@ -890,6 +893,7 @@ const QuantityFilter = (props: any) => {
           color: "white",
           width: "5vw",
           height: "3vh",
+          margin:"1%"
         }}
       >
         Apply
