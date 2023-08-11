@@ -12,7 +12,7 @@ import {
 } from "@progress/kendo-data-query";
 import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
 import "./../../../styles/subBuildingAnalysisTable.scss";
-import loadingBar from "./../../../resource/loadingBars.gif"
+import loadingBar from "./../../../resource/loadingBars.gif";
 
 const SingleColTable = (props: any) => {
   const [filter, setFilter] = useState<CompositeFilterDescriptor>({
@@ -26,12 +26,21 @@ const SingleColTable = (props: any) => {
     },
   ]);
 
-
+  // props.data.length === 0
+  // !props.isLoading
   return (
     <div>
-      {props.data.length === 0 ? (
-        <div>No data available</div>
-      ) : !props.isLoading?  (
+      {props.isLoading ? (
+        <img
+          alt="loader"
+          src={loadingBar}
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "10%",
+          }}
+        />
+      ) : props.data.length !== 0 ? (
         <div className="analysis-table-container">
           <div>
             <Grid
@@ -75,15 +84,9 @@ const SingleColTable = (props: any) => {
           </div>
           <br></br>
         </div>
-      ):( <img
-        alt="loader"
-        src={loadingBar}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "10%",
-        }}
-      />) }
+      ) : (
+        <div>No data available</div>
+      )}
     </div>
   );
 };
