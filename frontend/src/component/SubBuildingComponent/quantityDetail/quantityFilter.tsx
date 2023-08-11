@@ -4,6 +4,7 @@ import {
   MultiSelectTreeChangeEvent,
   getMultiSelectTreeValue,
 } from "@progress/kendo-react-dropdowns";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Button } from "@progress/kendo-react-buttons";
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 import urlPrefix from "../../../resource/URL_prefix.json";
@@ -14,6 +15,7 @@ import {
 } from "@progress/kendo-data-query";
 import SingleColTable from "./SingleColTable";
 import { dropDownListArrowBtnAriaLabel } from "@progress/kendo-react-dropdowns/dist/npm/messages";
+import { BreadcrumbLink } from "@progress/kendo-react-layout";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -149,6 +151,9 @@ const QuantityFilter = (props: any) => {
       logic: "or",
       filters: [],
     });
+
+  const [selectedType, setSelectedType] = useState("concrete");
+  const [selectedTypeOnList, setSelectedTypeOnList] = useState("콘크리트");
 
   //const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
@@ -598,6 +603,21 @@ const QuantityFilter = (props: any) => {
     }
   };
 
+  const onSelectedTypeChange = (e: any) => {
+    setSelectedTypeOnList(e.value);
+    switch (e.value) {
+      case "콘크리트":
+        setSelectedType("concrete");
+        break;
+      case "거푸집":
+        setSelectedType("formwork");
+        break;
+      case "철근":
+        setSelectedType("rebar");
+        break;
+    }
+  };
+
   const getGridData = async () => {
     let subBuildingInfo: SubBuildingI[] = [];
     let floorInfo: FloorI[] = [];
@@ -644,21 +664,21 @@ const QuantityFilter = (props: any) => {
       subBuildingList: subBuildingInfo_noId,
       floorList: floorInfo_noId,
       componentTypeList: componentTypeInfo_noId,
-      type: props.selectedType,
+      type: selectedType,
       buildingId: props.buildingInfo.id,
     };
 
-    const response = await fetch(
-      urlPrefix.IP_port + "/sub_building/component_info",
-      {
-        method: "POST",
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ info }),
-      }
-    );
+    // const response = await fetch(
+    //   urlPrefix.IP_port + "/sub_building/component_info",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ info }),
+    //   }
+    // );
 
     fetch(urlPrefix.IP_port + "/sub_building/component_info", {
       method: "POST",
@@ -679,7 +699,8 @@ const QuantityFilter = (props: any) => {
           ({ id, building_id, component_id, sub_building_id, ...rest }: any) =>
             rest
         );
-        switch (props.selectedType) {
+
+        switch (selectedType) {
           case "concrete":
             data = data.map(
               ({
@@ -850,6 +871,14 @@ const QuantityFilter = (props: any) => {
         //     : []
         // }
       />
+
+      <DropDownList
+        style={{ width: "13%", margin: "1%" }}
+        data={["콘크리트", "거푸집", "철근"]}
+        value={selectedTypeOnList}
+        onChange={onSelectedTypeChange}
+      />
+
       <Button
         onClick={getGridData}
         style={{

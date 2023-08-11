@@ -167,22 +167,22 @@ export const NavigationLayout = (props: any) => {
           </DrawerContent>
         </Drawer>
 
-        {/* {!expanded ? (
+        {!expanded ? (
           <div></div>
         ) : (
           <div className="user-container" style={getUserContainerStyle()}>
             {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
-            {/* <h1>
+             {/* <h1>
               {name !== null ? name : null}
             </h1>
             <div className="user-email" style={{marginTop: "1%", marginBottom: "3%"}}>
               {emailAddress !== null ? emailAddress : null}
-            </div>
+            </div> */}
               <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
                 Sign Out
               </Button>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
