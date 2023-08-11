@@ -816,6 +816,14 @@ const QuantityFilter = (props: any) => {
 
   return (
     <div className="filters-button-container">
+        <DropDownList
+        style={{ width: "13%", margin: "1%" }}
+        data={["콘크리트", "거푸집", "철근"]}
+        value={selectedTypeOnList}
+        onChange={onSelectedTypeChange}
+      />
+
+
       <MultiSelectTree
         style={{ width: "24%", margin: "1%" }}
         data={subBuildingList}
@@ -874,20 +882,14 @@ const QuantityFilter = (props: any) => {
         // }
       />
 
-      <DropDownList
-        style={{ width: "13%", margin: "1%" }}
-        data={["콘크리트", "거푸집", "철근"]}
-        value={selectedTypeOnList}
-        onChange={onSelectedTypeChange}
-      />
-
+    
       <Button
         onClick={getGridData}
         style={{
           backgroundColor: "rgb(25, 101, 203)",
           color: "white",
           width: "5vw",
-          height: "4vh",
+          height: "3vh",
         }}
       >
         Apply

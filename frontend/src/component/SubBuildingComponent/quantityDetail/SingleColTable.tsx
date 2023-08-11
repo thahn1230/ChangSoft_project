@@ -26,8 +26,7 @@ const SingleColTable = (props: any) => {
     },
   ]);
 
-  // props.data.length === 0
-  // !props.isLoading
+  
   return (
     <div>
       {props.isLoading ? (
