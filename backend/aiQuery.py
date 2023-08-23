@@ -174,7 +174,7 @@ def correct_code(code, pron_dict, error):
 def send_prompt(prompt: str) -> str:
 
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-16k-0613",
+    model="gpt-4-0613",
     messages=[
         {"role": "system", "content": "You are a helpful python data scientist."},
         {"role": "user", "content": prompt},
@@ -188,7 +188,7 @@ def send_prompt(prompt: str) -> str:
 
 def ask_gpt(messages):
     response = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo-16k-0613",
+    model="gpt-4-0613",
     #model="gpt-4-0613",
     messages=[message.to_dict() for message in messages],
     temperature=0.2
@@ -349,20 +349,35 @@ def execute_python(string_python: str) -> Any:
 # return {"plot" : plot_data, "explanation" : explanation}
 def generate_explanation_byplot(plot_data: str):
     answer = []
-    prompt = """give me the 3 line paragraph that explains the data of this plot graph in korean. Especially what the data implies. That is, consider various aspects such as efficiency to compare those. You have to explain it to the manager of the construction company."""
+    prompt = """You are a data analyst for the construction company. When you explain, Round the number to the second decimal place."""
     
-    plot_data_json = json.loads(plot_data)
+    plot_data_list = json.loads(plot_data)
     #print(plot_data_json[1])
-    for i in range (0,len(plot_data_json)):
+    for i in range (0,len(plot_data_list)):
+        
+        if i > 0: #임시. 그래프 1개만 처리한다.
+            break
+
+        plot_data_dic = plot_data_list[i]
+
+        graph_title = plot_data_dic['layout']['title']['text']
+        x_axis_title = plot_data_dic['layout']['xaxis']['title']['text']
+        y_axis_title = plot_data_dic['layout']['yaxis']['title']['text']
+        graph_type = plot_data_dic['data'][0]['type']
+        graph_data_string = json.dumps(plot_data_dic['data'])
+
+        graph_string = f"Graph Title: {graph_title}, X-Axis Title: {x_axis_title}, Y-Axis Title: {y_axis_title}, Graph Type:{graph_type}, Graph Data: {graph_data_string}"
+
+
         response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
+        model="gpt-4-0613",
         messages=[{
             "role" : "system",
             "content" : prompt
         },
         {
             "role" : "user",
-            "content" : plot_data
+            "content" : f"Based on the following plot data, write a simple description in Korean explaining the implication of the plot - notable numerical points, usability, etc. - to a construction manager. {graph_string}"                
         }],
         temperature=0.2
         )
