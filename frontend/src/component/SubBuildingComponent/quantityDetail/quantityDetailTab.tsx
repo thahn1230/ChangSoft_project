@@ -33,7 +33,7 @@ const QuantityDetailTab = (props: any) => {
       <div>
         <div style={{ textAlign: "left" }}>
           <Button
-            onClick={() => setShowTable(!showTable)}
+            onClick={() => setShowTable(prevShowTable => !prevShowTable)}
             style={{
               backgroundColor: "rgb(75, 151, 203)",
               color: "white",
@@ -56,7 +56,7 @@ const QuantityDetailTab = (props: any) => {
 
         <div style={{ textAlign: "left" }}>
           <Button
-            onClick={() => setShowPivot(!showPivot)}
+            onClick={() => setShowPivot(prevShowPivot => !prevShowPivot)}
             style={{
               backgroundColor: "rgb(75, 151, 203)",
               color: "white",
