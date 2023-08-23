@@ -45,10 +45,10 @@ const initialMessages = [
         type: "reply",
         value: "Insight 5",
       },
-      {
-        type: "reply",
-        value: "Insight 6",
-      },
+      // {
+      //   type: "reply",
+      //   value: "Insight 6",
+      // },
     ],
     timestamp: new Date(),
     text: "안녕하세요? 무엇을 도와드릴까요?",
@@ -71,12 +71,12 @@ const AIQuery = () => {
         {
           author: { id: 0, name: "챗봇" },
           selectionIndex: 0,
-          text: "Generating response.",
+          text: "Generating response...",
         },
       ]);
     } else if (!isResponding) {
       setMessages(
-        messages.filter((message) => message.text !== "Generating response.")
+        messages.filter((message) => message.text !== "Generating response...")
       );
     }
   }, [isResponding]);
@@ -122,6 +122,7 @@ const AIQuery = () => {
 
     setIsResponding(false);
     addNewMessage(botResponse);
+    addNewMessage(initialMessages[0]);
   };
 
   return (

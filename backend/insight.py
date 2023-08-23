@@ -24,14 +24,27 @@ import plotly.graph_objects as go
 from typing import List
 from dbAccess import create_db_connection
 from plotly.subplots import make_subplots
+import logging
+from datetime import datetime
 
 router = APIRouter()
 engine = create_db_connection()
 
-font_location = "./Others/malgun"  # For Windows , 맑은 고딕
+font_location = "/home/indigoray/my_projects/smartdb/ChangSoft_project/backend/others/malgun.ttf"  # For Windows , 맑은 고딕
 font_name = fm.FontProperties(fname=font_location).get_name()
 plt.rc("font", family=font_name)
 
+# Logger를 생성하고 로그 레벨을 설정합니다.
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+# Handler를 생성하고 Formatter를 설정합니다.
+handler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+# Logger에 Handler를 추가합니다.
+logger.addHandler(handler)
 
 def add_explanation(fig_json, explanation):
     # Load the fig_json as a Python dictionary
@@ -276,6 +289,10 @@ def get_insight_1(project_ids_str: str):
     # company_name의 모든 프로젝트에 있는 빌딩별, 콘크리트 M3당 철근량(ton) 값에 대한 분석
     # 그래프 1 : 빌딩별 콘크리트 M3당 철근량(ton) 값의 분포 히스토그램
     # 그래프 2 : 프로젝트별 콘크리트 M3당 철근량(ton) 값의 평균값 비교
+    worker_pid = os.getpid()
+    #logging.info(f"Request handled by worker with PID: {worker_pid}")    
+    print(f"{datetime.now()}: Request handled by worker with PID: {worker_pid}")    
+    
     project_ids = json.loads(project_ids_str)
     
     for project_id in project_ids:

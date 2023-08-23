@@ -24,6 +24,9 @@ const Projects = (props: any) => {
 
   return (
     <div className="projects">
+       <q>
+        이 DB는 현재 Demo의 목적으로 공개되고 있습니다. DB에 나타나는 건설사나 프로젝트는 가공된 데이터로 실제의 건설사나, 프로젝트와는 관련이 없습니다.
+      </q>
       <ProjectList
         setData={setData}
         setSelectedProjectName={setSelectedProjectName}
