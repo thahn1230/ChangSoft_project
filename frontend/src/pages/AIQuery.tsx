@@ -9,7 +9,7 @@ import Plot from "react-plotly.js";
 import SendMessageToChatGPT from "../resource/SendMessageToChatGPT";
 import chatgptLogo from "./../resource/chatgpt_logo.png";
 import "./../styles/AIQuery.scss";
-
+import { Loader, LoaderType } from "@progress/kendo-react-indicators";
 
   const bot: User = {
     id: 0,
@@ -63,6 +63,13 @@ const AIQuery = () => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
+  const loadingIndicatorStyle: React.CSSProperties  = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1000 // 채팅창 위에 나타나게 하는 높은 z-index 값
+};
   
   useEffect(() => {
     if (isResponding) {
@@ -137,6 +144,8 @@ const AIQuery = () => {
         placeholder={isResponding ? "is Loading..." : "Enter your message..."}
         width={"98%"}
       />
+      {isResponding && <Loader size="large" type="pulsing" style={loadingIndicatorStyle}  />}
+
     </div>
   );
 };
