@@ -3,9 +3,9 @@ import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserInfoI } from "./../interface/userInfo_interface";
-import urlPrefix from "./../resource/URL_prefix.json";
-import { useUserContext } from "./../UserInfoContext";
+import { UserInfoI } from "../interface/userInfo_interface";
+import urlPrefix from "../resource/URL_prefix.json";
+import { useUserContext } from "../UserInfoContext";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
