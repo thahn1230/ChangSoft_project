@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./../../styles/totalProjectNum.scss";
-import urlPrefix from "./../../resource/URL_prefix.json";
+import urlPrefix from "../../resource/URL_prefix.json";
 
 const TotalProject = () => {
   const [projectNum, setProjectNum] = useState(0);

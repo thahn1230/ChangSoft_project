@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import urlPrefix from "./../../resource/URL_prefix.json";
+import urlPrefix from "../../resource/URL_prefix.json";
 import "./../../styles/totalBuildingNum.scss";
 
 const ProjectDetail = () => {

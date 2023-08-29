@@ -7,7 +7,7 @@ import {
   ChartSeriesItem,
   ChartTooltip,
 } from "@progress/kendo-react-charts";
-import urlPrefix from "./../../resource/URL_prefix.json";
+import urlPrefix from "../../resource/URL_prefix.json";
 import "./../../styles/ChartFont.scss";
 
 const LocalPercentage = () => {

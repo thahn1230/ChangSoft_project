@@ -1,42 +1,36 @@
 import React, { useState, useEffect } from "react";
 import {
   Chart,
-  ChartTitle,
   ChartSeries,
-  ChartValueAxisItem,
+  ChartTitle,
   ChartSeriesItem,
-  ChartValueAxis,
   ChartCategoryAxis,
   ChartCategoryAxisTitle,
   ChartCategoryAxisItem,
+  ChartTooltip,
+  ChartValueAxis,
+  ChartValueAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import axios from "axios";
-import urlPrefix from "./../../resource/URL_prefix.json";
-import "./../../styles/Histogram.scss"
-import "./../../styles/totalArea.scss"
+import urlPrefix from "../../resource/URL_prefix.json";
+import "./../../styles/ChartFont.scss";
+import { useTokenContext, addTokenToRequest } from "../../TokenContext";
 
-interface projectsTotalArea {
-  min_val: number;
-  max_val: number;
+interface ProjectsFloorCount {
   range_num: number;
   item_count: number;
 }
 
 const categoryContent = (e: any) => {
-  return (
-    "&nbsp;&nbsp;&nbsp;" + (e.range_num * 25000).toString()
-    // "&nbsp;&nbsp;&nbsp;" +
-    // Math.floor(((e.max_val - e.min_val) / 8) * e.range_num).toString()
-  );
+  return "&nbsp;&nbsp;" + (e.range_num * 10).toString();
 };
 
-const TotalArea = () => {
-  const [totalarea, setTotalarea] = useState<projectsTotalArea[]>([]);
-  const [maxRng, setMaxRng] = useState(0);
+const FloorCount = () => {
+  const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/project/total_area_histogram", {
+    fetch(urlPrefix.IP_port + "/dashboard/building/floor_count_histogram", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -50,26 +44,31 @@ const TotalArea = () => {
         return response.json();
       })
       .then((data) => {
-        const arrayData = JSON.parse(data)
-        setTotalarea(arrayData);
-        setMaxRng(arrayData[0].max_val);
-
+        const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+        setTotalfloor(arrayData);
       })
       .catch((error) => console.error("Error:", error));
-      
   }, []);
 
+  const renderTooltip = (e: any) => {
+    return (
+      <div>
+        <p>Floors: {e.point.dataItem}</p>
+      </div>
+    );
+  };
+
   return (
-    <div className="bar-chart-container">
-      <Chart style={{height: "36vh"}}>
+    <div>
+      <Chart style={{ height: "36vh" }}>
         <ChartCategoryAxis>
-          <ChartCategoryAxisItem categories={totalarea.map(categoryContent)}>
-            <ChartCategoryAxisTitle text="Total Area (m²)"/>
+          <ChartCategoryAxisItem categories={totalfloor.map(categoryContent)}>
+            <ChartCategoryAxisTitle text="Stories (층)" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>
 
         <ChartValueAxis>
-          <ChartValueAxisItem min={0} majorUnit={1} title={{ text: "Project count" }}/>
+          <ChartValueAxisItem title={{ text: "Building count" }} />
         </ChartValueAxis>
 
         <ChartSeries>
@@ -77,13 +76,14 @@ const TotalArea = () => {
             type="column"
             gap={2}
             spacing={0.25}
-            data={totalarea.map((obj) => obj.item_count)}
+            data={totalfloor.map((obj) => obj.item_count)}
             color="#00028f"
           ></ChartSeriesItem>
         </ChartSeries>
+        <ChartTooltip render={renderTooltip} />
       </Chart>
     </div>
   );
 };
 
-export default TotalArea;
+export default FloorCount;
