@@ -19,16 +19,18 @@ import urlPrefix from "resource/URL_prefix.json";
 import { projectList_interface } from "interface/projectList_interface";
 import { project_interface } from "interface/project_interface";
 
-import "styles/ProjectList.scss";
+//context
+import { useProjectName, useBuildingInfo } from "App";
 
+import "styles/ProjectList.scss";
 import loadingBars from "resource/loadingBars.gif";
 
 const ProjectList = (props: any) => {
   const [data, setData] = useState<project_interface[]>([]);
 
   const [projectList, setProjectList] = useState<string[]>([]);
-  const [selectedProjectName, setSelectedProjectName] =
-    useState<string>("Project");
+
+  const [projectName, setProjectName] = useProjectName();
 
   const [fileteredList, setFileteredList] = useState<string[]>([]);
   const [filteredData, setFilteredData] = useState<project_interface[]>([]);
@@ -140,8 +142,7 @@ const ProjectList = (props: any) => {
     setFileteredList(filterData(event.filter));
   };
   const projectListOnChange = (event: any) => {
-    setSelectedProjectName(event.target.value);
-    props.setSelectedProjectName(event.target.value);
+    setProjectName(event.target.value)
   };
 
   //건설회사,지역 comboboxes
@@ -312,7 +313,7 @@ const ProjectList = (props: any) => {
         <ComboBox
           id="project-combobox"
           data={fileteredList}
-          value={selectedProjectName}
+          value={projectName}
           onChange={projectListOnChange}
           onFilterChange={filterChange}
           filterable={true}

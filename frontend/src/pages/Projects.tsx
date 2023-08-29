@@ -5,27 +5,18 @@ import ProjectList from "component/projectComponent/ProjectList";
 import { projectList_interface } from "interface/projectList_interface";
 import { buildingInfo_interface } from "interface/buildingInfo_interface";
 
-const Projects = (props: any) => {
-  const [selectedProjectName, setSelectedProjectName] = useState<string>(
-    "project를 선택해주세요"
-  );
-  const [data, setData] = useState<projectList_interface[]>([]);
-  const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
-  >();
+//context
+import {useProjectName, useBuildingInfo} from "App"
 
-  useEffect(() => {
-    props.setBuildingInfo(buildingInfo);
-  }, [buildingInfo]);
-  useEffect(() => {
-    props.setProjectName(selectedProjectName);
-  }, [selectedProjectName]);
+const Projects = (props: any) => {
+  //const [, setBuildingInfo] = useBuildingInfo();
+  const [projectName, setProjectName] = useProjectName();
+  const [data, setData] = useState<projectList_interface[]>([]);
 
   return (
     <div className="projects">
       <ProjectList
         setData={setData}
-        setSelectedProjectName={setSelectedProjectName}
       />
 
       <div className="projectDetail">
@@ -39,7 +30,7 @@ const Projects = (props: any) => {
         <div style={{ width: "49%", float: "right", paddingLeft: "1%" }}>
           <ProjectDetail
             selectedProject={data.find(
-              (data: any) => data.project_name === selectedProjectName
+              (data: any) => data.project_name === projectName
             )}
           />
         </div>
@@ -47,9 +38,7 @@ const Projects = (props: any) => {
 
       <div className="projects">
         <BuildingList
-          projectName={selectedProjectName}
           projectList={data}
-          setBuildingInfo={setBuildingInfo}
         />
       </div>
     </div>

@@ -2,10 +2,14 @@ import react, { useEffect, useState, useCallback } from "react";
 import SingleColTable from "component/SubBuildingComponent/quantityDetail/SingleColTable";
 import QuantityFilter from "component/SubBuildingComponent/quantityDetail/QuantityFilter";
 import PivotTableChart from "component/SubBuildingComponent/quantityDetail/PivotTableChart";
-import "styles/analysisTab.scss";
 import { Button } from "@progress/kendo-react-buttons";
+import { useBuildingInfo} from "App"
 
-const QuantityDetailTab = (props: any) => {
+import "styles/analysisTab.scss";
+
+const QuantityDetailTab = () => {
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
+
   const [gridData, setGridData] = useState<[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showTable, setShowTable] = useState(true);
@@ -17,7 +21,7 @@ const QuantityDetailTab = (props: any) => {
         <div>
           <QuantityFilter
             setGridData={setGridData}
-            buildingInfo={props.buildingInfo}
+            buildingInfo={buildingInfo}
             // isLoading={isLoading}
             setIsLoading={setIsLoading}
             // selectedType={selectedType}

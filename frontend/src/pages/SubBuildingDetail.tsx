@@ -4,7 +4,7 @@ import SubBuildingTabLayout from "component/SubBuildingTabLayout";
 const SubBuildingDetail: React.FC = () => {
     return (
       <div>
-        <SubBuildingTabLayout></SubBuildingTabLayout>
+        <SubBuildingTabLayout/>
       </div>
     );
   };

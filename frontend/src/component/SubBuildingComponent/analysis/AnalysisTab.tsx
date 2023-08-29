@@ -14,17 +14,21 @@ import SubBuildingList from "component/SubBuildingComponent/analysis/SubBuilding
 import SingleColTable from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
-import "styles/analysisTab.scss";
-
 import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+import {useProjectName, useBuildingInfo} from "App"
+
+import "styles/analysisTab.scss";
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
-const AnalysisTab = (props: any) => {
+const AnalysisTab = () => {
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
+  const [projectName, setProjectName] = useProjectName();
+
   const headerData = [
     {
-      projectName: props.projectName,
-      building_name: props.buildingInfo?.building_name,
+      projectName: projectName,
+      building_name: buildingInfo?.building_name,
     },
   ];
 
@@ -53,7 +57,7 @@ const AnalysisTab = (props: any) => {
   };
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+    fetch(urlPrefix.IP_port + "/sub_building/" + buildingInfo?.id, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -71,7 +75,7 @@ const AnalysisTab = (props: any) => {
         setSubBuildingInfo(data);
       })
       .catch((error) => console.error("Error:", error));
-  }, [props.buildingInfo]);
+  }, [buildingInfo]);
 
   useEffect(() => {
     let concretePivotResponse: any;
@@ -82,7 +86,7 @@ const AnalysisTab = (props: any) => {
         const concretePromise = fetch(
           urlPrefix.IP_port +
             "/sub_building/analysis_table_all/" +
-            props.buildingInfo.id +
+            buildingInfo?.id +
             "/concrete",
           {
             method: "GET",
@@ -105,7 +109,7 @@ const AnalysisTab = (props: any) => {
         const formworkPromise = fetch(
           urlPrefix.IP_port +
             "/sub_building/analysis_table_all/" +
-            props.buildingInfo.id +
+            buildingInfo?.id +
             "/formwork",
           {
             method: "GET",
@@ -128,7 +132,7 @@ const AnalysisTab = (props: any) => {
         const rebarPromise = fetch(
           urlPrefix.IP_port +
             "/sub_building/analysis_table_all/" +
-            props.buildingInfo.id +
+            buildingInfo?.id +
             "/rebar",
           {
             method: "GET",
@@ -452,13 +456,10 @@ const AnalysisTab = (props: any) => {
             cell={() => (
               <div style={{ textAlign: "center", margin: "3px" }}>
                 <SubBuildingList
-                  buildingInfo={props.buildingInfo}
-                  projectName={props.projectName}
+                  buildingInfo={buildingInfo}
+                  projectName={projectName}
                   setSelectedSubBuildingId={setSelectedSubBuildingId}
                   selectedSubBuildingId={selectedSubBuildingId}
-                  selectedSubBuildingName={
-                    props.selectedSubBuildingInfo?.sub_building_name
-                  }
                   subBuildingInfo={subBuildingInfo}
                 />
               </div>

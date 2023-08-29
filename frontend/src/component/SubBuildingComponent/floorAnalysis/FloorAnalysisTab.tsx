@@ -16,8 +16,8 @@ import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/Su
 import SubBuildingAnalysisTableSingleCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import ComponentTypeList from "component/SubBuildingComponent/floorAnalysis/ComponentTypeList";
-
 import urlPrefix from "resource/URL_prefix.json";
+import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/FloorAnalysisTab.scss";
 
@@ -30,11 +30,14 @@ interface RebarJson {
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
-const FloorAnalysisTab = (props: any) => {
+const FloorAnalysisTab = () => {
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
+  const [projectName, setProjectName] = useProjectName();
+
   const headerData = [
     {
-      projectName: props.projectName,
-      building_name: props.buildingInfo?.building_name,
+      projectName: projectName,
+      building_name: buildingInfo?.building_name,
     },
   ];
 
@@ -70,7 +73,7 @@ const FloorAnalysisTab = (props: any) => {
     fetch(
       urlPrefix.IP_port +
         "/sub_building/floor_analysis_table/" +
-        props.buildingInfo.id +
+        buildingInfo?.id +
         "/component_type",
       {
         method: "GET",
@@ -103,7 +106,7 @@ const FloorAnalysisTab = (props: any) => {
 
       })
       .catch((error) => console.error("Error:", error));
-  }, [props.buildingInfo]);
+  }, [buildingInfo]);
 
   useEffect(() => {
     if (fetched) return;
@@ -131,7 +134,7 @@ const FloorAnalysisTab = (props: any) => {
       setSelectedGridChart(<div>부재를 선택해주세요.</div>);
     } else {
       const concreteUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/concrete/filter`
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/concrete/filter`
       );
       concreteUrl.search = new URLSearchParams(params).toString();
       fetch(concreteUrl.toString(), {
@@ -163,7 +166,7 @@ const FloorAnalysisTab = (props: any) => {
         .catch((error) => console.error("Error:", error));
 
       const formworkUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/formwork/filter`
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/formwork/filter`
       );
       formworkUrl.search = new URLSearchParams(params).toString();
       fetch(formworkUrl.toString(), {
@@ -195,7 +198,7 @@ const FloorAnalysisTab = (props: any) => {
         .catch((error) => console.error("Error:", error));
 
       const rebarUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${props.buildingInfo.id}/rebar/filter`
+        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/rebar/filter`
       );
       rebarUrl.search = new URLSearchParams(params).toString();
       fetch(rebarUrl.toString(), {

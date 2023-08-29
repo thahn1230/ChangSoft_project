@@ -1,13 +1,10 @@
 import React from "react";
 import SubBuildingTabLayout from "component/SubBuildingTabLayout";
 
-const Analyses = (props:any) => {
+const Analyses = () => {
   return (
     <div>
-      <SubBuildingTabLayout
-      buildingInfo={props.buildingInfo}
-      projectName={props.projectName}>
-      </SubBuildingTabLayout>
+      <SubBuildingTabLayout/>
     </div>
   );
 };

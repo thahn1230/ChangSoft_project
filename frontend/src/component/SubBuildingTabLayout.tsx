@@ -8,7 +8,7 @@ import FloorAnalysisTab from "component/SubBuildingComponent/floorAnalysis/Floor
 import QuantityDetailTab from "component/SubBuildingComponent/quantityDetail/QuantityDetailTab";
 import "styles/subBuildingTabLayout.scss";
 
-const SubBuildingTabLayout = (props: any) => {
+const SubBuildingTabLayout = () => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
 
   const renderComponent = () => {
@@ -16,38 +16,24 @@ const SubBuildingTabLayout = (props: any) => {
       case "개요":
         return (
           <BuildingDetail
-            projectName={props.projectName}
-            buildingInfo={props.buildingInfo}
             forAnalysisTab={true}
           />
         );
       case "총괄분석표":
         return (
-          <TotalAnalysisTab
-            buildingInfo={props.buildingInfo}
-            projectName={props.projectName}
-          ></TotalAnalysisTab>
+          <TotalAnalysisTab/>
         );
       case "분석표":
         return (
-          <AnalysisTab
-            buildingInfo={props.buildingInfo}
-            projectName={props.projectName}
-          ></AnalysisTab>
+          <AnalysisTab/>
         );
       case "층별총집계표":
         return (
-          <FloorAnalysisTab
-            buildingInfo={props.buildingInfo}
-            projectName={props.projectName}
-          ></FloorAnalysisTab>
+          <FloorAnalysisTab/>
         );
       case "물량정보상세":
         return (
-          <QuantityDetailTab
-            buildingInfo={props.buildingInfo}
-            projectName={props.projectName}
-          ></QuantityDetailTab>
+          <QuantityDetailTab/>
         );
       default:
         return null;

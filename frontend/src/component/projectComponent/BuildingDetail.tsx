@@ -10,20 +10,19 @@ import { Button } from "@progress/kendo-react-buttons";
 import urlPrefix from "resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/GridDetail.scss";
 
 const BuildingDetail = (props: any) => {
   const [returnDiv, setReturnDiv] = useState(<div></div>);
   const [imgPath, setImgPath] = useState<string>("");
-  const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
-  >();
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
 
   useEffect(() => {
     fetch(urlPrefix.IP_port +
       "/building/" +
-      props.buildingInfo.id +
+      buildingInfo?.id +
       "/get_project_name", {
       method: "GET",
       headers: {
@@ -46,7 +45,6 @@ const BuildingDetail = (props: any) => {
             data[0].building_name +
             "/ScreenShot.png"
         );
-        setBuildingInfo(props.buildingInfo);
         setImgPath(importedImagePath.default);
       })
       .catch((error) => console.error("Error:", error));

@@ -23,6 +23,8 @@ import { GridPDFExport } from "@progress/kendo-react-pdf";
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import "styles/GridDetail.scss";
 
+import {useProjectName, useBuildingInfo} from "App"
+
 const DATA_ITEM_KEY = "id";
 const SELECTED_FIELD = "selected";
 const initialDataState = {
@@ -32,12 +34,11 @@ const initialDataState = {
 
 //여기에 빌딩상세정보
 const DetailComponent = (props: any) => {
-  props.setBuildingInfo(props.dataItem);
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
+  setBuildingInfo(props.dataItem);
   return (
     <div>
       <BuildingDetail
-        projectName={props.projectName}
-        buildingInfo={props.dataItem}
         forAnalysisTab={false}
       />
     </div>
@@ -61,6 +62,8 @@ const BuildingList = (props: any) => {
   const [categories, setCategories] = React.useState([]);
   //const [attributeNames, setAttributeNames] = useState<string[]>([""]);
   const [projectFilter, setProjectFilter] = useState(initialFilter);
+
+  const [projectName, setProjectName] = useProjectName();
 
   let gridPDFExport: GridPDFExport | null;
   let gridExcelExport: ExcelExport | null;
@@ -92,7 +95,7 @@ const BuildingList = (props: any) => {
   useEffect(() => {
     if (props.projectList) {
       const projectId: number = props.projectList.find(
-        (item: any) => item.project_name === props.projectName
+        (item: any) => item.project_name === projectName
       )?.id;
       if (projectId) {
         setProjectFilter({
@@ -108,7 +111,7 @@ const BuildingList = (props: any) => {
         setPage(initialDataState);
       }
     }
-  }, [props.projectList, props.projectName]);
+  }, [props.projectList, projectName]);
 
   useEffect(() => {
     const filteredItems = filterBy(initialBuildingList, projectFilter);
@@ -196,7 +199,6 @@ const BuildingList = (props: any) => {
         detail={({ dataItem }) => (
           <DetailComponent
             dataItem={dataItem}
-            setBuildingInfo={props.setBuildingInfo}
           />
         )}
         onExpandChange={expandChange}
