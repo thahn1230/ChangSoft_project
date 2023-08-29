@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import SubBuildingTabLayout from "../component/subBuildingTabLayout";
+import SubBuildingTabLayout from "../component/SubBuildingTabLayout";
 
 const SubBuildingDetail: React.FC = () => {
     return (

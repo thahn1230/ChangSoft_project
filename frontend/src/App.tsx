@@ -19,7 +19,7 @@ import Projects from "./pages/Projects";
 import UserPage from "./pages/user";
 import Insight from "./pages/insight";
 import { buildingInfo_interface } from "./interface/buildingInfo_interface";
-import SubBuildingTabLayout from "./component/subBuildingTabLayout";
+import SubBuildingTabLayout from "./component/SubBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
 

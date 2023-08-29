@@ -254,7 +254,6 @@ const LoginPage = (props: any) => {
         //token을 context가 아니고 localstorage로 관리하게 바꾸기
         //tokenContext?.setToken(loginData.token)
         localStorage.setItem("token", loginData.token);
-
         navigator("/home");
         return true;
       } else {

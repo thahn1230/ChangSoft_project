@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
-import SubBuildingTabLayout from "./../component/subBuildingTabLayout";
+import SubBuildingTabLayout from "./../component/SubBuildingTabLayout";
 
 const Analyses = (props:any) => {
   return (

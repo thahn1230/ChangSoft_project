@@ -5,7 +5,7 @@ import {
 } from "@progress/kendo-react-inputs";
 import SingleColTable from "./SingleColTable";
 import QuantityFilter from "./quantityFilter";
-import PivotTable from "./PivotTable";
+// import PivotTable from "./PivotTable";
 import PivotTableChart from "./PivotTableChart";
 import "./../../../styles/analysisTab.scss";
 import { Button } from "@progress/kendo-react-buttons";
