@@ -1,7 +1,7 @@
-import BuildingList from "../component/projectComponent/buildingList";
+import BuildingList from "../component/projectComponent/temp6";
 import React, { useEffect, useState } from "react";
-import ProjectDetail from "../component/projectComponent/projectDetail";
-import ProjectList from "./../component/projectComponent/projectList";
+import ProjectDetail from "../component/projectComponent/temp4";
+import ProjectList from "../component/projectComponent/temp5";
 import { projectList_interface } from "./../interface/projectList_interface";
 import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
 import tempImage from "./../resource/temp.jpg"

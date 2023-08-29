@@ -17,8 +17,8 @@ import {
 } from "@progress/kendo-data-query";
 import axios from "axios";
 import urlPrefix from "../../resource/URL_prefix.json";
-import { projectList_interface } from "./../../interface/projectList_interface";
-import { project_interface } from "./../../interface/project_interface";
+import { projectList_interface } from "../../interface/projectList_interface";
+import { project_interface } from "../../interface/project_interface";
 
 import "./../../styles/ProjectList.scss";
 import { returnFalse } from "@progress/kendo-react-inputs/dist/npm/maskedtextbox/utils";
