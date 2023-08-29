@@ -16,8 +16,8 @@ import {
 import { NavigationLayout } from "./component/NavgationLayout";
 import { Home } from "./pages/Home";
 import Projects from "./pages/Projects";
-import UserPage from "./pages/temp1";
-import Insight from "./pages/temp2";
+import UserPage from "./pages/User";
+import Insight from "./pages/Insight";
 import { buildingInfo_interface } from "./interface/buildingInfo_interface";
 import SubBuildingTabLayout from "./component/SubBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
