@@ -1,13 +1,8 @@
 import react, { useEffect, useState, useCallback } from "react";
-import {
-  RadioButton,
-  RadioButtonChangeEvent,
-} from "@progress/kendo-react-inputs";
-import SingleColTable from "./SingleColTable";
-import QuantityFilter from "./QuantityFilter";
-// import PivotTable from "./PivotTable";
-import PivotTableChart from "./PivotTableChart";
-import "./../../../styles/analysisTab.scss";
+import SingleColTable from "component/SubBuildingComponent/quantityDetail/SingleColTable";
+import QuantityFilter from "component/SubBuildingComponent/quantityDetail/QuantityFilter";
+import PivotTableChart from "component/SubBuildingComponent/quantityDetail/PivotTableChart";
+import "styles/analysisTab.scss";
 import { Button } from "@progress/kendo-react-buttons";
 
 const QuantityDetailTab = (props: any) => {

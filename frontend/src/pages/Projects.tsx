@@ -1,10 +1,9 @@
-import BuildingList from "../component/projectComponent/BuildingList";
 import React, { useEffect, useState } from "react";
-import ProjectDetail from "../component/projectComponent/ProjectDetail";
-import ProjectList from "../component/projectComponent/ProjectList";
-import { projectList_interface } from "./../interface/projectList_interface";
-import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
-import tempImage from "./../resource/temp.jpg"
+import BuildingList from "component/projectComponent/BuildingList";
+import ProjectDetail from "component/projectComponent/ProjectDetail";
+import ProjectList from "component/projectComponent/ProjectList";
+import { projectList_interface } from "interface/projectList_interface";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
 
 const Projects = (props: any) => {
   const [selectedProjectName, setSelectedProjectName] = useState<string>(

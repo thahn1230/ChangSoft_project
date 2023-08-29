@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
-import "./../styles/NavigationLayout.scss";
-import ChangSoftLogo from "./../resource/changSoft_logo.png";
-import tempIMG from "./../resource/temp.jpg";
-import { useUserContext } from "../UserInfoContext";
-import { useTokenContext } from "./../TokenContext";
-import urlPrefix from "../resource/URL_prefix.json";
-import exp from "constants";
+import "styles/NavigationLayout.scss";
+import ChangSoftLogo from "resource/changSoft_logo.png";
+import urlPrefix from "resource/URL_prefix.json";
 
 interface MenuItem {
   text: string;
@@ -60,8 +56,6 @@ export const NavigationLayout = (props: any) => {
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
 
-
-  const tokenContext = useTokenContext();
 
   const handleClick = () => {
     setExpanded(!expanded);

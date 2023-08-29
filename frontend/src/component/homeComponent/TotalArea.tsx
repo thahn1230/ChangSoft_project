@@ -11,10 +11,9 @@ import {
   ChartCategoryAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
-import "./../../styles/Histogram.scss"
-import "./../../styles/totalArea.scss"
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/Histogram.scss"
+import "styles/totalArea.scss"
 
 interface projectsTotalArea {
   min_val: number;

@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
+import React from "react";
 import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
 
-import urlPrefix from "../../../resource/URL_prefix.json";
-import "./../../../styles/subBuildingAnalysisTable.scss";
+import "styles/subBuildingAnalysisTable.scss";
 
 
 const SubBuildingAnalysisTable = (props: any) => {

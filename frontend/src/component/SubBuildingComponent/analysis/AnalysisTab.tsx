@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import SubBuildingList from "./SubBuildingList";
 import {
   RadioButton,
   RadioButtonChangeEvent,
@@ -10,15 +9,14 @@ import {
   SplitterBar,
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import SubBuildingAnalysisTable from "./SubBuildingAnalysisTable";
-import SingleColTable from "./SubBuildingAnalysisTable_singleCol";
-import SubBuildingAnalysisTableSubCol from "./SubBuildingAnalysisTable_subCol";
-import SubBuildingAnalysisGraph from "./SubBuildingAnalysisGraph";
-import "./../../../styles/analysisTab.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import SubBuildingList from "component/SubBuildingComponent/analysis/SubBuildingList";
+import SingleColTable from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
+import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
+import "styles/analysisTab.scss";
 
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 

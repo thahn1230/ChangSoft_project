@@ -12,15 +12,14 @@ import {
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
 
-import SubBuildingFloorAnalysisTable from "./SubBuildingFloorAnalysisTable";
-import SubBuildingAnalysisGraph from "../analysis/SubBuildingAnalysisGraph";
-import SubBuildingAnalysisTableSingleCol from "../analysis/SubBuildingAnalysisTable_singleCol";
-import SubBuildingAnalysisTableSubCol from "../analysis/SubBuildingAnalysisTable_subCol";
-import ComponentTypeList from "./ComponentTypeList";
+import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
+import SubBuildingAnalysisTableSingleCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
+import ComponentTypeList from "component/SubBuildingComponent/floorAnalysis/ComponentTypeList";
 
-import urlPrefix from "../../../resource/URL_prefix.json";
+import urlPrefix from "resource/URL_prefix.json";
 
-import "./../../../styles/FloorAnalysisTab.scss";
+import "styles/FloorAnalysisTab.scss";
 
 interface RebarJson {
   floor_name: string;

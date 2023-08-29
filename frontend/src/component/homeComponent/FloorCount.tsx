@@ -12,10 +12,8 @@ import {
   ChartValueAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
-import "./../../styles/ChartFont.scss";
-import { useTokenContext, addTokenToRequest } from "../../TokenContext";
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/ChartFont.scss";
 
 interface ProjectsFloorCount {
   range_num: number;

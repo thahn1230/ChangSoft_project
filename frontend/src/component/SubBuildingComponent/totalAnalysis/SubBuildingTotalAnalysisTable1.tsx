@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
+import urlPrefix from "resource/URL_prefix.json";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
-import SubBuildingList from "./SubBuildingList";
+import SubBuildingList from "component/SubBuildingComponent/totalAnalysis/SubBuildingList";
 
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "../../../interface/subBuildingTotalAnalysisTable1_interface";
-import "./../../../styles/subBuildingTotalAnalysisTable.scss";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { subBuildingTotalAnalysisTable1_interface } from "interface/subBuildingTotalAnalysisTable1_interface";
+import "styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();

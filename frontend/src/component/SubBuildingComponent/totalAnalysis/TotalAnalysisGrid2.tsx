@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import { subBuildingTotalAnalysisTable2_interface } from "../../../interface/subBuildingTotalAnalysisTable2_interface";
-import { subBuildingAnalysisPercentage_interface } from "../../../interface/subBuildingAnalysisPercentage_interface";
+import urlPrefix from "resource/URL_prefix.json";
+import { subBuildingTotalAnalysisTable2_interface } from "interface/subBuildingTotalAnalysisTable2_interface";
 
 import {
   Grid,
@@ -13,7 +11,7 @@ import {
   GridDataStateChangeEvent,
   GridExpandChangeEvent,
 } from "@progress/kendo-react-grid";
-import "./../../../styles/subBuildingTotalAnalysisTable.scss";
+import "styles/subBuildingTotalAnalysisTable.scss";
 
 const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =

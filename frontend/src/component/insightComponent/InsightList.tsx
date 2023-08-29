@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
+import urlPrefix from "resource/URL_prefix.json";
 import {
   DropDownList,
   MultiSelect,
@@ -17,7 +16,7 @@ import {
 } from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
 
-import "./../../styles/insightList.scss";
+import "styles/insightList.scss";
 
 const dataItemKey = "id";
 const checkField = "checkField";

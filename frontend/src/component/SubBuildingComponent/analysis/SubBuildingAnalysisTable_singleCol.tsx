@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
 
-import "./../../../styles/subBuildingAnalysisTable.scss";
+import "styles/subBuildingAnalysisTable.scss";
 
 const SingleColTable = (props: any) => {
   return (

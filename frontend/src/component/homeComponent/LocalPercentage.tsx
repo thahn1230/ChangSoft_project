@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Chart,
   ChartLegend,
@@ -7,8 +6,8 @@ import {
   ChartSeriesItem,
   ChartTooltip,
 } from "@progress/kendo-react-charts";
-import urlPrefix from "../../resource/URL_prefix.json";
-import "./../../styles/ChartFont.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/ChartFont.scss";
 
 const LocalPercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);

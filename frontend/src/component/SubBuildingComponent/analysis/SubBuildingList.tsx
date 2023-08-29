@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { DropDownList, ComboBox } from "@progress/kendo-react-dropdowns";
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import { TextArea } from "@progress/kendo-react-inputs";
+import urlPrefix from "resource/URL_prefix.json";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
 
 const SubBuildingList = (props: any) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);

@@ -7,13 +7,11 @@ import {
   GridToolbar,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
+import urlPrefix from "resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
-import { buildingInfo_interface } from "../../interface/buildingInfo_interface";
-import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/SubBuildingList";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
 
-import "./../../styles/GridDetail.scss";
+import "styles/GridDetail.scss";
 
 const BuildingDetail = (props: any) => {
   const [returnDiv, setReturnDiv] = useState(<div></div>);

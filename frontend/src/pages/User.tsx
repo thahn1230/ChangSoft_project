@@ -3,9 +3,7 @@ import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserInfoI } from "../interface/userInfo_interface";
-import urlPrefix from "../resource/URL_prefix.json";
-import { useUserContext } from "../UserInfoContext";
+import urlPrefix from "resource/URL_prefix.json";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
@@ -292,7 +290,6 @@ const sha256 = async (message: string) => {
 };
 
 const User = (props: any) => {
-  const userInfoContext = useUserContext();
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");

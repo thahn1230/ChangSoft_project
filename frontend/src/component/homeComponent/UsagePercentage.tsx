@@ -6,10 +6,9 @@ import {
   ChartSeries,
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
-import "./../../styles/ChartFont.scss";
-import "./../../styles/Chart.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/ChartFont.scss";
+import "styles/Chart.scss";
 
 const UsagePercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);

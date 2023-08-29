@@ -6,16 +6,12 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Button } from "@progress/kendo-react-buttons";
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import urlPrefix from "../../../resource/URL_prefix.json";
+import urlPrefix from "resource/URL_prefix.json";
 import {
   CompositeFilterDescriptor,
   filterBy,
   FilterDescriptor,
 } from "@progress/kendo-data-query";
-import SingleColTable from "./SingleColTable";
-import { dropDownListArrowBtnAriaLabel } from "@progress/kendo-react-dropdowns/dist/npm/messages";
-import { BreadcrumbLink } from "@progress/kendo-react-layout";
 
 const dataItemKey = "id";
 const checkField = "checkField";

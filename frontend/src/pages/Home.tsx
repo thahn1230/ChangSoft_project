@@ -3,16 +3,15 @@ import {
   TileLayout,
   TileLayoutRepositionEvent,
 } from "@progress/kendo-react-layout";
-import TotalProject from "../component/homeComponent/TotalProject";
-import ProjectDetail from "../component/homeComponent/ProjectDetail";
-import DistributionMap from "../component/homeComponent/DistributionMap";
-import UsagePercentage from "../component/homeComponent/UsagePercentage";
-import CompanyPercentage from "../component/homeComponent/CompanyPercentage";
-import LocalPercentage from "../component/homeComponent/LocalPercentage";
-import TotalArea from "../component/homeComponent/TotalArea";
-import FloorCount from "../component/homeComponent/FloorCount";
-import { Button } from "@progress/kendo-react-buttons";
-import "./../styles/Home.scss"
+import TotalProject from "component/homeComponent/TotalProject";
+import ProjectDetail from "component/homeComponent/ProjectDetail";
+import DistributionMap from "component/homeComponent/DistributionMap";
+import UsagePercentage from "component/homeComponent/UsagePercentage";
+import CompanyPercentage from "component/homeComponent/CompanyPercentage";
+import LocalPercentage from "component/homeComponent/LocalPercentage";
+import TotalArea from "component/homeComponent/TotalArea";
+import FloorCount from "component/homeComponent/FloorCount";
+import "styles/Home.scss"
 
 
 interface Tile {

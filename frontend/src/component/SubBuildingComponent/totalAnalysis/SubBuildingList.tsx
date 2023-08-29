@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import "./../../../styles/SubBuildingList.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+import "styles/SubBuildingList.scss";
 
 const SubBuildingList = (props: any) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);

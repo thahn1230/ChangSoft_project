@@ -7,12 +7,10 @@ import {
   ChartSeriesItem,
   ChartTooltip,
 } from "@progress/kendo-react-charts";
-import urlPrefix from "../../resource/URL_prefix.json";
-import { useTokenContext, addTokenToRequest } from "../../TokenContext";
+import urlPrefix from 'resource/URL_prefix.json';
 
 const CompanyPercentage = () => {
   const [percentages, setPercentages] = useState<any[]>([]);
-  const tokenContext = useTokenContext();
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/dashboard/project/construction_company_ratio", {

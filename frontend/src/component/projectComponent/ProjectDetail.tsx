@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import axios from "axios";
-import urlPrefix from "../../resource/URL_prefix.json";
-import "../../styles/GridDetail.scss";
-import { formatNumber } from "@progress/kendo-intl";
-
-import "./../../styles/GridDetail.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/GridDetail.scss";
 
 interface projectDetail_interface {
   project_name: string;

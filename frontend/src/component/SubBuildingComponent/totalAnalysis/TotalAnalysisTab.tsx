@@ -1,35 +1,27 @@
 import React, { useState, useEffect } from "react";
 import {
   Grid,
-  GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
-  GridFilterChangeEvent,
+  GridColumn
 } from "@progress/kendo-react-grid";
 import {
   RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
-import { BrowserRouter } from "react-router-dom";
-import SubBuildingList from "./SubBuildingList";
-import SubBuildingTotalAnalysisTable1 from "./SubBuildingTotalAnalysisTable1";
-import TotalAnalysisGrid2 from "./TotalAnalysisGrid2";
-import SubBuildingTotalAnalysisPieChart from "./SubBuildingTotalAnalysisPieChart";
-import SubBuildingTotalAnalysisBarChart from "./SubBuildingTotalAnalysisBarChart";
+import SubBuildingTotalAnalysisTable1 from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisTable1";
+import TotalAnalysisGrid2 from "component/SubBuildingComponent/totalAnalysis/TotalAnalysisGrid2";
+import SubBuildingTotalAnalysisPieChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisPieChart";
+import SubBuildingTotalAnalysisBarChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisBarChart";
 
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "../../../interface/subBuildingTotalAnalysisTable1_interface";
-import { subBuildingTotalAnalysisTable2_interface } from "../../../interface/subBuildingTotalAnalysisTable2_interface";
-import { subBuildingAnalysisPercentage_interface } from "../../../interface/subBuildingAnalysisPercentage_interface";
-import { subBuildingAnalysisValue_interface } from "../../../interface/subBuildingAnalysisValue_interface";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { subBuildingTotalAnalysisTable1_interface } from "interface/subBuildingTotalAnalysisTable1_interface";
+import { subBuildingAnalysisPercentage_interface } from "interface/subBuildingAnalysisPercentage_interface";
+import { subBuildingAnalysisValue_interface } from "interface/subBuildingAnalysisValue_interface";
 
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import "./../../../styles/SubBuildingDetail.scss";
+import urlPrefix from "resource/URL_prefix.json";
+import "styles/SubBuildingDetail.scss";
 
-import Analyses from "../../../pages/analyses";
-import "./../../../styles/TotalAnalysisTab.scss";
+import "styles/TotalAnalysisTab.scss";
 
 const TotalAnalysisTab = (props: any) => {
   const [buildingInfo, setBuildingInfo] = useState<

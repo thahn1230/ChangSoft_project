@@ -6,13 +6,9 @@ import {
   MapBubbleLayer,
   MapShapeLayer,
   MapTileLayer,
-  MapMarkerLayer,
 } from "@progress/kendo-react-map";
-import urlPrefix from "../../resource/URL_prefix.json";
-import { location } from "../../interface/location";
-import { coordinate } from "../../interface/coordinate";
-import axios, { AxiosRequestConfig } from "axios";
-import { useTokenContext, addTokenToRequest } from "../../TokenContext";
+import urlPrefix from "resource/URL_prefix.json";
+import { coordinate } from "interface/coordinate";
 // import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
 
 const tileSubdomains = ["a", "b", "c"];

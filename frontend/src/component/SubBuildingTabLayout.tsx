@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Menu, MenuItem, MenuSelectEvent } from "@progress/kendo-react-layout";
-import {
-  useLocation,
-  useNavigate,
-  Outlet,
-  Link,
-  Navigate,
-} from "react-router-dom";
 
-import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
-import BuildingDetail from "./projectComponent/BuildingDetail";
-import AnalysisTab from "./SubBuildingComponent/analysis/AnalysisTab";
-import FloorAnalysisTab from "./SubBuildingComponent/floorAnalysis/FloorAnalysisTab";
-import QuantityDetailTab from "./SubBuildingComponent/quantityDetail/QuantityDetailTab";
-import "./../styles/subBuildingTabLayout.scss";
+import TotalAnalysisTab from "component/SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
+import BuildingDetail from "component/projectComponent/BuildingDetail";
+import AnalysisTab from "component/SubBuildingComponent/analysis/AnalysisTab";
+import FloorAnalysisTab from "component/SubBuildingComponent/floorAnalysis/FloorAnalysisTab";
+import QuantityDetailTab from "component/SubBuildingComponent/quantityDetail/QuantityDetailTab";
+import "styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
