@@ -11,11 +11,11 @@ import {
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
 import { BrowserRouter } from "react-router-dom";
-import SubBuildingList from "./subBuildingList";
-import SubBuildingTotalAnalysisTable1 from "./subBuildingTotalAnalysisTable1";
-import TotalAnalysisGrid2 from "./subBuildingTotalAnalysisTable2";
-import SubBuildingTotalAnalysisPieChart from "./subBuildingTotalAnalysisPieChart";
-import SubBuildingTotalAnalysisBarChart from "./subBuildingTotalAnalysisBarChart";
+import SubBuildingList from "./temp4";
+import SubBuildingTotalAnalysisTable1 from "./temp6";
+import TotalAnalysisGrid2 from "./temp5";
+import SubBuildingTotalAnalysisPieChart from "./temp7";
+import SubBuildingTotalAnalysisBarChart from "./temp8";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";

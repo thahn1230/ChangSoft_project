@@ -12,7 +12,7 @@ import {
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
 
-import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
+import SubBuildingFloorAnalysisTable from "./temp1";
 import SubBuildingAnalysisGraph from "../analysis/SubBuildingAnalysisGraph";
 import SubBuildingAnalysisTableSingleCol from "../analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "../analysis/SubBuildingAnalysisTable_subCol";

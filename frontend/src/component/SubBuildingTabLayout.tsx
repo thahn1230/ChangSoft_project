@@ -12,7 +12,7 @@ import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysis
 import BuildingDetail from "./projectComponent/buildingDetail";
 import AnalysisTab from "./SubBuildingComponent/analysis/AnalysisTab";
 import FloorAnalysisTab from "./SubBuildingComponent/floorAnalysis/FloorAnalysisTab";
-import QuantityDetailTab from "./SubBuildingComponent/quantityDetail/quantityDetailTab";
+import QuantityDetailTab from "./SubBuildingComponent/quantityDetail/temp2";
 import "./../styles/subBuildingTabLayout.scss";
 
 const SubBuildingTabLayout = (props: any) => {

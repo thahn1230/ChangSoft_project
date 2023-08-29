@@ -11,7 +11,7 @@ import axios from "axios";
 import urlPrefix from "./../../resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
 import { buildingInfo_interface } from "./../../interface/buildingInfo_interface";
-import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/subBuildingList";
+import SubBuildingDetail from "../SubBuildingComponent/totalAnalysis/temp4";
 
 import "./../../styles/GridDetail.scss";
 
