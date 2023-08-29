@@ -19,7 +19,7 @@ import {
 import axios from "axios";
 import { building } from "../../interface/building";
 import { MultiSelectPropsContext } from "@progress/kendo-react-dropdowns";
-import BuildingDetail from "./temp3";
+import BuildingDetail from "./BuildingDetail";
 import ProjectIntro from "../homeComponent/TotalProject";
 import urlPrefix from "../../resource/URL_prefix.json";
 import { GridPDFExport } from "@progress/kendo-react-pdf";

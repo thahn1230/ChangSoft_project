@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import InsightList from "../component/insightComponent/temp2";
-import InsightGraph from "../component/insightComponent/temp1";
+import InsightList from "../component/insightComponent/InsightList";
+import InsightGraph from "../component/insightComponent/InsightGraph";
 
 interface graphInfoI {
   data: any;
