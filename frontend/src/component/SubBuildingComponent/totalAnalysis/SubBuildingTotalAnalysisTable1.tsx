@@ -3,7 +3,7 @@ import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
-import SubBuildingList from "./temp4";
+import SubBuildingList from "./SubBuildingList";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
 import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";

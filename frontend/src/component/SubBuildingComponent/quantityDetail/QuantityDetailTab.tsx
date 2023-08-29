@@ -4,7 +4,7 @@ import {
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
 import SingleColTable from "./SingleColTable";
-import QuantityFilter from "./temp3";
+import QuantityFilter from "./QuantityFilter";
 // import PivotTable from "./PivotTable";
 import PivotTableChart from "./PivotTableChart";
 import "./../../../styles/analysisTab.scss";
