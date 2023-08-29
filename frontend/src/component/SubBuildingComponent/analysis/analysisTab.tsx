@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import SubBuildingList from "./subBuildingList";
+import SubBuildingList from "./SubBuildingList";
 import {
   RadioButton,
   RadioButtonChangeEvent,
@@ -12,10 +12,10 @@ import {
 } from "@progress/kendo-react-layout";
 import axios from "axios";
 import urlPrefix from "../../../resource/URL_prefix.json";
-import SubBuildingAnalysisTable from "./subBuildingAnalysisTable";
-import SingleColTable from "./subBuildingAnalysisTable_singleCol";
-import SubBuildingAnalysisTableSubCol from "./subBuildingAnalysisTable_subCol";
-import SubBuildingAnalysisGraph from "./subBuildingAnalysisGraph";
+import SubBuildingAnalysisTable from "./SubBuildingAnalysisTable";
+import SingleColTable from "./SubBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "./SubBuildingAnalysisTable_subCol";
+import SubBuildingAnalysisGraph from "./SubBuildingAnalysisGraph";
 import "./../../../styles/analysisTab.scss";
 
 import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";

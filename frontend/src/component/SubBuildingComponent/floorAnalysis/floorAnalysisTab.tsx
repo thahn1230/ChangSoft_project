@@ -13,9 +13,9 @@ import {
 } from "@progress/kendo-react-layout";
 
 import SubBuildingFloorAnalysisTable from "./subBuildingFloorAnalysisTable";
-import SubBuildingAnalysisGraph from "../analysis/subBuildingAnalysisGraph";
-import SubBuildingAnalysisTableSingleCol from "../analysis/subBuildingAnalysisTable_singleCol";
-import SubBuildingAnalysisTableSubCol from "../analysis/subBuildingAnalysisTable_subCol";
+import SubBuildingAnalysisGraph from "../analysis/SubBuildingAnalysisGraph";
+import SubBuildingAnalysisTableSingleCol from "../analysis/SubBuildingAnalysisTable_singleCol";
+import SubBuildingAnalysisTableSubCol from "../analysis/SubBuildingAnalysisTable_subCol";
 import ComponentTypeList from "./ComponentTypeList";
 
 import urlPrefix from "../../../resource/URL_prefix.json";

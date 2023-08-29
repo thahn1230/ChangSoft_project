@@ -10,7 +10,7 @@ import {
 
 import TotalAnalysisTab from "./SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
 import BuildingDetail from "./projectComponent/buildingDetail";
-import AnalysisTab from "./SubBuildingComponent/analysis/analysisTab";
+import AnalysisTab from "./SubBuildingComponent/analysis/AnalysisTab";
 import FloorAnalysisTab from "./SubBuildingComponent/floorAnalysis/floorAnalysisTab";
 import QuantityDetailTab from "./SubBuildingComponent/quantityDetail/quantityDetailTab";
 import "./../styles/subBuildingTabLayout.scss";
