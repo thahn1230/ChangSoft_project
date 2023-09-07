@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import pandas as pd
 import json
 import os
+from logging_config import add_log
 
 from sqlalchemy import text
 from dbAccess import create_db_connection
@@ -17,7 +18,11 @@ engine = create_db_connection()
 #    DASHBOARD    #
 ###################
 
-    
+# for testing
+@router.get("/add_error")
+async def add_error():
+    add_log(404, "cy", "test message")
+    return {"detail" : "hello world!"}
 
 
 # table에 있는 데이터 전부 보내기
@@ -87,20 +92,31 @@ async def get_project_usage_ratio(token: TokenData = Depends(verify_user)):
     return JSONResponse(project_usage_df.to_json(force_ascii=False, orient="records"))
 
 
+
 # 프로젝트 건설회사별 비율
 @router.get("/dashboard/project/construction_company_ratio")
 async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
-    query = """
-        SELECT structure3.project.construction_company as field, COUNT(*) as count,
-        COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
-        FROM structure3.project 
-        GROUP BY structure3.project.construction_company
-        ORDER BY percentage DESC;
-    """
-    project_construction_company_df = pd.read_sql(query, engine)
-    return JSONResponse(
-        project_construction_company_df.to_json(force_ascii=False, orient="records")
-    )
+    try:
+        print(token['id'])
+        query = """
+            SELECT structure3.project.construction_company as field, COUNT(*) as count,
+            COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
+            FROM structure3.project 
+            GROUP BY structure3.project.construction_company
+            ORDER BY percentage DESC;
+        """
+        project_construction_company_df = pd.read_sql(query, engine)
+
+        add_log(200, token['id'], "Successfully retrieved data.")
+        return JSONResponse(
+            project_construction_company_df.to_json(force_ascii=False, orient="records")
+        )
+    except Exception as e:
+        add_log(404, token['id'], "An error occurred")
+        return JSONResponse(
+            {"detail": f"An error occurred: {str(e)}"}, status_code=500
+        ) 
+
 
 
 # 프로젝트 지역지구별 비율
