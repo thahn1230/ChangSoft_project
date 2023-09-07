@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import urlPrefix from "resource/URL_prefix.json";
+import { projectList_interface } from "interface/projectList_interface";
 import "styles/GridDetail.scss";
 
 interface projectDetail_interface {
@@ -15,7 +16,7 @@ interface projectDetail_interface {
   building_count: number;
 }
 
-const ProjectDetail = (props: any) => {
+const ProjectDetail = (props: {selectedProject : projectList_interface | undefined}) => {
   const [projectData, setProjectData] = useState<projectDetail_interface[]>();
 
   useEffect(() => {

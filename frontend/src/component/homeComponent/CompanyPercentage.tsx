@@ -9,8 +9,14 @@ import {
 } from "@progress/kendo-react-charts";
 import urlPrefix from 'resource/URL_prefix.json';
 
+interface PercentageInterface {
+  field: string;
+  count: number;
+  percentage: number;
+}
+
 const CompanyPercentage = () => {
-  const [percentages, setPercentages] = useState<any[]>([]);
+  const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/dashboard/project/construction_company_ratio", {

@@ -12,6 +12,7 @@ import {
   filterBy,
   FilterDescriptor,
 } from "@progress/kendo-data-query";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -107,7 +108,14 @@ interface ComponentTypeI {
   checked: boolean;
 }
 //buildinginfo랑 setgriddata를 props로
-const QuantityFilter = (props: any) => {
+
+interface QuantityFilterInfo {
+  setGridData: React.Dispatch<React.SetStateAction<[]>>;
+  buildingInfo: buildingInfo_interface | undefined;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const QuantityFilter = (props: QuantityFilterInfo) => {
   const [originalSubBuildingList, setOriginalSubBuildingList] = useState<
     SubBuildingI[]
   >([]);
@@ -163,7 +171,7 @@ const QuantityFilter = (props: any) => {
     fetch(
       urlPrefix.IP_port +
         "/sub_building/quantity_detail/get_quantity_list/" +
-        props.buildingInfo.id,
+        props.buildingInfo?.id,
       {
         method: "GET",
         headers: {
@@ -662,7 +670,7 @@ const QuantityFilter = (props: any) => {
       floorList: floorInfo_noId,
       componentTypeList: componentTypeInfo_noId,
       type: selectedType,
-      buildingId: props.buildingInfo.id,
+      buildingId: props.buildingInfo?.id,
     };
 
     // const response = await fetch(

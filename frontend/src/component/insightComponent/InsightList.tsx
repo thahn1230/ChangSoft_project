@@ -32,7 +32,19 @@ const selectDropDownFields = {
   subItemsField,
 };
 
-const InsightList = (props: any) => {
+interface graphInfoI {
+  data: any;
+  explanation: any;
+  layout: any;
+}
+
+interface InsightListInfo {
+  setGraphInfo: React.Dispatch<React.SetStateAction<graphInfoI[] | undefined>>;
+  setSelectedInsightIndex: React.Dispatch<React.SetStateAction<number>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const InsightList = (props: InsightListInfo) => {
   const [insightList, setInsightList] = useState<string[]>([
     "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
     "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
@@ -501,9 +513,9 @@ const InsightList = (props: any) => {
     fetchData();
   };
 
-  useEffect(() => {
-    props.setIsLoading(false);
-  }, [props.graphInfo]);
+  // useEffect(() => {
+  //   props.setIsLoading(false);
+  // }, [props.graphInfo]);
 
   useEffect(() => {
     setIsAnalyzable(calculateAnalyzableCondition());

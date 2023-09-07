@@ -4,7 +4,15 @@ import urlPrefix from "resource/URL_prefix.json";
 import { buildingInfo_interface } from "interface/buildingInfo_interface";
 import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
 
-const SubBuildingList = (props: any) => {
+interface SubBuildingListInfo {
+  buildingInfo: buildingInfo_interface | undefined;
+  projectName : string;
+  setSelectedSubBuildingId : React.Dispatch<React.SetStateAction<number>>;
+  selectedSubBuildingId : number;
+  subBuildingInfo : subBuildingInfo_interface[];
+}
+
+const SubBuildingList = (props: SubBuildingListInfo) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
   const [subBuildingInfo, setSubBuildingInfo] = useState<
     subBuildingInfo_interface[]
@@ -34,7 +42,7 @@ const SubBuildingList = (props: any) => {
     // const response = await axios.get(
     //   urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
     // );
-    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo?.id, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -68,11 +76,13 @@ const SubBuildingList = (props: any) => {
       setSelectedSubBuildingId(0);
       props.setSelectedSubBuildingId(0);
     } else {
-      const selectedSubId = subBuildingInfo.find(
+      const selectedSubId: number | undefined = subBuildingInfo.find(
         (item) => item.sub_building_name === e.value
       )?.id;
       setSelectedSubBuildingId(selectedSubId);
-      props.setSelectedSubBuildingId(selectedSubId);
+      if(selectedSubId) {
+        props.setSelectedSubBuildingId(selectedSubId);
+      }
     }
   };
 

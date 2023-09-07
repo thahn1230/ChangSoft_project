@@ -24,6 +24,7 @@ import { ExcelExport } from '@progress/kendo-react-excel-export';
 import "styles/GridDetail.scss";
 
 import {useProjectName, useBuildingInfo} from "App"
+import { projectList_interface } from "interface/projectList_interface";
 
 const DATA_ITEM_KEY = "id";
 const SELECTED_FIELD = "selected";
@@ -51,7 +52,7 @@ const initialFilter: CompositeFilterDescriptor = {
   filters: [{ field: "project_id", operator: "eq", value: "0" }],
 };
 
-const BuildingList = (props: any) => {
+const BuildingList = (props: {projectList : projectList_interface[]}) => {
   const [initialBuildingList, setInitialBuildingList] = useState<building[]>(
     []
   );
@@ -94,7 +95,7 @@ const BuildingList = (props: any) => {
 
   useEffect(() => {
     if (props.projectList) {
-      const projectId: number = props.projectList.find(
+      const projectId: number | undefined = props.projectList.find(
         (item: any) => item.project_name === projectName
       )?.id;
       if (projectId) {

@@ -9,8 +9,14 @@ import {
 import urlPrefix from "resource/URL_prefix.json";
 import "styles/ChartFont.scss";
 
+interface PercentageInterface {
+  field: string;
+  count: number;
+  percentage: number;
+}
+
 const LocalPercentage = () => {
-  const [percentages, setPercentages] = useState<any[]>([]);
+  const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
   useEffect(() => {
     // const fetchData = async () => {
     //   try {
@@ -53,6 +59,7 @@ const LocalPercentage = () => {
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         const arrayData = JSON.parse(data)
         const top5 = arrayData.slice(0, 5);
 

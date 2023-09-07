@@ -3,6 +3,12 @@ import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
 
 import "styles/subBuildingAnalysisTable.scss";
 
+interface SubColTableInfo {
+  data : Array<{ [key: string]: any } & { "": string }>;
+  columns : {}[] | undefined;
+}
+
+
 const SubBuildingAnalysisTableSubCol  = (props: any) => {
     return (
       <div>

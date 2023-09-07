@@ -10,8 +10,14 @@ import urlPrefix from "resource/URL_prefix.json";
 import "styles/ChartFont.scss";
 import "styles/Chart.scss";
 
+interface PercentageInterface {
+  field: string;
+  count: number;
+  percentage: number;
+}
+
 const UsagePercentage = () => {
-  const [percentages, setPercentages] = useState<any[]>([]);
+  const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/dashboard/project/usage_ratio", {

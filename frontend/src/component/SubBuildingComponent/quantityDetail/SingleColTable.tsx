@@ -14,7 +14,12 @@ import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
 import "styles/subBuildingAnalysisTable.scss";
 import loadingBar from "resource/loadingBars.gif";
 
-const SingleColTable = (props: any) => {
+interface PivotTableChartInfo {
+  data : {}[];
+  isLoading : boolean;
+}
+
+const SingleColTable = (props: PivotTableChartInfo) => {
   const [filter, setFilter] = useState<CompositeFilterDescriptor>({
     logic: "and",
     filters: [],

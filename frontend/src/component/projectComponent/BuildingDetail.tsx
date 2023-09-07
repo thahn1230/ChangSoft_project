@@ -14,7 +14,7 @@ import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/GridDetail.scss";
 
-const BuildingDetail = (props: any) => {
+const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
   const [returnDiv, setReturnDiv] = useState(<div></div>);
   const [imgPath, setImgPath] = useState<string>("");
   const [buildingInfo, setBuildingInfo] = useBuildingInfo();
