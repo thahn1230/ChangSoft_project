@@ -10,6 +10,8 @@ from insight import router as insightRouter
 from aiQuery import router as aiQueryRouter
 from userLogin import router as userLoginRouter
 from user import router as userRouter
+import logging
+from logging_config import setup_logger 
 
 # FastAPI 모듈 설정
 app = FastAPI()
@@ -25,6 +27,9 @@ app.include_router(insightRouter)
 app.include_router(aiQueryRouter)
 app.include_router(userLoginRouter)
 app.include_router(userRouter)
+
+setup_logger()
+    
 
 # root 읽기
 @app.get("/")
