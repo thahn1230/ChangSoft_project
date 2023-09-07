@@ -1,7 +1,6 @@
 import React, { Fragment, useCallback } from "react";
 import styled from "styled-components";
-import logo from "./../resource/changSoft_logo.png";
-import { useNavigate } from "react-router-dom";
+import logo from "resource/changSoft_logo.png";
 
 export const PolicyAgreementList = [
   {

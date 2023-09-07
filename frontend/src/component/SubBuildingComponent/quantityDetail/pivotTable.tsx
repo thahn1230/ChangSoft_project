@@ -15,7 +15,6 @@ import {
   PivotGridConfiguratorButton,
 } from "@progress/kendo-react-pivotgrid";
 import { FilterDescriptor, SortDescriptor } from "@progress/kendo-data-query";
-import { Loader } from "@progress/kendo-react-indicators";
 
 
 const dimensions: { [key: string]: Dimension } = {

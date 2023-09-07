@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
 import { Error } from "@progress/kendo-react-labels";
-import urlPrefix from "../resource/URL_prefix.json";
-import Join from "../pages/LoginPages/Join";
+import urlPrefix from "resource/URL_prefix.json";
+import Join from "pages/LoginPages/Join";
 import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
 
 const LoginWrapper = styled.div`
@@ -254,7 +254,6 @@ const LoginPage = (props: any) => {
         //token을 context가 아니고 localstorage로 관리하게 바꾸기
         //tokenContext?.setToken(loginData.token)
         localStorage.setItem("token", loginData.token);
-
         navigator("/home");
         return true;
       } else {

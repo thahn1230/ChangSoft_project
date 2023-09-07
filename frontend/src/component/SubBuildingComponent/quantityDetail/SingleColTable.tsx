@@ -11,8 +11,8 @@ import {
   CompositeFilterDescriptor,
 } from "@progress/kendo-data-query";
 import { orderBy, SortDescriptor } from "@progress/kendo-data-query";
-import "./../../../styles/subBuildingAnalysisTable.scss";
-import loadingBar from "./../../../resource/loadingBars.gif";
+import "styles/subBuildingAnalysisTable.scss";
+import loadingBar from "resource/loadingBars.gif";
 
 const SingleColTable = (props: any) => {
   const [filter, setFilter] = useState<CompositeFilterDescriptor>({
