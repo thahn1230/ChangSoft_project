@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 import json
-import os
 from loggingHandler import add_log
 
 from sqlalchemy import text

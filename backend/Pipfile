@@ -7,8 +7,19 @@ name = "pypi"
 jwt = "*"
 uvicorn = "*"
 pyjwt = "*"
+openai = "*"
+fastapi = "*"
+pandas = "*"
+sqlalchemy = "*"
+pymysql = "*"
+plotly = "*"
+sqlalchemy-utils = "*"
+matplotlib = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.10"
+
+[scripts]
+server = "uvicorn main:app --reload --port 8000 --host 0.0.0.0"

@@ -3,27 +3,20 @@ from fastapi.responses import JSONResponse
 from fastapi import FastAPI
 from pydantic import BaseModel
 import json
-import plotly
-import plotly.graph_objects as go
 import openai
 from typing import Any
 import pymysql
-from typing import Tuple
 
 import pandas as pd
 from pymysql.cursors import DictCursor
 from sqlalchemy import create_engine, text
 from sqlalchemy_utils import database_exists, create_database
-import os
-import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
 from enum import Enum
 
-from sqlalchemy import text
 from dbAccess import create_db_connection
 
 from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey

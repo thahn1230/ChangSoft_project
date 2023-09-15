@@ -5,7 +5,6 @@ import plotly.graph_objects as go
 import json
 import plotly
 
-from typing import List
 from dbAccess import create_db_connection
 
 router = APIRouter()

@@ -1,12 +1,5 @@
 import pandas as pd
 from fastapi import APIRouter
-import pymysql
-from pymysql.cursors import DictCursor
-from sqlalchemy import create_engine, text
-from sqlalchemy_utils import database_exists, create_database
-import os
-import numpy as np
-import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import plotly.express as px
@@ -18,7 +11,6 @@ import json
 import plotly
 import re
 import math
-import plotly.figure_factory as ff
 import plotly.graph_objects as go
 
 from typing import List
