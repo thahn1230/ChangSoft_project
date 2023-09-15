@@ -1,32 +1,22 @@
-import BuildingList from "../component/projectComponent/buildingList";
 import React, { useEffect, useState } from "react";
-import ProjectDetail from "../component/projectComponent/projectDetail";
-import ProjectList from "./../component/projectComponent/projectList";
-import { projectList_interface } from "./../interface/projectList_interface";
-import { buildingInfo_interface } from "./../interface/buildingInfo_interface";
-import tempImage from "./../resource/temp.jpg"
+import BuildingList from "component/projectComponent/BuildingList";
+import ProjectDetail from "component/projectComponent/ProjectDetail";
+import ProjectList from "component/projectComponent/ProjectList";
+import { projectList_interface } from "interface/projectList_interface";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
 
-const Projects = (props: any) => {
-  const [selectedProjectName, setSelectedProjectName] = useState<string>(
-    "project를 선택해주세요"
-  );
+//context
+import {useProjectName, useBuildingInfo} from "App"
+
+const Projects = () => {
+  //const [, setBuildingInfo] = useBuildingInfo();
+  const [projectName, setProjectName] = useProjectName();
   const [data, setData] = useState<projectList_interface[]>([]);
-  const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
-  >();
-
-  useEffect(() => {
-    props.setBuildingInfo(buildingInfo);
-  }, [buildingInfo]);
-  useEffect(() => {
-    props.setProjectName(selectedProjectName);
-  }, [selectedProjectName]);
 
   return (
     <div className="projects">
       <ProjectList
         setData={setData}
-        setSelectedProjectName={setSelectedProjectName}
       />
 
       <div className="projectDetail">
@@ -40,7 +30,7 @@ const Projects = (props: any) => {
         <div style={{ width: "49%", float: "right", paddingLeft: "1%" }}>
           <ProjectDetail
             selectedProject={data.find(
-              (data: any) => data.project_name === selectedProjectName
+              (data: any) => data.project_name === projectName
             )}
           />
         </div>
@@ -48,9 +38,7 @@ const Projects = (props: any) => {
 
       <div className="projects">
         <BuildingList
-          projectName={selectedProjectName}
           projectList={data}
-          setBuildingInfo={setBuildingInfo}
         />
       </div>
     </div>

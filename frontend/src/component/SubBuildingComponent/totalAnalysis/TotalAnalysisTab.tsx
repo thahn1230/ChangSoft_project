@@ -1,40 +1,33 @@
 import React, { useState, useEffect } from "react";
 import {
   Grid,
-  GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
-  GridFilterChangeEvent,
+  GridColumn
 } from "@progress/kendo-react-grid";
 import {
   RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
-import { BrowserRouter } from "react-router-dom";
-import SubBuildingList from "./subBuildingList";
-import SubBuildingTotalAnalysisTable1 from "./subBuildingTotalAnalysisTable1";
-import TotalAnalysisGrid2 from "./subBuildingTotalAnalysisTable2";
-import SubBuildingTotalAnalysisPieChart from "./subBuildingTotalAnalysisPieChart";
-import SubBuildingTotalAnalysisBarChart from "./subBuildingTotalAnalysisBarChart";
+import SubBuildingTotalAnalysisTable1 from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisTable1";
+import TotalAnalysisGrid2 from "component/SubBuildingComponent/totalAnalysis/TotalAnalysisGrid2";
+import SubBuildingTotalAnalysisPieChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisPieChart";
+import SubBuildingTotalAnalysisBarChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisBarChart";
 
-import { subBuildingInfo_interface } from "../../../interface/subBuildingInfo_interface";
-import { buildingInfo_interface } from "../../../interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "../../../interface/subBuildingTotalAnalysisTable1_interface";
-import { subBuildingTotalAnalysisTable2_interface } from "../../../interface/subBuildingTotalAnalysisTable2_interface";
-import { subBuildingAnalysisPercentage_interface } from "../../../interface/subBuildingAnalysisPercentage_interface";
-import { subBuildingAnalysisValue_interface } from "../../../interface/subBuildingAnalysisValue_interface";
+import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { subBuildingTotalAnalysisTable1_interface } from "interface/subBuildingTotalAnalysisTable1_interface";
+import { subBuildingAnalysisPercentage_interface } from "interface/subBuildingAnalysisPercentage_interface";
+import { subBuildingAnalysisValue_interface } from "interface/subBuildingAnalysisValue_interface";
+import {useProjectName, useBuildingInfo} from "App"
 
-import axios from "axios";
-import urlPrefix from "../../../resource/URL_prefix.json";
-import "./../../../styles/SubBuildingDetail.scss";
+import urlPrefix from "resource/URL_prefix.json";
 
-import Analyses from "../../../pages/analyses";
-import "./../../../styles/TotalAnalysisTab.scss";
+import "styles/SubBuildingDetail.scss";
+import "styles/TotalAnalysisTab.scss";
 
-const TotalAnalysisTab = (props: any) => {
-  const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
-  >();
+const TotalAnalysisTab = () => {
+  const [buildingInfo, setBuildingInfo] = useBuildingInfo();
+  const [projectName, setProjectName] = useProjectName();
+
   const [subBuildingInfo, setSubBuildingInfo] = useState<
     subBuildingInfo_interface[]
   >([]);
@@ -60,22 +53,9 @@ const TotalAnalysisTab = (props: any) => {
     setSelectedSubBuildingId(0)
   },[])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        //console.log("props.buildingInfo.id: ")
-        //console.log(props.buildingInfo.id)
-        setBuildingInfo(props.buildingInfo);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [props]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id, {
+    fetch(urlPrefix.IP_port + "/sub_building/" + buildingInfo?.id, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -95,24 +75,7 @@ const TotalAnalysisTab = (props: any) => {
         // setTotalfloor(arrayData);
       })
       .catch((error) => console.error("Error:", error));
-  }, [buildingInfo, props.buildingInfo]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-  //       );
-
-  //       const subBuildings = JSON.parse(response.data);
-  //       setSubBuildingInfo(subBuildings);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [buildingInfo, props.buildingInfo]);
+  }, [buildingInfo, buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -156,7 +119,7 @@ const TotalAnalysisTab = (props: any) => {
 
   let data = [
     {
-      projectName: props.projectName,
+      projectName: projectName,
       building_name: buildingInfo?.building_name,
     },
   ];
@@ -183,7 +146,7 @@ const TotalAnalysisTab = (props: any) => {
           subBuildingInfo={subBuildingInfo}
           selectedSubBuildingId={selectedSubBuildingId}
           setSelectedSubBuildingId={setSelectedSubBuildingId}
-          projectName={props.projectName}
+          projectName={projectName}
         />
         <TotalAnalysisGrid2
           selectedBuildingId={buildingInfo?.id}

@@ -2,13 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
-import "./../styles/NavigationLayout.scss";
-import ChangSoftLogo from "./../resource/changSoft_logo.png";
-import tempIMG from "./../resource/temp.jpg";
-import { useUserContext } from "../UserInfoContext";
-import { useTokenContext } from "./../TokenContext";
-import urlPrefix from "../resource/URL_prefix.json";
-import exp from "constants";
+import "styles/NavigationLayout.scss";
+import ChangSoftLogo from "resource/changSoft_logo.png";
+import urlPrefix from "resource/URL_prefix.json";
 
 interface MenuItem {
   text: string;
@@ -61,8 +57,6 @@ export const NavigationLayout = (props: any) => {
   const [emailAddress, setEmailAddress] = useState("");
 
 
-  const tokenContext = useTokenContext();
-
   const handleClick = () => {
     setExpanded(!expanded);
   };
@@ -112,12 +106,8 @@ export const NavigationLayout = (props: any) => {
 
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "230px" }
-      : { height: "230px", expanded: `${expanded}` };
-  };
-
-  const getMargin = () => {
-    return expanded ? { marginTop: "-230px" } : { marginTop: "0px" };
+      ? { height: "230px", marginTop:"-262px", zIndex:"100000"}
+      : { height: "0px", expanded: `${expanded}`};
   };
 
   return (
@@ -150,22 +140,6 @@ export const NavigationLayout = (props: any) => {
       </div>
 
       <div>
-        {!expanded ? (
-          <div style={getMargin()}></div>
-        ) : (
-          <div className="user-container" style={getUserContainerStyle()}>
-            {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
-            <h1>
-              {name !== null ? name : null}
-            </h1>
-            <div className="user-email" style={{marginTop: "1%", marginBottom: "3%"}}>
-              {emailAddress !== null ? emailAddress : null}
-            </div>
-              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
-                Sign Out
-              </Button>
-          </div>
-        )}
         <Drawer
           expanded={expanded}
           position="start"
@@ -180,12 +154,29 @@ export const NavigationLayout = (props: any) => {
           className="drawer"
         >
           <DrawerContent>
-            <div style={getMargin()}>
+            <div>
               {props.children}
               <Outlet />
             </div>
           </DrawerContent>
         </Drawer>
+
+        {!expanded ? (
+          <div></div>
+        ) : (
+          <div className="user-container" style={getUserContainerStyle()}>
+            {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
+             {/* <h1>
+              {name !== null ? name : null}
+            </h1>
+            <div className="user-email" style={{marginTop: "1%", marginBottom: "3%"}}>
+              {emailAddress !== null ? emailAddress : null}
+            </div> */}
+              <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
+                Sign Out
+              </Button>
+          </div>
+        )}
       </div>
     </div>
   );

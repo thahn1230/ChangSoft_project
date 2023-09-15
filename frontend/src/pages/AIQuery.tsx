@@ -6,9 +6,9 @@ import {
   User,
 } from "@progress/kendo-react-conversational-ui";
 import Plot from "react-plotly.js";
-import SendMessageToChatGPT from "../resource/SendMessageToChatGPT";
-import chatgptLogo from "./../resource/chatgpt_logo.png";
-import "./../styles/AIQuery.scss";
+import SendMessageToChatGPT from "resource/SendMessageToChatGPT";
+import chatgptLogo from "resource/chatgpt_logo.png";
+import "styles/AIQuery.scss";
 
 
 const bot: User = {
