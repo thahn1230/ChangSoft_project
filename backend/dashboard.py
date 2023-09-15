@@ -92,7 +92,7 @@ async def get_project_usage_ratio(token: TokenData = Depends(verify_user)):
     return JSONResponse(project_usage_df.to_json(force_ascii=False, orient="records"))
 
 
-
+# testing
 # 프로젝트 건설회사별 비율
 @router.get("/dashboard/project/construction_company_ratio")
 async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
