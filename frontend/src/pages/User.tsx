@@ -289,7 +289,7 @@ const sha256 = async (message: string) => {
   return hashHex;
 };
 
-const User = (props: any) => {
+const User = () => {
   //const [checked, setChecked] = useState(false);
   const history = useNavigate();
   const [phoneNum, setPhoneNum] = useState("");

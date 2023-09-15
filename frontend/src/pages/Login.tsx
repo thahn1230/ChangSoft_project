@@ -167,7 +167,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const LoginPage = (props: any) => {
+const LoginPage = () => {
   const link = urlPrefix.IP_port + "/login";
   const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({

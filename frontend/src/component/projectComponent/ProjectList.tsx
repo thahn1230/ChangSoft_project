@@ -25,7 +25,7 @@ import { useProjectName, useBuildingInfo } from "App";
 import "styles/ProjectList.scss";
 import loadingBars from "resource/loadingBars.gif";
 
-const ProjectList = (props: any) => {
+const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<projectList_interface[]>>}) => {
   const [data, setData] = useState<project_interface[]>([]);
 
   const [projectList, setProjectList] = useState<string[]>([]);

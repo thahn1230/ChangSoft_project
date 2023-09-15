@@ -106,7 +106,12 @@ const defaultSort: SortDescriptor[] = Object.keys(dimensions).map((k) => ({
   dir: "asc" as "asc",
 }));
 
-const PivotTableChart = (props: any) => {
+interface PivotTableChartInfo {
+  data : [];
+  isLoading : boolean;
+}
+
+const PivotTableChart = (props: PivotTableChartInfo) => {
   const [show, setShow] = React.useState(false);
 
   const handleButtonClick = React.useCallback(() => {

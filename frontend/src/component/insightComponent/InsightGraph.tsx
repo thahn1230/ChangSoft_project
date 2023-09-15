@@ -1,3 +1,4 @@
+import { LargeNumberLike } from "crypto";
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import spinner from "resource/loadingBars.gif";
@@ -8,7 +9,14 @@ interface graphInfoI {
   layout: any;
 }
 
-const InsightGraph = (props: any) => {
+interface InsightGraphInfo {
+  selectedInsightIndex: number;
+  graphInfo: graphInfoI[] | undefined;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+}
+
+const InsightGraph = (props: InsightGraphInfo) => {
   const [returnDiv, setReturnDiv] = useState<JSX.Element[]>([]);
 
   useEffect(() => {

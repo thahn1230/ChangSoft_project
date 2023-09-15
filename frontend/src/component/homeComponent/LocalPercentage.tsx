@@ -7,10 +7,32 @@ import {
   ChartTooltip,
 } from "@progress/kendo-react-charts";
 import urlPrefix from "resource/URL_prefix.json";
-import "styles/ChartFont.scss";
+import styled from "styled-components";
+
+interface PercentageInterface {
+  field: string;
+  count: number;
+  percentage: number;
+}
+
+const ChartWrapper = styled.div`
+  @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+  .k-chart {
+    font-family: "Inter", sans-serif !important;
+    font-size: 20px !important;
+  }
+
+  .k-chart-legend {
+    white-space: normal;
+  }
+  .k-chart {
+    height: 36vh;
+  }
+`;
 
 const LocalPercentage = () => {
-  const [percentages, setPercentages] = useState<any[]>([]);
+  const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
   useEffect(() => {
     // const fetchData = async () => {
     //   try {
@@ -38,7 +60,7 @@ const LocalPercentage = () => {
     //   } catch (error) {
     //     console.error(error);
     //   }
-    // };    
+    // };
     fetch(urlPrefix.IP_port + "/dashboard/project/location_ratio", {
       method: "GET",
       headers: {
@@ -53,7 +75,8 @@ const LocalPercentage = () => {
         return response.json();
       })
       .then((data) => {
-        const arrayData = JSON.parse(data)
+        console.log(data);
+        const arrayData = JSON.parse(data);
         const top5 = arrayData.slice(0, 5);
 
         // 나머지 데이터 합산하여 "Others" 데이터 생성
@@ -92,27 +115,25 @@ const LocalPercentage = () => {
   };
 
   return (
-    <div className="chart-container">
-      <div className="local-percentage">
-        <Chart style={{ height: "36vh" }}>
-          <ChartLegend position="top" />
+    <ChartWrapper>
+      <Chart>
+        <ChartLegend position="top" />
 
-          <ChartSeries>
-            <ChartSeriesItem
-              type="donut"
-              data={percentages}
-              categoryField="field"
-              field="percentage"
-              autoFit={true}
-              holeSize={40}
-              size={45}
-              color={"blue"}
-            />
-          </ChartSeries>
-          <ChartTooltip render={renderTooltip} />
-        </Chart>
-      </div>
-    </div>
+        <ChartSeries>
+          <ChartSeriesItem
+            type="donut"
+            data={percentages}
+            categoryField="field"
+            field="percentage"
+            autoFit={true}
+            holeSize={40}
+            size={45}
+            color={"blue"}
+          />
+        </ChartSeries>
+        <ChartTooltip render={renderTooltip} />
+      </Chart>
+    </ChartWrapper>
   );
 };
 

@@ -8,7 +8,7 @@ interface graphInfoI {
   layout: any;
 }
 
-const Insight: React.FC = (props:any) => {
+const Insight: React.FC = () => {
   const [selectedInsightIndex, setSelectedInsightIndex] = useState(-1);
   const [graphInfo, setGraphInfo] = useState<graphInfoI[]>();
   const [isLoading, setIsLoading] = useState(false);

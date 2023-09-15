@@ -12,8 +12,7 @@ import {
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import urlPrefix from "resource/URL_prefix.json";
-import "styles/Histogram.scss"
-import "styles/totalArea.scss"
+import styled from "styled-components";
 
 interface projectsTotalArea {
   min_val: number;
@@ -21,6 +20,12 @@ interface projectsTotalArea {
   range_num: number;
   item_count: number;
 }
+
+const TotalWrapper = styled.div`
+  .k-chart {
+    height: 36vh;
+  }
+`;
 
 const categoryContent = (e: any) => {
   return (
@@ -49,26 +54,28 @@ const TotalArea = () => {
         return response.json();
       })
       .then((data) => {
-        const arrayData = JSON.parse(data)
+        const arrayData = JSON.parse(data);
         setTotalarea(arrayData);
         setMaxRng(arrayData[0].max_val);
-
       })
       .catch((error) => console.error("Error:", error));
-      
   }, []);
 
   return (
-    <div className="bar-chart-container">
-      <Chart style={{height: "36vh"}}>
+    <TotalWrapper>
+      <Chart>
         <ChartCategoryAxis>
           <ChartCategoryAxisItem categories={totalarea.map(categoryContent)}>
-            <ChartCategoryAxisTitle text="Total Area (m²)"/>
+            <ChartCategoryAxisTitle text="Total Area (m²)" />
           </ChartCategoryAxisItem>
         </ChartCategoryAxis>
 
         <ChartValueAxis>
-          <ChartValueAxisItem min={0} majorUnit={1} title={{ text: "Project count" }}/>
+          <ChartValueAxisItem
+            min={0}
+            majorUnit={1}
+            title={{ text: "Project count" }}
+          />
         </ChartValueAxis>
 
         <ChartSeries>
@@ -81,7 +88,7 @@ const TotalArea = () => {
           ></ChartSeriesItem>
         </ChartSeries>
       </Chart>
-    </div>
+    </TotalWrapper>
   );
 };
 

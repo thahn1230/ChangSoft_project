@@ -13,12 +13,28 @@ import {
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import urlPrefix from "resource/URL_prefix.json";
-import "styles/ChartFont.scss";
+import styled from "styled-components";
 
 interface ProjectsFloorCount {
   range_num: number;
   item_count: number;
 }
+
+const FloorCountWrapper = styled.div`
+  @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+  .k-chart {
+    font-family: "Inter", sans-serif !important;
+    font-size: 20px !important;
+  }
+
+  .k-chart-legend {
+    white-space: normal;
+  }
+  .k-chart {
+    height: 36vh;
+  }
+`;
 
 const categoryContent = (e: any) => {
   return "&nbsp;&nbsp;" + (e.range_num * 10).toString();
@@ -57,8 +73,8 @@ const FloorCount = () => {
   };
 
   return (
-    <div>
-      <Chart style={{ height: "36vh" }}>
+    <FloorCountWrapper>
+      <Chart>
         <ChartCategoryAxis>
           <ChartCategoryAxisItem categories={totalfloor.map(categoryContent)}>
             <ChartCategoryAxisTitle text="Stories (층)" />
@@ -80,7 +96,7 @@ const FloorCount = () => {
         </ChartSeries>
         <ChartTooltip render={renderTooltip} />
       </Chart>
-    </div>
+    </FloorCountWrapper>
   );
 };
 

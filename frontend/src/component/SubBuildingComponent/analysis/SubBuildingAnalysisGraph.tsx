@@ -12,6 +12,15 @@ import {
   ChartLegend,
 } from "@progress/kendo-react-charts";
 
+type gridData = Array<{ [key: string]: any } & { "": string }>;
+
+interface SubBuildingAnalysisGraphInfo {
+
+  data : gridData;
+  componentType : string;
+
+}
+
 const toolTipRender = (e: any) => {
   return (<div><div>구분 :{e.point.series.name} </div>< div> 값 :{e.point.dataItem}</div></div>);
 };
@@ -31,7 +40,7 @@ const getRandomColor = () => {
   return blueShades[randomIndex];
 };
 
-const SubBuildingAnalysisGraph = (props: any) => {
+const SubBuildingAnalysisGraph = (props: SubBuildingAnalysisGraphInfo) => {
   const [categories, setCategories] = useState<string[]>([]);
 
   const [isLoaded, setIsLoaded] =useState<Boolean>(false);

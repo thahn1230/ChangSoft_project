@@ -9,7 +9,18 @@ import {
 } from "@progress/kendo-react-map";
 import urlPrefix from "resource/URL_prefix.json";
 import { coordinate } from "interface/coordinate";
+import styled from "styled-components";
 // import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
+
+const MapWrapper = styled.div`
+  display: flex;
+  alignitems: center;
+  justifycontent: center;
+
+  .distributionMapClass {
+    width: 100%;
+  }
+`;
 
 const tileSubdomains = ["a", "b", "c"];
 const tileUrl = (e: TileUrlTemplateArgs) =>
@@ -68,19 +79,14 @@ const DistributionMap = () => {
         return response.json();
       })
       .then((data) => {
-        setMarkers(data)})
+        setMarkers(data);
+      })
       .catch((error) => console.error("Error:", error));
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Map center={[34, 128]} zoom={6} style={{ width: "100%" }}>
+    <MapWrapper>
+      <Map center={[34, 128]} zoom={6} className="distributionMapClass">
         <MapLayers>
           <MapTileLayer
             urlTemplate={tileUrl}
@@ -104,7 +110,7 @@ const DistributionMap = () => {
           /> */}
         </MapLayers>
       </Map>
-    </div>
+    </MapWrapper>
   );
 };
 

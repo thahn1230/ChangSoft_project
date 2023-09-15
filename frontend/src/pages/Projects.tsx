@@ -8,7 +8,7 @@ import { buildingInfo_interface } from "interface/buildingInfo_interface";
 //context
 import {useProjectName, useBuildingInfo} from "App"
 
-const Projects = (props: any) => {
+const Projects = () => {
   //const [, setBuildingInfo] = useBuildingInfo();
   const [projectName, setProjectName] = useProjectName();
   const [data, setData] = useState<projectList_interface[]>([]);

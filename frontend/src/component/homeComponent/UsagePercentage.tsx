@@ -7,11 +7,32 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 import urlPrefix from "resource/URL_prefix.json";
-import "styles/ChartFont.scss";
-import "styles/Chart.scss";
+import styled from "styled-components";
+
+interface PercentageInterface {
+  field: string;
+  count: number;
+  percentage: number;
+}
+
+const ChartWrapper = styled.div`
+  @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+  .k-chart{
+    font-family: "Inter", sans-serif !important;
+    font-size: 20px !important;
+  }
+
+  .k-chart-legend {
+    white-space: normal;
+  }
+  .k-chart {
+    height: 36vh;
+  }
+`;
 
 const UsagePercentage = () => {
-  const [percentages, setPercentages] = useState<any[]>([]);
+  const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
 
   useEffect(() => {
     fetch(urlPrefix.IP_port + "/dashboard/project/usage_ratio", {
@@ -66,8 +87,8 @@ const UsagePercentage = () => {
   };
 
   return (
-    <div className="chart-container">
-      <Chart style={{ height: "36vh" }}>
+    <ChartWrapper>
+      <Chart>
         <ChartLegend
           position="top"
           orientation="horizontal"
@@ -88,7 +109,7 @@ const UsagePercentage = () => {
         </ChartSeries>
         <ChartTooltip render={renderTooltip} />
       </Chart>
-    </div>
+    </ChartWrapper>
   );
 };
 

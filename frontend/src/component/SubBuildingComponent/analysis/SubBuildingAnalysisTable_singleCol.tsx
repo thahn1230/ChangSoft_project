@@ -3,7 +3,11 @@ import { Grid, GridColumn, GridEvent } from "@progress/kendo-react-grid";
 
 import "styles/subBuildingAnalysisTable.scss";
 
-const SingleColTable = (props: any) => {
+interface SingleColTableInfo {
+  data : Array<{ [key: string]: any } & { "": string }>;
+}
+
+const SingleColTable = (props: SingleColTableInfo) => {
   return (
     <div>
       {props.data.length > 0 ? (
