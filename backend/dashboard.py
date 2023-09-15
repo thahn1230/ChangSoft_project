@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 import pandas as pd
 import json
 import os
-from logging_config import add_log
+from loggingHandler import add_log
 
 from sqlalchemy import text
 from dbAccess import create_db_connection
@@ -12,7 +12,8 @@ from user import verify_user, TokenData
 router = APIRouter()
 engine = create_db_connection()
 
-    
+#test
+from exceptionHandler import exception_handler
 
 ###################
 #    DASHBOARD    #
@@ -95,27 +96,22 @@ async def get_project_usage_ratio(token: TokenData = Depends(verify_user)):
 # testing
 # 프로젝트 건설회사별 비율
 @router.get("/dashboard/project/construction_company_ratio")
+@exception_handler
 async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
-    try:
-        print(token['id'])
-        query = """
-            SELECT structure3.project.construction_company as field, COUNT(*) as count,
-            COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
-            FROM structure3.project 
-            GROUP BY structure3.project.construction_company
-            ORDER BY percentage DESC;
-        """
-        project_construction_company_df = pd.read_sql(query, engine)
+    
+    print("hi")
+    query = """
+        SELECT structure3.project.construction_company as field, COUNT(*) as count,
+        COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage 
+        FROM structure3.project 
+        GROUP BY structure3.project.construction_company
+        ORDER BY percentage DESC;
+    """
+    project_construction_company_df = pd.read_sql(query, engine)
 
-        add_log(200, token['id'], "Successfully retrieved data.")
-        return JSONResponse(
-            project_construction_company_df.to_json(force_ascii=False, orient="records")
-        )
-    except Exception as e:
-        add_log(404, token['id'], "An error occurred")
-        return JSONResponse(
-            {"detail": f"An error occurred: {str(e)}"}, status_code=500
-        ) 
+    return JSONResponse(
+        project_construction_company_df.to_json(force_ascii=False, orient="records")
+    )
 
 
 
