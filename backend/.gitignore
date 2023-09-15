@@ -4,6 +4,8 @@ origins.py
 aiQueryInfo.py
 userLoginInfo.py
 access.log
+Pipfile
+Pipfile.lock
 
 Others/
 __pycache__/

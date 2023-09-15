@@ -12,8 +12,7 @@ import LocalPercentage from "../component/homeComponent/localPercentage";
 import TotalArea from "../component/homeComponent/totalArea";
 import FloorCount from "../component/homeComponent/floorCount";
 import { Button } from "@progress/kendo-react-buttons";
-import "./../styles/Home.scss"
-
+import "./../styles/Home.scss";
 
 interface Tile {
   header: string;
@@ -59,7 +58,7 @@ const tiles: Tile[] = [
   // },
 ];
 
-export const Home: React.FC = (props:any) => {
+export const Home: React.FC = () => {
   const [data, setData] = useState<
     { col: number; colSpan: number; rowSpan: number }[]
   >([

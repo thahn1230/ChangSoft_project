@@ -39,6 +39,7 @@ def get_building_totalNum_dataframe():
         building_column = building_num.keys()
 
         # 결과를 데이터프레임으로 변환
+        pd.DataFrame()
         building_df = pd.DataFrame(building_num.fetchall(), columns=building_column)
         return JSONResponse(building_df.to_json(force_ascii=False, orient="records"))
 
