@@ -1,5 +1,5 @@
 import pandas as pd
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 import plotly.express as px
@@ -16,6 +16,8 @@ import plotly.graph_objects as go
 from typing import List
 from dbAccess import create_db_connection
 from plotly.subplots import make_subplots
+from user import TokenData, verify_user
+from exceptionHandler import exception_handler
 
 router = APIRouter()
 engine = create_db_connection()
@@ -965,7 +967,8 @@ def get_insight_6(project_building_ids_str):
     return figures_json
 
 @router.get("/insight/{example_id}")
-async def get_insight(example_id: int, data: str):
+@exception_handler
+async def get_insight(example_id: int, data: str, token: TokenData = Depends(verify_user)):
     if example_id == 1:
         result_json = get_insight_1(data)
     elif example_id == 2:

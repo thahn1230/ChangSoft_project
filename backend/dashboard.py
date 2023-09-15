@@ -20,6 +20,7 @@ from exceptionHandler import exception_handler
 
 # for testing
 @router.get("/add_error")
+@exception_handler
 async def add_error():
     add_log(404, "cy", "test message")
     return {"detail" : "hello world!"}
@@ -27,6 +28,7 @@ async def add_error():
 
 # table에 있는 데이터 전부 보내기
 @router.get("/dashboard/{table_name}")
+@exception_handler
 async def get_project(table_name: str, token: TokenData = Depends(verify_user)):
     valid_check_query = """
         SELECT TABLE_NAME
@@ -68,6 +70,7 @@ async def get_project(table_name: str, token: TokenData = Depends(verify_user)):
 
 # table들의 수 상수값으로 리턴
 @router.get("/dashboard/{table_name}/count")
+@exception_handler
 async def get_total_project_num(table_name: str, token: TokenData = Depends(verify_user)):
     query = text(f"SELECT COUNT(*) FROM structure3.{table_name}")
 
@@ -80,6 +83,7 @@ async def get_total_project_num(table_name: str, token: TokenData = Depends(veri
 
 # 프로젝트 용도별 비율
 @router.get("/dashboard/project/usage_ratio")
+@exception_handler
 async def get_project_usage_ratio(token: TokenData = Depends(verify_user)):
     query = """
         SELECT structure3.project.usage as field, COUNT(*) as count, 
@@ -116,6 +120,7 @@ async def get_project_construction_company_ratio(token: TokenData = Depends(veri
 
 # 프로젝트 지역지구별 비율
 @router.get("/dashboard/project/location_ratio")
+@exception_handler
 async def get_project_location_ratio(token: TokenData = Depends(verify_user)):
     query = """
         SELECT structure3.project.location as field, COUNT(*) as count,
@@ -132,6 +137,7 @@ async def get_project_location_ratio(token: TokenData = Depends(verify_user)):
 
 # construction_company당 면적
 @router.get("/dashboard/project/construction_company_total_area")
+@exception_handler
 async def get_construction_company_total_area(token: TokenData = Depends(verify_user)):
     query = """
         SELECT construction_company, SUM(total_area) AS total_area_sum
@@ -148,6 +154,7 @@ async def get_construction_company_total_area(token: TokenData = Depends(verify_
 
 # map 그릴때 필요한 데이터(좌표)들 보내기
 @router.get("/dashboard/project/map")
+@exception_handler
 async def get_map_data(token: TokenData = Depends(verify_user)):
     query = """
         SELECT sub_table.latitude, sub_table.longitude, SUM(count) AS sum 
@@ -173,6 +180,7 @@ async def get_map_data(token: TokenData = Depends(verify_user)):
 
 # project의 total_area 히스토그램
 @router.get("/dashboard/project/total_area_histogram")
+@exception_handler
 async def get_total_area_histogram(token: TokenData = Depends(verify_user)):
     query = """
         SELECT 
@@ -197,6 +205,7 @@ async def get_total_area_histogram(token: TokenData = Depends(verify_user)):
 
 # building의 floor_count 히스토그램
 @router.get("/dashboard/building/floor_count_histogram")
+@exception_handler
 async def get_floor_count_histogram(token: TokenData = Depends(verify_user)):
     query = """
         SELECT 

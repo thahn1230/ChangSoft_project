@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from fastapi import FastAPI
 from pydantic import BaseModel
@@ -18,6 +18,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from enum import Enum
 
 from dbAccess import create_db_connection
+from exceptionHandler import exception_handler
+from user import verify_user, TokenData
 
 from aiQueryInfo import imports, code_condition, db_explanation, db_schema, db_query_example, APIkey
 from insight import get_insight_1, get_insight_2, get_insight_3, get_insight_4, get_insight_5, get_insight_6
@@ -62,7 +64,8 @@ class Query(BaseModel):
     query: str
 
 @router.post("/query")
-async def execute_query(query: Query): 
+@exception_handler
+async def execute_query(query: Query, token: TokenData = Depends(verify_user)): 
 
     #explanation = generate_explanation_byplot(plotly_data_example)
     mode = query.query[0:9]

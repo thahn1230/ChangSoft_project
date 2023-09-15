@@ -1,8 +1,10 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 
 from dbAccess import create_db_connection
+from user import verify_user, TokenData
+from exceptionHandler import exception_handler
 
 router = APIRouter()
 engine = create_db_connection()
@@ -10,7 +12,8 @@ engine = create_db_connection()
 
 # 특정 building_id의 building의 데이터를 보내기
 @router.get("/building/{building_id}/get_project_name")
-def get_project_building_data(building_id: int):
+@exception_handler
+def get_project_building_data(building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT project.project_name, building.building_name 
         FROM project JOIN building 
@@ -26,7 +29,8 @@ def get_project_building_data(building_id: int):
 
 # building_detail 나타낼때 필요한 데이터들 전부 보내기
 @router.get("/building/additional_sub_info")
-def get_sub_building_names_data():
+@exception_handler
+def get_sub_building_names_data(token: TokenData = Depends(verify_user)):
     query = """
         SELECT building.*, 
         ((total_area) / 1000000) AS total_area_square_meter,

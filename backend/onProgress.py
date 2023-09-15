@@ -1,16 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from dbAccess import engine
+from user import TokenData, verify_user
+from exceptionHandler import exception_handler
 
 router = APIRouter()
 
 ###########################이 밑부분 코드는 개발중###############################
 @router.get("/project/{project_num}/building")
-def get_building_dataframe(project_num: int):
+@exception_handler
+def get_building_dataframe(project_num: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT *
         FROM structure3.project AS p
@@ -22,7 +25,8 @@ def get_building_dataframe(project_num: int):
 
 
 @router.get("/data/building_totalnum")
-def get_building_totalNum_dataframe():
+@exception_handler
+def get_building_totalNum_dataframe(token: TokenData = Depends(verify_user)):
     with Session(engine) as session:
         # structure.concrete 전부 다 선택
         building_num = session.execute(
@@ -46,7 +50,8 @@ def get_building_totalNum_dataframe():
 
 
 @router.get("/data/concrete/value")
-def get_concrete_value_data(min: float, max: float):
+@exception_handler
+def get_concrete_value_data(min: float, max: float, token: TokenData = Depends(verify_user)):
     with Session(engine) as session:
         # structure.concrete 전부 다 선택
         concrete_value = session.execute(
@@ -72,7 +77,8 @@ def get_concrete_value_data(min: float, max: float):
 # 프로젝트 내부에 있는 attribute 값들을 .json파일로 보내기
 # 여러개의 .json을 보낼때는 "," 로 연결해주면 됨. ex) id,total_area, ...
 @router.get("/building/{building_attribute}")
-def get_building_attribute(building_attribute: str):
+@exception_handler
+def get_building_attribute(building_attribute: str, token: TokenData = Depends(verify_user)):
     valid_check_query = """
         SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS

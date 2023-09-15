@@ -16,6 +16,7 @@ import jwt
 from pydantic import BaseModel
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 from userLogin import oauth2_scheme, decode_jwt_token
+from exceptionHandler import exception_handler
 
 router = APIRouter()
 engine = create_db_connection()
@@ -30,6 +31,7 @@ def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permis
     return decode_jwt_token(token)
 
 @router.get("/user/profile")
+@exception_handler
 def get_user_info(token: TokenData = Depends(verify_user)): 
     query = f"""
     SELECT id, name, job_position, company, 
@@ -59,6 +61,7 @@ def get_user_info(token: TokenData = Depends(verify_user)):
 
 
 @router.post("/user/change_info")
+@exception_handler
 async def change_user_info(params: dict, token: TokenData = Depends(verify_user)):
 
     user_id = token["id"]
@@ -101,6 +104,7 @@ async def change_user_info(params: dict, token: TokenData = Depends(verify_user)
     return True
 
 @router.post("/user/change_pw")
+@exception_handler
 async def change_password(params: dict, token: TokenData = Depends(verify_user)):
     user_id = token["id"]
     query = f"""

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
 import plotly.graph_objects as go
@@ -6,6 +6,8 @@ import json
 import plotly
 
 from dbAccess import create_db_connection
+from user import TokenData, verify_user
+from exceptionHandler import exception_handler
 
 router = APIRouter()
 engine = create_db_connection()
@@ -13,7 +15,8 @@ engine = create_db_connection()
 
 # 빌딩 id의 맞는 sub building을 받기
 @router.get("/sub_building/{building_id}")
-async def get_sub_building_data(building_id: int):
+@exception_handler
+async def get_sub_building_data(building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT * FROM sub_building
         WHERE sub_building.building_id = {building_id}
@@ -28,7 +31,8 @@ async def get_sub_building_data(building_id: int):
 
 # 총괄분석표 전체 sub_building 1
 @router.get("/sub_building/total_analysis_table_all/1/{building_id}")
-async def get_total_analysis_data1(building_id: int):
+@exception_handler
+async def get_total_analysis_data1(building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT *,
         total_floor_area_meter, total_floor_area_pyeong,
@@ -76,7 +80,8 @@ async def get_total_analysis_data1(building_id: int):
 
 # 총괄분석표 전체 sub_building 2
 @router.get("/sub_building/total_analysis_table_all/2/{building_id}")
-async def get_total_analysis_data2(building_id: int):
+@exception_handler
+async def get_total_analysis_data2(building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT c.component_type,
         SUM(concrete_volume) AS concrete_volume,
@@ -141,7 +146,8 @@ async def get_total_analysis_data2(building_id: int):
 
 # 총괄분석표 한개의 sub_building 1
 @router.get("/sub_building/total_analysis_table/1/{sub_building_id}")
-async def get_total_analysis_data3(sub_building_id: int):
+@exception_handler
+async def get_total_analysis_data3(sub_building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT *,
         (total_formwork / total_concrete) AS form_con_result,
@@ -170,7 +176,8 @@ async def get_total_analysis_data3(sub_building_id: int):
 
 # 총괄분석표 한개의 sub_building 2
 @router.get("/sub_building/total_analysis_table/2/{sub_building_id}")
-async def get_total_analysis_data4(sub_building_id: int):
+@exception_handler
+async def get_total_analysis_data4(sub_building_id: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT c.component_type,
         SUM(concrete_volume) AS concrete_volume,
@@ -234,7 +241,8 @@ async def get_total_analysis_data4(sub_building_id: int):
 ### 분석표 ###
 # 분석표 전체 sub_building
 @router.get("/sub_building/analysis_table_all/{building_id}/concrete")
-async def get_pivot_analysis_concrete_data1(building_id: int):
+@exception_handler
+async def get_pivot_analysis_concrete_data1(building_id: int, token: TokenData = Depends(verify_user)):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -259,7 +267,8 @@ async def get_pivot_analysis_concrete_data1(building_id: int):
 
 # 분석표 전체 sub_building에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/formwork")
-async def get_pivot_analysis_formwork_data1(building_id: int):
+@exception_handler
+async def get_pivot_analysis_formwork_data1(building_id: int, token: TokenData = Depends(verify_user)):
     formwork_query = f"""
         SELECT component_type, formwork_type, 
         SUM(formwork.area) AS total_area FROM formwork
@@ -284,7 +293,8 @@ async def get_pivot_analysis_formwork_data1(building_id: int):
 
 # 분석표 전체 sub_building에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table_all/{building_id}/rebar")
-async def get_analysis_rebar_data1(building_id: int):
+@exception_handler
+async def get_analysis_rebar_data1(building_id: int, token: TokenData = Depends(verify_user)):
     rebar_query = f"""
         SELECT component_type, rebar_grade, 
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
@@ -305,7 +315,8 @@ async def get_analysis_rebar_data1(building_id: int):
 
 # 분석표 sub_building 1개
 @router.get("/sub_building/analysis_table/{sub_building_id}/concrete")
-async def get_pivot_analysis_concrete_data2(sub_building_id: int):
+@exception_handler
+async def get_pivot_analysis_concrete_data2(sub_building_id: int, token: TokenData = Depends(verify_user)):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -330,7 +341,8 @@ async def get_pivot_analysis_concrete_data2(sub_building_id: int):
 
 # 분석표 sub_building 1개에서 formwork 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/formwork")
-async def get_pivot_analysis_formwork_data2(sub_building_id: int):
+@exception_handler
+async def get_pivot_analysis_formwork_data2(sub_building_id: int, token: TokenData = Depends(verify_user)):
     formwork_query = f"""
         SELECT component_type, formwork_type, 
         SUM(formwork.area) AS total_area FROM formwork
@@ -355,7 +367,8 @@ async def get_pivot_analysis_formwork_data2(sub_building_id: int):
 
 # 분석표 sub_building 1개에서 rebar 데이터 보이기
 @router.get("/sub_building/analysis_table/{sub_building_id}/rebar")
-async def get_analysis_rebar_data2(sub_building_id: int):
+@exception_handler
+async def get_analysis_rebar_data2(sub_building_id: int, token: TokenData = Depends(verify_user)):
     rebar_query = f"""
         SELECT component_type, rebar_grade, 
         CAST(rebar_diameter AS signed integer) AS rebar_diameter,
@@ -375,7 +388,8 @@ async def get_analysis_rebar_data2(sub_building_id: int):
 
 
 @router.get("/sub_building/analysis_table/{sub_building_id}/concrete/table")
-async def draw_analysis_concrete2(sub_building_id: int):
+@exception_handler
+async def draw_analysis_concrete2(sub_building_id: int, token: TokenData = Depends(verify_user)):
     concrete_query = f"""
         SELECT component_type, material_name, 
         SUM(concrete.volume) AS total_volume FROM concrete
@@ -411,7 +425,8 @@ async def draw_analysis_concrete2(sub_building_id: int):
 # 부재별층잡계표
 # 빌딩 안에 어떠한 component_type이 있는지 알려주는 함수
 @router.get("/sub_building/floor_analysis_table/{building_id}/component_type")
-async def get_floor_analysis_component_type_data(building_id: int):
+@exception_handler
+async def get_floor_analysis_component_type_data(building_id: int, token: TokenData = Depends(verify_user)):
     query=f"""
         SELECT component_type FROM formwork
         JOIN component ON component.id = formwork.component_id
@@ -430,7 +445,8 @@ async def get_floor_analysis_component_type_data(building_id: int):
 
 # 콘크리트
 @router.get("/sub_building/floor_analysis_table/{building_id}/concrete/filter")
-async def get_floor_analysis_concrete_filtered(building_id: int, component_types: str):
+@exception_handler
+async def get_floor_analysis_concrete_filtered(building_id: int, component_types: str, token: TokenData = Depends(verify_user)):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
     if component_types == "":
@@ -462,7 +478,8 @@ async def get_floor_analysis_concrete_filtered(building_id: int, component_types
     
 # 거푸집
 @router.get("/sub_building/floor_analysis_table/{building_id}/formwork/filter")
-async def get_floor_analysis_formwork_filtered(building_id: int, component_types: str):
+@exception_handler
+async def get_floor_analysis_formwork_filtered(building_id: int, component_types: str, token: TokenData = Depends(verify_user)):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
     if component_types == "":
@@ -495,7 +512,8 @@ async def get_floor_analysis_formwork_filtered(building_id: int, component_types
     
 # 철근
 @router.get("/sub_building/floor_analysis_table/{building_id}/rebar/filter")
-async def get_floor_analysis_rebar_filtered(building_id: int, component_types: str):
+@exception_handler
+async def get_floor_analysis_rebar_filtered(building_id: int, component_types: str, token: TokenData = Depends(verify_user)):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
     
@@ -522,7 +540,8 @@ async def get_floor_analysis_rebar_filtered(building_id: int, component_types: s
     
 # 부재별로 타입 보이기
 @router.get("/sub_building/quantity_detail/get_quantity_list/{building_id}")
-async def get_quantity_list(building_id: int):
+@exception_handler
+async def get_quantity_list(building_id: int, token: TokenData = Depends(verify_user)):
     sub_building_query = f"""
         SELECT id, sub_building_name FROM sub_building
         WHERE sub_building.building_id = {building_id}
@@ -565,7 +584,8 @@ async def get_quantity_list(building_id: int):
     
 # 피봇 그리드
 @router.post("/sub_building/component_info")
-async def get_component_info(params: dict):
+@exception_handler
+async def get_component_info(params: dict, token: TokenData = Depends(verify_user)):
     sub_building_list = params["info"]["subBuildingList"]
     floor_list = params["info"]["floorList"]
     component_list = params["info"]["componentTypeList"]
