@@ -3,8 +3,9 @@ dbAccess.py
 origins.py
 aiQueryInfo.py
 userLoginInfo.py
-access.log
 application.log
+Pipfile
+Pipfile.lock
 
 Others/
 __pycache__/

@@ -3,7 +3,6 @@ from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import OperationalError, IntegrityError, TimeoutError, InvalidRequestError, DataError, StatementError
 from loggingHandler import add_log
-from fastapi.routing import APIRoute
 
 
 def exception_handler(f):

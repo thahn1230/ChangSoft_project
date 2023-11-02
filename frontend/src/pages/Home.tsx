@@ -11,8 +11,7 @@ import CompanyPercentage from "component/homeComponent/CompanyPercentage";
 import LocalPercentage from "component/homeComponent/LocalPercentage";
 import TotalArea from "component/homeComponent/TotalArea";
 import FloorCount from "component/homeComponent/FloorCount";
-import "styles/Home.scss"
-
+import "styles/Home.scss";
 
 interface Tile {
   header: string;
