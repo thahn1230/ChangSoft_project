@@ -8,10 +8,10 @@ from loggingHandler import add_log
 def exception_handler(f):
     @wraps(f)
     async def wrapper(*args, **kwargs):
+        token = None
         try:
             result = await f(*args, **kwargs)
             token = kwargs['token']['id']
-            print(token)
             add_log(200,token, "Successful operation")  # Log for successful operation
             return result
         except HTTPException as e:

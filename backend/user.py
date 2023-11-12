@@ -27,12 +27,12 @@ class TokenData(BaseModel):
     company: str
     email_address: str
 
-def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permission
+async def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_permission
     return decode_jwt_token(token)
 
 @router.get("/user/profile")
 @exception_handler
-def get_user_info(token: TokenData = Depends(verify_user)): 
+async def get_user_info(token: TokenData = Depends(verify_user)): 
     query = f"""
     SELECT id, name, job_position, company, 
     email_address, phone_number, user_type 
