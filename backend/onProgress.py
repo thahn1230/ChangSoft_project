@@ -13,7 +13,7 @@ router = APIRouter()
 ###########################이 밑부분 코드는 개발중###############################
 @router.get("/project/{project_num}/building")
 @exception_handler
-def get_building_dataframe(project_num: int, token: TokenData = Depends(verify_user)):
+async def get_building_dataframe(project_num: int, token: TokenData = Depends(verify_user)):
     query = f"""
         SELECT *
         FROM structure3.project AS p
@@ -26,7 +26,7 @@ def get_building_dataframe(project_num: int, token: TokenData = Depends(verify_u
 
 @router.get("/data/building_totalnum")
 @exception_handler
-def get_building_totalNum_dataframe(token: TokenData = Depends(verify_user)):
+async def get_building_totalNum_dataframe(token: TokenData = Depends(verify_user)):
     with Session(engine) as session:
         # structure.concrete 전부 다 선택
         building_num = session.execute(
@@ -51,7 +51,7 @@ def get_building_totalNum_dataframe(token: TokenData = Depends(verify_user)):
 
 @router.get("/data/concrete/value")
 @exception_handler
-def get_concrete_value_data(min: float, max: float, token: TokenData = Depends(verify_user)):
+async def get_concrete_value_data(min: float, max: float, token: TokenData = Depends(verify_user)):
     with Session(engine) as session:
         # structure.concrete 전부 다 선택
         concrete_value = session.execute(
@@ -78,7 +78,7 @@ def get_concrete_value_data(min: float, max: float, token: TokenData = Depends(v
 # 여러개의 .json을 보낼때는 "," 로 연결해주면 됨. ex) id,total_area, ...
 @router.get("/building/{building_attribute}")
 @exception_handler
-def get_building_attribute(building_attribute: str, token: TokenData = Depends(verify_user)):
+async def get_building_attribute(building_attribute: str, token: TokenData = Depends(verify_user)):
     valid_check_query = """
         SELECT COLUMN_NAME
         FROM INFORMATION_SCHEMA.COLUMNS

@@ -42,8 +42,8 @@ setup_logger()
 
 # 이거안돼서, 엔드포인트마다 @exception_handler 이거를, @router.get바로 아래줄에 다 추가해줘야됨
 # 이게 되면 다 추가안하고 그냥 그대로 냅두면됨
-for route in app.routes:
-    route.endpoint = exception_handler(route.endpoint)
+# for route in app.routes:
+#     route.endpoint = exception_handler(route.endpoint)
 
 middleware_logger = logging.getLogger('middleware_logger')
 middleware_logger.setLevel(logging.INFO)
