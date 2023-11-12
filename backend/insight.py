@@ -151,12 +151,14 @@ def get_materials_data_by_company(construction_company, project_limit):
     return df
 
 
-def get_materials_data_by_project_ids_company(construction_company: str, project_ids: List[int]):
+def get_materials_data_by_project_ids_company(
+    construction_company: str, project_ids: List[int]
+):
     # Get project names for the construction company '우미건설'
 
     for project_id in project_ids:
         project_ids_str = ", ".join(str(project_id) for project_id in project_ids)
-    
+
     print(project_ids_str)
     query_projects = f"""
     SELECT project_name
@@ -264,27 +266,27 @@ def extract_keywords(input_string):
     else:
         return "etc."
 
-#@router.get("/insight/1")
+
+# @router.get("/insight/1")
 def get_insight_1(project_ids_str: str):
     # 예제 1번
     # company_name의 모든 프로젝트에 있는 빌딩별, 콘크리트 M3당 철근량(ton) 값에 대한 분석
     # 그래프 1 : 빌딩별 콘크리트 M3당 철근량(ton) 값의 분포 히스토그램
     # 그래프 2 : 프로젝트별 콘크리트 M3당 철근량(ton) 값의 평균값 비교
     project_ids = json.loads(project_ids_str)
-    
+
     for project_id in project_ids:
-        query=f"""
+        query = f"""
             SELECT * FROM project 
             WHERE id = {project_id}
         """
         data_df = pd.read_sql(query, engine)
         company_name = data_df["construction_company"].values[0]
         break
-            
+
     # 계산 로직
     df = get_materials_data_by_project_ids_company(company_name, project_ids)
-    
-    
+
     # 그래프1
     # make plotly histogram chart
     # Create a histogram
@@ -379,27 +381,27 @@ def get_insight_1(project_ids_str: str):
 
     # Convert the list to json
     figures_json = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
-    
+
     return figures_json
 
 
-#@router.get("/insight/2")
+# @router.get("/insight/2")
 def get_insight_2(project_ids_str):
     # 예제 2번
     # company_name의 모든 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 M3당 철근량(ton) 값의 분포 분석
     # 그래프 1 : 빌딩별 콘크리트 M3당 철근량(ton) 값의 Box plot 그래프
 
     project_ids = json.loads(project_ids_str)
-    
+
     for project_id in project_ids:
-        query=f"""
+        query = f"""
             SELECT * FROM project 
             WHERE id = {project_id}
         """
         data_df = pd.read_sql(query, engine)
         company_name = data_df["construction_company"].values[0]
         break
-    
+
     df = get_materials_data_by_project_ids_company(company_name, project_ids)
 
     # Let's say 'df' is your original DataFrame
@@ -440,16 +442,16 @@ def get_insight_2(project_ids_str):
     return json.dumps(response_data)
 
 
-#@router.get("/insight/3")
+# @router.get("/insight/3")
 def get_insight_3(project_ids_str):
     # 예제 3번
     # company_name의 4개 프로젝트에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교
     # 그래프 1 : 프로젝트별 콘크리트 종류별 사용비율 비교 그래프
 
     project_ids = json.loads(project_ids_str)
-    
+
     for project_id in project_ids:
-        query=f"""
+        query = f"""
             SELECT * FROM project 
             WHERE id = {project_id}
         """
@@ -459,16 +461,16 @@ def get_insight_3(project_ids_str):
 
     for project_id in project_ids:
         project_ids_str = ", ".join(str(project_id) for project_id in project_ids)
-    
+
     project_name_query = f"""
     SELECT project_name
     FROM project
     WHERE construction_company = "{company_name}"
     AND id IN ({project_ids_str});
     """
-    
+
     project_names = pd.read_sql_query(project_name_query, engine)["project_name"]
-    
+
     # 각 프로젝트에 대해 concrete_df 생성
     concrete_dfs = [
         generate_concrete_df(engine, project_name) for project_name in project_names
@@ -477,9 +479,11 @@ def get_insight_3(project_ids_str):
     num_projects = len(project_ids)
     num_rows = math.ceil(math.sqrt(num_projects))
     num_cols = math.ceil(num_projects / num_rows)
-    
+
     # subplot 생성
-    fig = make_subplots(rows=num_rows, cols=num_cols, subplot_titles=project_names)  # 서브플롯에 제목 추가
+    fig = make_subplots(
+        rows=num_rows, cols=num_cols, subplot_titles=project_names
+    )  # 서브플롯에 제목 추가
 
     # 각 프로젝트별로 그래프 추가
     for i, df in enumerate(concrete_dfs, start=1):
@@ -520,14 +524,14 @@ def get_insight_3(project_ids_str):
     return json.dumps(response_data)
 
 
-#@router.get("/insight/4")
+# @router.get("/insight/4")
 def get_insight_4(company_name_str):
     # 예제 4번
     # 건설사별 콘크리트당 철근중량 비교
     # 그래프1 : 건설사별 콘크리트당 철근중량 비교
-    
+
     company_name = json.loads(company_name_str)
-    company_names=', '.join(f'"{x}"' for x in company_name)
+    company_names = ", ".join(f'"{x}"' for x in company_name)
     print(company_name)
     print(company_names)
     # SQL 쿼리 작성 - construction_company 별 concrete volume 합계
@@ -603,10 +607,10 @@ def get_insight_4(company_name_str):
     return json.dumps(response_data)
 
 
-#@router.get("/insight/5")
+# @router.get("/insight/5")
 def get_insight_5(project_id_str):
     project_id = json.loads(project_id_str)[0]
-    query=f"""
+    query = f"""
         SELECT *
         FROM project
         WHERE id = {project_id}
@@ -614,8 +618,7 @@ def get_insight_5(project_id_str):
     project_df = pd.read_sql(query, engine)
     project_name = project_df["project_name"].values[0]
     company_name = project_df["construction_company"].values[0]
-    
-    
+
     # Define the SQL query to load data where 'component_type' is '내력벽'
     query = """
     SELECT *
@@ -745,7 +748,7 @@ def get_insight_5(project_id_str):
     return json.dumps(response_data)
 
 
-#@router.get("/insight/6")
+# @router.get("/insight/6")
 def get_insight_6(project_building_ids_str):
     # 예제 6번
     # 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석
@@ -754,7 +757,7 @@ def get_insight_6(project_building_ids_str):
 
     project_id = json.loads(project_building_ids_str)[0]
     building_id = json.loads(project_building_ids_str)[1]
-    
+
     query = f"""
         SELECT * FROM project
         JOIN building ON project.id = building.project_id
@@ -762,7 +765,9 @@ def get_insight_6(project_building_ids_str):
     """
     data_df = pd.read_sql(query, engine)
     project_name = data_df["project_name"].values[0]  # Replace with your project name
-    building_name = data_df["building_name"].values[0]  # Replace with your building name
+    building_name = data_df["building_name"].values[
+        0
+    ]  # Replace with your building name
 
     query = f"""
     SELECT fl.floor_name, fl.floor_number, r.rebar_type, SUM(r.rebar_weight) as total_rebar_weight
@@ -778,11 +783,14 @@ def get_insight_6(project_building_ids_str):
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
-    df['rebar_type'] = df['rebar_type'].fillna('Unknown')
+    df["rebar_type"] = df["rebar_type"].fillna("Unknown")
 
     # Pivot the DataFrame to prepare it for the heatmap
     pivot_df = df.pivot_table(
-        index="floor_name", columns="rebar_type", values="total_rebar_weight", sort=False,
+        index="floor_name",
+        columns="rebar_type",
+        values="total_rebar_weight",
+        sort=False,
     )
 
     # Sorting by floor_number
@@ -795,22 +803,21 @@ def get_insight_6(project_building_ids_str):
     x_data = list(pivot_df.columns)
     y_data = list(pivot_df.index)
 
-
     # Calculate the number of values
     num_values_per_col = len(x_data)  # Assuming each row has the same number of values
     num_values_per_row = len(y_data)
-    
+
     # Calculate the dynamic height based on the number of values per row
-    if(num_values_per_col/num_values_per_row > 12) :
+    if num_values_per_col / num_values_per_row > 12:
         row_height = 90  # Set the height of each row (adjust as needed)
         col_width = 40
-    else :
+    else:
         row_height = 50  # Set the height of each row (adjust as needed)
         col_width = 40
-    
+
     height = row_height * num_values_per_row
     width = col_width * num_values_per_col
-    
+
     # Define heatmap
     heatmap = go.Heatmap(
         z=z_data, x=x_data, y=y_data, colorscale="RdBu_r", showscale=True
@@ -830,10 +837,16 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
+                    text=val,
+                    x=j,
+                    y=i,
+                    xref="x1",
+                    yref="y1",
+                    showarrow=False,
+                    font=dict(size=9),
                 )
-            )   
-    
+            )
+
     # Create layout with annotations
     layout = go.Layout(
         annotations=annotations,
@@ -877,30 +890,33 @@ def get_insight_6(project_building_ids_str):
 
     # Execute the query and create a DataFrame
     df = pd.read_sql_query(query, engine)
-    df['rebar_type'] = df['rebar_type'].fillna('Unknown')
+    df["rebar_type"] = df["rebar_type"].fillna("Unknown")
     pivot_df = df.pivot_table(
-        index="component_type", columns="rebar_type", values="total_rebar_weight", sort=False,
+        index="component_type",
+        columns="rebar_type",
+        values="total_rebar_weight",
+        sort=False,
     )
-    
+
     print(pivot_df)
 
     # Prepare data for heatmap
     z_data = np.log10(pivot_df.values)  # Apply log scale
     x_data = list(pivot_df.columns)
     y_data = list(pivot_df.index)
-    
+
     # Calculate the number of values
     num_values_per_col = len(x_data)  # Assuming each row has the same number of values
     num_values_per_row = len(y_data)
-    
+
     # Calculate the dynamic height based on the number of values per row
-    if(num_values_per_col/num_values_per_row > 12) :
+    if num_values_per_col / num_values_per_row > 12:
         row_height = 90  # Set the height of each row (adjust as needed)
         col_width = 40
-    else :
+    else:
         row_height = 50  # Set the height of each row (adjust as needed)
         col_width = 40
-    
+
     height = row_height * num_values_per_row
     width = col_width * num_values_per_col
 
@@ -923,7 +939,13 @@ def get_insight_6(project_building_ids_str):
         for j, val in enumerate(row):
             annotations.append(
                 go.layout.Annotation(
-                    text=val, x=j, y=i, xref="x1", yref="y1", showarrow=False, font=dict(size=9)
+                    text=val,
+                    x=j,
+                    y=i,
+                    xref="x1",
+                    yref="y1",
+                    showarrow=False,
+                    font=dict(size=9),
                 )
             )
 
@@ -966,9 +988,12 @@ def get_insight_6(project_building_ids_str):
 
     return figures_json
 
+
 @router.get("/insight/{example_id}")
 @exception_handler
-async def get_insight(example_id: int, data: str, token: TokenData = Depends(verify_user)):
+async def get_insight(
+    example_id: int, data: str, token: TokenData = Depends(verify_user)
+):
     if example_id == 1:
         result_json = get_insight_1(data)
     elif example_id == 2:
@@ -980,7 +1005,7 @@ async def get_insight(example_id: int, data: str, token: TokenData = Depends(ver
     elif example_id == 5:
         result_json = get_insight_5(data)
     elif example_id == 6:
-        result_json = get_insight_6(data) 
+        result_json = get_insight_6(data)
     else:
         return []
     return result_json
