@@ -17,6 +17,9 @@ import time
 
 import logging
 from loggingHandler import setup_logger 
+from loggingHandler import add_performance_log
+from loggingHandler import read_stats, write_stats
+import asyncio
 
 #test
 from exceptionHandler import exception_handler
@@ -40,18 +43,7 @@ app.include_router(userRouter)
 
 setup_logger()
 
-# 이거안돼서, 엔드포인트마다 @exception_handler 이거를, @router.get바로 아래줄에 다 추가해줘야됨
-# 이게 되면 다 추가안하고 그냥 그대로 냅두면됨
-# for route in app.routes:
-#     route.endpoint = exception_handler(route.endpoint)
-
-middleware_logger = logging.getLogger('middleware_logger')
-middleware_logger.setLevel(logging.INFO)
-file_handler = logging.FileHandler('middleware_performance.log')
-file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-middleware_logger.addHandler(file_handler)
-middleware_logger.propagate = False  # Prevent logs from being propagated to the root logger
-
+lock = asyncio.Lock()
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     start_time = datetime.now()
@@ -65,10 +57,22 @@ async def add_process_time_header(request: Request, call_next):
     
     endpoint_path = request.url.path
 
-    middleware_logger.info(f"Endpoint: {endpoint_path} | Processing time: {process_time_ms} ms")
+    add_performance_log(f"Endpoint: {endpoint_path} | Processing time: {process_time_ms} ms")
+    # middleware_logger.info(f"Endpoint: {endpoint_path} | Processing time: {process_time_ms} ms")
 
-    # Add X-Process-Time header to response
-    response.headers["X-Process-Time"] = str(process_time_ms)
+
+
+    async with lock:
+        stats = read_stats()
+        if endpoint_path in stats:
+            old_avg, old_count = stats[endpoint_path]
+            new_count = old_count + 1
+            new_avg = ((old_avg * old_count) + process_time_ms) / new_count
+            stats[endpoint_path] = (new_avg, new_count)
+        else:
+            stats[endpoint_path] = (process_time_ms, 1)
+        write_stats(stats)
+
     return response
 
 
