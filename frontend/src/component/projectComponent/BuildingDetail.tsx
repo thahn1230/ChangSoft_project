@@ -9,7 +9,6 @@ import {
 import { Button } from "@progress/kendo-react-buttons";
 import urlPrefix from "resource/URL_prefix.json";
 import { useNavigate, Route, Routes } from "react-router-dom";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
 import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/GridDetail.scss";

@@ -3,7 +3,7 @@ import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { UserInfoI } from "interface/userInfo_interface";
+import { UserInfo } from "interface/UserInterface";
 import urlPrefix from "resource/URL_prefix.json";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
@@ -317,7 +317,7 @@ const Join = (props: any) => {
         body: JSON.stringify({ join_info: updatedJoinValue }),
       });
 
-      const signupData: UserInfoI[] = await response.json();
+      const signupData: UserInfo[] = await response.json();
       console.log(signupData);
       if (signupData.length !== 0) {
         //회원가입 성공

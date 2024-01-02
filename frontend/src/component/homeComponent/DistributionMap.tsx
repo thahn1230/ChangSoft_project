@@ -8,7 +8,7 @@ import {
   MapTileLayer,
 } from "@progress/kendo-react-map";
 import urlPrefix from "resource/URL_prefix.json";
-import { coordinate } from "interface/coordinate";
+import { Coordinate } from "interface/DashBoardInterface";
 import styled from "styled-components";
 // import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
 
@@ -56,7 +56,7 @@ const markerStyle = {
 };
 
 const DistributionMap = () => {
-  const [markers, setMarkers] = useState<coordinate[]>([]);
+  const [markers, setMarkers] = useState<Coordinate[]>([]);
 
   useEffect(() => {
     // axios.interceptors.request.use((config: AxiosRequestConfig) =>

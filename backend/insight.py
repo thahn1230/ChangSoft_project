@@ -757,7 +757,7 @@ def get_insight_6(project_building_ids_str):
 
     project_id = json.loads(project_building_ids_str)[0]
     building_id = json.loads(project_building_ids_str)[1]
-
+    
     query = f"""
         SELECT * FROM project
         JOIN building ON project.id = building.project_id

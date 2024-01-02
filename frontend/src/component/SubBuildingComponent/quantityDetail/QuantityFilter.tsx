@@ -12,7 +12,8 @@ import {
   filterBy,
   FilterDescriptor,
 } from "@progress/kendo-data-query";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
+
+import { BuildingInfo } from "interface/BuildingInterface";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -27,67 +28,6 @@ const selectDropDownFields = {
   expandField,
   subItemsField,
 };
-
-interface idNameI {
-  id: number;
-  name: string;
-}
-interface ConcreteDataI {
-  id: number;
-  object_id: number;
-  floor_id: number;
-  sub_building_id: number;
-  component_type: string;
-  section_name: string;
-  construction_zone: string;
-  category: string;
-  component_id: number;
-  summation_type: string;
-  blinding: string;
-  calculation_formula: string;
-  material_name: string;
-  coarse_aggregate: string;
-  concrete_strength: string;
-  slump: string;
-  aggregate_strength_concrete_strength_slump: string;
-  volume: number;
-}
-interface FormworkDataI {
-  id: number;
-  object_id: number;
-  floor_id: number;
-  sub_building_id: number;
-  component_type: string;
-  section_name: string;
-  construction_zone: string;
-  category: string;
-  component_id: number;
-  calculation_formula: string;
-  formwork_position: string;
-  formwork_type: string;
-  area: number;
-}
-interface RebarDataI {
-  id: number;
-  object_id: number;
-  floor_id: number;
-  sub_building_id: number;
-  component_type: string;
-  section_name: string;
-  construction_zone: string;
-  category: string;
-  component_id: number;
-  calculation_formula: string;
-  rebar_type: string;
-  rebar_grade: string;
-  rebar_diameter: number;
-  rebar_shape_count: number;
-  rebar_shape_length: number;
-  rebar_unit_weight: number;
-  rebar_id: number;
-  rebar_count: number;
-  rebar_weight: number;
-}
 
 interface SubBuildingI {
   subBuilding: string;
@@ -111,7 +51,7 @@ interface ComponentTypeI {
 
 interface QuantityFilterInfo {
   setGridData: React.Dispatch<React.SetStateAction<[]>>;
-  buildingInfo: buildingInfo_interface | undefined;
+  buildingInfo: BuildingInfo | undefined;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

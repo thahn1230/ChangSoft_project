@@ -1,4 +1,4 @@
-export interface UserInfoI {
+export interface UserInfo {
     id: string;
     name: string;
     job_position: string|null;

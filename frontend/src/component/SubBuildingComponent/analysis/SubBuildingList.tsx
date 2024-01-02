@@ -1,21 +1,23 @@
 import React, { useEffect, useState, useRef } from "react";
 import { DropDownList, ComboBox } from "@progress/kendo-react-dropdowns";
 import urlPrefix from "resource/URL_prefix.json";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
-import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+
+
+import { BuildingInfo } from "interface/BuildingInterface";
+import { SubBuildingInfo } from "interface/SubBuildingInterface";
 
 interface SubBuildingListInfo {
-  buildingInfo: buildingInfo_interface | undefined;
+  buildingInfo: BuildingInfo | undefined;
   projectName : string;
   setSelectedSubBuildingId : React.Dispatch<React.SetStateAction<number>>;
   selectedSubBuildingId : number;
-  subBuildingInfo : subBuildingInfo_interface[];
+  subBuildingInfo : SubBuildingInfo[];
 }
 
 const SubBuildingList = (props: SubBuildingListInfo) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
   const [subBuildingInfo, setSubBuildingInfo] = useState<
-    subBuildingInfo_interface[]
+  SubBuildingInfo[]
   >([]);
 
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
@@ -25,7 +27,7 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
   >(0);
 
   const [selectedBuilding, setSelectedBuilding] =
-    useState<buildingInfo_interface>();
+    useState<BuildingInfo>();
 
   useEffect(() => {
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
@@ -56,7 +58,7 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
         return response.json();
       })
       .then((rawData) => {
-        const data: subBuildingInfo_interface[] = JSON.parse(rawData);
+        const data: SubBuildingInfo[] = JSON.parse(rawData);
 
         let subBuildingNames: string[] = [];
         subBuildingNames.push("전체동");

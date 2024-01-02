@@ -12,11 +12,10 @@ import TotalAnalysisGrid2 from "component/SubBuildingComponent/totalAnalysis/Tot
 import SubBuildingTotalAnalysisPieChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisPieChart";
 import SubBuildingTotalAnalysisBarChart from "component/SubBuildingComponent/totalAnalysis/SubBuildingTotalAnalysisBarChart";
 
-import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "interface/subBuildingTotalAnalysisTable1_interface";
-import { subBuildingAnalysisPercentage_interface } from "interface/subBuildingAnalysisPercentage_interface";
-import { subBuildingAnalysisValue_interface } from "interface/subBuildingAnalysisValue_interface";
+import { SubBuildingInfo } from "interface/SubBuildingInterface";
+import { SubBuildingTotalAnalysis1 } from "interface/SubBuildingInterface";
+import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
+import { SubBuildingAnalysisValue } from "interface/SubBuildingInterface";
 import {useProjectName, useBuildingInfo} from "App"
 
 import urlPrefix from "resource/URL_prefix.json";
@@ -29,12 +28,12 @@ const TotalAnalysisTab = () => {
   const [projectName, setProjectName] = useProjectName();
 
   const [subBuildingInfo, setSubBuildingInfo] = useState<
-    subBuildingInfo_interface[]
+  SubBuildingInfo[]
   >([]);
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(-1);
 
   const [analysisTable1, setAnalysisTable1] =
-    useState<subBuildingTotalAnalysisTable1_interface[]>();
+    useState<SubBuildingTotalAnalysis1[]>();
   const [analysisTable1Grid, setAnalysisTable1Grid] = useState<
     { [key: string]: string | number }[]
   >([{}]);
@@ -43,10 +42,10 @@ const TotalAnalysisTab = () => {
   const [selectedType, setSelectedType] = useState("concrete");
   //각각의 퍼센트&타입
   const [percentagesInfo, setPercentagesInfo] =
-    useState<subBuildingAnalysisPercentage_interface[]>();
+    useState<SubBuildingAnalysisPercentage[]>();
   //각각의 값&타입
   const [valueInfo, setValueInfo] =
-    useState<subBuildingAnalysisValue_interface[]>();
+    useState<SubBuildingAnalysisValue[]>();
 
   useEffect(()=>{
     if(selectedSubBuildingId ===-1)

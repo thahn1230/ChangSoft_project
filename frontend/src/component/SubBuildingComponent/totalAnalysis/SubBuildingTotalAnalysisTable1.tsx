@@ -4,16 +4,14 @@ import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import SubBuildingList from "component/SubBuildingComponent/totalAnalysis/SubBuildingList";
 
-import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
-import { subBuildingTotalAnalysisTable1_interface } from "interface/subBuildingTotalAnalysisTable1_interface";
+import { SubBuildingTotalAnalysis1 } from "interface/SubBuildingInterface";
 import "styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
 
   const [analysisTable1, setAnalysisTable1] =
-    useState<subBuildingTotalAnalysisTable1_interface[]>();
+    useState<SubBuildingTotalAnalysis1[]>();
   const [analysisTable1Grid, setAnalysisTable1Grid] = useState<
     { [key: string]: string | number }[]
   >([{}]);
@@ -44,24 +42,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
       })
       .catch((error) => console.error("Error:", error));
   }, [props.buildingInfo]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response1 = await axios.get(
-  //         urlPrefix.IP_port +
-  //           "/sub_building/total_analysis_table_all/1/" +
-  //           props.buildingInfo?.id
-  //       );
-
-  //       setAnalysisTable1(JSON.parse(response1.data));
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [props.buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -135,35 +115,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
   }, [selectedSubBuildingId, props.buildingInfo?.id]);
 
-  //여기에서 테이블 수정
-  // useEffect(() => {
-  //   props.setSelectedSubBuildingId(selectedSubBuildingId);
-  //   const fetchData = async () => {
-  //     try {
-  //       if (selectedSubBuildingId === undefined) return;
-
-  //       let response;
-  //       if (selectedSubBuildingId === 0) {
-  //         response = await axios.get(
-  //           urlPrefix.IP_port +
-  //             "/sub_building/total_analysis_table_all/1/" +
-  //             props.buildingInfo?.id
-  //         );
-  //       } else {
-  //         response = await axios.get(
-  //           urlPrefix.IP_port +
-  //             "/sub_building/total_analysis_table/1/" +
-  //             selectedSubBuildingId
-  //         );
-  //       }
-  //       setAnalysisTable1(JSON.parse(response.data));
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [selectedSubBuildingId, props.buildingInfo?.id]);
 
   return (
     <div className="table-container">

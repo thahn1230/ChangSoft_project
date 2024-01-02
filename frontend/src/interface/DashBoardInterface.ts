@@ -1,4 +1,9 @@
-export interface location {
+export interface Coordinate {
+    latlng: [number,number];
+    sum: number;
+  }
+
+  export interface Location {
     place_id: number;
     licence: string;
     osm_type: string;
@@ -11,3 +16,10 @@ export interface location {
     type: string;
     importance: number;
   }
+
+  export interface PercentPercentage {
+    field: string;
+    count: number;
+    percentage: number;
+  }
+  

@@ -12,15 +12,15 @@ import { Home } from "./pages/Home";
 import Projects from "./pages/Projects";
 import UserPage from "./pages/User";
 import Insight from "./pages/Insight";
-import { buildingInfo_interface } from "./interface/buildingInfo_interface";
+import { BuildingInfo } from "interface/BuildingInterface";
 import SubBuildingTabLayout from "./component/SubBuildingTabLayout";
 import AIQuery from "./pages/AIQuery";
 import LoginPage from "./pages/Login";
 
 const BuildingInfoContext = createContext<
   | [
-      buildingInfo_interface | undefined,
-      React.Dispatch<React.SetStateAction<buildingInfo_interface | undefined>>
+    BuildingInfo | undefined,
+      React.Dispatch<React.SetStateAction<BuildingInfo | undefined>>
     ]
   | undefined
 >(undefined);
@@ -48,13 +48,10 @@ export function useProjectName() {
 
 export function App() {
   const [buildingInfo, setBuildingInfo] = useState<
-    buildingInfo_interface | undefined
+  BuildingInfo | undefined
   >();
   const [projectName, setProjectName] = useState<string>("project");
 
-  // const onBuildingInfoChange =(e:buildingInfo_interface)=>{
-  //   setBuildingInfo(e);
-  // }
 
   const navigate = useNavigate();
   const location = useLocation();

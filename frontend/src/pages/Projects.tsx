@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import BuildingList from "component/projectComponent/BuildingList";
 import ProjectDetail from "component/projectComponent/ProjectDetail";
 import ProjectList from "component/projectComponent/ProjectList";
-import { projectList_interface } from "interface/projectList_interface";
-import { buildingInfo_interface } from "interface/buildingInfo_interface";
+import { ProjectIdName } from "interface/ProjectInterface";
 
 //context
 import {useProjectName, useBuildingInfo} from "App"
@@ -11,7 +10,7 @@ import {useProjectName, useBuildingInfo} from "App"
 const Projects = () => {
   //const [, setBuildingInfo] = useBuildingInfo();
   const [projectName, setProjectName] = useProjectName();
-  const [data, setData] = useState<projectList_interface[]>([]);
+  const [data, setData] = useState<ProjectIdName[]>([]);
 
   return (
     <div className="projects">

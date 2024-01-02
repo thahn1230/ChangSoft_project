@@ -1,4 +1,12 @@
-export interface buildingInfo_interface {
+export interface Building {
+  id: number;
+  building_name: string;
+  building_type: string;
+  project_id: number;
+  sub_bldg_list: string;
+}
+
+export interface BuildingInfo {
   id: number;
   building_name: string;
   screenshot: null | string;

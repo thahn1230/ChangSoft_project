@@ -6,7 +6,6 @@ import {
 } from "@progress/kendo-react-inputs";
 import {
   Splitter,
-  SplitterBar,
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
 import urlPrefix from "resource/URL_prefix.json";
@@ -14,7 +13,8 @@ import SubBuildingList from "component/SubBuildingComponent/analysis/SubBuilding
 import SingleColTable from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
-import { subBuildingInfo_interface } from "interface/subBuildingInfo_interface";
+
+import { SubBuildingInfo } from "interface/SubBuildingInterface";
 import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/analysisTab.scss";
@@ -35,7 +35,7 @@ const AnalysisTab = () => {
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState(0);
 
   const [subBuildingInfo, setSubBuildingInfo] = useState<
-    subBuildingInfo_interface[]
+  SubBuildingInfo[]
   >([]);
 
   const [concreteData, setConcreteData] = useState<gridData>([]);

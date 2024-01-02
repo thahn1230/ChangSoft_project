@@ -1,4 +1,5 @@
-export interface project_interface {
+//project_interface
+export interface ProjectInfo {
     building_area: number;
     construction_company: string;
     construction_end: null | Date;
@@ -17,3 +18,17 @@ export interface project_interface {
     wind_tunnel_test: null | string;
     zone: string;
   }
+
+  export interface ProjectDetail {
+    id: number;
+    project_name: string;
+    buildingTotalNum : number;
+  }
+  
+  //projectList_interface
+  export interface ProjectIdName {
+    id: number;
+    project_name: string;
+  }
+
+  

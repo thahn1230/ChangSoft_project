@@ -16,8 +16,9 @@ import {
   FilterDescriptor,
 } from "@progress/kendo-data-query";
 import urlPrefix from "resource/URL_prefix.json";
-import { projectList_interface } from "interface/projectList_interface";
-import { project_interface } from "interface/project_interface";
+
+import { ProjectIdName } from "interface/ProjectInterface";
+import { ProjectInfo } from "interface/ProjectInterface";
 
 //context
 import { useProjectName, useBuildingInfo } from "App";
@@ -25,15 +26,15 @@ import { useProjectName, useBuildingInfo } from "App";
 import "styles/ProjectList.scss";
 import loadingBars from "resource/loadingBars.gif";
 
-const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<projectList_interface[]>>}) => {
-  const [data, setData] = useState<project_interface[]>([]);
+const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<ProjectIdName[]>>}) => {
+  const [data, setData] = useState<ProjectInfo[]>([]);
 
   const [projectList, setProjectList] = useState<string[]>([]);
 
   const [projectName, setProjectName] = useProjectName();
 
   const [fileteredList, setFileteredList] = useState<string[]>([]);
-  const [filteredData, setFilteredData] = useState<project_interface[]>([]);
+  const [filteredData, setFilteredData] = useState<ProjectInfo[]>([]);
   const [projectFilter, setProjectFilter] = useState<CompositeFilterDescriptor>(
     {
       logic: "and",
@@ -80,7 +81,7 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<projec
         const data = JSON.parse(response);
 
         const projectNames = data.map(
-          (obj: projectList_interface) => obj.project_name
+          (obj: ProjectIdName) => obj.project_name
         );
 
         setData(data); //projectList의 project data
@@ -92,30 +93,6 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<projec
       .catch((error) => console.error("Error:", error));
   }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         urlPrefix.IP_port + "/dashboard/project/"
-  //       );
-  //       const data = JSON.parse(response.data);
-
-  //       const projectNames = data.map(
-  //         (obj: projectList_interface) => obj.project_name
-  //       );
-
-  //       setData(data); //projectList의 project data
-  //       setFilteredData(data);
-  //       props.setData(data); //projects 페이지의 project data
-  //       setProjectList(projectNames);
-  //       setFileteredList(projectNames);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     setBuildingAreaSliderValue();
@@ -124,7 +101,7 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<projec
 
   useEffect(() => {
     const projectNames = filteredData.map(
-      (obj: projectList_interface) => obj.project_name
+      (obj: ProjectIdName) => obj.project_name
     );
     setFileteredList(projectNames);
   }, [filteredData]);

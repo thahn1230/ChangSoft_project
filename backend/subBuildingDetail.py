@@ -71,8 +71,9 @@ async def get_total_analysis_data1(building_id: int, token: TokenData = Depends(
         WHERE building.id = {building_id}) AS total_floor_area_pyeong
     ) AS sub_table
     """
-
+    print("here?")
     total_analysis_data_df = pd.read_sql(query, engine)
+    print("here!")
     return JSONResponse(
         total_analysis_data_df.to_json(force_ascii=False, orient="records")
     )

@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import urlPrefix from "resource/URL_prefix.json";
-import { subBuildingTotalAnalysisTable2_interface } from "interface/subBuildingTotalAnalysisTable2_interface";
+import { SubBuildingTotalAnalysis2 } from "interface/SubBuildingInterface";
 
 import {
   Grid,
   GridColumn,
-  GridDetailRow,
-  GridToolbar,
-  GridDetailRowProps,
-  GridDataStateChangeEvent,
-  GridExpandChangeEvent,
 } from "@progress/kendo-react-grid";
 import "styles/subBuildingTotalAnalysisTable.scss";
 
 const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
-    useState<subBuildingTotalAnalysisTable2_interface[]>();
+    useState<SubBuildingTotalAnalysis2[]>();
 
   useEffect(() => {
     if(props.selectedSubBuildingId===-1)

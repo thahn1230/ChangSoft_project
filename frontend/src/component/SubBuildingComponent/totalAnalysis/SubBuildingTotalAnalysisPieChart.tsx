@@ -7,11 +7,11 @@ import {
   ChartSeriesItem,
 } from "@progress/kendo-react-charts";
 
-import { subBuildingAnalysisPercentage_interface } from "interface/subBuildingAnalysisPercentage_interface";
+import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
 
 const SubBuildingTotalAnalysisPieChart = (props: any) => {
   const [percentages, setPercentages] = useState<
-    subBuildingAnalysisPercentage_interface[]
+  SubBuildingAnalysisPercentage[]
   >([]);
   const [returnDiv, setReturnDiv] = useState(<div></div>);
 

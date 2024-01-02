@@ -16,7 +16,7 @@ import {
   filterBy,
   CompositeFilterDescriptor,
 } from "@progress/kendo-data-query";
-import { building } from "interface/building";
+import { Building } from "interface/BuildingInterface";
 import BuildingDetail from "component/projectComponent/BuildingDetail";
 import urlPrefix from "resource/URL_prefix.json";
 import { GridPDFExport } from "@progress/kendo-react-pdf";
@@ -24,7 +24,7 @@ import { ExcelExport } from '@progress/kendo-react-excel-export';
 import "styles/GridDetail.scss";
 
 import {useProjectName, useBuildingInfo} from "App"
-import { projectList_interface } from "interface/projectList_interface";
+import { ProjectIdName } from "interface/ProjectInterface";
 
 const DATA_ITEM_KEY = "id";
 const SELECTED_FIELD = "selected";
@@ -52,11 +52,11 @@ const initialFilter: CompositeFilterDescriptor = {
   filters: [{ field: "project_id", operator: "eq", value: "0" }],
 };
 
-const BuildingList = (props: {projectList : projectList_interface[]}) => {
-  const [initialBuildingList, setInitialBuildingList] = useState<building[]>(
+const BuildingList = (props: {projectList : ProjectIdName[]}) => {
+  const [initialBuildingList, setInitialBuildingList] = useState<Building[]>(
     []
   );
-  const [buildingList, setBuildingList] = useState<building[]>([]);
+  const [buildingList, setBuildingList] = useState<Building[]>([]);
   const [page, setPage] = React.useState(initialDataState);
   const [pageSizeValue, setPageSizeValue] = React.useState();
 
