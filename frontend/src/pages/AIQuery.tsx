@@ -10,7 +10,6 @@ import SendMessageToChatGPT from "resource/SendMessageToChatGPT";
 import chatgptLogo from "resource/chatgpt_logo.png";
 import "styles/AIQuery.scss";
 
-
 const bot: User = {
   id: 0,
   name: "챗봇",
@@ -63,7 +62,6 @@ const AIQuery = () => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
-  
   useEffect(() => {
     if (isResponding) {
       setMessages((prevMessages) => [
@@ -93,26 +91,25 @@ const AIQuery = () => {
     // const botResponseJson = JSON.parse(botResponseText);
 
     const botResponseJson = await SendMessageToChatGPT(event.message.text);
-
-    console.log(botResponseJson)
+    if (botResponseJson.detail === "Not authenticated") return;
+    console.log(botResponseJson);
     const newAttachment: Attachment[] = [];
-    const graphs:JSX.Element[] = [];
-    botResponseJson.map((item: any, index:number) => {
-      graphs.push((
-          <div>
-            <Plot
-              data={JSON.parse(item.plot)[index].data}
-              layout={JSON.parse(item.plot)[index].layout}
-            />
-            <p>{item.explanation}</p>
-            <hr
-              style={{ border: "solid 1px", color: "#162F84", width: "1000px" }}
-            />
-          </div>
-        ),
+    const graphs: JSX.Element[] = [];
+    botResponseJson.map((item: any, index: number) => {
+      graphs.push(
+        <div>
+          <Plot
+            data={JSON.parse(item.plot)[index].data}
+            layout={JSON.parse(item.plot)[index].layout}
+          />
+          <p>{item.explanation}</p>
+          <hr
+            style={{ border: "solid 1px", color: "#162F84", width: "1000px" }}
+          />
+        </div>
       );
     });
-    newAttachment.push({contentType:"", content:graphs})
+    newAttachment.push({ contentType: "", content: graphs });
 
     const botResponse: Message = {
       author: bot,

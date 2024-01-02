@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import json
 import openai
+from openai import OpenAI
 from typing import Any
 import pymysql
 
@@ -65,7 +66,9 @@ class Query(BaseModel):
 
 @router.post("/query")
 @exception_handler
-async def execute_query(query: Query, token: TokenData = Depends(verify_user)): 
+async def execute_query(query: Query): 
+
+    
 
     #explanation = generate_explanation_byplot(plotly_data_example)
     mode = query.query[0:9]
@@ -178,7 +181,7 @@ def send_prompt(prompt: str) -> str:
     ]
     )
 
-    print(response.choices[0].message)
+    # print(response.choices[0].message)
 
     return response
 
@@ -190,7 +193,7 @@ def ask_gpt(messages):
     temperature=0.2
     )
     answer = response['choices'][0]['message']['content']
-    print(answer)
+    # print(answer)
     return answer
 
 def process_prompt(question: str, pron_dict : str) -> str:
@@ -347,23 +350,26 @@ def generate_explanation_byplot(plot_data: str):
     answer = []
     prompt = """give me the 3 line paragraph that explains the data of this plot graph in korean. Especially what the data implies. That is, consider various aspects such as efficiency to compare those. You have to explain it to the manager of the construction company."""
     
-    plot_data_json = json.loads(plot_data)
-    #print(plot_data_json[1])
-    for i in range (0,len(plot_data_json)):
-        response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
-        messages=[{
-            "role" : "system",
-            "content" : prompt
-        },
-        {
-            "role" : "user",
-            "content" : plot_data
-        }],
-        temperature=0.2
-        )
-        explanation = response['choices'][0]['message']['content']
+    client = OpenAI()
 
-        answer.append({"plot" : plot_data, "explanation" : explanation})
+    plot_data_json = json.loads(plot_data)
+    # print(plot_data)
+    # for i in range (0,len(plot_data_json)):
+    response = client.chat.completions.create(
+    model="gpt-3.5-turbo-16k",
+    messages=[{
+        "role" : "system",
+        "content" : prompt
+    },
+    {
+        "role" : "user",
+        "content" : plot_data
+    }],
+    temperature=0.2
+    )
+
+        # explanation = response['choices'][0]['message']['content']
+
+        # answer.append({"plot" : plot_data, "explanation" : explanation})
     # print(answer)
     return answer
