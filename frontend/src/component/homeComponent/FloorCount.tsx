@@ -12,7 +12,6 @@ import {
   ChartValueAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
-import urlPrefix from "resource/URL_prefix.json";
 import styled from "styled-components";
 
 interface ProjectsFloorCount {
@@ -44,7 +43,7 @@ const FloorCount = () => {
   const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/building/floor_count_histogram", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/building/floor_count_histogram`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

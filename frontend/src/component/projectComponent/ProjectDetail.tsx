@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-import urlPrefix from "resource/URL_prefix.json";
 import { ProjectIdName } from "interface/ProjectInterface";
 import "styles/GridDetail.scss";
 
@@ -21,11 +20,7 @@ const ProjectDetail = (props: {selectedProject : ProjectIdName | undefined}) => 
 
   useEffect(() => {
     if (props.selectedProject) {
-      fetch(
-        urlPrefix.IP_port +
-          "/project/" +
-          props.selectedProject.id +
-          "/project_detail",
+      fetch(`${process.env.REACT_APP_API_URL}/project/${props.selectedProject.id}/project_detail`,
         {
           method: "GET",
           headers: {
@@ -48,27 +43,6 @@ const ProjectDetail = (props: {selectedProject : ProjectIdName | undefined}) => 
     }
   }, [props]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       if (props.selectedProject) {
-  //         const response = await axios.get(
-  //           urlPrefix.IP_port +
-  //             "/project/" +
-  //             props.selectedProject.id +
-  //             "/project_detail"
-  //         );
-
-  //         const data = JSON.parse(response.data);
-  //         setProjectData(data);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [props]);
 
   const headerClassName = "custom-header-cell";
 

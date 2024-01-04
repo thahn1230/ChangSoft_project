@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import {
-  DropDownList,
-  MultiSelect,
-  MultiSelectChangeEvent,
   MultiSelectTree,
   MultiSelectTreeChangeEvent,
-  MultiSelectTreeExpandEvent,
   getMultiSelectTreeValue,
 } from "@progress/kendo-react-dropdowns";
 

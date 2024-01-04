@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Menu, MenuItem, MenuSelectEvent } from "@progress/kendo-react-layout";
+import React, { useState } from "react";
+import { Menu, MenuItem } from "@progress/kendo-react-layout";
 
 import TotalAnalysisTab from "component/SubBuildingComponent/totalAnalysis/TotalAnalysisTab";
 import BuildingDetail from "component/projectComponent/BuildingDetail";

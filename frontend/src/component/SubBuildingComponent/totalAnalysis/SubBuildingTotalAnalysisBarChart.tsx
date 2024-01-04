@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Chart,
-  ChartCategoryAxis,
-  ChartCategoryAxisItem,
-  ChartCategoryAxisTitle,
   ChartValueAxis,
   ChartValueAxisItem,
   ChartSeries,

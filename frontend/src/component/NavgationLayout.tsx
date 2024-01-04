@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
-import { useLocation, useNavigate, Outlet, Link } from "react-router-dom";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
 import "styles/NavigationLayout.scss";
 import ChangSoftLogo from "resource/changSoft_logo.png";
-import urlPrefix from "resource/URL_prefix.json";
 
 interface MenuItem {
   text: string;
@@ -74,7 +73,7 @@ export const NavigationLayout = (props: any) => {
   }, [location.pathname]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/user/profile", {
+    fetch(`${process.env.REACT_APP_API_URL}/user/profile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

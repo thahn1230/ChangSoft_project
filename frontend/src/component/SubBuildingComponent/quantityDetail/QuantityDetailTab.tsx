@@ -1,4 +1,4 @@
-import react, { useEffect, useState, useCallback } from "react";
+import {  useState } from "react";
 import SingleColTable from "component/SubBuildingComponent/quantityDetail/SingleColTable";
 import QuantityFilter from "component/SubBuildingComponent/quantityDetail/QuantityFilter";
 import PivotTableChart from "component/SubBuildingComponent/quantityDetail/PivotTableChart";

@@ -18,8 +18,6 @@ import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisValue } from "interface/SubBuildingInterface";
 import {useProjectName, useBuildingInfo} from "App"
 
-import urlPrefix from "resource/URL_prefix.json";
-
 import "styles/SubBuildingDetail.scss";
 import "styles/TotalAnalysisTab.scss";
 
@@ -54,7 +52,7 @@ const TotalAnalysisTab = () => {
 
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/sub_building/" + buildingInfo?.id, {
+    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${buildingInfo?.id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

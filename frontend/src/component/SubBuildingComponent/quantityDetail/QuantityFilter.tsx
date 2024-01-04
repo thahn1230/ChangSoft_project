@@ -1,4 +1,4 @@
-import react, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MultiSelectTree,
   MultiSelectTreeChangeEvent,
@@ -6,11 +6,9 @@ import {
 } from "@progress/kendo-react-dropdowns";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Button } from "@progress/kendo-react-buttons";
-import urlPrefix from "resource/URL_prefix.json";
 import {
   CompositeFilterDescriptor,
   filterBy,
-  FilterDescriptor,
 } from "@progress/kendo-data-query";
 
 import { BuildingInfo } from "interface/BuildingInterface";
@@ -109,9 +107,7 @@ const QuantityFilter = (props: QuantityFilterInfo) => {
 
     //3번 받아와야되나 아니면 3개 한번에?
     fetch(
-      urlPrefix.IP_port +
-        "/sub_building/quantity_detail/get_quantity_list/" +
-        props.buildingInfo?.id,
+      `${process.env.REACT_APP_API_URL}/sub_building/quantity_detail/get_quantity_list/${props.buildingInfo?.id}`,
       {
         method: "GET",
         headers: {
@@ -613,19 +609,7 @@ const QuantityFilter = (props: QuantityFilterInfo) => {
       buildingId: props.buildingInfo?.id,
     };
 
-    // const response = await fetch(
-    //   urlPrefix.IP_port + "/sub_building/component_info",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ info }),
-    //   }
-    // );
-
-    fetch(urlPrefix.IP_port + "/sub_building/component_info", {
+    fetch(`${process.env.REACT_APP_API_URL}/sub_building/component_info`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

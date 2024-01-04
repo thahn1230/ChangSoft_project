@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   GridColumn,
-  GridEvent,
   GridFilterChangeEvent,
   GridSortChangeEvent,
 } from "@progress/kendo-react-grid";

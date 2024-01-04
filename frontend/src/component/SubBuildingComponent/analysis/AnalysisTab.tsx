@@ -8,7 +8,6 @@ import {
   Splitter,
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
-import urlPrefix from "resource/URL_prefix.json";
 import SubBuildingList from "component/SubBuildingComponent/analysis/SubBuildingList";
 import SingleColTable from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
@@ -57,7 +56,7 @@ const AnalysisTab = () => {
   };
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/sub_building/" + buildingInfo?.id, {
+    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${buildingInfo?.id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,10 +83,7 @@ const AnalysisTab = () => {
     const fetchData = async () => {
       if (selectedSubBuildingId === 0) {
         const concretePromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table_all/" +
-            buildingInfo?.id +
-            "/concrete",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/concrete`,
           {
             method: "GET",
             headers: {
@@ -107,10 +103,7 @@ const AnalysisTab = () => {
           });
 
         const formworkPromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table_all/" +
-            buildingInfo?.id +
-            "/formwork",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/formwork`,
           {
             method: "GET",
             headers: {
@@ -130,10 +123,7 @@ const AnalysisTab = () => {
           });
 
         const rebarPromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table_all/" +
-            buildingInfo?.id +
-            "/rebar",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/rebar`,
           {
             method: "GET",
             headers: {
@@ -156,10 +146,7 @@ const AnalysisTab = () => {
           await Promise.all([concretePromise, formworkPromise, rebarPromise]);
       } else {
         const concretePromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table/" +
-            selectedSubBuildingId +
-            "/concrete",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/concrete`,
           {
             method: "GET",
             headers: {
@@ -179,10 +166,7 @@ const AnalysisTab = () => {
           });
 
         const formworkPromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table/" +
-            selectedSubBuildingId +
-            "/formwork",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/formwork`,
           {
             method: "GET",
             headers: {
@@ -202,10 +186,7 @@ const AnalysisTab = () => {
           });
 
         const rebarPromise = fetch(
-          urlPrefix.IP_port +
-            "/sub_building/analysis_table/" +
-            selectedSubBuildingId +
-            "/rebar",
+          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/rebar`,
           {
             method: "GET",
             headers: {

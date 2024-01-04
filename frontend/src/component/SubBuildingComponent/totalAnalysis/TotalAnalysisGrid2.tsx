@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import urlPrefix from "resource/URL_prefix.json";
 import { SubBuildingTotalAnalysis2 } from "interface/SubBuildingInterface";
 
 import {
@@ -18,15 +17,9 @@ const TotalAnalysisGrid2 = (props: any) => {
     let url;
 
     if (props.selectedSubBuildingId === 0) {
-      url =
-        urlPrefix.IP_port +
-        "/sub_building/total_analysis_table_all/2/" +
-        props.selectedBuildingId;
+      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table_all/2/${props.selectedBuildingId}`;
     } else {
-      url =
-        urlPrefix.IP_port +
-        "/sub_building/total_analysis_table/2/" +
-        props.selectedSubBuildingId;
+      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table/2/${props.selectedSubBuildingId}`;
     }
 
     fetch(url, {
@@ -49,32 +42,6 @@ const TotalAnalysisGrid2 = (props: any) => {
       })
       .catch((error) => console.error("Error:", error));
   }, [props.selectedBuildingId, props.selectedSubBuildingId]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       let response;
-  //       if (props.selectedSubBuildingId === 0) {
-  //         response = await axios.get(
-  //           urlPrefix.IP_port +
-  //             "/sub_building/total_analysis_table_all/2/" +
-  //             props.selectedBuildingId
-  //         );
-  //       } else {
-  //         response = await axios.get(
-  //           urlPrefix.IP_port +
-  //             "/sub_building/total_analysis_table/2/" +
-  //             props.selectedSubBuildingId
-  //         );
-  //       }
-
-  //       setSelectedBuildingInfo(JSON.parse(response.data));
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [props.selectedBuildingId, props.selectedSubBuildingId]);
 
   useEffect(() => {
     if (

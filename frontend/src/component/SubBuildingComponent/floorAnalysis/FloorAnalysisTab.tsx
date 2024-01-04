@@ -3,12 +3,10 @@ import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 import {
-  RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
 import {
   Splitter,
-  SplitterBar,
   SplitterOnChangeEvent,
 } from "@progress/kendo-react-layout";
 
@@ -16,7 +14,6 @@ import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/Su
 import SubBuildingAnalysisTableSingleCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import ComponentTypeList from "component/SubBuildingComponent/floorAnalysis/ComponentTypeList";
-import urlPrefix from "resource/URL_prefix.json";
 import {useProjectName, useBuildingInfo} from "App"
 
 import "styles/FloorAnalysisTab.scss";
@@ -71,10 +68,7 @@ const FloorAnalysisTab = () => {
   useEffect(() => {
     let idx = 0;
     fetch(
-      urlPrefix.IP_port +
-        "/sub_building/floor_analysis_table/" +
-        buildingInfo?.id +
-        "/component_type",
+      `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/component_type`,
       {
         method: "GET",
         headers: {
@@ -134,7 +128,7 @@ const FloorAnalysisTab = () => {
       setSelectedGridChart(<div>부재를 선택해주세요.</div>);
     } else {
       const concreteUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/concrete/filter`
+        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/concrete/filter`
       );
       concreteUrl.search = new URLSearchParams(params).toString();
       fetch(concreteUrl.toString(), {
@@ -166,7 +160,7 @@ const FloorAnalysisTab = () => {
         .catch((error) => console.error("Error:", error));
 
       const formworkUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/formwork/filter`
+        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/formwork/filter`
       );
       formworkUrl.search = new URLSearchParams(params).toString();
       fetch(formworkUrl.toString(), {
@@ -198,7 +192,7 @@ const FloorAnalysisTab = () => {
         .catch((error) => console.error("Error:", error));
 
       const rebarUrl = new URL(
-        `${urlPrefix.IP_port}/sub_building/floor_analysis_table/${buildingInfo?.id}/rebar/filter`
+        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/rebar/filter`
       );
       rebarUrl.search = new URLSearchParams(params).toString();
       fetch(rebarUrl.toString(), {

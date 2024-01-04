@@ -1,8 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  PivotGrid,
-  PivotGridContainer,
-  PivotGridConfigurator,
   sumAggregate,
   minAggregate,
   maxAggregate,
@@ -12,7 +9,6 @@ import {
   usePivotLocalDataService,
   PivotLocalDataServiceArgs,
   PivotGridAxis,
-  PivotGridConfiguratorButton,
 } from "@progress/kendo-react-pivotgrid";
 import { FilterDescriptor, SortDescriptor } from "@progress/kendo-data-query";
 

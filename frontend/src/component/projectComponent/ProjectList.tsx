@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  DropDownList,
-  DropDownListFilterChangeEvent,
   ComboBox,
 } from "@progress/kendo-react-dropdowns";
 import {
@@ -15,7 +13,6 @@ import {
   filterBy,
   FilterDescriptor,
 } from "@progress/kendo-data-query";
-import urlPrefix from "resource/URL_prefix.json";
 
 import { ProjectIdName } from "interface/ProjectInterface";
 import { ProjectInfo } from "interface/ProjectInterface";
@@ -64,7 +61,7 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<Projec
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/project/", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

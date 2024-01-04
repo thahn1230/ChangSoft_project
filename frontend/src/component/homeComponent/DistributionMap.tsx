@@ -7,7 +7,6 @@ import {
   MapShapeLayer,
   MapTileLayer,
 } from "@progress/kendo-react-map";
-import urlPrefix from "resource/URL_prefix.json";
 import { Coordinate } from "interface/DashBoardInterface";
 import styled from "styled-components";
 // import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
@@ -59,13 +58,7 @@ const DistributionMap = () => {
   const [markers, setMarkers] = useState<Coordinate[]>([]);
 
   useEffect(() => {
-    // axios.interceptors.request.use((config: AxiosRequestConfig) =>
-    //   addTokenToRequest(config, tokenContext?.token)
-    // );
-    // const response = await axios.get(
-    //   urlPrefix.IP_port + "/dashboard/project/map"
-    // );
-    fetch(urlPrefix.IP_port + "/dashboard/project/map", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/map`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

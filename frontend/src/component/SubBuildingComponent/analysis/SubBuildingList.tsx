@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
-import { DropDownList, ComboBox } from "@progress/kendo-react-dropdowns";
-import urlPrefix from "resource/URL_prefix.json";
+import React, { useEffect, useState} from "react";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 
 import { BuildingInfo } from "interface/BuildingInterface";
@@ -41,10 +40,7 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
 
     setSelectedBuilding(props.buildingInfo);
 
-    // const response = await axios.get(
-    //   urlPrefix.IP_port + "/sub_building/" + props.buildingInfo.id
-    // );
-    fetch(urlPrefix.IP_port + "/sub_building/" + props.buildingInfo?.id, {
+    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${props.buildingInfo?.id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

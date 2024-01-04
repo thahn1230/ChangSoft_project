@@ -11,7 +11,7 @@ import {
   ChartCategoryAxisItem,
 } from "@progress/kendo-react-charts";
 import "hammerjs";
-import urlPrefix from "resource/URL_prefix.json";
+
 import styled from "styled-components";
 
 interface projectsTotalArea {
@@ -40,7 +40,7 @@ const TotalArea = () => {
   const [maxRng, setMaxRng] = useState(0);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/project/total_area_histogram", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/total_area_histogram`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

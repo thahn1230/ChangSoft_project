@@ -4,12 +4,10 @@ import {
   ChartSeries,
   ChartSeriesItem,
   ChartCategoryAxis,
-  ChartValueAxis,
   ChartTooltip,
   ChartCategoryAxisItem,
   ChartSeriesItemTooltip,
   ChartCategoryAxisTitle,
-  ChartLegend,
 } from "@progress/kendo-react-charts";
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;

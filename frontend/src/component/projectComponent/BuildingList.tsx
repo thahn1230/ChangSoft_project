@@ -1,16 +1,11 @@
 import React, {
   useState,
   useEffect,
-  SetStateAction,
-  JSXElementConstructor,
 } from "react";
 import {
   Grid,
   GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
   GridFilterChangeEvent,
-  GridToolbar,
 } from "@progress/kendo-react-grid";
 import {
   filterBy,
@@ -18,7 +13,6 @@ import {
 } from "@progress/kendo-data-query";
 import { Building } from "interface/BuildingInterface";
 import BuildingDetail from "component/projectComponent/BuildingDetail";
-import urlPrefix from "resource/URL_prefix.json";
 import { GridPDFExport } from "@progress/kendo-react-pdf";
 import { ExcelExport } from '@progress/kendo-react-excel-export';
 import "styles/GridDetail.scss";
@@ -27,7 +21,6 @@ import {useProjectName, useBuildingInfo} from "App"
 import { ProjectIdName } from "interface/ProjectInterface";
 
 const DATA_ITEM_KEY = "id";
-const SELECTED_FIELD = "selected";
 const initialDataState = {
   skip: 0,
   take: 15,
@@ -61,36 +54,10 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
   const [pageSizeValue, setPageSizeValue] = React.useState();
 
   const [categories, setCategories] = React.useState([]);
-  //const [attributeNames, setAttributeNames] = useState<string[]>([""]);
   const [projectFilter, setProjectFilter] = useState(initialFilter);
 
   const [projectName, setProjectName] = useProjectName();
 
-  let gridPDFExport: GridPDFExport | null;
-  let gridExcelExport: ExcelExport | null;
-
-  // const exportPDF = () => {
-  //   if (gridPDFExport) {
-  //     const exportOptions = {
-  //       fileName: "building_list.pdf",
-  //       paperSize: "auto",
-  //       scale: 0.5,
-  //       margin: "1cm",
-  //     };
-  //     gridPDFExport.save(buildingList, exportOptions);
-  //   }
-  // };
-  
-
-  // const exportExcel = () => {
-  //   if (gridExcelExport) {
-  //     gridExcelExport.save(buildingList, {
-  //       fileName: "building_list.xlsx",
-  //       filterable: true,
-  //       allPages: true,
-  //     });
-  //   }
-  // };
 
 
   useEffect(() => {
@@ -120,7 +87,7 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
   }, [initialBuildingList, projectFilter]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/building/additional_sub_info", {
+    fetch(`${process.env.REACT_APP_API_URL}/building/additional_sub_info`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -141,24 +108,6 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
       })
       .catch((error) => console.error("Error:", error));
   }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         urlPrefix.IP_port + "/building/additional_sub_info"
-  //       );
-  //       const data = JSON.parse(response.data);
-
-  //       setBuildingList(data);
-  //       setInitialBuildingList(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const pageChange = (event: any) => {
     const targetEvent = event.targetEvent;

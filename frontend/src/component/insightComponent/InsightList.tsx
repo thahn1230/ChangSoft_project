@@ -1,18 +1,13 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
-import urlPrefix from "resource/URL_prefix.json";
+import React, { useEffect, useState } from "react";
 import {
   DropDownList,
-  MultiSelect,
-  MultiSelectChangeEvent,
   MultiSelectTree,
   MultiSelectTreeChangeEvent,
-  MultiSelectTreeExpandEvent,
   getMultiSelectTreeValue,
 } from "@progress/kendo-react-dropdowns";
 import {
   CompositeFilterDescriptor,
   filterBy,
-  FilterDescriptor,
 } from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
 
@@ -132,7 +127,7 @@ const InsightList = (props: InsightListInfo) => {
   const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/project", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -290,10 +285,7 @@ const InsightList = (props: InsightListInfo) => {
       selectedProjectList.length === 1
     ) {
       fetch(
-        urlPrefix.IP_port +
-          "/project/" +
-          selectedProjectList[0].id +
-          "/building_detail",
+        `${process.env.REACT_APP_API_URL}/project/${selectedProjectList[0].id}/building_detail`,
         {
           method: "GET",
           headers: {
@@ -484,7 +476,7 @@ const InsightList = (props: InsightListInfo) => {
 
       params.append(paramName, paramContent);
 
-      const url = new URL(`${urlPrefix.IP_port}/insight/${selectedInsightIndexInList + 1}`);
+      const url = new URL(`${process.env.REACT_APP_API_URL}/insight/${selectedInsightIndexInList + 1}`);
       url.search = new URLSearchParams(params).toString();
       fetch(url, {
         method: "GET",

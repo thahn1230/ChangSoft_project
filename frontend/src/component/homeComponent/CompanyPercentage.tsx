@@ -7,7 +7,6 @@ import {
   ChartSeriesItem,
   ChartTooltip,
 } from "@progress/kendo-react-charts";
-import urlPrefix from "resource/URL_prefix.json";
 import styled from "styled-components";
 
 interface PercentageInterface {
@@ -36,7 +35,7 @@ const CompanyPercentage = () => {
   const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/project/construction_company_ratio", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/construction_company_ratio`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

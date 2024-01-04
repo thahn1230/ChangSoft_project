@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import urlPrefix from "resource/URL_prefix.json";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 
 import SubBuildingList from "component/SubBuildingComponent/totalAnalysis/SubBuildingList";
@@ -18,9 +17,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
 
   useEffect(() => {
     fetch(
-      urlPrefix.IP_port +
-        "/sub_building/total_analysis_table_all/1/" +
-        props.buildingInfo?.id,
+      `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table_all/1/${props.buildingInfo?.id}`,
       {
         method: "GET",
         headers: {
@@ -86,9 +83,9 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     let url;
 
     if (selectedSubBuildingId === 0) {
-      url = urlPrefix.IP_port + "/sub_building/total_analysis_table_all/1/" + props.buildingInfo?.id;
+      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table_all/1/${props.buildingInfo?.id}`;
     } else {
-      url = urlPrefix.IP_port + "/sub_building/total_analysis_table/1/" + selectedSubBuildingId;
+      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table/1/${selectedSubBuildingId}`;
     }
 
     fetch( url,

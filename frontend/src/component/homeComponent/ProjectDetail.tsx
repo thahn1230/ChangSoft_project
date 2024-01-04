@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import urlPrefix from "resource/URL_prefix.json";
 import styled from "styled-components";
 
 const TotalWrapper = styled.div`
@@ -24,7 +23,7 @@ const ProjectDetail = () => {
   const [buildingNum, setBuildingNum] = useState(0);
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/dashboard/building/count", {
+    fetch(`${process.env.REACT_APP_API_URL}/dashboard/building/count`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -2,27 +2,19 @@ import React, { useState, useEffect } from "react";
 import {
   Grid,
   GridColumn,
-  getSelectedState,
-  getSelectedStateFromKeyDown,
-  GridToolbar,
 } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
-import urlPrefix from "resource/URL_prefix.json";
-import { useNavigate, Route, Routes } from "react-router-dom";
-import {useProjectName, useBuildingInfo} from "App"
+import { useNavigate} from "react-router-dom";
+import { useBuildingInfo} from "App"
 
 import "styles/GridDetail.scss";
 
 const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
-  const [returnDiv, setReturnDiv] = useState(<div></div>);
   const [imgPath, setImgPath] = useState<string>("");
   const [buildingInfo, setBuildingInfo] = useBuildingInfo();
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port +
-      "/building/" +
-      buildingInfo?.id +
-      "/get_project_name", {
+    fetch(`${process.env.REACT_APP_API_URL}/building/${buildingInfo?.id}/get_project_name`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -48,35 +40,6 @@ const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
       })
       .catch((error) => console.error("Error:", error));
   }, [props, imgPath]);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         urlPrefix.IP_port +
-  //           "/building/" +
-  //           props.buildingInfo.id +
-  //           "/get_project_name"
-  //       );
-
-  //       const data = JSON.parse(response.data);
-  //       const importedImagePath = await import(
-  //         "./../../resource/project_pictures/" +
-  //           data[0].project_name +
-  //           "/" +
-  //           data[0].building_name +
-  //           "/ScreenShot.png"
-  //       );
-
-  //       setBuildingInfo(props.buildingInfo);
-  //       setImgPath(importedImagePath.default);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [props, imgPath]);
 
   const navigate = useNavigate();
   const onClick = () => {
