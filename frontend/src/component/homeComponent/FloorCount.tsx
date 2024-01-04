@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Chart,
   ChartSeries,
-  ChartTitle,
   ChartSeriesItem,
   ChartCategoryAxis,
   ChartCategoryAxisTitle,
@@ -13,6 +12,8 @@ import {
 } from "@progress/kendo-react-charts";
 import "hammerjs";
 import styled from "styled-components";
+import {getFloorCount} from "services/dashboard/dashboardService"
+
 
 interface ProjectsFloorCount {
   range_num: number;
@@ -43,24 +44,31 @@ const FloorCount = () => {
   const [totalfloor, setTotalfloor] = useState<ProjectsFloorCount[]>([]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/building/floor_count_histogram`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    // fetch(`${process.env.REACT_APP_API_URL}/dashboard/building/floor_count_histogram`, {
+    //   method: "GET",
+    //   headers: {
+    //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       throw new Error("Network response was not ok");
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     const arrayData: ProjectsFloorCount[] = JSON.parse(data);
+    //     setTotalfloor(arrayData);
+    //   })
+    //   .catch((error) => console.error("Error:", error));
+
+    getFloorCount()
+      .then((floorCountData) => {
+        setTotalfloor(floorCountData);
       })
-      .then((data) => {
-        const arrayData: ProjectsFloorCount[] = JSON.parse(data);
-        setTotalfloor(arrayData);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
+
   }, []);
 
   const renderTooltip = (e: any) => {

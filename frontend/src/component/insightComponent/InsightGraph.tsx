@@ -1,4 +1,3 @@
-import { LargeNumberLike } from "crypto";
 import React, { useEffect, useState } from "react";
 import Plot from "react-plotly.js";
 import spinner from "resource/loadingBars.gif";
@@ -22,10 +21,6 @@ const InsightGraph = (props: InsightGraphInfo) => {
   useEffect(() => {
     let newRes: JSX.Element[] = [];
     if (props.graphInfo !== undefined) {
-
-      console.log("insight data:")
-      console.log(JSON.stringify(props.graphInfo))
-
       for (let idx = 0; idx < props.graphInfo.length; idx++) {
         newRes.push(
           <div style={{ marginLeft: "8vw" }}>

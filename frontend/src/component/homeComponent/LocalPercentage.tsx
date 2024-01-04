@@ -7,6 +7,7 @@ import {
   ChartTooltip,
 } from "@progress/kendo-react-charts";
 import styled from "styled-components";
+import { getLocalRatio } from "services/dashboard/dashboardService";
 
 interface PercentageInterface {
   field: string;
@@ -33,36 +34,11 @@ const ChartWrapper = styled.div`
 const LocalPercentage = () => {
   const [percentages, setPercentages] = useState<PercentageInterface[]>([]);
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/location_ratio`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    getLocalRatio()
+      .then((localPercentageData) => {
+        setPercentages(localPercentageData);
       })
-      .then((data) => {
-        console.log(data);
-        const arrayData = JSON.parse(data);
-        const top5 = arrayData.slice(0, 5);
-
-        // 나머지 데이터 합산하여 "Others" 데이터 생성
-        const othersPercentage = arrayData
-          .slice(5)
-          .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
-        const othersData = { field: "Others", percentage: othersPercentage };
-
-        // "Others" 데이터를 포함하여 새로운 배열 생성
-        const modifiedData = [...top5, othersData];
-
-        setPercentages(modifiedData);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
   }, []);
 
   const renderTooltip = (e: any) => {

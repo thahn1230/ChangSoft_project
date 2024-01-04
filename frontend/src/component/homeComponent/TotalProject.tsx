@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getProjectNumber } from "services/dashboard/dashboardService";
 
 const TotalWrapper = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
@@ -22,24 +23,11 @@ const TotalProject = () => {
   const [projectNum, setProjectNum] = useState(0);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/count`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    getProjectNumber()
+      .then((projectNumData) => {
+        setProjectNum(projectNumData);
       })
-      .then((data) => {
-        const arrayData = JSON.parse(data);
-        setProjectNum(arrayData);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
   }, []);
 
   return (

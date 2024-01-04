@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Chart,
-  ChartTitle,
   ChartSeries,
   ChartValueAxisItem,
   ChartSeriesItem,
@@ -13,6 +12,7 @@ import {
 import "hammerjs";
 
 import styled from "styled-components";
+import { getProjectArea } from "services/dashboard/dashboardService";
 
 interface projectsTotalArea {
   min_val: number;
@@ -40,25 +40,12 @@ const TotalArea = () => {
   const [maxRng, setMaxRng] = useState(0);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/total_area_histogram`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    getProjectArea()
+      .then((projectNumData) => {
+        setTotalarea(projectNumData);
+        setMaxRng(projectNumData[0].max_val);
       })
-      .then((data) => {
-        const arrayData = JSON.parse(data);
-        setTotalarea(arrayData);
-        setMaxRng(arrayData[0].max_val);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
   }, []);
 
   return (

@@ -9,7 +9,7 @@ import {
 } from "@progress/kendo-react-map";
 import { Coordinate } from "interface/DashBoardInterface";
 import styled from "styled-components";
-// import GoogleMap_API_KEY from "./../../resource/googleMap_API_KEY.json"
+import { getMarkerData } from "services/dashboard/dashboardService";
 
 const MapWrapper = styled.div`
   display: flex;
@@ -58,23 +58,11 @@ const DistributionMap = () => {
   const [markers, setMarkers] = useState<Coordinate[]>([]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/map`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    getMarkerData()
+      .then((markerData) => {
+        setMarkers(markerData);
       })
-      .then((data) => {
-        setMarkers(data);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
   }, []);
 
   return (

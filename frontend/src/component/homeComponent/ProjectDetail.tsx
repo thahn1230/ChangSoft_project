@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { getBuildingNumber } from "services/dashboard/dashboardService";
 
 const TotalWrapper = styled.div`
 @import urlimport styled from "styled-components";
@@ -23,24 +24,11 @@ const ProjectDetail = () => {
   const [buildingNum, setBuildingNum] = useState(0);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/building/count`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
+    getBuildingNumber()
+      .then((buildingNumData) => {
+        setBuildingNum(buildingNumData);
       })
-      .then((data) => {
-        const arrayData = JSON.parse(data);
-        setBuildingNum(arrayData);
-      })
-      .catch((error) => console.error("Error:", error));
+      .catch((error) => {});
   }, []);
 
   return (
