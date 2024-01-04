@@ -1,9 +1,7 @@
-import { pagerTotalPages } from "@progress/kendo-react-grid/dist/npm/messages";
 import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import urlPrefix from "resource/URL_prefix.json";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
@@ -362,7 +360,7 @@ const User = () => {
       };
 
       //params는 어떻게씀
-      const response = await fetch(`${urlPrefix.IP_port}/user/change_info`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/change_info`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -398,7 +396,7 @@ const User = () => {
       };
 
       //params는 어떻게씀
-      const response = await fetch(`${urlPrefix.IP_port}/user/change_pw`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/change_pw`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -542,7 +540,7 @@ const User = () => {
   };
 
   useEffect(() => {
-    fetch(urlPrefix.IP_port + "/user/profile", {
+    fetch(`${process.env.REACT_APP_API_URL}/user/profile`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,

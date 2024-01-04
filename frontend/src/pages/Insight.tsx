@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InsightList from "component/insightComponent/InsightList";
 import InsightGraph from "component/insightComponent/InsightGraph";
 

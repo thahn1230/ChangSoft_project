@@ -1,9 +1,8 @@
-import urlPrefix from "./URL_prefix.json";
 
 const SendMessageToChatGPT = async (message: string): Promise<any> => {
   try {
     //return "hello";
-    const response = await fetch(urlPrefix.IP_port + "/query", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/query`, {
       method: "POST",
       headers: {
         accept: "application/json",

@@ -1,10 +1,8 @@
-import { pagerTotalPages } from "@progress/kendo-react-grid/dist/npm/messages";
 import { Input } from "@progress/kendo-react-inputs";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserInfo } from "interface/UserInterface";
-import urlPrefix from "resource/URL_prefix.json";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 const JoinBodyWrapper = styled.div`
@@ -308,7 +306,7 @@ const Join = (props: any) => {
       };
 
       //params는 어떻게씀
-      const response = await fetch(`${urlPrefix.IP_port}/sign_up`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/sign_up`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -334,7 +332,7 @@ const Join = (props: any) => {
 
   const checkIdDuplicate = async () => {
     try {
-      const response = await fetch(`${urlPrefix.IP_port}/sign_up/check_id`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/sign_up/check_id`, {
         method: "POST",
         headers: {
           Accept: "application/json",

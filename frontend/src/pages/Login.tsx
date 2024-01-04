@@ -1,14 +1,11 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { LoginHeader } from "../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
-import { Error } from "@progress/kendo-react-labels";
-import urlPrefix from "resource/URL_prefix.json";
 import Join from "pages/LoginPages/Join";
-import { Dialog, DialogActionsBar } from "@progress/kendo-react-dialogs";
+import { Dialog } from "@progress/kendo-react-dialogs";
 
 const LoginWrapper = styled.div`
   width: 100%;
@@ -168,7 +165,7 @@ const LoginWrapper = styled.div`
 `;
 
 const LoginPage = () => {
-  const link = urlPrefix.IP_port + "/login";
+  const link = `${process.env.REACT_APP_API_URL}/login`;
   const navigator = useNavigate();
   const [inputValues, setInputValues] = useState({
     loginId: "",
@@ -228,7 +225,7 @@ const LoginPage = () => {
 
       //params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
-      const response = await fetch(`${urlPrefix.IP_port}/login`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
         method: "POST",
         headers: {
           Accept: "application/json",
