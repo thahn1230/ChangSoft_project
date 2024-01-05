@@ -3,21 +3,21 @@ import { DropDownList } from "@progress/kendo-react-dropdowns";
 
 import { BuildingInfo } from "interface/BuildingInterface";
 import { SubBuildingInfo } from "interface/SubBuildingInterface";
+
+import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
+
 import "styles/SubBuildingList.scss";
 
 const SubBuildingList = (props: any) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
-  const [subBuildingInfo, setSubBuildingInfo] = useState<
-  SubBuildingInfo[]
-  >([]);
+  const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
     useState<string>("전체동");
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<
     number | undefined
   >(0);
 
-  const [selectedBuilding, setSelectedBuilding] =
-    useState<BuildingInfo>();
+  const [selectedBuilding, setSelectedBuilding] = useState<BuildingInfo>();
 
   useEffect(() => {
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
@@ -30,34 +30,18 @@ const SubBuildingList = (props: any) => {
     }
 
     setSelectedBuilding(props.buildingInfo);
-    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${props.buildingInfo.id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        const data: SubBuildingInfo[] = JSON.parse(response); // assuming the API response contains an array of buildings
 
-        let subBuildingNames: string[] = [];
-        subBuildingNames.push("전체동");
-        for (let i = 0; i < data.length; i++) {
-          subBuildingNames.push(data[i].sub_building_name);
-        }
+    getSubBuildingInfo(props.buildingInfo.id).then((data) => {
+      let subBuildingNames: string[] = [];
+      subBuildingNames.push("전체동");
+      for (let i = 0; i < data.length; i++) {
+        subBuildingNames.push(data[i].sub_building_name);
+      }
 
-        setSubBuildingInfo(data);
-        setSubBuildinglist(subBuildingNames);
-      })
-      .catch((error) => console.error("Error:", error));
+      setSubBuildingInfo(data);
+      setSubBuildinglist(subBuildingNames);
+    });
   }, [props]);
-
 
   const onSelectedSubbuildingChange = (e: any) => {
     setSelectedSubBuildingName(e.value);

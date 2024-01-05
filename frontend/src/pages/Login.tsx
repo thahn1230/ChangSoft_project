@@ -7,6 +7,9 @@ import { Button } from "@progress/kendo-react-buttons";
 import Join from "pages/LoginPages/Join";
 import { Dialog } from "@progress/kendo-react-dialogs";
 
+import { loginResponse } from "interface/UserInterface";
+import { loginRequest } from "services/user/userService";
+
 const LoginWrapper = styled.div`
   width: 100%;
   height: 100vh;
@@ -178,25 +181,6 @@ const LoginPage = () => {
     navigator("/home");
   }, []);
 
-  // useEffect(() => {
-  //   if (loginResult.data?.login?.accessToken) {
-  //     const { userId, fullName, accessToken, isMaster } =
-  //       loginResult.data.login;
-  //     const loginform = "normal";
-  //     setSessionStorage("user", {
-  //       userId,
-  //       fullName,
-  //       accessToken,
-  //       isMaster,
-  //       loginform,
-  //     });
-  //     history.push(
-  //       history.location?.state?.from?.pathname ||
-  //         process.env.REACT_APP_LANDING_URL
-  //     );
-  //   }
-  // }, [loginResult, history]);
-
   const onChange = (event: InputChangeEvent) => {
     const { name, value } = event.target;
     if (name !== undefined) setInputValues({ ...inputValues, [name]: value });
@@ -225,38 +209,16 @@ const LoginPage = () => {
 
       //params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          login_info: { id: id, password: hashedPassword },
-        }),
-      });
-
-      //const loginData:UserInfoI[] = JSON.parse(await response.json());
-      interface loginDataI {
-        token: string;
-        status: boolean;
-      }
-      const loginData: loginDataI = await response.json();
-      // console.log("loginData.id");
-      //console.log(loginData.token);
-
-      if (loginData.status) {
-        //로그인성공
-
-        //token을 context가 아니고 localstorage로 관리하게 바꾸기
-        //tokenContext?.setToken(loginData.token)
-        localStorage.setItem("token", loginData.token);
-        navigator("/home");
-        return true;
-      } else {
-        alert("아이디와 비밀번호를 확인해주세요");
-        return false;
-      }
+      loginRequest(id,hashedPassword).then((loginData:loginResponse)=>{
+        if (loginData.status) {
+          localStorage.setItem("token", loginData.token);
+          navigator("/home");
+          return true;
+        } else {
+          alert("아이디와 비밀번호를 확인해주세요");
+          return false;
+        }
+      })
     } catch (error) {
       console.error("Error occurred during login:", error);
       return false;

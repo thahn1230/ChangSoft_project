@@ -1,3 +1,5 @@
+import { BuildingInfo } from "interface/BuildingInterface";
+
 export interface SubBuildingAnalysisPercentage {
   type: string;
   percentage: number;
@@ -69,4 +71,13 @@ export interface SubBuildingTotalAnalysis2 {
   concrete_percentage: number;
   formwork_percentage: number;
   rebar_percentage: number;
+}
+
+
+export interface SubBuildingListInfo {
+  buildingInfo: BuildingInfo | undefined;
+  projectName: string;
+  setSelectedSubBuildingId: React.Dispatch<React.SetStateAction<number>>;
+  selectedSubBuildingId: number;
+  subBuildingInfo: SubBuildingInfo[];
 }

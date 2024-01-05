@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
+import { JoinInputValue } from "interface/UserInterface";
+
+import { changeUserInfo ,changePassword,getUserProfile} from "services/user/userService";
+
 const JoinBodyWrapper = styled.div`
   width: 400px;
   height: 600px;
@@ -265,16 +269,6 @@ const ChangePwBodyWrapper = styled.div`
 
 //이거에 맞게 입력 form 추가해야함
 //각 form에 따른 valid 체크와 duplicate체크 각각 해야함
-interface JoinValueI {
-  id: string;
-  password: string;
-  name: string;
-  job_position: string | null;
-  company: string;
-  email_address: string;
-  phone_number: string | null;
-  user_type: string;
-}
 
 const sha256 = async (message: string) => {
   const encoder = new TextEncoder();
@@ -296,12 +290,11 @@ const User = () => {
   const [emailValue, setEmailValue] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
 
-
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
-  const [joinValue, setJoinValue] = useState<JoinValueI>({
+  const [joinValue, setJoinValue] = useState<JoinInputValue>({
     id: "",
     password: "",
     name: "",
@@ -319,8 +312,6 @@ const User = () => {
   const [selectedUserType, setSelectedUserType] = useState<string>(
     joinValue.user_type
   );
-
-  const [fetched, setFetched] = useState<boolean>(false);
 
   const navigator = useNavigate();
   //const [isEmailDuplicate, setIsEmailDuplicate] = useState<boolean>(false);
@@ -348,7 +339,7 @@ const User = () => {
     navigator("/home");
   };
 
-  const signup = async (newUserInfo: JoinValueI) => {
+  const signup = async (newUserInfo: JoinInputValue) => {
     try {
       setJoinValue(
         await {
@@ -359,24 +350,11 @@ const User = () => {
         ...joinValue,
       };
 
-      //params는 어떻게씀
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/change_info`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ join_info: updatedJoinValue }),
-      });
-
-      const signupData: boolean = await response.json();
+      const signupData: boolean = await changeUserInfo(updatedJoinValue);
       if (signupData) {
-        //회원가입 성공
         window.location.reload();
         return true;
       } else {
-        //회원가입 실패
         return false;
       }
     } catch (error) {
@@ -395,18 +373,7 @@ const User = () => {
         changed_pw: hashedNewPassword,
       };
 
-      //params는 어떻게씀
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/user/change_pw`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ pw_info: updatedPwValue }),
-      });
-
-      const changePwData: boolean = await response.json();
+      const changePwData: boolean = await changePassword(updatedPwValue)
       if (changePwData) {
         //비밀번호 변경 성공
         return true;
@@ -540,22 +507,8 @@ const User = () => {
   };
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/user/profile`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // user 정보를 받아와서 전부 저장해놔야 함(pw 빼고)
-        const userProfile: JoinValueI = {
+      getUserProfile().then(data =>{
+        const userProfile: JoinInputValue = {
           company: data.company,
           email_address: data.email_address,
           id: data.id,
@@ -567,12 +520,12 @@ const User = () => {
         };
         setJoinValue(userProfile);
       })
-      .catch((error) => console.error("Error:", error));
   }, []);
 
   useEffect(() => {
     //user type을 바로 바로 수정해주려면 useEffect를 사용해야 할 것 같음
-    if (joinValue.email_address !== null) setEmailValue(joinValue.email_address);
+    if (joinValue.email_address !== null)
+      setEmailValue(joinValue.email_address);
     if (joinValue.phone_number !== null) setPhoneNum(joinValue.phone_number);
     setSelectedUserType(joinValue.user_type);
   }, [joinValue]);
@@ -625,14 +578,13 @@ const User = () => {
             <div className="phoneField">
               <div className="labelField">휴대전화 번호</div>
               <div className="phoneConfirm">
-               
-                  <Input
-                    className="phoneInputField"
-                    type="text"
-                    value={phoneNum}
-                    onChange={onPhoneChange}
-                    placeholder="예) 010-1111-1111, 01012341234 (선택사항입니다)"
-                  ></Input>
+                <Input
+                  className="phoneInputField"
+                  type="text"
+                  value={phoneNum}
+                  onChange={onPhoneChange}
+                  placeholder="예) 010-1111-1111, 01012341234 (선택사항입니다)"
+                ></Input>
               </div>
             </div>
             <div className="cpmpanyField">

@@ -1,7 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   GridColumn,
@@ -13,11 +10,12 @@ import {
 } from "@progress/kendo-data-query";
 import { Building } from "interface/BuildingInterface";
 import BuildingDetail from "component/projectComponent/BuildingDetail";
-import { GridPDFExport } from "@progress/kendo-react-pdf";
-import { ExcelExport } from '@progress/kendo-react-excel-export';
+
+import { getDetailedBuildingList } from "services/building/buildingService";
+
 import "styles/GridDetail.scss";
 
-import {useProjectName, useBuildingInfo} from "App"
+import { useProjectName, useBuildingInfo } from "App";
 import { ProjectIdName } from "interface/ProjectInterface";
 
 const DATA_ITEM_KEY = "id";
@@ -32,9 +30,7 @@ const DetailComponent = (props: any) => {
   setBuildingInfo(props.dataItem);
   return (
     <div>
-      <BuildingDetail
-        forAnalysisTab={false}
-      />
+      <BuildingDetail forAnalysisTab={false} />
     </div>
   );
 };
@@ -45,7 +41,7 @@ const initialFilter: CompositeFilterDescriptor = {
   filters: [{ field: "project_id", operator: "eq", value: "0" }],
 };
 
-const BuildingList = (props: {projectList : ProjectIdName[]}) => {
+const BuildingList = (props: { projectList: ProjectIdName[] }) => {
   const [initialBuildingList, setInitialBuildingList] = useState<Building[]>(
     []
   );
@@ -57,8 +53,6 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
   const [projectFilter, setProjectFilter] = useState(initialFilter);
 
   const [projectName, setProjectName] = useProjectName();
-
-
 
   useEffect(() => {
     if (props.projectList) {
@@ -87,26 +81,10 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
   }, [initialBuildingList, projectFilter]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/building/additional_sub_info`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        const data = JSON.parse(response);
-
-        setBuildingList(data);
-        setInitialBuildingList(data);
-      })
-      .catch((error) => console.error("Error:", error));
+    getDetailedBuildingList().then((detailedBuildingList) => {
+      setBuildingList(detailedBuildingList);
+      setInitialBuildingList(detailedBuildingList);
+    });
   }, []);
 
   const pageChange = (event: any) => {
@@ -146,24 +124,11 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
         }}
         onPageChange={pageChange}
         expandField="expanded"
-        detail={({ dataItem }) => (
-          <DetailComponent
-            dataItem={dataItem}
-          />
-        )}
+        detail={({ dataItem }) => <DetailComponent dataItem={dataItem} />}
         onExpandChange={expandChange}
         filter={projectFilter}
         onFilterChange={(e: GridFilterChangeEvent) => {}}
       >
-        {/* <GridToolbar>
-          <button
-            title="Export PDF"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
-            onClick={exportPDF}
-          >
-            Export PDF
-          </button>
-        </GridToolbar> */}
         <GridColumn
           title="빌딩명"
           field="building_name"
@@ -190,72 +155,6 @@ const BuildingList = (props: {projectList : ProjectIdName[]}) => {
           className="custom-text-cell"
         />
       </Grid>
-      {/* <GridPDFExport
-        paperSize="A4"
-        scale={0.5}
-        ref={(pdfExport) => (gridPDFExport = pdfExport)}
-        margin="1cm"
-      >
-      <Grid
-        style={{ height: "60vh", width: "97.5%" }}
-        data={buildingList.slice(page.skip, page.take + page.skip)}
-        skip={page.skip}
-        take={page.take}
-        total={buildingList.length}
-        dataItemKey={DATA_ITEM_KEY}
-        pageable={{
-          buttonCount: 10,
-          pageSizes: [10, 15, 20, "All"],
-          pageSizeValue: pageSizeValue,
-        }}
-        onPageChange={pageChange}
-        expandField="expanded"
-        detail={({ dataItem }) => (
-          <DetailComponent
-            dataItem={dataItem}
-            setBuildingInfo={props.setBuildingInfo}
-          />
-        )}
-        onExpandChange={expandChange}
-        filter={projectFilter}
-        onFilterChange={(e: GridFilterChangeEvent) => {}}
-      >
-        <GridToolbar>
-          <button
-            title="Export PDF"
-            className="k-button k-button-md k-rounded-md k-button-solid k-button-solid-primary"
-            onClick={exportPDF}
-          >
-            Export PDF
-          </button>
-        </GridToolbar>
-        <GridColumn
-          title="빌딩명"
-          field="building_name"
-          headerClassName={headerClassName}
-          className="custom-text-cell"
-        />
-        <GridColumn
-          title="빌딩별 전체 면적(㎡)"
-          field="total_area_square_meter"
-          headerClassName={headerClassName}
-          className="custom-number-cell"
-          format={"{0:n2}"}
-        />
-        <GridColumn
-          title="빌딩 전체 층수(층)"
-          field="total_stories"
-          headerClassName={headerClassName}
-          className="custom-number-cell"
-        />
-        <GridColumn
-          title="Sub Buildings"
-          field="sub_bldg_list"
-          headerClassName={headerClassName}
-          className="custom-text-cell"
-        />
-      </Grid>
-      </GridPDFExport> */}
     </div>
   );
 };

@@ -15,6 +15,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
+  //여기서 internal server error
   useEffect(() => {
     fetch(
       `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table_all/1/${props.buildingInfo?.id}`,

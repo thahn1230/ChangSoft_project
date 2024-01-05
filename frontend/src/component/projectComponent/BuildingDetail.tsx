@@ -1,45 +1,22 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  GridColumn,
-} from "@progress/kendo-react-grid";
+import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
-import { useNavigate} from "react-router-dom";
-import { useBuildingInfo} from "App"
+import { useNavigate } from "react-router-dom";
+import { useBuildingInfo } from "App";
+import { getImagePath } from "services/building/buildingService";
 
 import "styles/GridDetail.scss";
 
-const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
+const BuildingDetail = (props: { forAnalysisTab: boolean }) => {
   const [imgPath, setImgPath] = useState<string>("");
   const [buildingInfo, setBuildingInfo] = useBuildingInfo();
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/building/${buildingInfo?.id}/get_project_name`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then(async (response) => {
-        const data = JSON.parse(response);
-          const importedImagePath = await import(
-          "./../../resource/project_pictures/" +
-            data[0].project_name +
-            "/" +
-            data[0].building_name +
-            "/ScreenShot.png"
-        );
-        setImgPath(importedImagePath.default);
-      })
+    if (buildingInfo?.id === undefined) return;
+    getImagePath(buildingInfo?.id)
+      .then((imgPath) => setImgPath(imgPath))
       .catch((error) => console.error("Error:", error));
-  }, [props, imgPath]);
+  }, [buildingInfo]);
 
   const navigate = useNavigate();
   const onClick = () => {
@@ -51,7 +28,13 @@ const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
   return (
     <div>
       <div style={{ width: "30%", float: "left", paddingLeft: "1%" }}>
-        {imgPath && <img src={imgPath} alt="Building Image" style={{ width: "163%", float: "left"}} />}
+        {imgPath && (
+          <img
+            src={imgPath}
+            alt="Building Image"
+            style={{ width: "163%", float: "left" }}
+          />
+        )}
       </div>
       <div style={{ width: "50%", float: "right", paddingLeft: "1%" }}>
         {!props.forAnalysisTab && (
@@ -65,7 +48,7 @@ const BuildingDetail = (props: {forAnalysisTab: boolean}) => {
                 marginTop: "5px",
                 width: "6vw",
                 height: "4vh",
-                marginLeft: "1%"
+                marginLeft: "1%",
               }}
             >
               상세보기

@@ -4,17 +4,25 @@ import {
   RadioButton,
   RadioButtonChangeEvent,
 } from "@progress/kendo-react-inputs";
-import {
-  Splitter,
-  SplitterOnChangeEvent,
-} from "@progress/kendo-react-layout";
+import { Splitter, SplitterOnChangeEvent } from "@progress/kendo-react-layout";
 import SubBuildingList from "component/SubBuildingComponent/analysis/SubBuildingList";
 import SingleColTable from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
 
 import { SubBuildingInfo } from "interface/SubBuildingInterface";
-import {useProjectName, useBuildingInfo} from "App"
+import { useProjectName, useBuildingInfo } from "App";
+
+import {
+  getSubBuildingInfo,
+  fetchBuildingAnalysisData,
+} from "services/subbuilding/subbuildingService";
+import {
+  getGridFromPivotData,
+  getRebarGridFromPivotData,
+  getRebarColumnsFromData,
+  getRebarDataWithoutSubkey,
+} from "services/subbuilding/subBuildingUtils";
 
 import "styles/analysisTab.scss";
 
@@ -33,9 +41,7 @@ const AnalysisTab = () => {
 
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState(0);
 
-  const [subBuildingInfo, setSubBuildingInfo] = useState<
-  SubBuildingInfo[]
-  >([]);
+  const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
 
   const [concreteData, setConcreteData] = useState<gridData>([]);
   const [formworkData, setFormworkData] = useState<gridData>([]);
@@ -56,158 +62,23 @@ const AnalysisTab = () => {
   };
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${buildingInfo?.id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((rawData) => {
-        const data = JSON.parse(rawData);
-        setSubBuildingInfo(data);
-      })
-      .catch((error) => console.error("Error:", error));
+    if (buildingInfo?.id === undefined) return;
+    getSubBuildingInfo(buildingInfo.id).then((selectedSubBuildingInfo) => {
+      setSubBuildingInfo(selectedSubBuildingInfo);
+    });
   }, [buildingInfo]);
 
   useEffect(() => {
+    if (buildingInfo?.id === undefined) return;
     let concretePivotResponse: any;
     let formworkPivotResponse: any;
     let rebarResponse: any;
     const fetchData = async () => {
-      if (selectedSubBuildingId === 0) {
-        const concretePromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/concrete`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        const formworkPromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/formwork`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        const rebarPromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table_all/${buildingInfo?.id}/rebar`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        [concretePivotResponse, formworkPivotResponse, rebarResponse] =
-          await Promise.all([concretePromise, formworkPromise, rebarPromise]);
-      } else {
-        const concretePromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/concrete`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        const formworkPromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/formwork`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        const rebarPromise = fetch(
-          `${process.env.REACT_APP_API_URL}/sub_building/analysis_table/${buildingInfo?.id}/rebar`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          }
-        )
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((rawData) => {
-            return JSON.parse(rawData);
-          });
-
-        [concretePivotResponse, formworkPivotResponse, rebarResponse] =
-          await Promise.all([concretePromise, formworkPromise, rebarPromise]);
-      }
+      [concretePivotResponse, formworkPivotResponse, rebarResponse] =
+        await fetchBuildingAnalysisData(
+          buildingInfo.id,
+          selectedSubBuildingId
+        );
 
       if (
         concretePivotResponse === undefined ||
@@ -215,50 +86,15 @@ const AnalysisTab = () => {
         rebarResponse === undefined
       )
         return;
-      const concretePivotJsonGrid: gridData = Object.entries(
+
+      const concretePivotJsonGrid: gridData = getGridFromPivotData(
         concretePivotResponse
-      ).map(([key, value]) => {
-        const newObj: { [key: string]: any } = { "": key };
-        for (const prop in value as Record<string, any>) {
-          newObj[prop] = (value as Record<string, any>)[prop];
-        }
-        return newObj as { [key: string]: any } & { "": string };
-      });
-      const formworkPivotJsonGrid: gridData = Object.entries(
+      );
+      const formworkPivotJsonGrid: gridData = getGridFromPivotData(
         formworkPivotResponse
-      ).map(([key, value]) => {
-        const newObj: { [key: string]: any } = { "": key };
-        for (const prop in value as Record<string, any>) {
-          newObj[prop] = (value as Record<string, any>)[prop];
-        }
-        return newObj as { [key: string]: any } & { "": string };
-      });
-
-      const rebarJsonPivotGrid: gridData = [];
-      for (const rebar of rebarResponse) {
-        const componentType = rebar.component_type;
-        const rebarGrade = rebar.rebar_grade;
-        const rebarDiameter = rebar.rebar_diameter;
-        const totalWeight = rebar.total_weight;
-
-        const existingItem = rebarJsonPivotGrid.find(
-          (item) => item[""] === componentType
-        );
-        if (existingItem) {
-          if (!existingItem[rebarGrade]) {
-            existingItem[rebarGrade] = {};
-          }
-          existingItem[rebarGrade][rebarDiameter.toString()] = totalWeight;
-        } else {
-          const newItem = {
-            "": componentType,
-            [rebarGrade]: {
-              [rebarDiameter.toString()]: totalWeight,
-            },
-          };
-          rebarJsonPivotGrid.push(newItem);
-        }
-      }
+      );
+      const rebarJsonPivotGrid: gridData =
+        getRebarGridFromPivotData(rebarResponse);
 
       setConcreteData(concretePivotJsonGrid);
       setFormworkData(formworkPivotJsonGrid);
@@ -269,70 +105,11 @@ const AnalysisTab = () => {
   }, [selectedSubBuildingId]);
 
   useEffect(() => {
-    const temp: string[] = [];
-    const tempRebarColumns = [{}];
-    rebarData.map((item, index) => {
-      Object.entries(item).map((cols) => {
-        temp.push(cols[0]);
-      });
-    });
-    temp.sort();
-    const tempSet = new Set(temp);
-    Array.from(tempSet).map((strength) => {
-      const DiametersInStrength: string[] = rebarData.reduce(
-        (keys: string[], obj) => {
-          for (const key in obj) {
-            if (key === strength) {
-              keys.push(...Object.keys(obj[key]));
-            }
-          }
-          keys.sort();
-          const keysSet = new Set(keys);
-          return Array.from(keysSet);
-        },
-        []
-      );
-
-      tempRebarColumns.push({ [strength]: DiametersInStrength });
-    });
-    setRebarColumns(tempRebarColumns);
-
-    let nonSubKeyData = rebarData.map((item) => {
-      const newObj: { [key: string]: any } = { "": item[""] };
-      for (const key in item) {
-        if (key !== "") {
-          const subItem = item[key];
-          for (const subKey in subItem) {
-            newObj[`${key}_${subKey}`] = subItem[subKey];
-          }
-        }
-      }
-      return newObj;
-    });
-
-    let allSubKeys = new Set<string>();
-    nonSubKeyData.map((item) => {
-      for (const key of Object.keys(item)) {
-        if (key !== "") allSubKeys.add(key);
-      }
-    });
-    nonSubKeyData = nonSubKeyData.map((item: any) => {
-      const newObj: { [key: string]: any } = {};
-      newObj[""] = item[""];
-
-      for (const key of Array.from(allSubKeys)) {
-        newObj[key] = item[key] === undefined ? null : item[key];
-      }
-
-      return newObj;
-    });
-
-    setRebarDataNonSubKey(nonSubKeyData as gridData);
+    const rebarColumns = getRebarColumnsFromData(rebarData);
+    setRebarColumns(rebarColumns);
+    const nonSubKeyRebarData = getRebarDataWithoutSubkey(rebarData);
+    setRebarDataNonSubKey(nonSubKeyRebarData as gridData);
   }, [rebarData]);
-
-  useEffect(() => {
-    //console.log(rebarDataNonSubKey);
-  }, [rebarDataNonSubKey]);
 
   useEffect(() => {
     switch (selectedType) {
@@ -342,9 +119,7 @@ const AnalysisTab = () => {
           <div>
             <Splitter panes={panes} onChange={onPaneChange}>
               <div className="analysis-table-container">
-                <SingleColTable
-                  data={concreteData}
-                ></SingleColTable>
+                <SingleColTable data={concreteData}></SingleColTable>
               </div>
               <div className="analysis-chart-container">
                 <SubBuildingAnalysisGraph
@@ -362,9 +137,7 @@ const AnalysisTab = () => {
           <div>
             <Splitter panes={panes} onChange={onPaneChange}>
               <div className="analysis-table-container">
-                <SingleColTable
-                  data={formworkData}
-                ></SingleColTable>
+                <SingleColTable data={formworkData}></SingleColTable>
               </div>
               <div className="analysis-chart-container">
                 <SubBuildingAnalysisGraph

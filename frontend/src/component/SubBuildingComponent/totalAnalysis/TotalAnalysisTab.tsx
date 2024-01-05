@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Grid,
-  GridColumn
-} from "@progress/kendo-react-grid";
+import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import {
   RadioButton,
   RadioButtonChangeEvent,
@@ -16,7 +13,9 @@ import { SubBuildingInfo } from "interface/SubBuildingInterface";
 import { SubBuildingTotalAnalysis1 } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisValue } from "interface/SubBuildingInterface";
-import {useProjectName, useBuildingInfo} from "App"
+import { useProjectName, useBuildingInfo } from "App";
+
+import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
 
 import "styles/SubBuildingDetail.scss";
 import "styles/TotalAnalysisTab.scss";
@@ -25,10 +24,9 @@ const TotalAnalysisTab = () => {
   const [buildingInfo, setBuildingInfo] = useBuildingInfo();
   const [projectName, setProjectName] = useProjectName();
 
-  const [subBuildingInfo, setSubBuildingInfo] = useState<
-  SubBuildingInfo[]
-  >([]);
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>(-1);
+  const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
+  const [selectedSubBuildingId, setSelectedSubBuildingId] =
+    useState<number>(-1);
 
   const [analysisTable1, setAnalysisTable1] =
     useState<SubBuildingTotalAnalysis1[]>();
@@ -42,36 +40,18 @@ const TotalAnalysisTab = () => {
   const [percentagesInfo, setPercentagesInfo] =
     useState<SubBuildingAnalysisPercentage[]>();
   //각각의 값&타입
-  const [valueInfo, setValueInfo] =
-    useState<SubBuildingAnalysisValue[]>();
-
-  useEffect(()=>{
-    if(selectedSubBuildingId ===-1)
-    setSelectedSubBuildingId(0)
-  },[])
-
+  const [valueInfo, setValueInfo] = useState<SubBuildingAnalysisValue[]>();
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${buildingInfo?.id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        const subBuildings = JSON.parse(response);
-        setSubBuildingInfo(subBuildings);
-        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
-        // setTotalfloor(arrayData);
-      })
-      .catch((error) => console.error("Error:", error));
+    if (selectedSubBuildingId === -1) setSelectedSubBuildingId(0);
+  }, []);
+
+  useEffect(() => {
+    if (buildingInfo?.id === undefined) return;
+    
+    getSubBuildingInfo(buildingInfo?.id).then((data) => {
+      setSubBuildingInfo(data);
+    });
   }, [buildingInfo, buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"

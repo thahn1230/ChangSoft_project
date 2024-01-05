@@ -11,6 +11,15 @@ import {
 } from "@progress/kendo-data-query";
 import { Button } from "@progress/kendo-react-buttons";
 
+import {
+  getProjectWithCompanyList,
+  getBuildingListInProject,
+  getInsightGraph,
+} from "services/insight/insightService";
+import { getIntruction } from "services/insight/insightUtils";
+
+import { InsightListInfo } from "interface/InsightInterface";
+
 import "styles/insightList.scss";
 
 const dataItemKey = "id";
@@ -27,27 +36,15 @@ const selectDropDownFields = {
   subItemsField,
 };
 
-interface graphInfoI {
-  data: any;
-  explanation: any;
-  layout: any;
-}
-
-interface InsightListInfo {
-  setGraphInfo: React.Dispatch<React.SetStateAction<graphInfoI[] | undefined>>;
-  setSelectedInsightIndex: React.Dispatch<React.SetStateAction<number>>;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
 const InsightList = (props: InsightListInfo) => {
-  const [insightList, setInsightList] = useState<string[]>([
+  const insightList: string[] = [
     "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값에 대한 분석",
     "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 ㎥당 철근량(ton) 값의 분포 분석 (BoxPlot)",
     "건설사의 프로젝트들에 대해, 프로젝트별 빌딩의 콘크리트 종류별 사용비율 비교",
     "건설사들에 대한 콘크리트당 철근중량 비교",
     "건설사의 한 프로젝트에서 내력벽의 그루핑에 따른 콘크리트당 철근값의 비교",
     "하나의 빌딩에 대해서 층별, 부재타입별로 철근 타입별로 콘크리트당 철근사용량의 값을 한눈에 보여주는 히트맵 분석",
-  ]);
+  ];
   const [selectionInstruction, setSelectionInstruction] = useState<string>("");
 
   //only in list
@@ -127,54 +124,10 @@ const InsightList = (props: InsightListInfo) => {
   const [isAnalyzable, setIsAnalyzable] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((rawData) => {
-        const data = JSON.parse(rawData);
-        setProjectList(
-          [
-            {
-              projectName: "All",
-              id: 0,
-              constructionCompany: "All",
-              checked: false,
-            },
-          ].concat(
-            data.map((item: any) => {
-              return {
-                projectName: item.project_name,
-                id: item.id,
-                constructionCompany: item.construction_company,
-                checked: false,
-              };
-            })
-          )
-        );
-
-        const uniqueConstructionCompanies = Array.from(
-          new Set(data.map((item: any) => item.construction_company))
-        );
-        setConstructionCompanyList(
-          [{ constructionCompany: "All", id: 0, checked: false }].concat(
-            uniqueConstructionCompanies.map((constructionCompany: any) => {
-              const item = data.find(
-                (item: any) => item.construction_company === constructionCompany
-              );
-              return { constructionCompany, id: item.id, checked: false };
-            })
-          )
-        );
+    getProjectWithCompanyList()
+      .then(({ projectList, constructionCompanyList }) => {
+        setProjectList(projectList);
+        setConstructionCompanyList(constructionCompanyList);
       })
       .catch((error) => console.error("Error:", error));
   }, []);
@@ -188,7 +141,6 @@ const InsightList = (props: InsightListInfo) => {
     setSelectedBuildingList([]);
   }, [projectFilter]);
 
-
   useEffect(() => {
     setFilteredBuildingList(buildingList);
   }, [buildingList]);
@@ -200,22 +152,7 @@ const InsightList = (props: InsightListInfo) => {
   useEffect(() => {
     setSelectedConstructionCompanyList([]);
 
-    switch (selectedInsightIndexInList + 1) {
-      case 1:
-      case 2:
-      case 3:
-      case 5:
-        setSelectionInstruction("한 개의 건설사만 선택해주세요");
-        break;
-      case 4:
-        setSelectionInstruction("비교할 건설사들을 선택해주세요");
-        break;
-      case 6:
-        setSelectionInstruction("한 개의 빌딩만 선택해주세요");
-        break;
-      default:
-        setSelectionInstruction("");
-    }
+    setSelectionInstruction(getIntruction(selectedInsightIndexInList));
   }, [selectedInsightIndexInList]);
 
   //update checkboxes
@@ -239,6 +176,7 @@ const InsightList = (props: InsightListInfo) => {
       });
     }
     setProjectFilter(newProjectFilter);
+
     //set checkboxes
     const updatedConstructionCompanyList = constructionCompanyList.map(
       (item) => {
@@ -261,6 +199,7 @@ const InsightList = (props: InsightListInfo) => {
       setConstructionCompanyList(updatedConstructionCompanyList);
     } else setConstructionCompanyList(updatedConstructionCompanyList);
   }, [selectedConstructionCompanyList]);
+
   useEffect(() => {
     const updatedFilteredProjectList = filteredProjectList.map((item) => {
       const matchingItem = selectedProjectList.find(
@@ -284,39 +223,12 @@ const InsightList = (props: InsightListInfo) => {
       selectedInsightIndexInList + 1 === 6 &&
       selectedProjectList.length === 1
     ) {
-      fetch(
-        `${process.env.REACT_APP_API_URL}/project/${selectedProjectList[0].id}/building_detail`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((rawData) => {
-          const data = JSON.parse(rawData);
-          setBuildingList(
-            [{ buildingName: "All", id: 0, checked: false }].concat(
-              data.map((item: any) => {
-                return {
-                  buildingName: item.building_name,
-                  id: item.id,
-                  checked: false,
-                };
-              })
-            )
-          );
-        })
+      getBuildingListInProject(selectedProjectList[0].id)
+        .then((buildingList) => setBuildingList(buildingList))
         .catch((error) => console.error("Error:", error));
     }
   }, [selectedProjectList]);
+
   useEffect(() => {
     const updatedFilteredBuildingList = filteredBuildingList.map((item) => {
       const matchingItem = selectedBuildingList.find(
@@ -443,68 +355,19 @@ const InsightList = (props: InsightListInfo) => {
     props.setSelectedInsightIndex(selectedInsightIndexInList);
     setSelectedInsightIndex(selectedInsightIndexInList);
 
-    const fetchData = async () => {
-      const params = new URLSearchParams();
-      let paramName;
-      let paramContent;
-      if (selectedInsightIndexInList + 1 === 4) {
-        const selectedCompanyName = selectedConstructionCompanyList.map(
-          (item) => item.constructionCompany
-        );
-
-        paramName = "data";
-        paramContent = JSON.stringify(selectedCompanyName);
-      } else if (selectedInsightIndexInList + 1 === 5) {
-        const selectedProjectId = selectedProjectList.map((item) => item.id);
-
-        paramName = "data";
-        paramContent = JSON.stringify(selectedProjectId);
-      } else if (selectedInsightIndexInList + 1 === 6) {
-        const selectedProjectId = [selectedProjectList[0].id];
-        const selectedBuildingId = selectedBuildingList.map((item) => item.id);
-
-        paramName = "data";
-        paramContent = JSON.stringify(
-          selectedProjectId.concat(selectedBuildingId)
-        );
-      } else {
-        const selectedProjectId = selectedProjectList.map((item) => item.id);
-
-        paramName = "data";
-        paramContent = JSON.stringify(selectedProjectId);
-      }
-
-      params.append(paramName, paramContent);
-
-      const url = new URL(`${process.env.REACT_APP_API_URL}/insight/${selectedInsightIndexInList + 1}`);
-      url.search = new URLSearchParams(params).toString();
-      fetch(url, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
+    getInsightGraph(
+      selectedInsightIndexInList,
+      selectedConstructionCompanyList,
+      selectedProjectList,
+      selectedBuildingList
+    )
+      .then((data) => {
+        props.setGraphInfo(data);
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((rawData) => {
-          const data = JSON.parse(rawData);
-
-          props.setGraphInfo(data);
-        })
-        .catch((error) => console.error("Error:", error));
-    };
-    fetchData();
+      .catch((error) => console.error("Error:", error));
   };
 
-  // useEffect(() => {
-  //   props.setIsLoading(false);
-  // }, [props.graphInfo]);
-
+  
   useEffect(() => {
     setIsAnalyzable(calculateAnalyzableCondition());
   }, [

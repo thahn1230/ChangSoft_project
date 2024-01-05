@@ -1,23 +1,17 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
 
-
 import { BuildingInfo } from "interface/BuildingInterface";
-import { SubBuildingInfo } from "interface/SubBuildingInterface";
+import {
+  SubBuildingInfo,
+  SubBuildingListInfo,
+} from "interface/SubBuildingInterface";
 
-interface SubBuildingListInfo {
-  buildingInfo: BuildingInfo | undefined;
-  projectName : string;
-  setSelectedSubBuildingId : React.Dispatch<React.SetStateAction<number>>;
-  selectedSubBuildingId : number;
-  subBuildingInfo : SubBuildingInfo[];
-}
+import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
 
 const SubBuildingList = (props: SubBuildingListInfo) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
-  const [subBuildingInfo, setSubBuildingInfo] = useState<
-  SubBuildingInfo[]
-  >([]);
+  const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
 
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
     useState<string>("전체동");
@@ -25,10 +19,10 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
     number | undefined
   >(0);
 
-  const [selectedBuilding, setSelectedBuilding] =
-    useState<BuildingInfo>();
+  const [selectedBuilding, setSelectedBuilding] = useState<BuildingInfo>();
 
   useEffect(() => {
+    if (props.buildingInfo?.id === undefined) return;
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
       (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
     );
@@ -40,22 +34,8 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
 
     setSelectedBuilding(props.buildingInfo);
 
-    fetch(`${process.env.REACT_APP_API_URL}/sub_building/${props.buildingInfo?.id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((rawData) => {
-        const data: SubBuildingInfo[] = JSON.parse(rawData);
-
+    getSubBuildingInfo(props.buildingInfo.id).then(
+      (data: SubBuildingInfo[]) => {
         let subBuildingNames: string[] = [];
         subBuildingNames.push("전체동");
         for (let i = 0; i < data.length; i++) {
@@ -64,8 +44,8 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
 
         setSubBuildingInfo(data);
         setSubBuildinglist(subBuildingNames);
-      })
-      .catch((error) => console.error("Error:", error));
+      }
+    );
   }, [props]);
 
   const onSelectedSubbuildingChange = (e: any) => {
@@ -78,7 +58,7 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
         (item) => item.sub_building_name === e.value
       )?.id;
       setSelectedSubBuildingId(selectedSubId);
-      if(selectedSubId) {
+      if (selectedSubId) {
         props.setSelectedSubBuildingId(selectedSubId);
       }
     }

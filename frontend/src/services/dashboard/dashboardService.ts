@@ -39,7 +39,7 @@ const getConstructionCompanyRatio = async () => {
 
   const othersPercentage = arrayData
     .slice(5)
-    .reduce((acc, curr) => acc + curr.percentage, 0);
+    .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
   const othersData = { field: "Others", percentage: othersPercentage };
 
   const modifiedData = [...top5, othersData];
@@ -62,7 +62,7 @@ const getLocalRatio = async () => {
 
   const othersPercentage = arrayData
     .slice(5)
-    .reduce((acc, curr) => acc + curr.percentage, 0);
+    .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
   const othersData = { field: "Others", percentage: othersPercentage };
 
   const modifiedData = [...top5, othersData];
@@ -82,7 +82,7 @@ const getUsageRatio = async () => {
 
   const othersPercentage = arrayData
     .slice(5)
-    .reduce((acc, curr) => acc + curr.percentage, 0);
+    .reduce((acc: number, curr: any) => acc + curr.percentage, 0);
   const othersData = { field: "Others", percentage: othersPercentage };
 
   const modifiedData = [...top5, othersData];

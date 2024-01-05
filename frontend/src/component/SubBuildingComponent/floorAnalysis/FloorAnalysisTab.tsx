@@ -2,28 +2,27 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-import {
-  RadioButtonChangeEvent,
-} from "@progress/kendo-react-inputs";
-import {
-  Splitter,
-  SplitterOnChangeEvent,
-} from "@progress/kendo-react-layout";
+import { RadioButtonChangeEvent } from "@progress/kendo-react-inputs";
+import { Splitter, SplitterOnChangeEvent } from "@progress/kendo-react-layout";
 
 import SubBuildingAnalysisGraph from "component/SubBuildingComponent/analysis/SubBuildingAnalysisGraph";
 import SubBuildingAnalysisTableSingleCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/SubBuildingComponent/analysis/SubBuildingAnalysisTable_subCol";
 import ComponentTypeList from "component/SubBuildingComponent/floorAnalysis/ComponentTypeList";
-import {useProjectName, useBuildingInfo} from "App"
+import { useProjectName, useBuildingInfo } from "App";
+
+import {
+  fetchSubBuildingFloorAnalysisData,
+  getComponentTypeListFromBuildingId,
+} from "services/subbuilding/subbuildingService";
+import {
+  getGridFromPivotData,
+  getFloorRebarGridFromPivotData,
+  getRebarColumnsFromData,
+  getRebarDataWithoutSubkey,
+} from "services/subbuilding/subBuildingUtils";
 
 import "styles/FloorAnalysisTab.scss";
-
-interface RebarJson {
-  floor_name: string;
-  rebar_grade: string;
-  rebar_diameter: number;
-  total_rebar: number;
-}
 
 type gridData = Array<{ [key: string]: any } & { "": string }>;
 
@@ -66,40 +65,14 @@ const FloorAnalysisTab = () => {
   };
 
   useEffect(() => {
-    let idx = 0;
-    fetch(
-      `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/component_type`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
-        // setTotalfloor(arrayData);
-        setComponentTypeList(
-          [{ componentType: "All", id: idx++, checked: false }].concat(
-            JSON.parse(response).map((item: any) => {
-              return {
-                componentType: item.component_type,
-                id: idx++,
-                checked: false,
-              };
-            })
-          )
-        );
-
-      })
-      .catch((error) => console.error("Error:", error));
+    if (buildingInfo?.id === undefined) return;
+    const fetchData = async () => {
+      const newComponentTypeList = await getComponentTypeListFromBuildingId(
+        buildingInfo?.id
+      );
+      setComponentTypeList(newComponentTypeList);
+    };
+    fetchData();
   }, [buildingInfo]);
 
   useEffect(() => {
@@ -117,6 +90,7 @@ const FloorAnalysisTab = () => {
   }, [componentTypeList]);
 
   useEffect(() => {
+    if (buildingInfo?.id === undefined) return;
     const params = new URLSearchParams();
     const paramName = "component_types";
     const paramContent = JSON.stringify(
@@ -127,182 +101,35 @@ const FloorAnalysisTab = () => {
     if (selectedComponentType.length === 0) {
       setSelectedGridChart(<div>부재를 선택해주세요.</div>);
     } else {
-      const concreteUrl = new URL(
-        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/concrete/filter`
-      );
-      concreteUrl.search = new URLSearchParams(params).toString();
-      fetch(concreteUrl.toString(), {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((response) => {
-          const concreteJson = JSON.parse(response);
-          const concreteJsonGrid: gridData = Object.entries(concreteJson).map(
-            ([key, value]) => {
-              const newObj: { [key: string]: any } = { "": key };
-              for (const prop in value as Record<string, any>) {
-                newObj[prop] = (value as Record<string, any>)[prop];
-              }
-              return newObj as { [key: string]: any } & { "": string };
-            }
-          );
-          setConcreteData(concreteJsonGrid);
-        })
-        .catch((error) => console.error("Error:", error));
+      let concreteGridData: any;
+      let formworkGridData: any;
+      let rebarGridData: any;
+      
+      const fetchData = async () => {
+        //getGridFromPivotData,getRebarGridFromPivotData
+        [concreteGridData, formworkGridData, rebarGridData] =
+          await fetchSubBuildingFloorAnalysisData(buildingInfo.id, params);
 
-      const formworkUrl = new URL(
-        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/formwork/filter`
-      );
-      formworkUrl.search = new URLSearchParams(params).toString();
-      fetch(formworkUrl.toString(), {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((response) => {
-          const formworkJson = JSON.parse(response);
-          const formworkJsonGrid: gridData = Object.entries(formworkJson).map(
-            ([key, value]) => {
-              const newObj: { [key: string]: any } = { "": key };
-              for (const prop in value as Record<string, any>) {
-                newObj[prop] = (value as Record<string, any>)[prop];
-              }
-              return newObj as { [key: string]: any } & { "": string };
-            }
-          );
-          setFormworkData(formworkJsonGrid);
-        })
-        .catch((error) => console.error("Error:", error));
+        const concreteJsonGrid: gridData =
+          getGridFromPivotData(concreteGridData);
+        const formworkJsonGrid: gridData =
+          getGridFromPivotData(formworkGridData);
+        const rebarJsonGrid: gridData =
+          getFloorRebarGridFromPivotData(rebarGridData);
 
-      const rebarUrl = new URL(
-        `${process.env.REACT_APP_API_URL}/sub_building/floor_analysis_table/${buildingInfo?.id}/rebar/filter`
-      );
-      rebarUrl.search = new URLSearchParams(params).toString();
-      fetch(rebarUrl.toString(), {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((response) => {
-          const rebarJson: RebarJson[] = JSON.parse(response);
-          const rebarJsonGrid: gridData = [];
-          for (const rebar of rebarJson) {
-            const floorName = rebar.floor_name;
-            const rebarGrade = rebar.rebar_grade;
-            const rebarDiameter = rebar.rebar_diameter;
-            const totalRebar = rebar.total_rebar;
-
-            const existingItem = rebarJsonGrid.find(
-              (item) => item[""] === floorName
-            );
-            if (existingItem) {
-              if (!existingItem[rebarGrade]) {
-                existingItem[rebarGrade] = {};
-              }
-              existingItem[rebarGrade][rebarDiameter.toString()] = totalRebar;
-            } else {
-              const newItem = {
-                "": floorName,
-                [rebarGrade]: {
-                  [rebarDiameter.toString()]: totalRebar,
-                },
-              };
-              rebarJsonGrid.push(newItem);
-            }
-          }
-          setRebarData(rebarJsonGrid);
-        })
-        .catch((error) => console.error("Error:", error));
+        setConcreteData(concreteJsonGrid);
+        setFormworkData(formworkJsonGrid);
+        setRebarData(rebarJsonGrid);
+      };
+      fetchData();
     }
   }, [selectedComponentType]);
 
   useEffect(() => {
-    const temp: string[] = [];
-    const tempRebarColumns = [{}];
-    rebarData.map((item, index) => {
-      Object.entries(item).map((cols) => {
-        temp.push(cols[0]);
-      });
-    });
-    temp.sort();
-    const tempSet = new Set(temp);
-
-    Array.from(tempSet).map((strength) => {
-      const DiametersInStrength: string[] = rebarData.reduce(
-        (keys: string[], obj) => {
-          for (const key in obj) {
-            if (key === strength) {
-              keys.push(...Object.keys(obj[key]));
-            }
-          }
-          keys.sort();
-          const keysSet = new Set(keys);
-          return Array.from(keysSet);
-        },
-        []
-      );
-
-      tempRebarColumns.push({ [strength]: DiametersInStrength });
-    });
-
-    setRebarColumns(tempRebarColumns);
-
-    let nonSubKeyData = rebarData.map((item) => {
-      const newObj: { [key: string]: any } = { "": item[""] };
-      for (const key in item) {
-        if (key !== "") {
-          const subItem = item[key];
-          for (const subKey in subItem) {
-            newObj[`${key}_${subKey}`] = subItem[subKey];
-          }
-        }
-      }
-      return newObj;
-    });
-
-    let allSubKeys = new Set<string>();
-    nonSubKeyData.map((item) => {
-      for (const key of Object.keys(item)) {
-        if (key !== "") allSubKeys.add(key);
-      }
-    });
-    nonSubKeyData = nonSubKeyData.map((item: any) => {
-      const newObj: { [key: string]: any } = {};
-      newObj[""] = item[""];
-
-      for (const key of Array.from(allSubKeys)) {
-        newObj[key] = item[key] === undefined ? null : item[key];
-      }
-
-      return newObj;
-    });
-
-    setRebarDataNonSubKey(nonSubKeyData as gridData);
+    const rebarColumns = getRebarColumnsFromData(rebarData)
+    setRebarColumns(rebarColumns);
+    const nonSubKeyRebarData = getRebarDataWithoutSubkey(rebarData)
+    setRebarDataNonSubKey(nonSubKeyRebarData as gridData);
   }, [rebarData]);
 
   useEffect(() => {
@@ -392,13 +219,6 @@ const FloorAnalysisTab = () => {
     rebarColumns,
     panes,
   ]);
-
-  const onTypeChange = React.useCallback(
-    (e: RadioButtonChangeEvent) => {
-      setSelectedType(e.value);
-    },
-    [setSelectedType]
-  );
 
   const onSelectedTypeChange = (e: any) => {
     setSelectedType(e.value);

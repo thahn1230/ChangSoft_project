@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@progress/kendo-react-buttons";
 import { useLocation, useNavigate, Outlet } from "react-router-dom";
 import { Drawer, DrawerContent } from "@progress/kendo-react-layout";
+
+import { getUserProfile } from "services/user/userService";
+
 import "styles/NavigationLayout.scss";
 import ChangSoftLogo from "resource/changSoft_logo.png";
 
@@ -51,7 +54,6 @@ export const NavigationLayout = (props: any) => {
   const [expanded, setExpanded] = useState(true);
   const [selected, setSelected] = useState("");
 
-  const [userInfo, setUserInfo] = useState<{name:string, email:string}>({name:"login please~", email:""});
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
 
@@ -73,25 +75,10 @@ export const NavigationLayout = (props: any) => {
   }, [location.pathname]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/user/profile`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        //setUserInfo({name :data.name, email: data.email_address})
+      getUserProfile().then(data =>{
         setName(data.name);
         setEmailAddress(data.email_address);
       })
-      .catch((error) => console.error("Error:", error));
   }, []);
 
   const renderSelectedText = () => {

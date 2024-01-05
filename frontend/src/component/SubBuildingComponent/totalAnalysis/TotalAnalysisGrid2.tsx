@@ -11,6 +11,7 @@ const TotalAnalysisGrid2 = (props: any) => {
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
     useState<SubBuildingTotalAnalysis2[]>();
 
+    //여긴 나는지 안나는지 모르겠
   useEffect(() => {
     if(props.selectedSubBuildingId===-1)
     return;

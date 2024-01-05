@@ -1,30 +1,36 @@
-const BASE_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = process.env.REACT_APP_API_URL as string;
 
-const fetchApi = (url, options = {}) => {
+interface FetchOptions extends RequestInit {
+  auth?: boolean;
+}
+
+const fetchApi = (url: string, options: FetchOptions = {}) => {
   // 기본 헤더
-  const headers = {
+  const headers = new Headers({
     Accept: "application/json",
     "Content-Type": "application/json",
     ...options.headers,
-  };
+  });
 
   // 인증이 필요한 경우 (회원가입 제외 필수)
   if (options.auth) {
     const token = localStorage.getItem("token");
-    headers["Authorization"] = `Bearer ${token}`;
+    if (token) {
+      headers.append("Authorization", `Bearer ${token}`);
+    }
   }
 
   return fetch(`${BASE_URL}/${url}`, { ...options, headers });
 };
 
-export const get = (url, auth = false) => {
+export const get = (url: string, auth: boolean = false) => {
   return fetchApi(url, {
     method: "GET",
     auth,
   });
 };
 
-export const post = (url, data, auth = false) => {
+export const post = (url: string, data: any, auth: boolean = false) => {
   return fetchApi(url, {
     method: "POST",
     body: JSON.stringify(data),

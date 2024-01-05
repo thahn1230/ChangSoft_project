@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { ProjectIdName } from "interface/ProjectInterface";
+
+import { getProjectData } from "services/project/projectService";
+
 import "styles/GridDetail.scss";
 
 interface projectDetail_interface {
@@ -15,34 +18,18 @@ interface projectDetail_interface {
   building_count: number;
 }
 
-const ProjectDetail = (props: {selectedProject : ProjectIdName | undefined}) => {
+const ProjectDetail = (props: {
+  selectedProject: ProjectIdName | undefined;
+}) => {
   const [projectData, setProjectData] = useState<projectDetail_interface[]>();
 
   useEffect(() => {
     if (props.selectedProject) {
-      fetch(`${process.env.REACT_APP_API_URL}/project/${props.selectedProject.id}/project_detail`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((response) => {
-          const data = JSON.parse(response);
-          setProjectData(data);
-        })
-        .catch((error) => console.error("Error:", error));
+      getProjectData(props.selectedProject.id).then((selectedProjectData) =>
+        setProjectData(selectedProjectData)
+      );
     }
   }, [props]);
-
 
   const headerClassName = "custom-header-cell";
 

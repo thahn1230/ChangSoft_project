@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  ComboBox,
-} from "@progress/kendo-react-dropdowns";
+import { ComboBox } from "@progress/kendo-react-dropdowns";
 import {
   RangeSlider,
   SliderLabel,
@@ -20,10 +18,14 @@ import { ProjectInfo } from "interface/ProjectInterface";
 //context
 import { useProjectName, useBuildingInfo } from "App";
 
+import { getDetailedProjectData } from "services/project/projectService";
+
 import "styles/ProjectList.scss";
 import loadingBars from "resource/loadingBars.gif";
 
-const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<ProjectIdName[]>>}) => {
+const ProjectList = (props: {
+  setData: React.Dispatch<React.SetStateAction<ProjectIdName[]>>;
+}) => {
   const [data, setData] = useState<ProjectInfo[]>([]);
 
   const [projectList, setProjectList] = useState<string[]>([]);
@@ -61,35 +63,16 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<Projec
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/dashboard/project/`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((response) => {
-        const data = JSON.parse(response);
+    getDetailedProjectData().then((data) => {
+      const projectNames = data.map((obj: ProjectIdName) => obj.project_name);
 
-        const projectNames = data.map(
-          (obj: ProjectIdName) => obj.project_name
-        );
-
-        setData(data); //projectList의 project data
-        setFilteredData(data);
-        props.setData(data); //projects 페이지의 project data
-        setProjectList(projectNames);
-        setFileteredList(projectNames);
-      })
-      .catch((error) => console.error("Error:", error));
+      setData(data); //projectList의 project data
+      setFilteredData(data);
+      props.setData(data); //projects 페이지의 project data
+      setProjectList(projectNames);
+      setFileteredList(projectNames);
+    });
   }, []);
-
 
   useEffect(() => {
     setBuildingAreaSliderValue();
@@ -116,7 +99,7 @@ const ProjectList = (props:{setData : React.Dispatch<React.SetStateAction<Projec
     setFileteredList(filterData(event.filter));
   };
   const projectListOnChange = (event: any) => {
-    setProjectName(event.target.value)
+    setProjectName(event.target.value);
   };
 
   //건설회사,지역 comboboxes
