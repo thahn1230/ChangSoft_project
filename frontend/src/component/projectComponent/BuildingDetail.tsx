@@ -20,7 +20,7 @@ const BuildingDetail = (props: { forAnalysisTab: boolean }) => {
 
   const navigate = useNavigate();
   const onClick = () => {
-    navigate("/sub_building_detail");
+    navigate("/projects/sub_building_detail");
   };
 
   const headerClassName = "custom-header-cell";

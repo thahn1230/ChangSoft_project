@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginHeader } from "../component/LoginComponents";
+import { LoginHeader } from "../../../component/LoginComponents";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
-import Join from "pages/LoginPages/Join";
+import Join from "pages/Auth/JoinPage";
 import { Dialog } from "@progress/kendo-react-dialogs";
 
 import { loginResponse } from "interface/UserInterface";

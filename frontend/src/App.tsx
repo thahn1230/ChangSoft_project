@@ -1,21 +1,20 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import "./App.css";
 import {
-  Navigate,
   Route,
   Routes,
   useNavigate,
   useLocation,
 } from "react-router-dom";
 import { NavigationLayout } from "./component/NavgationLayout";
-import { Home } from "./pages/Home";
-import Projects from "./pages/Projects";
-import UserPage from "./pages/User";
-import Insight from "./pages/Insight";
+import { Home } from "./pages/HomePage";
+import Projects from "./pages/ProjectPage";
+import UserPage from "./pages/UserPage";
+import Insight from "./pages/InsightPage";
 import { BuildingInfo } from "interface/BuildingInterface";
 import SubBuildingTabLayout from "./component/SubBuildingTabLayout";
-import AIQuery from "./pages/AIQuery";
-import LoginPage from "./pages/Login";
+import AIQuery from "./pages/AIQueryPage";
+import LoginPage from "./pages/Auth/LoginPage";
 
 const BuildingInfoContext = createContext<
   | [
@@ -88,6 +87,14 @@ export function App() {
                 }
               />
               <Route
+                path="/projects/sub_building_detail"
+                element={
+                  <NavigationLayout>
+                    <SubBuildingTabLayout/>
+                  </NavigationLayout>
+                }
+              />
+              <Route
                 path="/insight"
                 element={
                   <NavigationLayout>
@@ -100,14 +107,6 @@ export function App() {
                 element={
                   <NavigationLayout>
                     <UserPage />
-                  </NavigationLayout>
-                }
-              />
-              <Route
-                path="/sub_building_detail"
-                element={
-                  <NavigationLayout>
-                    <SubBuildingTabLayout/>
                   </NavigationLayout>
                 }
               />
