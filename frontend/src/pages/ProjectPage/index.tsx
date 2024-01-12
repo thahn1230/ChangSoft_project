@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import BuildingList from "component/projectComponent/BuildingList";
-import ProjectDetail from "component/projectComponent/ProjectDetail";
-import ProjectList from "component/projectComponent/ProjectList";
+import BuildingList from "component/project/BuildingList";
+import ProjectDetail from "component/project/ProjectDetail";
+import ProjectList from "component/project/ProjectList";
 import { ProjectIdName } from "interface/ProjectInterface";
 
 //context

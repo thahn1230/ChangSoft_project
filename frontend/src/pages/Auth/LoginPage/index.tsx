@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginHeader } from "../../../component/LoginComponents";
+import { LoginHeader } from "component/auth/LoginHeader";
 import styled from "styled-components";
 import { Input, InputChangeEvent } from "@progress/kendo-react-inputs";
 import { Button } from "@progress/kendo-react-buttons";
