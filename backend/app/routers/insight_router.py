@@ -14,7 +14,7 @@ import math
 import plotly.graph_objects as go
 
 from typing import List
-from dbAccess import create_db_connection
+from ..database import create_db_connection
 from plotly.subplots import make_subplots
 from .user_router import TokenData, verify_user
 from exceptionHandler import exception_handler

@@ -18,7 +18,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
 from enum import Enum
 
-from dbAccess import create_db_connection
+from ..database import create_db_connection
 from exceptionHandler import exception_handler
 from .user_router import verify_user, TokenData
 

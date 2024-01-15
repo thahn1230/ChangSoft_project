@@ -3,9 +3,7 @@ from fastapi import FastAPI, Request
 from fastapi.routing import APIRoute
 from add_middleware import add_middleware
 
-from .routers.dashboard_router import router as dashboardRouter
 from .routers.project_router import router as projectRouter
-from .routers.projectDetail_router import router as projectDetailRouter
 from .routers.buildingDetail_router import router as buildingDetailRouter
 from .routers.subBuildingDetail_router import router as subBuildingDetailRouter
 from .routers.insight_router import router as insightRouter
@@ -31,9 +29,7 @@ app = FastAPI()
 # origins와 CORS 설정
 add_middleware(app)
 # 라우터 세팅
-app.include_router(dashboardRouter)
 app.include_router(projectRouter)
-app.include_router(projectDetailRouter)
 app.include_router(buildingDetailRouter)
 app.include_router(subBuildingDetailRouter)
 app.include_router(insightRouter)

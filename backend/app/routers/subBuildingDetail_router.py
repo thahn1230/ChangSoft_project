@@ -4,8 +4,11 @@ import pandas as pd
 import plotly.graph_objects as go
 import json
 import plotly
+from loggingHandler import add_log
 
-from dbAccess import create_db_connection
+from sqlalchemy import text
+
+from ..database import create_db_connection
 from .user_router import TokenData, verify_user
 from exceptionHandler import exception_handler
 

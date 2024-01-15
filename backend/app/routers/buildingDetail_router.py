@@ -1,8 +1,12 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 import pandas as pd
+import json
+from loggingHandler import add_log
 
-from dbAccess import create_db_connection
+from sqlalchemy import text
+
+from ..database import create_db_connection
 from .user_router import verify_user, TokenData
 from exceptionHandler import exception_handler
 
@@ -51,4 +55,25 @@ async def get_sub_building_names_data(token: TokenData = Depends(verify_user)):
     sub_building_name_df = pd.read_sql(query, engine)
     return JSONResponse(
         sub_building_name_df.to_json(force_ascii=False, orient="records")
+    )
+
+# building의 floor_count 히스토그램
+@router.get("/building/floor_count_histogram")
+@exception_handler
+async def get_floor_count_histogram(token: TokenData = Depends(verify_user)):
+    query = """
+        SELECT 
+            FLOOR((floor_count) / 10) AS range_num,
+            COUNT(*) AS item_count
+        FROM
+            (SELECT building_name, COUNT(*) AS floor_count 
+            FROM structure3.floor AS floor 
+            JOIN structure3.building AS building ON building.id = floor.building_id
+            GROUP BY building_name) AS subquery
+        GROUP BY range_num
+        ORDER BY range_num;
+    """
+    floor_count_table_df = pd.read_sql(query, engine)
+    return JSONResponse(
+        floor_count_table_df.to_json(force_ascii=False, orient="records")
     )

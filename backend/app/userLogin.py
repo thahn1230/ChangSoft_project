@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from dbAccess import create_db_connection
+from .database import create_db_connection
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from functools import wraps

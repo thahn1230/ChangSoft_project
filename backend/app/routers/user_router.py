@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from dbAccess import create_db_connection
+from ..database import create_db_connection
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
@@ -15,7 +15,7 @@ import pandas as pd
 import jwt
 from pydantic import BaseModel
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
-from userLogin import oauth2_scheme, decode_jwt_token
+from ..userLogin import oauth2_scheme, decode_jwt_token
 from exceptionHandler import exception_handler
 
 router = APIRouter()
@@ -153,7 +153,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from dbAccess import create_db_connection
+from ..database import create_db_connection
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from functools import wraps
