@@ -1,7 +1,7 @@
 import apiService from "services/apiService";
 
 const getMarkerData = async () => {
-  const response = await apiService.get("dashboard/project/map", true);
+  const response = await apiService.get("project/map", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -12,7 +12,7 @@ const getMarkerData = async () => {
 
 const getFloorCount = async () => {
   const response = await apiService.get(
-    "dashboard/building/floor_count_histogram",
+    "building/floor_count_histogram",
     true
   );
   if (!response.ok) {
@@ -26,7 +26,7 @@ const getFloorCount = async () => {
 
 const getConstructionCompanyRatio = async () => {
   const response = await apiService.get(
-    "dashboard/project/construction_company_ratio",
+    "project/construction_company_ratio",
     true
   );
   if (!response.ok) {
@@ -49,7 +49,7 @@ const getConstructionCompanyRatio = async () => {
 
 const getLocalRatio = async () => {
   const response = await apiService.get(
-    "dashboard/project/location_ratio",
+    "project/location_ratio",
     true
   );
   if (!response.ok) {
@@ -71,7 +71,7 @@ const getLocalRatio = async () => {
 };
 
 const getUsageRatio = async () => {
-  const response = await apiService.get("dashboard/project/usage_ratio", true);
+  const response = await apiService.get("project/usage_ratio", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -91,7 +91,7 @@ const getUsageRatio = async () => {
 };
 
 const getProjectNumber = async () => {
-  const response = await apiService.get("dashboard/project/count", true);
+  const response = await apiService.get("project/count", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -101,7 +101,7 @@ const getProjectNumber = async () => {
   return projectNumData;
 };
 const getBuildingNumber = async () => {
-  const response = await apiService.get("dashboard/building/count", true);
+  const response = await apiService.get("building/count", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
@@ -113,7 +113,7 @@ const getBuildingNumber = async () => {
 
 const getProjectArea = async () => {
   const response = await apiService.get(
-    "dashboard/project/total_area_histogram",
+    "project/total_area_histogram",
     true
   );
   if (!response.ok) {

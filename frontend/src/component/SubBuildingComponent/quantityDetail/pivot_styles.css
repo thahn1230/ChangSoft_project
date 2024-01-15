@@ -1,8 +1,0 @@
-.k-pivotgrid-row-headers table.k-pivotgrid-table {
-    table-layout: auto;
-}
-
-.k-pivotgrid-column-headers col,
-.k-pivotgrid-values col {
-    width: 150px;
-}

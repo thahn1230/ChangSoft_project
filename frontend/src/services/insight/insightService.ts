@@ -3,7 +3,7 @@ import { CompanyInfo } from "interface/InsightInterface";
 
 const getProjectWithCompanyList = async () => {
   try {
-    const response = await apiService.get("dashboard/project", true);
+    const response = await apiService.get("project", true);
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
