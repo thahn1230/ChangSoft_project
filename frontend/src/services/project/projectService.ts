@@ -17,7 +17,7 @@ const getProjectData = async (selectedProjectId:number) => {
 
 const getDetailedProjectData = async ()=>{
     const response = await apiService.get(
-        "dashboard/project/",
+        "project/",
         true
       );
       if (!response.ok) {
