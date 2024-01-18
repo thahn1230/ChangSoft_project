@@ -13,6 +13,9 @@ import re
 import math
 import plotly.graph_objects as go
 
+from ..database import Database
+engine = Database().get_engine
+
 from typing import List
 from ..database import create_db_connection
 from plotly.subplots import make_subplots
@@ -20,7 +23,7 @@ from .user_router import TokenData, verify_user
 from exceptionHandler import exception_handler
 
 router = APIRouter()
-engine = create_db_connection()
+# engine = create_db_connection()
 
 font_location = "./Others/malgun"  # For Windows , 맑은 고딕
 font_name = fm.FontProperties(fname=font_location).get_name()

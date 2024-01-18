@@ -30,26 +30,24 @@ def create_db_connection():
         print(f"An error occurred when trying to connect to database {db_name}: {str(e)}")
         exit()
 
-engine = create_db_connection()
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 class Database:
     _instance = None
 
     def __new__(cls):
         if cls._instance is None:
-            # 인스턴스가 아직 생성되지 않았다면 새로운 인스턴스를 생성
             cls._instance = super(Database, cls).__new__(cls)
-            # 여기서 데이터베이스 초기화 작업을 수행할 수 있음
-            Base.metadata.create_all(bind=engine)
-        # 이미 생성된 인스턴스 또는 새로 생성된 인스턴스 반환
+            cls._instance.engine = create_db_connection()
+            Base.metadata.create_all(bind=cls._instance.engine)
         return cls._instance
 
     def get_db(self):
-        # 데이터베이스 세션 생성
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         db = SessionLocal()
         try:
             yield db
         finally:
             db.close()
+
+    def get_engine(self):
+        return self.engine

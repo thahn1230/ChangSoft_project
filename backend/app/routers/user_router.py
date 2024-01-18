@@ -1,26 +1,23 @@
-from fastapi import APIRouter
-from fastapi.responses import JSONResponse
-
-from fastapi import Depends, FastAPI, HTTPException 
+from fastapi import APIRouter, Depends, HTTPException 
 from fastapi.security import OAuth2PasswordBearer
 
-from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-
-from ..database import create_db_connection
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-import pandas as pd
+from ..crud.user_crud import *
+
 import jwt
 from pydantic import BaseModel
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 from ..userLogin import oauth2_scheme, decode_jwt_token
 from exceptionHandler import exception_handler
 
+from functools import wraps
+
+from datetime import datetime, timedelta
+
 router = APIRouter()
-engine = create_db_connection()
-connection = engine.connect()
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 class TokenData(BaseModel):
     user_id: str
@@ -33,14 +30,7 @@ async def verify_user(token: str = Depends(oauth2_scheme)) -> str: # check_user_
 @router.get("/user/profile")
 @exception_handler
 async def get_user_info(token: TokenData = Depends(verify_user)): 
-    query = f"""
-    SELECT id, name, job_position, company, 
-    email_address, phone_number, user_type 
-    FROM user_information
-    WHERE id = "{token["id"]}"
-    """
-
-    user_df = pd.read_sql(query, engine)
+    user_df = get_user_df(token["id"])
 
     id = user_df["id"].iloc[0]
     name = user_df["name"].iloc[0]
@@ -71,47 +61,32 @@ async def change_user_info(params: dict, token: TokenData = Depends(verify_user)
     email_address = params["join_info"]["email_address"]
     phone_number = params["join_info"]["phone_number"]
     user_type = params["join_info"]["user_type"]
-    try :
-        with Session(engine) as session:
-            session.execute(
-                text(
-                    """
-                    UPDATE `user_information` SET `name` = :name, 
-                    `job_position` = :job_position, `company` = :company,
-                    `email_address` = :email_address, 
-                    `phone_number` = :phone_number,
-                    `user_type` = :user_type
-                    WHERE (`id` = :user_id)
-                """
-                ),
-                {
-                    "user_id": user_id,
-                    "name": name, 
-                    "job_position": job_position, 
-                    "company": company, 
-                    "email_address": email_address, 
-                    "phone_number": phone_number, 
-                    "user_type": user_type,
-                }
-            )
 
-            session.commit()
-    except Exception as e:
-        print("An error occurred: ", e)
-        session.rollback()
+    user_info = {
+        "user_id": user_id,
+        "name": name, 
+        "job_position": job_position, 
+        "company": company, 
+        "email_address": email_address, 
+        "phone_number": phone_number, 
+        "user_type": user_type,
+    }
+
+    validCheck = change_user_information(user_info)
+
+    if validCheck == True:
+        return True
+    else:
         return False
 
-    return True
+    
 
 @router.post("/user/change_pw")
 @exception_handler
 async def change_password(params: dict, token: TokenData = Depends(verify_user)):
     user_id = token["id"]
-    query = f"""
-        SELECT password FROM user_information
-        WHERE id = "{user_id}"
-    """
-    current_pw_db = pd.read_sql(query, engine)["password"].iloc[0]
+    
+    current_pw_db = get_password_df(user_id)["password"].iloc[0]
     current_pw_client = params["pw_info"]["current_pw"]
     changed_pw = params["pw_info"]["changed_pw"]
     
@@ -119,61 +94,23 @@ async def change_password(params: dict, token: TokenData = Depends(verify_user))
     # is, is not은 객체 비교라서 엄연히 달라요
     # -의문의 기홍씨-
     if current_pw_db != current_pw_client :
-        print("Password not correct")
+        # current_pw is not correct
         return False
     else :
-        try :
-            with Session(engine) as session:
-                session.execute(
-                    text(
-                        """
-                        UPDATE `user_information` SET `password` = :password
-                        WHERE (`id` = :user_id)
-                    """
-                    ),
-                    {
-                        "user_id": user_id,
-                        "password": changed_pw, 
-                    }
-                )
-
-                session.commit()
-        except Exception as e:
-                print("An error occurred: ", e)
-                session.rollback()
-                return False
+        valid_check = change_user_password(user_id, changed_pw)
             
-    return True
+    
+    if valid_check == True:
+        return True
+    else:
+        return False
 
 
 
 # User Login
-
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer
-from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from ..database import create_db_connection
-from sqlalchemy.orm import Session
-from sqlalchemy import text
-from functools import wraps
-
-import pandas as pd
-import jwt
-from datetime import datetime, timedelta
-from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
 # token 생성
 def create_jwt_token(user_id: str) -> str:
-    query=f"""
-        SELECT * FROM
-        user_information
-        WHERE id = "{user_id}"
-    """
-
-    user_df = pd.read_sql(query, engine)
+    user_df = get_user_df(user_id)
 
     # JWT payload 설정
     payload = {
@@ -214,13 +151,7 @@ async def login(params: dict):
     user_id = params["login_info"]["id"]
     password = params["login_info"]["password"]
 
-    query=f"""
-        SELECT id, name, job_position, company, email_address, phone_number, user_type
-        FROM structure3.user_information
-        WHERE id = "{user_id}" AND password = "{password}"
-    """
-
-    login_df = pd.read_sql(query, engine)
+    login_df = get_login_df(user_id, password)
 
     if login_df.empty:
         return {"token": "", "status": False}
@@ -239,22 +170,22 @@ async def sign_up(params: dict):
     phone_number = params["join_info"]["phone_number"]
     user_type = params["join_info"]["user_type"]
 
-    with Session(engine) as session:
-        session.execute(
-            text(
-                """
-                INSERT INTO user_information VALUES (:user_id, :password, :name, 
-                :job_position, :company, :email_address, :phone_number, :user_type);
-            """
-            ),
-            {"user_id": user_id, "password": password, "name": name, "job_position": job_position, 
-            "company": company, "email_address": email_address, "phone_number": phone_number, 
-            "user_type": user_type}
-        )
+    user_params = {
+        "user_id": user_id,
+        "password": password,
+        "name": name,
+        "job_position": job_position,
+        "company": company,
+        "email_address": email_address,
+        "phone_number": phone_number,
+        "user_type": user_type
+    }
 
-        session.commit()
-
-    return {"result": True}
+    valid_check = user_sign_up(user_params)
+    if valid_check == True:
+        return {"result": True}
+    else:
+        return {"result": False}
 
 
 # ID 중복성 검사
@@ -262,13 +193,7 @@ async def sign_up(params: dict):
 async def check_id_validity(params: dict):
     user_id = params["id_info"]["id"]
 
-    query = f"""
-        SELECT COUNT(*) as count
-        FROM structure3.user_information
-        WHERE id = "{user_id}"
-    """
-
-    count = pd.read_sql(query, engine)
+    count = check_user_id_validity(user_id)
 
     if count["count"].iloc[0] != 0 :
         return {"result": False}
