@@ -18,7 +18,7 @@ from sqlalchemy import create_engine, MetaData, Table
 from sqlalchemy.orm import sessionmaker, scoped_session
 from enum import Enum
 
-from ..database import create_db_connection
+from ..database import Database
 from exceptionHandler import exception_handler
 from .user_router import verify_user, TokenData
 
@@ -41,8 +41,7 @@ class Message():
 
 
 router = APIRouter()
-engine = create_db_connection()
-connection = engine.connect()
+engine = Database().get_engine
 
 font_location = "Others/malgun" # For Windows
 font_name = fm.FontProperties(fname=font_location).get_name()

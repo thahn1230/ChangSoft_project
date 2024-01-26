@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
-from .database import create_db_connection
+from .database import Database
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from functools import wraps
@@ -13,9 +13,7 @@ from datetime import datetime, timedelta
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
-engine = create_db_connection()
-connection = engine.connect()
-
+engine = Database().get_engine
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 # token 생성

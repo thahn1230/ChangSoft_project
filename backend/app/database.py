@@ -50,5 +50,3 @@ class Database:
 
     def get_engine(self):
         return self.engine
-
-engine = Database().get_engine()
