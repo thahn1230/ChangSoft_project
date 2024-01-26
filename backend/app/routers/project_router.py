@@ -115,7 +115,7 @@ async def get_project_detail_data(project_id: int, token: TokenData = Depends(ve
 
     # project_detail_df = pd.read_sql(query, engine)
 
-    project_detail_df = get_project_detail_df(db, project_id);
+    project_detail_df = get_project_detail_df(db, project_id)
     return JSONResponse(project_detail_df.to_json(force_ascii=False, orient="records"))
 
 @router.get("/project/{project_id}/building_detail")

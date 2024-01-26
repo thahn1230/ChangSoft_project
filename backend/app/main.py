@@ -5,7 +5,7 @@ from add_middleware import add_middleware
 
 from .routers.project_router import router as projectRouter
 from .routers.buildingDetail_router import router as buildingDetailRouter
-from .routers.subBuildingDetail_router import router as subBuildingDetailRouter
+from .routers.subBuilding_router import router as subBuildingDetailRouter
 from .routers.insight_router import router as insightRouter
 from .routers.aiQuery_router import router as aiQueryRouter
 from .routers.user_router import router as userRouter
