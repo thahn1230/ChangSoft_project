@@ -51,7 +51,8 @@ async def get_total_analysis_data2(building_id: int, token: TokenData = Depends(
 @router.get("/sub_building/total_analysis_table/1/{sub_building_id}")
 @exception_handler
 async def get_total_analysis_data3(sub_building_id: int, token: TokenData = Depends(verify_user)):
-    analysis_data_df = get_single_subBuilding_analysis1_df
+    analysis_data_df = get_single_subBuilding_analysis1_df(sub_building_id)
+    
     return JSONResponse(analysis_data_df.to_json(force_ascii=False, orient="records"))
 
 
