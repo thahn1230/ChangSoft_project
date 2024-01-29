@@ -15,6 +15,7 @@ interface MenuItem {
   icon: string;
 }
 
+
 export const items: MenuItem[] = [
   {
     text: "Home",
@@ -57,7 +58,6 @@ export const NavigationLayout = (props: any) => {
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
 
-
   const handleClick = () => {
     setExpanded(!expanded);
   };
@@ -75,10 +75,10 @@ export const NavigationLayout = (props: any) => {
   }, [location.pathname]);
 
   useEffect(() => {
-      getUserProfile().then(data =>{
-        setName(data.name);
-        setEmailAddress(data.email_address);
-      })
+    getUserProfile().then((data) => {
+      setName(data.name);
+      setEmailAddress(data.email_address);
+    });
   }, []);
 
   const renderSelectedText = () => {
@@ -86,14 +86,14 @@ export const NavigationLayout = (props: any) => {
   };
 
   const signOutClicked = () => {
-    localStorage.removeItem("token")
-    navigate("/")
+    localStorage.removeItem("token");
+    navigate("/");
   };
 
   const getUserContainerStyle = () => {
     return expanded
-      ? { height: "230px", marginTop:"-262px", zIndex:"100000"}
-      : { height: "0px", expanded: `${expanded}`};
+      ? { height: "230px", marginTop: "-262px", zIndex: "100000" }
+      : { height: "0px", expanded: `${expanded}` };
   };
 
   return (
@@ -112,6 +112,13 @@ export const NavigationLayout = (props: any) => {
             className="menu-button"
             style={{ color: "rgb(22, 48, 138)", backgroundColor: "white" }}
           />
+          <Button
+            icon="logout"
+            onClick={signOutClicked}
+            className="menu-button"
+            title="logout"
+          >
+          </Button>
           <span
             className={selected === "Projects" ? "selected-text" : ""}
             style={{ color: "white" }}
@@ -147,22 +154,15 @@ export const NavigationLayout = (props: any) => {
           </DrawerContent>
         </Drawer>
 
-        {!expanded ? (
+        {/* {!expanded ? (
           <div></div>
         ) : (
-          <div className="user-container" style={getUserContainerStyle()}>
-            {/* <img alt="UserImg" src={tempIMG} width={110} style={{borderRadius: "70%"}} /> */}
-             {/* <h1>
-              {name !== null ? name : null}
-            </h1>
-            <div className="user-email" style={{marginTop: "1%", marginBottom: "3%"}}>
-              {emailAddress !== null ? emailAddress : null}
-            </div> */}
+          <div className="user-container">
               <Button className="user-button k-button k-button-md k-rounded-md k-button-solid k-button-solid-base" onClick={signOutClicked}>
                 Sign Out
               </Button>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

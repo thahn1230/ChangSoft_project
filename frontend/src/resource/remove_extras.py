@@ -12,5 +12,3 @@ def delete_non_png_files(directory):
 
 delete_non_png_files('./project_pictures')
 
-# 예시: delete_non_png_files('/path/to/directory')
-# 주의: 실제 경로로 교체하고 실행하기 전에 주의사항을 확인하세요.

@@ -126,29 +126,25 @@ def get_all_subBuilding_analysis2_df(building_id: int):
 
 def get_single_subBuilding_analysis1_df(sub_building_id: int):
     query = f"""
-        SELECT
-            total_concrete,
-            total_formwork,
-            total_rebar,
-            (total_formwork / total_concrete) AS form_con_result,
-            (total_rebar / total_concrete) AS reb_con_result
-        FROM (
-            SELECT
+        SELECT *,
+        (total_formwork / total_concrete) AS form_con_result,
+        (total_rebar / total_concrete) AS reb_con_result
+        FROM (SELECT
                 (SELECT SUM(volume) FROM structure3.concrete con
                 JOIN structure3.component com ON com.id = con.component_id
                 JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
                 WHERE sub.id = {sub_building_id}) AS total_concrete,
-                        
+                
                 (SELECT SUM(area) FROM structure3.formwork form
                 JOIN structure3.component com ON com.id = form.component_id
                 JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
                 WHERE sub.id = {sub_building_id}) AS total_formwork,
-                            
+                    
                 (SELECT SUM(rebar_weight) FROM structure3.rebar reb
                 JOIN structure3.component com ON com.id = reb.component_id
                 JOIN structure3.sub_building sub ON sub.id = com.sub_building_id
                 WHERE sub.id = {sub_building_id}) AS total_rebar
-        ) AS sub_table
+            ) AS sub_table
     """
 
     params = {'sub_building_id': sub_building_id}
