@@ -11,7 +11,8 @@ import SubBuildingAnalysisTableSubCol from "component/subBuilding/analysis/SubBu
 import SubBuildingAnalysisGraph from "component/subBuilding/analysis/SubBuildingAnalysisGraph";
 
 import { SubBuildingInfo } from "interface/SubBuildingInterface";
-import { useProjectName, useBuildingInfo } from "App";
+import { useBuildingInfo } from "hooks/useBuildingInfo";
+import { useProjectName } from "hooks/useProjectName";
 
 import {
   getSubBuildingInfo,

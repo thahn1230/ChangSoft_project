@@ -9,7 +9,9 @@ import SubBuildingAnalysisGraph from "component/subBuilding/analysis/SubBuilding
 import SubBuildingAnalysisTableSingleCol from "component/subBuilding/analysis/SubBuildingAnalysisTable_singleCol";
 import SubBuildingAnalysisTableSubCol from "component/subBuilding/analysis/SubBuildingAnalysisTable_subCol";
 import ComponentTypeList from "component/subBuilding/floorAnalysis/ComponentTypeList";
-import { useProjectName, useBuildingInfo } from "App";
+
+import { useBuildingInfo } from "hooks/useBuildingInfo";
+import { useProjectName } from "hooks/useProjectName";
 
 import {
   fetchSubBuildingFloorAnalysisData,

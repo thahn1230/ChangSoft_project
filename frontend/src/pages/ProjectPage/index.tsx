@@ -5,7 +5,7 @@ import ProjectList from "component/project/ProjectList";
 import { ProjectIdName } from "interface/ProjectInterface";
 
 //context
-import {useProjectName, useBuildingInfo} from "App"
+import { useProjectName } from "hooks/useProjectName";
 
 const Projects = () => {
   //const [, setBuildingInfo] = useBuildingInfo();

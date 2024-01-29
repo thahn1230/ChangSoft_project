@@ -13,7 +13,8 @@ import { SubBuildingInfo } from "interface/SubBuildingInterface";
 import { SubBuildingTotalAnalysis1 } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisValue } from "interface/SubBuildingInterface";
-import { useProjectName, useBuildingInfo } from "App";
+import { useBuildingInfo } from "hooks/useBuildingInfo";
+import { useProjectName } from "hooks/useProjectName";
 
 import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
 

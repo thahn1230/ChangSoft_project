@@ -3,7 +3,8 @@ import SingleColTable from "component/subBuilding/quantityDetail/SingleColTable"
 import QuantityFilter from "component/subBuilding/quantityDetail/QuantityFilter";
 import PivotTableChart from "component/subBuilding/quantityDetail/PivotTableChart";
 import { Button } from "@progress/kendo-react-buttons";
-import { useBuildingInfo} from "App"
+
+import { useBuildingInfo } from "hooks/useBuildingInfo";
 
 import "styles/analysisTab.scss";
 

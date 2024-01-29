@@ -16,7 +16,7 @@ import { ProjectIdName } from "interface/ProjectInterface";
 import { ProjectInfo } from "interface/ProjectInterface";
 
 //context
-import { useProjectName, useBuildingInfo } from "App";
+import { useProjectName } from "hooks/useProjectName";
 
 import { getDetailedProjectData } from "services/project/projectService";
 

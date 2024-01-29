@@ -15,7 +15,8 @@ import { getDetailedBuildingList } from "services/building/buildingService";
 
 import "styles/GridDetail.scss";
 
-import { useProjectName, useBuildingInfo } from "App";
+import { useBuildingInfo } from "hooks/useBuildingInfo";
+import { useProjectName } from "hooks/useProjectName";
 import { ProjectIdName } from "interface/ProjectInterface";
 
 const DATA_ITEM_KEY = "id";

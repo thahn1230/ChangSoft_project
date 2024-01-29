@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
 import { Button } from "@progress/kendo-react-buttons";
 import { useNavigate } from "react-router-dom";
-import { useBuildingInfo } from "App";
+import { useBuildingInfo } from "hooks/useBuildingInfo";
 import { getImagePath } from "services/building/buildingService";
 
 import "styles/GridDetail.scss";
