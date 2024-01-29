@@ -41,7 +41,7 @@ class Message():
 
 
 router = APIRouter()
-engine = Database().get_engine
+engine = Database().get_engine()
 
 font_location = "Others/malgun" # For Windows
 font_name = fm.FontProperties(fname=font_location).get_name()

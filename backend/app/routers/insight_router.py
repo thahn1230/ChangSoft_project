@@ -14,7 +14,7 @@ import math
 import plotly.graph_objects as go
 
 from ..database import Database
-engine = Database().get_engine
+engine = Database().get_engine()
 
 from typing import List
 from ..database import create_db_connection

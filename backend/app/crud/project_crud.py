@@ -2,7 +2,7 @@ from ..database import Database
 
 import pandas as pd
 
-engine = Database().get_engine
+engine = Database().get_engine()
 
 # 파라미터 바인딩 꼭 하기
 
@@ -18,32 +18,23 @@ def get_table_list():
 
 def get_table_attributes(table_name: str):
     query = f"""
-        SELECT * FROM %(table_name)s;
+        SELECT * FROM {table_name};
     """
 
-    params = {'table_name': table_name}
 
-    table_df = pd.read_sql(query, engine, params=params)
+    table_df = pd.read_sql(query, engine)
     
     return table_df
 
 def get_table_count(table_name: str):
-    # query = text(f"SELECT COUNT(*) FROM structure3.{table_name}")
+    query = f"SELECT COUNT(*) as count FROM structure3.{table_name};"
 
-    # with engine.connect() as connection:
-    #     result = connection.execute(query)
-    #     table_count = result.scalar()
+    table_count_df = pd.read_sql(query, engine)
 
-    query = f"""
-        SELECT COUNT(*) as count FROM structure3.%(table_name)s
-    """
-
-    params = {'table_name': table_name}
-
-    table_count = pd.read_sql(query, engine, params=params)["count"].scalar()
+    table_count = int(table_count_df['count'].iloc[0])
     
     return table_count
-
+    
 def get_project_detail_df(project_id: int):
     query = f"""
         SELECT p.project_name, p.building_area, p.construction_company, 

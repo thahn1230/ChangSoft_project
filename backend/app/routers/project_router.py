@@ -77,7 +77,7 @@ async def get_project(table_name: str, token: TokenData = Depends(verify_user)):
 @exception_handler
 async def get_total_project_num(table_name: str, token: TokenData = Depends(verify_user)):
     table_count = get_table_count(table_name)
-    
+
     return {table_count}
 
 
