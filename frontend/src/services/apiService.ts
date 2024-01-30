@@ -4,15 +4,13 @@ interface FetchOptions extends RequestInit {
   auth?: boolean;
 }
 
-const fetchApi = (url: string, options: FetchOptions = {}) => {
-  // 기본 헤더
+const fetchApi = async (url: string, options: FetchOptions = {}) => {
   const headers = new Headers({
     Accept: "application/json",
     "Content-Type": "application/json",
     ...options.headers,
   });
 
-  // 인증이 필요한 경우 (회원가입 제외 필수)
   if (options.auth) {
     const token = localStorage.getItem("token");
     if (token) {
@@ -20,8 +18,21 @@ const fetchApi = (url: string, options: FetchOptions = {}) => {
     }
   }
 
-  return fetch(`${BASE_URL}/${url}`, { ...options, headers });
+  try {
+    const response = await fetch(`${BASE_URL}/${url}`, { ...options, headers });
+
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+    }
+
+    return response;
+  } catch (error) {
+    // 네트워크 오류나 연결 거부
+
+    throw error;
+  }
 };
+
 
 export const get = (url: string, auth: boolean = false) => {
   return fetchApi(url, {
