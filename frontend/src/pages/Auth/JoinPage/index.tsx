@@ -218,21 +218,18 @@ interface JoinValueI {
   user_type: string;
 }
 
-const sha256 = async (message: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-};
+// const sha256 = async (message: string) => {
+//   const encoder = new TextEncoder();
+//   const data = encoder.encode(message);
+//   const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+//   const hashArray = Array.from(new Uint8Array(hashBuffer));
+//   const hashHex = hashArray
+//     .map((byte) => byte.toString(16).padStart(2, "0"))
+//     .join("");
+//   return hashHex;
+// };
 
 const Join = (props: any) => {
-  //const [checked, setChecked] = useState(false);
-  const history = useNavigate();
-
   const [phoneNum, setPhoneNum] = useState("");
   const [isPhoneValid, setIsPhoneValid] = useState(false);
 
@@ -291,17 +288,17 @@ const Join = (props: any) => {
     //여기서는 무조건 valid joinValue가 들어왔다고 가정
 
     try {
-      const hashedPassword = await sha256(newUserInfo.password);
+      // const hashedPassword = await sha256(newUserInfo.password);
       setJoinValue(
         await {
           ...joinValue,
-          password: hashedPassword,
+          password: newUserInfo.password,
           user_type: "User",
         }
       );
       const updatedJoinValue = {
         ...joinValue,
-        password: hashedPassword,
+        password: newUserInfo.password,
         user_type: "User",
       };
 

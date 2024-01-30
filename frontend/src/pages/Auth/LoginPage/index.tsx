@@ -186,16 +186,16 @@ const LoginPage = () => {
     if (name !== undefined) setInputValues({ ...inputValues, [name]: value });
   };
 
-  const sha256 = async (message: string) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray
-      .map((byte) => byte.toString(16).padStart(2, "0"))
-      .join("");
-    return hashHex;
-  };
+  // const sha256 = async (message: string) => {
+  //   const encoder = new TextEncoder();
+  //   const data = encoder.encode(message);
+  //   const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+  //   const hashArray = Array.from(new Uint8Array(hashBuffer));
+  //   const hashHex = hashArray
+  //     .map((byte) => byte.toString(16).padStart(2, "0"))
+  //     .join("");
+  //   return hashHex;
+  // };
 
   // useEffect(()=>{
   //   if(tokenContext?.token !== null)
@@ -205,11 +205,11 @@ const LoginPage = () => {
   const login = async (id: string, password: string) => {
     try {
       //const params = new URLSearchParams();
-      const hashedPassword = await sha256(password);
+      // const hashedPassword = await sha256(password);
 
       //params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
 
-      loginRequest(id,hashedPassword).then((loginData:loginResponse)=>{
+      loginRequest(id, password).then((loginData:loginResponse)=>{
         if (loginData.status) {
           localStorage.setItem("token", loginData.token);
           navigator("/home");

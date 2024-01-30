@@ -9,10 +9,8 @@ from ..crud.user_crud import *
 import jwt
 from pydantic import BaseModel
 from userLoginInfo import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
-from ..userLogin import oauth2_scheme, decode_jwt_token
+from ..userLogin import oauth2_scheme, decode_jwt_token, sha256_hash
 from exceptionHandler import exception_handler
-
-from functools import wraps
 
 from datetime import datetime, timedelta
 
@@ -87,8 +85,8 @@ async def change_password(params: dict, token: TokenData = Depends(verify_user))
     user_id = token["id"]
     
     current_pw_db = get_password_df(user_id)["password"].iloc[0]
-    current_pw_client = params["pw_info"]["current_pw"]
-    changed_pw = params["pw_info"]["changed_pw"]
+    current_pw_client = sha256_hash(params["pw_info"]["current_pw"])
+    changed_pw = sha256_hash(params["pw_info"]["changed_pw"])
     
     # 파알못 팀장님 string 값비교는 == != 입니다
     # is, is not은 객체 비교라서 엄연히 달라요
@@ -149,7 +147,7 @@ async def read_users_me(token: str = Depends(oauth2_scheme)):
 async def login(params: dict):
 
     user_id = params["login_info"]["id"]
-    password = params["login_info"]["password"]
+    password = sha256_hash(params["login_info"]["password"])
 
     login_df = get_login_df(user_id, password)
 
@@ -162,7 +160,7 @@ async def login(params: dict):
 @router.post("/sign_up")
 async def sign_up(params: dict):
     user_id = params["join_info"]["id"]
-    password = params["join_info"]["password"]
+    password = sha256_hash(params["join_info"]["password"])
     name = params["join_info"]["name"]
     job_position = params["join_info"]["job_position"]
     company = params["join_info"]["company"]

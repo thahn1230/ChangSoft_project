@@ -270,16 +270,16 @@ const ChangePwBodyWrapper = styled.div`
 //이거에 맞게 입력 form 추가해야함
 //각 form에 따른 valid 체크와 duplicate체크 각각 해야함
 
-const sha256 = async (message: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-};
+// const sha256 = async (message: string) => {
+//   const encoder = new TextEncoder();
+//   const data = encoder.encode(message);
+//   const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+//   const hashArray = Array.from(new Uint8Array(hashBuffer));
+//   const hashHex = hashArray
+//     .map((byte) => byte.toString(16).padStart(2, "0"))
+//     .join("");
+//   return hashHex;
+// };
 
 const User = () => {
   //const [checked, setChecked] = useState(false);
@@ -365,12 +365,12 @@ const User = () => {
 
   const changePw = async (newPassword: string, currentPassword: string) => {
     try {
-      const hashedPassword = await sha256(currentPassword);
-      const hashedNewPassword = await sha256(newPassword);
+      // const hashedPassword = await sha256(currentPassword);
+      // const hashedNewPassword = await sha256(newPassword);
 
       const updatedPwValue = {
-        current_pw: hashedPassword,
-        changed_pw: hashedNewPassword,
+        current_pw: currentPassword,
+        changed_pw: newPassword,
       };
 
       const changePwData: boolean = await changePassword(updatedPwValue)
