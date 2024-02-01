@@ -36,30 +36,30 @@ def get_table_count(table_name: str):
     return table_count
     
 def get_project_detail_df(project_id: int):
-    query = f"""
+    query = """
         SELECT p.project_name, p.building_area, p.construction_company, 
         p.location, p.total_area, p.construction_start, p.construction_end,
         (p.construction_end-p.construction_start) AS total_date,
         COUNT(*) AS building_count
         FROM structure3.project AS p
         JOIN structure3.building AS b ON p.id = b.project_id
-        WHERE p.id = %(project_id)s;
+        WHERE p.id = %s;
     """
 
-    params = {'project_id': project_id}
+    params = (project_id,)
     project_detail_df = pd.read_sql(query, engine, params=params)
 
     return project_detail_df
 
 def get_building_df(project_id: int):
-    query=f"""
+    query="""
         SELECT building.* 
         FROM project
         JOIN building ON project.id = building.project_id
-        WHERE project.id = %(project_id)s;
+        WHERE project.id = %s;
     """
 
-    params = {'project_id': project_id}
+    params = (project_id,)
     building_detail_df = pd.read_sql(query, engine, params=params)
 
     return building_detail_df
