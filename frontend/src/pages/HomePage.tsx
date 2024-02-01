@@ -56,27 +56,18 @@ const tiles: Tile[] = [
   //   body: ""
   // },
 ];
+const data: { col: number; colSpan: number; rowSpan: number }[] = [
+  { col: 1, colSpan: 1, rowSpan: 1 }, // Total project
+  { col: 1, colSpan: 1, rowSpan: 1 }, // Total Building
+  { col: 2, colSpan: 2, rowSpan: 2 }, // Local %
+  { col: 4, colSpan: 2, rowSpan: 2 }, // Company %
+  { col: 6, colSpan: 2, rowSpan: 2 }, // Usage %
+  { col: 1, colSpan: 3, rowSpan: 2 }, // Total Area
+  { col: 4, colSpan: 2, rowSpan: 2 }, // Floor Count
+  { col: 6, colSpan: 2, rowSpan: 2 }, // Map
+];
 
 export const Home: React.FC = () => {
-  const [data, setData] = useState<
-    { col: number; colSpan: number; rowSpan: number }[]
-  >([
-    { col: 1, colSpan: 1, rowSpan: 1 }, // Total project
-    { col: 1, colSpan: 1, rowSpan: 1 }, // Total Building
-    { col: 2, colSpan: 2, rowSpan: 2 }, // Local %
-    { col: 4, colSpan: 2, rowSpan: 2 }, // Company %
-    { col: 6, colSpan: 2, rowSpan: 2 }, // Usage %
-    { col: 1, colSpan: 3, rowSpan: 2 }, // Total Area
-    { col: 4, colSpan: 2, rowSpan: 2 }, // Floor Count
-    { col: 6, colSpan: 2, rowSpan: 2 }, // Map
-    // { col: 1, colSpan: 7, rowSpan: 2 }, // Total Area by Company
-  ]);
-
-  const handleReposition = (e: TileLayoutRepositionEvent) => {
-    setData(e.value);
-    console.log(e.value);
-  };
-
   return (
     <div className="building-dashboard-container">
       <TileLayout
@@ -90,7 +81,6 @@ export const Home: React.FC = () => {
           header: <strong>{tile.header}</strong>,
           body: <div className="tile-content">{tile.body}</div>,
         }))}
-        onReposition={handleReposition}
       />
     </div>
   );

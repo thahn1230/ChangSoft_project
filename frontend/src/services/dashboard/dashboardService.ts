@@ -7,7 +7,7 @@ const getMarkerData = async () => {
   }
 
   const markerData = await response.json();
-  return markerData;
+  return markerData.map_data;
 };
 
 const getFloorCount = async () => {
@@ -20,6 +20,7 @@ const getFloorCount = async () => {
   }
 
   const data = await response.json();
+  console.log(data)
   const floorCount = JSON.parse(data);
   return floorCount;
 };
@@ -97,7 +98,7 @@ const getProjectNumber = async () => {
   }
 
   const data = await response.json();
-  const projectNumData = JSON.parse(data);
+  const projectNumData = data.table_count
   return projectNumData;
 };
 const getBuildingNumber = async () => {
@@ -107,8 +108,8 @@ const getBuildingNumber = async () => {
   }
 
   const data = await response.json();
-  const buildingNumData = JSON.parse(data);
-  return buildingNumData;
+  const projectNumData = data.table_count
+  return projectNumData;
 };
 
 const getProjectArea = async () => {
