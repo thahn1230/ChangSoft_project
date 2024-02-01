@@ -25011,3 +25011,5 @@
 2024-02-01 17:31:47,951 - INFO - Endpoint: /sign_up/check_id | Processing time: 21.003 ms
 2024-02-01 17:32:26,119 - INFO - Endpoint: /sign_up/check_id | Processing time: 1.002 ms
 2024-02-01 17:32:26,173 - INFO - Endpoint: /sign_up/check_id | Processing time: 19.003 ms
+2024-02-01 17:32:41,543 - INFO - Endpoint: /sign_up/check_id | Processing time: 0.0 ms
+2024-02-01 17:32:43,245 - INFO - Endpoint: /sign_up/check_id | Processing time: 1.0 ms

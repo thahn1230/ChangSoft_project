@@ -6,7 +6,7 @@ userLoginInfo.py
 Pipfile
 Pipfile.lock
 
-*.log
+**/*.log
 endpoint_stats.json
 
 Others/
