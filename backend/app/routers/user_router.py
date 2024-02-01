@@ -148,9 +148,9 @@ async def login(params: dict):
 
     user_id = params["login_info"]["id"]
     password = sha256_hash(params["login_info"]["password"])
-
+    print((user_id, password))
     login_df = get_login_df(user_id, password)
-
+    
     if login_df.empty:
         return {"token": "", "status": False}
     else :
