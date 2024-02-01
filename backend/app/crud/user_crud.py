@@ -52,12 +52,12 @@ def change_user_information(params:dict):
     return True
 
 def get_password_df(id: str):
-    query = f"""
+    query = """
         SELECT password FROM user_information
-        WHERE id = "%(id)s"
+        WHERE id = %s
     """
 
-    params = {'id': id}
+    params = (id, )
     password_df = pd.read_sql(query, engine, params=params)
     return password_df
 
@@ -122,13 +122,13 @@ def user_sign_up(params: dict):
     return True
 
 def check_user_id_validity(id: str):
-    query = f"""
+    query = """
         SELECT COUNT(*) as count
         FROM structure3.user_information
-        WHERE id = "%(id)s"
+        WHERE id = %s
     """
 
-    params = {'id': id}
+    params = (id, )
 
     count = pd.read_sql(query, engine, params=params)
 
