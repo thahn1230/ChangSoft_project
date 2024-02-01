@@ -5,9 +5,8 @@ import pandas as pd
 import json
 from loggingHandler import add_log
 
-from sqlalchemy import text
-
 from .user_router import verify_user, TokenData
+from app.schemas.project.response import *
 from exceptionHandler import exception_handler
 from ..crud.project_crud import *
 
@@ -78,7 +77,9 @@ async def get_project(table_name: str, token: TokenData = Depends(verify_user)):
 async def get_total_project_num(table_name: str, token: TokenData = Depends(verify_user)):
     table_count = get_table_count(table_name)
 
-    return {table_count}
+    return TableCountResponse(
+        table_count = table_count
+        )
 
 
 # 프로젝트 정보(이름, 건물면적, 건설회사, 위치, 총면적, 건축기간, 건물 갯수)
@@ -147,9 +148,12 @@ async def get_map_data(token: TokenData = Depends(verify_user)):
         lat = map_coordinates_json["latitude"][str(i)]
         lon = map_coordinates_json["longitude"][str(i)]
         count = map_coordinates_json["sum"][str(i)]
-        coordinates.append({"latlng": [lat, lon], "sum": count})
+        # LatLngWithSum 인스턴스 생성
+        coordinates.append(LatLngWithSum(latlng=[lat, lon], sum=count))
 
-    return coordinates
+    return ProjectMapResponse(
+        map_data = coordinates
+    )
 
 
 # project의 total_area 히스토그램
