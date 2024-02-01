@@ -7,14 +7,14 @@ engine = Database().get_engine()
 # 파라미터 바인딩 꼭 하기
 
 def get_project_building_df(building_id: int):
-    query = f"""
+    query = """
         SELECT project.project_name, building.building_name 
         FROM project JOIN building 
         ON project.id = building.project_id 
-        WHERE building.id = %(building_id)s;
+        WHERE building.id = %s;
     """
         
-    params = {'building_id': building_id}
+    params = (building_id,)
     project_building_df = pd.read_sql(query, engine, params=params)
     return project_building_df
 

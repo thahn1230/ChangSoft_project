@@ -190,10 +190,12 @@ async def sign_up(params: dict):
 @router.post("/sign_up/check_id")
 async def check_id_validity(params: dict):
     user_id = params["id_info"]["id"]
-
+    
     count = check_user_id_validity(user_id)
-
+    
     if count["count"].iloc[0] != 0 :
+        print("yummy~")
         return {"result": False}
     else :
+        print("not yummy~")
         return {"result": True}

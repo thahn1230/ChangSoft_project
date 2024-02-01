@@ -7,13 +7,13 @@ import pandas as pd
 engine = Database().get_engine()
 
 def get_user_df(id: str):
-    query = """
+    query = f"""
     SELECT *
     FROM user_information
-    WHERE id = %s
+    WHERE id = "%(id)s"
     """
 
-    params = (id,)
+    params = {'id': id}
     user_df = pd.read_sql(query, engine, params=params)
 
     return user_df
@@ -86,16 +86,19 @@ def change_user_password(id: str, pw: str):
     return True
 
 def get_login_df(id: str, pw: str):
-    query = """
+    query=f"""
         SELECT id, name, job_position, company, email_address, phone_number, user_type
         FROM structure3.user_information
-        WHERE id = %s AND password = %s
+        WHERE id = "%(id)s" AND password = "%(password)s"
     """
-    params = (id, pw) 
+
+    params = {
+        'id': id,
+        'password': pw
+    }
 
     login_df = pd.read_sql(query, engine, params=params)
 
-    print(login_df)
     return login_df
 
 def user_sign_up(params: dict):
@@ -122,13 +125,13 @@ def user_sign_up(params: dict):
     return True
 
 def check_user_id_validity(id: str):
-    query = f"""
+    query = """
         SELECT COUNT(*) as count
         FROM structure3.user_information
-        WHERE id = "%(id)s"
+        WHERE id = %s
     """
 
-    params = {'id': id}
+    params = (id,)
 
     count = pd.read_sql(query, engine, params=params)
 
