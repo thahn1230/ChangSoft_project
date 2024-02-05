@@ -39,7 +39,7 @@ def get_project_detail_df(project_id: int):
     query = """
         SELECT p.project_name, p.building_area, p.construction_company, 
         p.location, p.total_area, p.construction_start, p.construction_end,
-        (p.construction_end-p.construction_start) AS total_date,
+        DATEDIFF(p.construction_start, construction_end) AS total_date,
         COUNT(*) AS building_count
         FROM structure3.project AS p
         JOIN structure3.building AS b ON p.id = b.project_id
@@ -51,18 +51,18 @@ def get_project_detail_df(project_id: int):
 
     return project_detail_df
 
-def get_building_df(project_id: int):
-    query="""
-        SELECT building.* 
-        FROM project
-        JOIN building ON project.id = building.project_id
-        WHERE project.id = %s;
-    """
+# def get_building_df(project_id: int):
+#     query="""
+#         SELECT building.* 
+#         FROM project
+#         JOIN building ON project.id = building.project_id
+#         WHERE project.id = %s;
+#     """
 
-    params = (project_id,)
-    building_detail_df = pd.read_sql(query, engine, params=params)
+#     params = (project_id,)
+#     building_detail_df = pd.read_sql(query, engine, params=params)
 
-    return building_detail_df
+#     return building_detail_df
 
 def get_project_usage_df():
     query = """

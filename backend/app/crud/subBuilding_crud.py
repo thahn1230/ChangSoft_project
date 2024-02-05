@@ -362,20 +362,21 @@ def get_building_concrete_pivot(building_id: int, component_types: str):
         JOIN floor ON component.floor_id = floor.id
         JOIN building ON floor.building_id = building.id
         WHERE building.id = %s
-        AND component.component_type IN (%s)
+        AND component.component_type IN %s
         GROUP BY floor_name, concrete.material_name, floor_number
         ORDER BY floor_number DESC
     """
-    
+   
     params = (building_id, component_types)
-    concrete_floor_analysis_data_df = pd.read_sql(query, engine, params=params)
+    print(query % params)
+    concrete_floor_analysis_data_df = pd.read_sql(query % params, engine)
+    print(query % params)
     concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot_table(
         index="floor_name",
         columns="material_name",
         values="total_volume",
         sort=False,
     )
-
     return concrete_floor_analysis_data_pivot_df
 
 def get_building_formwork_pivot(building_id: int, component_types: str):
