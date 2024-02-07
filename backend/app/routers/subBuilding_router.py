@@ -12,6 +12,8 @@ from ..database import create_db_connection
 from .user_router import TokenData, verify_user
 from exceptionHandler import exception_handler
 
+from app.schemas.subBuilding.response import *
+
 from ..database import Database
 from ..crud.subBuilding_crud import *
 
@@ -20,10 +22,12 @@ router = APIRouter()
 # 빌딩 id의 맞는 sub building을 받기
 @router.get("/sub_building/{building_id}")
 @exception_handler
-async def get_sub_building_data(building_id: int, token: TokenData = Depends(verify_user)):
+async def get_sub_building_data(building_id: int, token: TokenData = Depends(verify_user)) -> SubBuildingDataResponse:
     sub_building_df = get_subBuilding_df(building_id)
 
-    return JSONResponse(sub_building_df.to_json(force_ascii=False, orient="records"))
+    return SubBuildingDataResponse(
+        data = sub_building_df.to_dict('records')
+    )
 
 
 ### 총괄분석표 ###
@@ -155,11 +159,11 @@ async def draw_analysis_concrete2(sub_building_id: int, token: TokenData = Depen
 # 빌딩 안에 어떠한 component_type이 있는지 알려주는 함수
 @router.get("/sub_building/floor_analysis_table/{building_id}/component_type")
 @exception_handler
-async def get_floor_analysis_component_type_data(building_id: int, token: TokenData = Depends(verify_user)):
+async def get_floor_analysis_component_type_data(building_id: int, token: TokenData = Depends(verify_user)) -> ComponentTypeResponse:
     component_type_data = get_building_component_type(building_id)
 
-    return JSONResponse(
-        component_type_data.to_json(force_ascii=False, orient="records")
+    return ComponentTypeResponse(
+        data = component_type_data.to_dict('records')
     )
 
 # 콘크리트
@@ -168,30 +172,16 @@ async def get_floor_analysis_component_type_data(building_id: int, token: TokenD
 async def get_floor_analysis_concrete_filtered(building_id: int, component_types: str, token: TokenData = Depends(verify_user)):
     component_types = json.loads(component_types)
     component_types=', '.join(f'"{x}"' for x in component_types)
+    component_types = '(' + component_types + ')'
+
+    print(component_types)
+    
     if component_types == "":
         return []
-    
-    # query = f"""
-    #     SELECT floor_name, material_name, floor_number,
-    #     SUM(concrete.volume) AS total_volume FROM concrete
-    #     JOIN component ON concrete.component_id = component.id
-    #     JOIN floor ON component.floor_id = floor.id
-    #     JOIN building ON floor.building_id = building.id
-    #     WHERE building.id = {building_id}
-    #     AND component.component_type IN ({component_types})
-    #     GROUP BY floor_name, concrete.material_name, floor_number
-    #     ORDER BY floor_number DESC
-    # """
-
-    # concrete_floor_analysis_data_df = pd.read_sql(query, engine)
-    # concrete_floor_analysis_data_pivot_df = concrete_floor_analysis_data_df.pivot_table(
-    #     index="floor_name",
-    #     columns="material_name",
-    #     values="total_volume",
-    #     sort=False,
-    # )
 
     concrete_floor_analysis_data_pivot_df = get_building_concrete_pivot(building_id, component_types)
+
+    print(concrete_floor_analysis_data_pivot_df)
 
     return JSONResponse(
         concrete_floor_analysis_data_pivot_df.to_json(force_ascii=False, orient="index")

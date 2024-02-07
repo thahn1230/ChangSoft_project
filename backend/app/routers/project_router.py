@@ -74,7 +74,7 @@ async def get_project(table_name: str, token: TokenData = Depends(verify_user)):
 # table들의 수 상수값으로 리턴
 @router.get("/{table_name}/count")
 @exception_handler
-async def get_total_project_num(table_name: str, token: TokenData = Depends(verify_user)):
+async def get_total_project_num(table_name: str, token: TokenData = Depends(verify_user)) -> TableCountResponse:
     table_count = get_table_count(table_name)
 
     return TableCountResponse(
@@ -85,44 +85,48 @@ async def get_total_project_num(table_name: str, token: TokenData = Depends(veri
 # 프로젝트 정보(이름, 건물면적, 건설회사, 위치, 총면적, 건축기간, 건물 갯수)
 @router.get("/project/{project_id}/project_detail")
 @exception_handler
-async def get_project_detail_data(project_id: int, token: TokenData = Depends(verify_user)):
+async def get_project_detail_data(project_id: int, token: TokenData = Depends(verify_user)) -> ProjectDetailResponse:
     project_detail_df = get_project_detail_df(project_id)
-    return JSONResponse(project_detail_df.to_json(force_ascii=False, orient="records"))
+    return ProjectDetailResponse(
+        **project_detail_df.to_dict('records')[0]
+    )
 
 
-# 빌딩 정보(전부 다)
-@router.get("/project/{project_id}/building_detail")
-@exception_handler
-async def get_building_details_by_project_id(project_id: int, token: TokenData = Depends(verify_user)):
-    building_detail_df = get_building_df(project_id)
-    return JSONResponse(building_detail_df.to_json(force_ascii=False, orient="records"))
+# # 빌딩 정보(전부 다)
+# @router.get("/project/{project_id}/building_detail")
+# @exception_handler
+# async def get_building_details_by_project_id(project_id: int, token: TokenData = Depends(verify_user)):
+#     building_detail_df = get_building_df(project_id)
+#     return JSONResponse(building_detail_df.to_json(force_ascii=False, orient="records"))
 
 
 # 프로젝트 용도별 비율
 @router.get("/project/usage_ratio")
 @exception_handler
-async def get_project_usage_ratio(token: TokenData = Depends(verify_user)):
+async def get_project_usage_ratio(token: TokenData = Depends(verify_user)) -> FieldRatioResponse:
     project_usage_df = get_project_usage_df()
-    return JSONResponse(project_usage_df.to_json(force_ascii=False, orient="records"))
+    return FieldRatioResponse(
+        data = project_usage_df.to_dict('records')
+    )
 
 
 # 프로젝트 건설회사별 비율
 @router.get("/project/construction_company_ratio")
 @exception_handler
-async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)):
+async def get_project_construction_company_ratio(token: TokenData = Depends(verify_user)) -> FieldRatioResponse:
     project_construction_company_df = get_project_construction_company_df()
-    return JSONResponse(
-        project_construction_company_df.to_json(force_ascii=False, orient="records")
+    return FieldRatioResponse(
+        data = project_construction_company_df.to_dict('records')
     )
 
 
 # 프로젝트 지역지구별 비율
 @router.get("/project/location_ratio")
 @exception_handler
-async def get_project_location_ratio(token: TokenData = Depends(verify_user)):
+async def get_project_location_ratio(token: TokenData = Depends(verify_user)) -> FieldRatioResponse:
     project_location_df = get_project_location_df()
-    return JSONResponse(
-        project_location_df.to_json(force_ascii=False, orient="records")
+    return FieldRatioResponse(
+        data = project_location_df.to_dict('records')
     )
 
 
@@ -139,7 +143,7 @@ async def get_construction_company_total_area(token: TokenData = Depends(verify_
 # map 그릴때 필요한 데이터(좌표)들 보내기
 @router.get("/project/map")
 @exception_handler
-async def get_map_data(token: TokenData = Depends(verify_user)):
+async def get_map_data(token: TokenData = Depends(verify_user)) -> ProjectMapResponse:
     map_coordinates_df = get_map_coordinates_df()
     map_coordinates_json = json.loads(map_coordinates_df.to_json())
 
@@ -159,6 +163,8 @@ async def get_map_data(token: TokenData = Depends(verify_user)):
 # project의 total_area 히스토그램
 @router.get("/project/total_area_histogram")
 @exception_handler
-async def get_total_area_histogram(token: TokenData = Depends(verify_user)):
+async def get_total_area_histogram(token: TokenData = Depends(verify_user)) -> TotalAreaHistogramResponse:
     map_table_df = get_map_table_df()
-    return JSONResponse(map_table_df.to_json(force_ascii=False, orient="records"))
+    return TotalAreaHistogramResponse(
+        data = map_table_df.to_dict('records')
+    )
