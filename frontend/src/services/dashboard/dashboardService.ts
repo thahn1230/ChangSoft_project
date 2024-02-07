@@ -11,18 +11,13 @@ const getMarkerData = async () => {
 };
 
 const getFloorCount = async () => {
-  const response = await apiService.get(
-    "building/floor_count_histogram",
-    true
-  );
+  const response = await apiService.get("building/floor_count_histogram", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
   const data = await response.json();
-  console.log(data)
-  const floorCount = JSON.parse(data);
-  return floorCount;
+  return data.data;
 };
 
 const getConstructionCompanyRatio = async () => {
@@ -34,8 +29,7 @@ const getConstructionCompanyRatio = async () => {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-  const arrayData = JSON.parse(data);
+  const arrayData = (await response.json()).data;
   const top5 = arrayData.slice(0, 5);
 
   const othersPercentage = arrayData
@@ -49,16 +43,12 @@ const getConstructionCompanyRatio = async () => {
 };
 
 const getLocalRatio = async () => {
-  const response = await apiService.get(
-    "project/location_ratio",
-    true
-  );
+  const response = await apiService.get("project/location_ratio", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-  const arrayData = JSON.parse(data);
+  const arrayData = (await response.json()).data;
   const top5 = arrayData.slice(0, 5);
 
   const othersPercentage = arrayData
@@ -77,8 +67,7 @@ const getUsageRatio = async () => {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-  const arrayData = JSON.parse(data);
+  const arrayData = (await response.json()).data;
   const top5 = arrayData.slice(0, 5);
 
   const othersPercentage = arrayData
@@ -98,7 +87,7 @@ const getProjectNumber = async () => {
   }
 
   const data = await response.json();
-  const projectNumData = data.table_count
+  const projectNumData = data.table_count;
   return projectNumData;
 };
 const getBuildingNumber = async () => {
@@ -108,21 +97,17 @@ const getBuildingNumber = async () => {
   }
 
   const data = await response.json();
-  const projectNumData = data.table_count
+  const projectNumData = data.table_count;
   return projectNumData;
 };
 
 const getProjectArea = async () => {
-  const response = await apiService.get(
-    "project/total_area_histogram",
-    true
-  );
+  const response = await apiService.get("project/total_area_histogram", true);
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-  const projectAreaData = JSON.parse(data);
+  const projectAreaData = (await response.json()).data;
   return projectAreaData;
 };
 

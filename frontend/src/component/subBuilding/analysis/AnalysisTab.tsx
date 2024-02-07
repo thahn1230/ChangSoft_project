@@ -33,12 +33,7 @@ const AnalysisTab = () => {
   const [buildingInfo, setBuildingInfo] = useBuildingInfo();
   const [projectName, setProjectName] = useProjectName();
 
-  const headerData = [
-    {
-      projectName: projectName,
-      building_name: buildingInfo?.building_name,
-    },
-  ];
+  const [headerData, setHeaderData] = useState([{}]);
 
   const [selectedSubBuildingId, setSelectedSubBuildingId] = useState(0);
 
@@ -63,10 +58,28 @@ const AnalysisTab = () => {
   };
 
   useEffect(() => {
-    if (buildingInfo?.id === undefined) return;
-    getSubBuildingInfo(buildingInfo.id).then((selectedSubBuildingInfo) => {
-      setSubBuildingInfo(selectedSubBuildingInfo);
-    });
+    console.log(headerData);
+  }, [headerData]);
+
+  useEffect(() => {
+    setHeaderData([
+      {
+        projectName: projectName,
+        buildingName: buildingInfo?.building_name,
+      },
+    ]);
+  }, [buildingInfo, projectName]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (buildingInfo?.id === undefined) return;
+      await getSubBuildingInfo(buildingInfo.id).then(
+        (selectedSubBuildingInfo) => {
+          setSubBuildingInfo(selectedSubBuildingInfo);
+        }
+      );
+    }
+    fetchData();
   }, [buildingInfo]);
 
   useEffect(() => {
@@ -76,10 +89,7 @@ const AnalysisTab = () => {
     let rebarResponse: any;
     const fetchData = async () => {
       [concretePivotResponse, formworkPivotResponse, rebarResponse] =
-        await fetchBuildingAnalysisData(
-          buildingInfo.id,
-          selectedSubBuildingId
-        );
+        await fetchBuildingAnalysisData(buildingInfo.id, selectedSubBuildingId);
 
       if (
         concretePivotResponse === undefined ||
@@ -88,20 +98,20 @@ const AnalysisTab = () => {
       )
         return;
 
-      const concretePivotJsonGrid: gridData = getGridFromPivotData(
+      const concretePivotJsonGrid: gridData = await getGridFromPivotData(
         concretePivotResponse
       );
-      const formworkPivotJsonGrid: gridData = getGridFromPivotData(
+      const formworkPivotJsonGrid: gridData = await getGridFromPivotData(
         formworkPivotResponse
       );
-      const rebarJsonPivotGrid: gridData =
-        getRebarGridFromPivotData(rebarResponse);
+      const rebarJsonPivotGrid: gridData = await getRebarGridFromPivotData(
+        rebarResponse
+      );
 
       setConcreteData(concretePivotJsonGrid);
       setFormworkData(formworkPivotJsonGrid);
       setRebarData(rebarJsonPivotGrid);
     };
-
     fetchData();
   }, [selectedSubBuildingId]);
 
@@ -201,11 +211,10 @@ const AnalysisTab = () => {
           />
           <GridColumn
             title="빌딩명"
-            field="building_name"
+            field="buildingName"
             headerClassName="custom-header-cell"
             className="custom-text-cell"
           />
-
           <GridColumn
             title="건물명 구분"
             cell={() => (

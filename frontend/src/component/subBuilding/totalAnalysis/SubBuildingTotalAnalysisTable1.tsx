@@ -15,6 +15,10 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
+  // useEffect(() => {
+  //   console.log(selectedSubBuildingId);
+  // }, []);
+
   //여기서 internal server error
   useEffect(() => {
     fetch(
@@ -75,8 +79,8 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
   }, [analysisTable1]);
 
   useEffect(() => {
-    if(selectedSubBuildingId===-1)
-    return;
+    console.log("??")
+    if (selectedSubBuildingId === -1) return;
     props.setSelectedSubBuildingId(selectedSubBuildingId);
 
     if (selectedSubBuildingId === undefined) return;
@@ -89,15 +93,13 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
       url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table/1/${selectedSubBuildingId}`;
     }
 
-    fetch( url,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      }
-    )
+    fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -110,9 +112,7 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
         setAnalysisTable1(JSON.parse(response));
       })
       .catch((error) => console.error("Error:", error));
-
   }, [selectedSubBuildingId, props.buildingInfo?.id]);
-
 
   return (
     <div className="table-container">

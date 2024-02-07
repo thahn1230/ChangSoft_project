@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DropDownList } from "@progress/kendo-react-dropdowns";
-
-import { BuildingInfo } from "interface/BuildingInterface";
 import {
   SubBuildingInfo,
   SubBuildingListInfo,
@@ -11,18 +9,15 @@ import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
 
 const SubBuildingList = (props: SubBuildingListInfo) => {
   const [subBuildinglist, setSubBuildinglist] = useState<string[]>([]);
-  const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
-
+  // const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
     useState<string>("전체동");
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<
-    number | undefined
-  >(0);
-
-  const [selectedBuilding, setSelectedBuilding] = useState<BuildingInfo>();
 
   useEffect(() => {
-    if (props.buildingInfo?.id === undefined) return;
+    console.log("subBuildinglist rendered");
+  }, [subBuildinglist]);
+
+  useEffect(() => {
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
       (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId
     );
@@ -31,9 +26,10 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
     } else {
       setSelectedSubBuildingName(prevSelectedSubBuilding.sub_building_name);
     }
+  }, [props.selectedSubBuildingId]);
 
-    setSelectedBuilding(props.buildingInfo);
-
+  useEffect(() => {
+    if (props.buildingInfo?.id === undefined) return;
     getSubBuildingInfo(props.buildingInfo.id).then(
       (data: SubBuildingInfo[]) => {
         let subBuildingNames: string[] = [];
@@ -42,22 +38,18 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
           subBuildingNames.push(data[i].sub_building_name);
         }
 
-        setSubBuildingInfo(data);
         setSubBuildinglist(subBuildingNames);
       }
     );
-  }, [props]);
+  }, [props.buildingInfo?.id]);
 
   const onSelectedSubbuildingChange = (e: any) => {
-    setSelectedSubBuildingName(e.value);
     if (e.value === "전체동") {
-      setSelectedSubBuildingId(0);
       props.setSelectedSubBuildingId(0);
     } else {
-      const selectedSubId: number | undefined = subBuildingInfo.find(
+      const selectedSubId: number | undefined = props.subBuildingInfo.find(
         (item) => item.sub_building_name === e.value
       )?.id;
-      setSelectedSubBuildingId(selectedSubId);
       if (selectedSubId) {
         props.setSelectedSubBuildingId(selectedSubId);
       }

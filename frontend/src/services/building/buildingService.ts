@@ -9,10 +9,10 @@ const getImagePath = async (buildingId:Number) => {
     throw new Error("Network response was not ok");
   }
 
-  const responseJson = await response.json();
-  const data = JSON.parse(responseJson);
+  const data = await response.json();
+
   const importedImagePath = await import(
-    `resource/project_pictures/${data[0].project_name}/${data[0].building_name}/ScreenShot.png`
+    `resource/project_pictures/${data.project_name}/${data.building_name}/ScreenShot.png`
   );
 
   return importedImagePath.default;
@@ -27,8 +27,7 @@ const getDetailedBuildingList = async ()=>{
         throw new Error("Network response was not ok");
       }
     
-      const responseJson = await response.json();
-      const detailedBuildingList = JSON.parse(responseJson);
+      const detailedBuildingList = (await response.json()).data;
 
       return detailedBuildingList
 }

@@ -8,7 +8,6 @@ interface ProjectNameProviderProps {
   children: ReactNode; 
 }
 
-// ProjectNameProvider 컴포넌트 정의
 const ProjectNameProvider: React.FC<ProjectNameProviderProps> = ({ children }) => {
   const [state, setState] = useState(""); 
 

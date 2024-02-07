@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, MenuItem } from "@progress/kendo-react-layout";
 
 import TotalAnalysisTab from "component/subBuilding/totalAnalysis/TotalAnalysisTab";
@@ -14,27 +14,15 @@ const SubBuildingTabLayout = () => {
   const renderComponent = () => {
     switch (selectedPage) {
       case "개요":
-        return (
-          <BuildingDetail
-            forAnalysisTab={true}
-          />
-        );
+        return <BuildingDetail forAnalysisTab={true} />;
       case "총괄분석표":
-        return (
-          <TotalAnalysisTab/>
-        );
+        return <TotalAnalysisTab />;
       case "분석표":
-        return (
-          <AnalysisTab/>
-        );
+        return <AnalysisTab />;
       case "층별총집계표":
-        return (
-          <FloorAnalysisTab/>
-        );
+        return <FloorAnalysisTab />;
       case "물량정보상세":
-        return (
-          <QuantityDetailTab/>
-        );
+        return <QuantityDetailTab />;
       default:
         return null;
     }

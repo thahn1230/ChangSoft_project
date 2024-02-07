@@ -19,6 +19,8 @@ const SubBuildingList = (props: any) => {
 
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingInfo>();
 
+
+  useEffect(()=>{console.log("??")},[])
   useEffect(() => {
     let prevSelectedSubBuilding = props.subBuildingInfo.find(
       (subBuilding: any) => subBuilding.id === props.selectedSubBuildingId

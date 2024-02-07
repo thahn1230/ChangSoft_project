@@ -186,29 +186,8 @@ const LoginPage = () => {
     if (name !== undefined) setInputValues({ ...inputValues, [name]: value });
   };
 
-  // const sha256 = async (message: string) => {
-  //   const encoder = new TextEncoder();
-  //   const data = encoder.encode(message);
-  //   const hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
-  //   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  //   const hashHex = hashArray
-  //     .map((byte) => byte.toString(16).padStart(2, "0"))
-  //     .join("");
-  //   return hashHex;
-  // };
-
-  // useEffect(()=>{
-  //   if(tokenContext?.token !== null)
-  //     navigator("/home")
-  // },[tokenContext?.token])
-
   const login = async (id: string, password: string) => {
     try {
-      //const params = new URLSearchParams();
-      // const hashedPassword = await sha256(password);
-
-      //params.append("login_info", `["${id}" ,"${hashedPassword}" ]`);
-
       loginRequest(id, password).then((loginData:loginResponse)=>{
         if (loginData.status) {
           localStorage.setItem("token", loginData.token);
@@ -235,14 +214,6 @@ const LoginPage = () => {
       const { loginId, password } = inputValues;
       login(loginId, password);
     }
-  };
-
-  const goToJira = () => {
-    window.open(link, "_blank");
-  };
-
-  const goToHome = () => {
-    //window.navigator(link);
   };
 
   const onJoin = () => {
@@ -284,23 +255,11 @@ const LoginPage = () => {
                   onChange={onChange}
                 />
               </div>
-              {/* {loginResult.called && !loginResult.loading && (
-                <div>
-                  <Error>아이디 또는 비밀번호를 확인해주세요.</Error>
-                </div>
-              )} */}
             </fieldset>
             <Button className="loginBtn defaultButton" type={"submit"}>
               로그인
             </Button>
           </form>
-
-          {/* <div className="otherLogins">
-            <Button className="askBtn cancelButton" onClick={goToJira}>
-              프로그램 구매 문의
-            </Button>
-          </div> */}
-          {/* <LoginOptionButtons /> */}
 
           <div className="join">
             <span className="joinText" onClick={onJoin}>

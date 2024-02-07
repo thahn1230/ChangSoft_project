@@ -7,20 +7,19 @@ const getSubBuildingInfo = async (buildingId:number) => {
     throw new Error("Network response was not ok");
   }
 
-  const rawData = await response.json();
-  const subBuildingInfo:SubBuildingInfo[] = JSON.parse(rawData);
+  const subBuildingInfo:SubBuildingInfo[] = (await response.json()).data;
+  // const subBuildingInfo = JSON.parse(rawData);
 
   return subBuildingInfo;
 };
 
-const getComponentTypeListFromBuildingId= async (buildingId:number) =>{
+const getComponentTypeListFromBuildingId = async (buildingId:number) =>{
     const response = await apiService.get(`sub_building/floor_analysis_table/${buildingId}/component_type`, true);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
   
-    const rawData = await response.json();
-    const data = JSON.parse(rawData);
+    const data = (await response.json()).data;
     let idx = 0
     const componentTypeList = [{ componentType: "All", id: idx++, checked: false }].concat(
         data.map((item:any) => {
@@ -72,6 +71,7 @@ const fetchSubBuildingFloorAnalysisData = async (buildingId:number, params: Reco
     }
 
     const rawData = await response.json();
+    console.log(rawData)
     return JSON.parse(rawData);
   };
 

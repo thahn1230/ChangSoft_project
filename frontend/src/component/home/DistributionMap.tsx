@@ -83,12 +83,6 @@ const DistributionMap = () => {
             valueField="sum"
             style={markerStyle}
           />
-
-          {/* <MapMarkerLayer
-            data={markers}
-            locationField="latlng"
-            titleField="name"
-          /> */}
         </MapLayers>
       </Map>
     </MapWrapper>

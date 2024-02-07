@@ -9,8 +9,7 @@ const getProjectData = async (selectedProjectId:number) => {
     throw new Error("Network response was not ok");
   }
 
-  const rawData = await response.json();
-  const projectData = JSON.parse(rawData);
+  const projectData = [await response.json()];
 
   return projectData;
 };
@@ -29,4 +28,6 @@ const getDetailedProjectData = async ()=>{
     
       return detailedProjectData;
 }
+
+
 export {getProjectData,getDetailedProjectData}

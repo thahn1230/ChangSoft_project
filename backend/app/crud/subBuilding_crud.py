@@ -331,7 +331,7 @@ def get_single_subbuilding_rebar_df(sub_building_id: int):
         ORDER BY component_type
     """
 
-    params = (sub_building_id)
+    params = (sub_building_id, )
     rebar_analysis_data_df = pd.read_sql(query, engine, params=params)
 
     return rebar_analysis_data_df

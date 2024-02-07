@@ -11,7 +11,6 @@ import { Home } from "./pages/HomePage";
 import Projects from "./pages/ProjectPage";
 import UserPage from "./pages/UserPage";
 import Insight from "./pages/InsightPage";
-import { BuildingInfo } from "interface/BuildingInterface";
 import SubBuildingTabLayout from "./component/common/SubBuildingTabLayout";
 import AIQuery from "./pages/AIQueryPage";
 import LoginPage from "./pages/Auth/LoginPage";
