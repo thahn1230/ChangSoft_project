@@ -11,6 +11,7 @@ import "styles/subBuildingTabLayout.scss";
 const SubBuildingTabLayout = () => {
   const [selectedPage, setSelectedPage] = useState<string | undefined>("개요");
 
+
   const renderComponent = () => {
     switch (selectedPage) {
       case "개요":

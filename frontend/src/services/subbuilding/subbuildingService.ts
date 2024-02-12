@@ -71,7 +71,6 @@ const fetchSubBuildingFloorAnalysisData = async (buildingId:number, params: Reco
     }
 
     const rawData = await response.json();
-    console.log(rawData)
     return JSON.parse(rawData);
   };
 

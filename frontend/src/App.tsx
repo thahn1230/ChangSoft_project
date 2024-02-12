@@ -1,11 +1,6 @@
 import React, { useState, createContext, useContext, useEffect } from "react";
 import "./App.css";
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { NavigationLayout } from "./component/common/NavgationLayout";
 import { Home } from "./pages/HomePage";
 import Projects from "./pages/ProjectPage";
@@ -15,9 +10,8 @@ import SubBuildingTabLayout from "./component/common/SubBuildingTabLayout";
 import AIQuery from "./pages/AIQueryPage";
 import LoginPage from "./pages/Auth/LoginPage";
 
-import {BuildingInfoProvider} from "context/BuildingInfoContext"
-import {ProjectNameProvider} from "context/ProjectNameContext"
-
+import { BuildingInfoProvider } from "context/BuildingInfoContext";
+import { ProjectNameProvider } from "context/ProjectNameContext";
 
 export function App() {
   const navigate = useNavigate();
@@ -50,7 +44,7 @@ export function App() {
                 path="/projects"
                 element={
                   <NavigationLayout>
-                    <Projects/>
+                    <Projects />
                   </NavigationLayout>
                 }
               />
@@ -58,7 +52,7 @@ export function App() {
                 path="/projects/sub_building_detail"
                 element={
                   <NavigationLayout>
-                    <SubBuildingTabLayout/>
+                    <SubBuildingTabLayout />
                   </NavigationLayout>
                 }
               />

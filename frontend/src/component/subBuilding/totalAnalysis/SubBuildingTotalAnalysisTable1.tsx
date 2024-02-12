@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Grid, GridColumn } from "@progress/kendo-react-grid";
-
 import SubBuildingList from "component/subBuilding/totalAnalysis/SubBuildingList";
-
 import { SubBuildingTotalAnalysis1 } from "interface/SubBuildingInterface";
+
+import { useSubBuildingInfo } from "hooks/useSubBuildingInfo"
+
 import "styles/subBuildingTotalAnalysisTable.scss";
 
 const SubBuildingTotalAnalysisTable1 = (props: any) => {
-  const [selectedSubBuildingId, setSelectedSubBuildingId] = useState<number>();
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useSubBuildingInfo()
 
   const [analysisTable1, setAnalysisTable1] =
     useState<SubBuildingTotalAnalysis1[]>();
@@ -15,9 +16,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
     { [key: string]: string | number }[]
   >([{}]);
 
-  // useEffect(() => {
-  //   console.log(selectedSubBuildingId);
-  // }, []);
 
   //여기서 internal server error
   useEffect(() => {
@@ -79,12 +77,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
   }, [analysisTable1]);
 
   useEffect(() => {
-    console.log("??")
-    if (selectedSubBuildingId === -1) return;
-    props.setSelectedSubBuildingId(selectedSubBuildingId);
-
-    if (selectedSubBuildingId === undefined) return;
-
     let url;
 
     if (selectedSubBuildingId === 0) {
@@ -107,8 +99,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
         return response.json();
       })
       .then((response) => {
-        // const arrayData: ProjectsFloorCount[] = JSON.parse(data);
-        // setTotalfloor(arrayData);
         setAnalysisTable1(JSON.parse(response));
       })
       .catch((error) => console.error("Error:", error));
@@ -125,8 +115,6 @@ const SubBuildingTotalAnalysisTable1 = (props: any) => {
                   <SubBuildingList
                     buildingInfo={props.buildingInfo}
                     projectName={props.projectName}
-                    setSelectedSubBuildingId={setSelectedSubBuildingId}
-                    selectedSubBuildingId={selectedSubBuildingId}
                     selectedSubBuildingName={
                       props.selectedSubBuildingInfo?.sub_building_name
                     }

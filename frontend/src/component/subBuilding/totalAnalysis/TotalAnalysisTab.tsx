@@ -15,6 +15,7 @@ import { SubBuildingAnalysisPercentage } from "interface/SubBuildingInterface";
 import { SubBuildingAnalysisValue } from "interface/SubBuildingInterface";
 import { useBuildingInfo } from "hooks/useBuildingInfo";
 import { useProjectName } from "hooks/useProjectName";
+import { SubBuildingInfoProvider } from "context/SubBuildingInfoContext";
 
 import { getSubBuildingInfo } from "services/subbuilding/subbuildingService";
 
@@ -26,8 +27,8 @@ const TotalAnalysisTab = () => {
   const [projectName, setProjectName] = useProjectName();
 
   const [subBuildingInfo, setSubBuildingInfo] = useState<SubBuildingInfo[]>([]);
-  const [selectedSubBuildingId, setSelectedSubBuildingId] =
-    useState<number>(-1);
+  // const [selectedSubBuildingId, setSelectedSubBuildingId] =
+  //   useState<number>(-1);
 
   const [analysisTable1, setAnalysisTable1] =
     useState<SubBuildingTotalAnalysis1[]>();
@@ -44,16 +45,12 @@ const TotalAnalysisTab = () => {
   const [valueInfo, setValueInfo] = useState<SubBuildingAnalysisValue[]>();
 
   useEffect(() => {
-    if (selectedSubBuildingId === -1) setSelectedSubBuildingId(0);
-  }, []);
-
-  useEffect(() => {
     if (buildingInfo?.id === undefined) return;
-    
+
     getSubBuildingInfo(buildingInfo?.id).then((data) => {
       setSubBuildingInfo(data);
     });
-  }, [buildingInfo, buildingInfo]);
+  }, [buildingInfo]);
 
   // "콘크리트(㎥)", "거푸집(㎡)", "철근(Ton)"
   useEffect(() => {
@@ -104,77 +101,74 @@ const TotalAnalysisTab = () => {
 
   return (
     <div className="sub-building-list">
-      <div className="left-components">
-        <Grid data={data}>
-          <GridColumn
-            title="프로젝트명"
-            field="projectName"
-            headerClassName="custom-header-cell"
-            className="custom-text-cell"
+      <SubBuildingInfoProvider>
+        <div className="left-components">
+          <Grid data={data}>
+            <GridColumn
+              title="프로젝트명"
+              field="projectName"
+              headerClassName="custom-header-cell"
+              className="custom-text-cell"
+            />
+            <GridColumn
+              title="빌딩명"
+              field="building_name"
+              headerClassName="custom-header-cell"
+              className="custom-text-cell"
+            />
+          </Grid>
+          <SubBuildingTotalAnalysisTable1
+            buildingInfo={buildingInfo}
+            subBuildingInfo={subBuildingInfo}
+            projectName={projectName}
           />
-          <GridColumn
-            title="빌딩명"
-            field="building_name"
-            headerClassName="custom-header-cell"
-            className="custom-text-cell"
-          />
-        </Grid>
-        <SubBuildingTotalAnalysisTable1
-          buildingInfo={buildingInfo}
-          subBuildingInfo={subBuildingInfo}
-          selectedSubBuildingId={selectedSubBuildingId}
-          setSelectedSubBuildingId={setSelectedSubBuildingId}
-          projectName={projectName}
-        />
-        <TotalAnalysisGrid2
-          selectedBuildingId={buildingInfo?.id}
-          selectedSubBuildingId={selectedSubBuildingId}
-          selectedType={selectedType}
-          setValueInfo={setValueInfo}
-          setPercentagesInfo={setPercentagesInfo}
-        ></TotalAnalysisGrid2>
-      </div>
-
-      <div className="right-components">
-        <div className="total-analysis-button-container">
-          <RadioButton
-            value="concrete"
-            checked={selectedType === "concrete"}
-            label="콘크리트"
-            onChange={onTypeChange}
-            style={{ marginLeft: "10px" }}
-            className="k-radio-button"
-          />
-          <RadioButton
-            value="formwork"
-            checked={selectedType === "formwork"}
-            label="거푸집"
-            onChange={onTypeChange}
-            style={{ marginLeft: "10px" }}
-            className="k-radio-button"
-          />
-          <RadioButton
-            value="rebar"
-            checked={selectedType === "rebar"}
-            label="철근"
-            onChange={onTypeChange}
-            style={{ marginLeft: "10px" }}
-            className="k-radio-button"
-          />
-        </div>
-        <div className="bar-pie-chart-container">
-          <SubBuildingTotalAnalysisBarChart
-            valueInfo={valueInfo}
+          <TotalAnalysisGrid2
+            selectedBuildingId={buildingInfo?.id}
             selectedType={selectedType}
-          ></SubBuildingTotalAnalysisBarChart>
-
-          <SubBuildingTotalAnalysisPieChart
-            percentagesInfo={percentagesInfo}
-            selectedType={selectedType}
-            selectedSubBuildingId={selectedSubBuildingId}
-          ></SubBuildingTotalAnalysisPieChart>
+            setValueInfo={setValueInfo}
+            setPercentagesInfo={setPercentagesInfo}
+          ></TotalAnalysisGrid2>
         </div>
-      </div>
+        <div className="right-components">
+          <div className="total-analysis-button-container">
+            <RadioButton
+              value="concrete"
+              checked={selectedType === "concrete"}
+              label="콘크리트"
+              onChange={onTypeChange}
+              style={{ marginLeft: "10px" }}
+              className="k-radio-button"
+            />
+            <RadioButton
+              value="formwork"
+              checked={selectedType === "formwork"}
+              label="거푸집"
+              onChange={onTypeChange}
+              style={{ marginLeft: "10px" }}
+              className="k-radio-button"
+            />
+            <RadioButton
+              value="rebar"
+              checked={selectedType === "rebar"}
+              label="철근"
+              onChange={onTypeChange}
+              style={{ marginLeft: "10px" }}
+              className="k-radio-button"
+            />
+          </div>
+          <div className="bar-pie-chart-container">
+            <SubBuildingTotalAnalysisBarChart
+              valueInfo={valueInfo}
+              selectedType={selectedType}
+            ></SubBuildingTotalAnalysisBarChart>
+
+            <SubBuildingTotalAnalysisPieChart
+              percentagesInfo={percentagesInfo}
+              selectedType={selectedType}
+            ></SubBuildingTotalAnalysisPieChart>
+          </div>
+        </div>
+      </SubBuildingInfoProvider>
     </div>
   );
 };

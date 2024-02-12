@@ -13,9 +13,6 @@ const SubBuildingList = (props: SubBuildingListInfo) => {
   const [selectedSubBuildingName, setSelectedSubBuildingName] =
     useState<string>("전체동");
 
-  useEffect(() => {
-    console.log("subBuildinglist rendered");
-  }, [subBuildinglist]);
 
   useEffect(() => {
     let prevSelectedSubBuilding = props.subBuildingInfo.find(

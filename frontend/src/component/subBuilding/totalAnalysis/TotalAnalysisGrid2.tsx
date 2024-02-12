@@ -5,22 +5,27 @@ import {
   Grid,
   GridColumn,
 } from "@progress/kendo-react-grid";
+
+
+import { useSubBuildingInfo } from "hooks/useSubBuildingInfo"
+
 import "styles/subBuildingTotalAnalysisTable.scss";
 
 const TotalAnalysisGrid2 = (props: any) => {
+  const [selectedSubBuildingId, setSelectedSubBuildingId] = useSubBuildingInfo()
   const [selectedBuildingInfo, setSelectedBuildingInfo] =
     useState<SubBuildingTotalAnalysis2[]>();
 
     //여긴 나는지 안나는지 모르겠
   useEffect(() => {
-    if(props.selectedSubBuildingId===-1)
+    if(selectedSubBuildingId===-1)
     return;
     let url;
 
-    if (props.selectedSubBuildingId === 0) {
+    if (selectedSubBuildingId === 0) {
       url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table_all/2/${props.selectedBuildingId}`;
     } else {
-      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table/2/${props.selectedSubBuildingId}`;
+      url = `${process.env.REACT_APP_API_URL}/sub_building/total_analysis_table/2/${selectedSubBuildingId}`;
     }
 
     fetch(url, {
@@ -42,7 +47,7 @@ const TotalAnalysisGrid2 = (props: any) => {
         setSelectedBuildingInfo(JSON.parse(response));
       })
       .catch((error) => console.error("Error:", error));
-  }, [props.selectedBuildingId, props.selectedSubBuildingId]);
+  }, [props.selectedBuildingId, selectedSubBuildingId]);
 
   useEffect(() => {
     if (
