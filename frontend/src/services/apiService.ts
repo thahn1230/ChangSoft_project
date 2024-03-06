@@ -23,16 +23,22 @@ const fetchApi = async (url: string, options: FetchOptions = {}) => {
 
     if (response.status === 401) {
       localStorage.removeItem("token");
+      throw new Error("Authentication failed. Token has been removed.");
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `API call failed with status ${response.status}: ${errorText}`
+      );
     }
 
     return response;
   } catch (error) {
-    // 네트워크 오류나 연결 거부
-
-    throw error;
+    console.error("Network error or connection refused:", error);
+    throw new Error("Network error or connection refused.");
   }
 };
-
 
 export const get = (url: string, auth: boolean = false) => {
   return fetchApi(url, {
